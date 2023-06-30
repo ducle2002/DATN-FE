@@ -1,21 +1,20 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 import AuthenticationStack from './source/routes/authentication.stack';
-import store from '@/store';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import AppStack from '@/routes/app.stack';
 
 const queryClient = new QueryClient();
 function App(): JSX.Element {
+  const {isLogin} = useSelector(state => state.auth);
   return (
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <AuthenticationStack />
-        </NavigationContainer>
-      </QueryClientProvider>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        {isLogin ? <AppStack /> : <AuthenticationStack />}
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }
 

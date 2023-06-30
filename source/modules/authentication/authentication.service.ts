@@ -1,6 +1,7 @@
 import axiosClient from '@/utils/axios.client';
 import {HOST_SERVER} from '@env';
 import {ILoginPayload, IToken} from './authentication.model';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class Authentication {
   endpoint = HOST_SERVER;
@@ -8,15 +9,18 @@ class Authentication {
   loginRequest = async ({
     userNameOrEmailAddress,
     password,
+    tenancyName,
   }: ILoginPayload): Promise<IToken> => {
     const url = this.endpoint + '/api/TokenAuth/Authenticate';
-    const {result} = await axiosClient.post(url, {
+    const {data} = await axiosClient.post(url, {
       userNameOrEmailAddress,
       password,
+      tenancyName,
     });
+
     return {
-      accessToken: result.accessToken,
-      refreshToken: result.refreshToken,
+      accessToken: data.result.accessToken,
+      refreshToken: data.result.refreshToken,
     };
   };
 
