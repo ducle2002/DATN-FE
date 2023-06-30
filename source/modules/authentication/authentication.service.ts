@@ -1,8 +1,6 @@
 import axiosClient from '@/utils/axios.client';
 import {HOST_SERVER} from '@env';
 import {ILoginPayload, IToken} from './authentication.model';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 class Authentication {
   endpoint = HOST_SERVER;
 

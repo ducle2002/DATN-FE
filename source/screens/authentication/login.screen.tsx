@@ -17,6 +17,8 @@ const LoginScreen = (): JSX.Element => {
     mutationFn: (params: ILoginPayload) =>
       AuthenticationApi.loginRequest(params),
     onSuccess: result => {
+      console.log(result);
+
       AsyncStorage.setItem(
         'Token',
         JSON.stringify({
