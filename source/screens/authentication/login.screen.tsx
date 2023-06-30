@@ -7,6 +7,7 @@ import {Button} from 'react-native-paper';
 import {ILoginPayload} from '@/modules/authentication/authentication.model';
 import {useDispatch} from 'react-redux';
 import {loginSuccess} from '@/modules/authentication/authentication.slide';
+import language, {languageKeys} from '@/config/language/language';
 
 const LoginScreen = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ const LoginScreen = (): JSX.Element => {
         )}
       />
       <Button onPress={handleSubmit(onSubmit)}>
-        <Text>login</Text>
+        {/* <Text>{language.t}</Text> */}
       </Button>
     </View>
   );
