@@ -1,7 +1,7 @@
 export interface ILoginPayload {
   userNameOrEmailAddress: string;
   password: string;
-  tenancyName: string;
+  tenancyName?: string;
 }
 
 export interface IToken {

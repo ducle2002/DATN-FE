@@ -2,5 +2,10 @@ const login = {
   login: 'Đăng nhập',
 };
 
-const auth = {login};
+const form = {
+  userNamePlaceholder: 'User Name',
+  passwordPlaceholder: 'Mật khẩu',
+};
+
+const auth = {login, form};
 export default auth;

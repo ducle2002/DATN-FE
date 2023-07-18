@@ -17,6 +17,9 @@ const AuthenticationStack = (): JSX.Element => {
       <Stack.Screen
         name={AUTHENTICATION_ROUTE.LOGIN_SCREEN}
         component={LoginScreen}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name={AUTHENTICATION_ROUTE.REGISTER_SCREEN}
