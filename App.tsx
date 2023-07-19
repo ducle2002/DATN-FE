@@ -1,14 +1,13 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-
-import {useSelector} from 'react-redux';
 import AuthenticationStack from './source/routes/authentication.stack';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import AppStack from '@/routes/app.stack';
+import {useAppSelector} from '@/hooks/redux.hook';
 
 const queryClient = new QueryClient();
 function App(): JSX.Element {
-  const {isLogin} = useSelector(state => state.auth);
+  const {isLogin} = useAppSelector(state => state.auth);
   return (
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>

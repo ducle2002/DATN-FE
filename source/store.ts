@@ -1,14 +1,13 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import authenticationSlide, {
-  initAuth,
+  authInitAction,
 } from './modules/authentication/authentication.slide';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const rootReducer = combineReducers({
   auth: authenticationSlide,
 });
 
-const middlewares = [];
+const middlewares: any[] = [];
 
 if (__DEV__) {
   const createDebugger = require('redux-flipper').default;
@@ -25,15 +24,6 @@ const store = configureStore({
   ],
 });
 
-const getAsyncStorage = () => {
-  return dispatch => {
-    AsyncStorage.getItem('Token').then(result => {
-      console.log(result);
-
-      // dispatch(initAuth(result));
-    });
-  };
-};
-store.dispatch(getAsyncStorage());
+store.dispatch(authInitAction());
 
 export default store;
