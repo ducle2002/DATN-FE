@@ -1,6 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import AuthenticationStack from './source/routes/authentication.stack';
+import AuthenticationStack from './source/routes/auth.stack';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import AppStack from '@/routes/app.stack';
 import {useAppSelector} from '@/hooks/redux.hook';

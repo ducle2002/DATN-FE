@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import AUTHENTICATION_ROUTE from '@/modules/authentication/authentication.route';
+import AUTHENTICATION_ROUTE from '@/modules/auth/auth.route';
 import LoginScreen from '@/screens/authentication/login.screen';
 import RegisterScreen from '@/screens/authentication/register.screen';
 

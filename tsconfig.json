@@ -20,6 +20,5 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    // "typeRoots": ["./source/types"],
-  }
+  }, 
 }

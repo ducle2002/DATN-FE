@@ -1,9 +1,14 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {IToken} from './authentication.model';
+import {IToken} from './auth.model';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createAppAsyncThunk} from '@/hooks/redux.hook';
 
-const initialState = {
+type authState = {
+  isLogin: boolean;
+  accessToken: string;
+};
+
+const initialState: authState = {
   isLogin: false,
   accessToken: '',
 };
@@ -25,6 +30,10 @@ const authenticationSlice = createSlice({
       state.isLogin = true;
       state.accessToken = action.payload.accessToken;
     },
+    logoutSuccess: state => {
+      state.isLogin = false;
+      state.accessToken = initialState.accessToken;
+    },
   },
   extraReducers(builder) {
     builder.addCase(authInitAction.fulfilled, (state, action) => {
@@ -33,5 +42,5 @@ const authenticationSlice = createSlice({
     });
   },
 });
-export const {loginSuccess} = authenticationSlice.actions;
+export const {loginSuccess, logoutSuccess} = authenticationSlice.actions;
 export default authenticationSlice.reducer;

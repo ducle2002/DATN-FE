@@ -8,10 +8,10 @@ import {
 import React from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useMutation} from 'react-query';
-import AuthenticationApi from '@/modules/authentication/authentication.service';
-import {ILoginPayload} from '@/modules/authentication/authentication.model';
+import AuthenticationApi from '@/modules/auth/auth.service';
+import {ILoginPayload} from '@/modules/auth/auth.model';
 import {useDispatch} from 'react-redux';
-import {loginSuccess} from '@/modules/authentication/authentication.slide';
+import {loginSuccess} from '@/modules/auth/auth.slice';
 import language, {languageKeys} from '@/config/language/language';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '@/components/button.component';
@@ -29,7 +29,8 @@ const LoginScreen = (): JSX.Element => {
   const {control, handleSubmit} = useForm<ILoginPayload>({
     resolver: yupResolver(loginSchema),
   });
-  const {mutate} = useMutation({
+
+  const {mutate: login} = useMutation({
     mutationFn: (params: ILoginPayload) =>
       AuthenticationApi.loginRequest(params),
     onSuccess: result => {
@@ -48,7 +49,7 @@ const LoginScreen = (): JSX.Element => {
   });
 
   const onSubmit = (data: ILoginPayload) => {
-    mutate(data);
+    login({...data, tenancyName: 'keangnam'});
   };
 
   return (
