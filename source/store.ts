@@ -1,10 +1,12 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import authenticationSlice, {authInitAction} from './modules/auth/auth.slice';
 import configSlice from './modules/config/config.slice';
+import userSlice from './modules/user/user.slice';
 
 const rootReducer = combineReducers({
   auth: authenticationSlice,
   config: configSlice,
+  user: userSlice,
 });
 
 const middlewares: any[] = [];

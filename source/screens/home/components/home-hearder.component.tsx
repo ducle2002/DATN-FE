@@ -3,30 +3,65 @@ import {
   ImageBackground,
   SafeAreaView,
   StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import React from 'react';
 import Icon from '@/components/icon.component';
 import {HomeScreenProps} from '../home.screen';
+import {Avatar} from 'react-native-paper';
+import {useAppSelector} from '@/hooks/redux.hook';
+import globalStyles from '@/config/globalStyles';
 const {height} = Dimensions.get('screen');
 
 const HomeHeader = ({navigation}: HomeScreenProps) => {
+  const {imageUrl, fullName} = useAppSelector(state => state.user);
   return (
     <ImageBackground
       source={require('assets/images/login.background.png')}
       blurRadius={5}
       style={styles.container}
       imageStyle={styles.imageContainer}>
-      <SafeAreaView style={styles.contentContainer}>
-        <Icon
-          type="Ionicons"
-          name="settings-sharp"
-          size={30}
-          color={'white'}
-          style={{padding: 5}}
-          onPress={() => {
-            navigation.navigate('SETTING_SCREEN');
-          }}
-        />
+      <SafeAreaView
+        style={[
+          {flex: 1, backgroundColor: '#091D66B2'},
+          styles.contentContainer,
+        ]}>
+        <View style={styles.contentContainer}>
+          <View style={styles.headerIconContainer}>
+            <Icon
+              type="Ionicons"
+              name="notifications"
+              size={30}
+              color={'white'}
+              style={styles.icon}
+            />
+            <Icon
+              type="Ionicons"
+              name="qr-code-outline"
+              size={30}
+              color={'white'}
+              style={styles.icon}
+            />
+            <Icon
+              type="Ionicons"
+              name="settings-sharp"
+              size={30}
+              color={'white'}
+              style={styles.icon}
+              onPress={() => {
+                navigation.navigate('SETTING_SCREEN');
+              }}
+            />
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Avatar.Image source={{uri: imageUrl}} size={72} />
+            <View style={styles.textContainer}>
+              <Text style={styles.textWelcome}>Wellcome to Keangnam</Text>
+              <Text style={styles.textName}>{fullName}</Text>
+            </View>
+          </View>
+        </View>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -37,7 +72,7 @@ export default HomeHeader;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: height * 0.3,
+    height: height * 0.2,
     overflow: 'hidden',
   },
   imageContainer: {
@@ -45,9 +80,30 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
   },
   contentContainer: {
-    backgroundColor: '#091D66B2',
     flex: 1,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
+    paddingHorizontal: 16,
+  },
+  headerIconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  icon: {
+    padding: 5,
+    marginLeft: 10,
+  },
+  textContainer: {
+    flex: 1,
+    marginLeft: 15,
+  },
+  textWelcome: {
+    ...globalStyles.text17SemiBold,
+    color: 'white',
+    lineHeight: 30,
+  },
+  textName: {
+    ...globalStyles.text16Medium,
+    color: 'white',
   },
 });

@@ -6,9 +6,10 @@ import {useAppDispatch, useAppSelector} from '@/hooks/redux.hook';
 import {setConfig} from '@/modules/config/config.slice';
 import HomeFunction from './components/home-function.component';
 import HomeHeader from './components/home-hearder.component';
-import {useLogout} from '@/hooks/auth.hook';
+import {useLogout} from '@/modules/auth/auth.hook';
 import {StackScreenProps} from '@react-navigation/stack';
 import {AppStackParamsList} from '@/routes/app.stack';
+import {useAccount} from '@/modules/user/user.hook';
 
 export type HomeScreenProps = StackScreenProps<
   AppStackParamsList,
@@ -18,6 +19,7 @@ export type HomeScreenProps = StackScreenProps<
 const HomeScreen = (props: HomeScreenProps) => {
   const dispatch = useAppDispatch();
   const {logout} = useLogout();
+  useAccount();
   const {mutate: getConfig} = useMutation({
     mutationFn: () => ConfigApi.getConfigRequest(),
     onSuccess: ({data: {result}}) => {
