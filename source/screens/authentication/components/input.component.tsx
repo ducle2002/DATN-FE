@@ -23,6 +23,7 @@ const InputComponent = ({
         <Icon name={iconName} type={iconType} size={20} color={iconColor} />
       </View>
       <TextInput
+        autoCapitalize="none"
         placeholderTextColor={'#e4e4e4'}
         style={styles.input}
         {...props}
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0A167C',
   },
   input: {
-    ...globalStyles.text,
+    ...globalStyles.text14Medium,
     flex: 1,
     paddingLeft: 10,
     color: 'white',

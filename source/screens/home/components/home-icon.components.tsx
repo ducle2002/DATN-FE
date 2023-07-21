@@ -1,11 +1,9 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import FeedbackIcon from 'assets/icons/feebback.svg';
 import NotificationIcon from 'assets/icons/notification.svg';
 import ChatIcon from 'assets/icons/chat.svg';
-import Vote from 'assets/icons/vote.svg';
 import {SvgProps} from 'react-native-svg';
-import {permissionsType} from 'types/declarations';
+import {permissionsType} from 'types/permissions';
 
 export type HomeIconProp = SvgProps & {
   type: permissionsType;
