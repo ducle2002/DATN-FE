@@ -1,23 +1,41 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import HomeIcon from './home-icon.components';
-import {permissionsType} from 'types/permissions';
+import {TPermission} from 'types/permissions';
 import language, {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {AppStackParamsList} from '@/routes/app.stack';
 
-type Props = React.ComponentProps<typeof View> & {
-  type: permissionsType;
+type Props = React.ComponentProps<typeof TouchableOpacity> & {
+  type: TPermission;
 };
 
 const HomeFunction = ({type, style, ...props}: Props) => {
+  const navigation = useNavigation<NavigationProp<AppStackParamsList>>();
+
+  const onPress = () => {
+    switch (type) {
+      case 'Pages.Management.Digital.Notices':
+        return navigation.navigate('NOTIFICATION_STACK', {
+          screen: 'MAIN_SCREEN',
+        });
+      case 'Pages.Management.Citizens.Reflects':
+        return navigation.navigate('FEEDBACK_STACK', {screen: 'MAIN_SCREEN'});
+    }
+  };
+
   if (language.t(languageKeys[type])) {
     return (
-      <View style={[styles.container, style]} {...props}>
+      <TouchableOpacity
+        style={[styles.container, style]}
+        onPress={onPress}
+        {...props}>
         <View style={styles.iconContainer}>
           <HomeIcon type={type} />
         </View>
         <Text style={styles.text}>{language.t(languageKeys[type])}</Text>
-      </View>
+      </TouchableOpacity>
     );
   }
 };

@@ -1,8 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {permissionsType} from 'types/permissions';
+import {TPermission} from 'types/permissions';
 
 type configState = {
-  grantedPermissions: Array<permissionsType>;
+  grantedPermissions: Array<TPermission>;
 };
 const initialState: configState = {
   grantedPermissions: [],

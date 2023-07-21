@@ -7,8 +7,15 @@ import {setConfig} from '@/modules/config/config.slice';
 import HomeFunction from './components/home-function.component';
 import HomeHeader from './components/home-hearder.component';
 import {useLogout} from '@/hooks/auth.hook';
+import {StackScreenProps} from '@react-navigation/stack';
+import {AppStackParamsList} from '@/routes/app.stack';
 
-const HomeScreen = () => {
+export type HomeScreenProps = StackScreenProps<
+  AppStackParamsList,
+  'HOME_SCREEN'
+>;
+
+const HomeScreen = (props: HomeScreenProps) => {
   const dispatch = useAppDispatch();
   const {logout} = useLogout();
   const {mutate: getConfig} = useMutation({
@@ -37,7 +44,7 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <ScrollView bounces={false}>
-        <HomeHeader />
+        <HomeHeader {...props} />
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
           {grantedPermissions?.map(p => (
             <HomeFunction

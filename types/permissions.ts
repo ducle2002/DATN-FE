@@ -1,4 +1,4 @@
-export type permissionsType =
+export type TPermission =
   | 'Pages.About'
   | 'Pages.About.Edit'
   | 'Pages.Admin.Organization_Units'
