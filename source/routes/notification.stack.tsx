@@ -12,7 +12,11 @@ const Stack = createStackNavigator<NotificationStackParamsList>();
 const NotificationStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerBackTitleVisible: false}}>
-      <Stack.Screen name="MAIN_SCREEN" component={NotificationScreen} />
+      <Stack.Screen
+        name="MAIN_SCREEN"
+        component={NotificationScreen}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };

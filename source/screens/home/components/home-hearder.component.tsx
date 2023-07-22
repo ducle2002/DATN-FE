@@ -1,69 +1,53 @@
-import {
-  Dimensions,
-  ImageBackground,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Icon from '@/components/icon.component';
 import {HomeScreenProps} from '../home.screen';
 import {Avatar} from 'react-native-paper';
 import {useAppSelector} from '@/hooks/redux.hook';
 import globalStyles from '@/config/globalStyles';
+import BackgroundHeader from '@/components/background-header.component';
 const {height} = Dimensions.get('screen');
 
 const HomeHeader = ({navigation}: HomeScreenProps) => {
   const {imageUrl, fullName} = useAppSelector(state => state.user);
   return (
-    <ImageBackground
-      source={require('assets/images/login.background.png')}
-      blurRadius={5}
-      style={styles.container}
-      imageStyle={styles.imageContainer}>
-      <SafeAreaView
-        style={[
-          {flex: 1, backgroundColor: '#091D66B2'},
-          styles.contentContainer,
-        ]}>
-        <View style={styles.contentContainer}>
-          <View style={styles.headerIconContainer}>
-            <Icon
-              type="Ionicons"
-              name="notifications"
-              size={30}
-              color={'white'}
-              style={styles.icon}
-            />
-            <Icon
-              type="Ionicons"
-              name="qr-code-outline"
-              size={30}
-              color={'white'}
-              style={styles.icon}
-            />
-            <Icon
-              type="Ionicons"
-              name="settings-sharp"
-              size={30}
-              color={'white'}
-              style={styles.icon}
-              onPress={() => {
-                navigation.navigate('SETTING_SCREEN');
-              }}
-            />
-          </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Avatar.Image source={{uri: imageUrl}} size={72} />
-            <View style={styles.textContainer}>
-              <Text style={styles.textWelcome}>Wellcome to Keangnam</Text>
-              <Text style={styles.textName}>{fullName}</Text>
-            </View>
+    <BackgroundHeader>
+      <View style={styles.contentContainer}>
+        <View style={styles.headerIconContainer}>
+          <Icon
+            type="Ionicons"
+            name="notifications"
+            size={30}
+            color={'white'}
+            style={styles.icon}
+          />
+          <Icon
+            type="Ionicons"
+            name="qr-code-outline"
+            size={30}
+            color={'white'}
+            style={styles.icon}
+          />
+          <Icon
+            type="Ionicons"
+            name="settings-sharp"
+            size={30}
+            color={'white'}
+            style={styles.icon}
+            onPress={() => {
+              navigation.navigate('SETTING_SCREEN');
+            }}
+          />
+        </View>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Avatar.Image source={{uri: imageUrl}} size={72} />
+          <View style={styles.textContainer}>
+            <Text style={styles.textWelcome}>Wellcome to Keangnam</Text>
+            <Text style={styles.textName}>{fullName}</Text>
           </View>
         </View>
-      </SafeAreaView>
-    </ImageBackground>
+      </View>
+    </BackgroundHeader>
   );
 };
 
