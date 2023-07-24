@@ -1,15 +1,13 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
 import React, {useEffect} from 'react';
-import {useMutation} from 'react-query';
-import ConfigApi from '@/modules/config/config.service';
-import {useAppDispatch, useAppSelector} from '@/hooks/redux.hook';
-import {setConfig} from '@/modules/config/config.slice';
+import {useAppSelector} from '@/hooks/redux.hook';
 import HomeFunction from './components/home-function.component';
 import HomeHeader from './components/home-hearder.component';
-import {useLogout} from '@/modules/auth/auth.hook';
 import {StackScreenProps} from '@react-navigation/stack';
 import {AppStackParamsList} from '@/routes/app.stack';
 import {useAccount} from '@/modules/user/user.hook';
+import {useOrganizationUnit} from '@/modules/organization/organization.hook';
+import {useConfigPermissions} from '@/modules/config/config.hook';
 
 export type HomeScreenProps = StackScreenProps<
   AppStackParamsList,
@@ -17,31 +15,21 @@ export type HomeScreenProps = StackScreenProps<
 >;
 
 const HomeScreen = (props: HomeScreenProps) => {
-  const dispatch = useAppDispatch();
-  const {logout} = useLogout();
-  useAccount();
-  const {mutate: getConfig} = useMutation({
-    mutationFn: () => ConfigApi.getConfigRequest(),
-    onSuccess: ({data: {result}}) => {
-      dispatch(
-        setConfig({
-          grantedPermissions: Object.keys(result.auth.grantedPermissions),
-        }),
-      );
-    },
-    onError: () => {
-      logout();
-    },
-  });
+  const {getOrganizationUnitByUser} = useOrganizationUnit();
+  const {getConfigPermission} = useConfigPermissions();
+
+  const {getUserInfor} = useAccount();
 
   const {isLogin} = useAppSelector(state => state.auth);
   const {grantedPermissions} = useAppSelector(state => state.config);
 
   useEffect(() => {
     if (isLogin) {
-      getConfig();
+      getConfigPermission();
+      getOrganizationUnitByUser();
+      getUserInfor();
     }
-  }, [getConfig, isLogin]);
+  }, [getConfigPermission, getOrganizationUnitByUser, getUserInfor, isLogin]);
 
   return (
     <View style={styles.container}>

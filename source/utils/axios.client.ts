@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import QueryString, {parse, stringify} from 'qs';
 import {HOST_SERVER} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {IToken} from '@/modules/auth/auth.model';
 // Set up default config for http requests here
 
 // Please have a look at here `https://github.com/axios/axios#request-
@@ -16,7 +17,8 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async config => {
-  const token = JSON.parse(await AsyncStorage.getItem('Token'));
+  const tokenFromStorage = await AsyncStorage.getItem('Token');
+  const token = tokenFromStorage ? JSON.parse(tokenFromStorage) : undefined;
   if (token) {
     config.headers.Authorization = 'Bearer ' + token.accessToken;
   }
@@ -35,26 +37,40 @@ axiosClient.interceptors.response.use(
     }
     throw response;
   },
-  async error => {
-    const originalRequest = error.config;
-    if (
-      (error.response?.status === 403 || error.response?.status === 401) &&
-      !originalRequest._retry
-    ) {
-      // const {result} = await ImaxServer.refreshTokenRequest();
-      // const tokenFromStorage = JSON.parse(
-      //   await AsyncStorageLib.getItem('token'),
-      // );
-      // await AsyncStorageLib.setItem(
-      //   'token',
-      //   JSON.stringify({
-      //     ...tokenFromStorage,
-      //     ...result,
-      //   }),
-      // );
-      return axiosClient(originalRequest);
+  async (error: Error | AxiosError) => {
+    if (axios.isAxiosError(error)) {
+      const originalRequest = error.config;
+      if (
+        error.response?.status === 401 &&
+        !error.config?.url?.includes('RefreshToken')
+      ) {
+        const tokenFromStorage = await AsyncStorage.getItem('Token');
+        const token: IToken = tokenFromStorage
+          ? JSON.parse(tokenFromStorage)
+          : undefined;
+
+        const {
+          data: {result},
+        } = await axiosClient.post('/api/TokenAuth/RefreshToken', null, {
+          params: {refreshToken: token?.refreshToken},
+        });
+        await AsyncStorage.setItem(
+          'Token',
+          JSON.stringify({
+            ...token,
+            ...result,
+          }),
+        );
+        if (originalRequest) {
+          return axiosClient(originalRequest);
+        } else {
+          throw error;
+        }
+      }
+      throw error;
+    } else {
+      throw error;
     }
-    throw error;
   },
 );
 

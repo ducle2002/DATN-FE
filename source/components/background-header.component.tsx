@@ -1,7 +1,11 @@
-import {Dimensions, ImageBackground, StyleSheet, View} from 'react-native';
+import {
+  ImageBackground,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-const {height} = Dimensions.get('screen');
 
 type Props = React.ComponentProps<typeof View>;
 
@@ -13,11 +17,14 @@ const BackgroundHeader = ({children}: Props) => {
       style={styles.container}
       imageStyle={styles.imageContainer}>
       <SafeAreaView
-        style={[
-          {flex: 1, backgroundColor: '#091D66B2'},
-          styles.contentContainer,
-        ]}>
-        {children}
+        style={[{backgroundColor: '#091D66B2'}, styles.contentContainer]}>
+        <View
+          style={{
+            paddingBottom: 16,
+            paddingTop: Platform.OS === 'android' ? 16 : 0,
+          }}>
+          {children}
+        </View>
       </SafeAreaView>
     </ImageBackground>
   );
@@ -28,17 +35,15 @@ export default BackgroundHeader;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    minHeight: height * 0.2,
     overflow: 'hidden',
   },
   imageContainer: {
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   contentContainer: {
-    flex: 1,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    paddingHorizontal: 16,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    minHeight: '20%',
   },
 });
