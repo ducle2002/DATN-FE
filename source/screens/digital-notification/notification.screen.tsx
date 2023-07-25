@@ -1,12 +1,22 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useEffect} from 'react';
+import React from 'react';
 import MainHeader from './components/main-header.component';
-import OrganizationApi from '@/modules/organization/organization.service';
+import Button from '@/components/button.component';
+import {StackScreenProps} from '@react-navigation/stack';
+import {NotificationStackParamsList} from '@/routes/notification.stack';
 
-const NotificationScreen = () => {
+type Props = StackScreenProps<NotificationStackParamsList, 'MAIN_SCREEN'>;
+
+const NotificationScreen = ({navigation}: Props) => {
   return (
     <View>
       <MainHeader />
+      <Button
+        onPress={() => {
+          navigation.navigate('CREATE_SCREEN', {});
+        }}>
+        <Text>Tao bai</Text>
+      </Button>
     </View>
   );
 };

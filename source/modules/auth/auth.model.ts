@@ -7,4 +7,5 @@ export interface ILoginPayload {
 export interface IToken {
   accessToken: string;
   refreshToken: string;
+  tenantId: number;
 }

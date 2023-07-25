@@ -19,6 +19,7 @@ class Authentication {
     return {
       accessToken: data.result.accessToken,
       refreshToken: data.result.refreshToken,
+      tenantId: data.result.tenantId,
     };
   };
 
