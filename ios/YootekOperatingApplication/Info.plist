@@ -62,6 +62,17 @@
 			<string>assets/Icons/Octicons.ttf</string>
 			<string>assets/Icons/SimpleLineIcons.ttf</string>
 			<string>assets/Icons/Zocial.ttf</string>
+
+			<string>assets/Fonts/Inter-Back.ttf</string>
+			<string>assets/Fonts/Inter-Bold.ttf</string>
+			<string>assets/Fonts/Inter-ExtraBold.ttf</string>
+			<string>assets/Fonts/Inter-ExtraLight.ttf</string>
+
+			<string>assets/Fonts/Inter-Light.ttf</string>
+			<string>assets/Fonts/Inter-Medium.ttf</string>
+			<string>assets/Fonts/Inter-Regular.ttf</string>
+			<string>assets/Fonts/Inter-SemiBold.ttf</string>
+			<string>assets/Fonts/Inter-Thin.ttf</string>
 		</array>
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>

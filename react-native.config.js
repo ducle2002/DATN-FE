@@ -6,4 +6,8 @@ module.exports = {
       },
     },
   },
+  project: {
+    android: {}, // grouped into "project"
+  },
+  asssets: ['./asset/fonts/'],
 };

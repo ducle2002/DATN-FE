@@ -1,6 +1,5 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import AUTHENTICATION_ROUTE from '@/modules/auth/auth.route';
 import LoginScreen from '@/screens/authentication/login.screen';
 import RegisterScreen from '@/screens/authentication/register.screen';
 
@@ -9,22 +8,19 @@ export type AuthenticationStackParamsList = {
   Register: undefined;
 };
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<AuthenticationStackParamsList>();
 
 const AuthenticationStack = (): JSX.Element => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name={AUTHENTICATION_ROUTE.LOGIN_SCREEN}
+        name="Login"
         component={LoginScreen}
         options={{
           headerShown: false,
         }}
       />
-      <Stack.Screen
-        name={AUTHENTICATION_ROUTE.REGISTER_SCREEN}
-        component={RegisterScreen}
-      />
+      <Stack.Screen name="Register" component={RegisterScreen} />
     </Stack.Navigator>
   );
 };

@@ -2,6 +2,7 @@ import {StyleProp, StyleSheet, TextInput, View, ViewStyle} from 'react-native';
 import React from 'react';
 import Icon, {TypeIcon} from '@/components/icon.component';
 import globalStyles from '@/config/globalStyles';
+import CTextInput from '@/components/text-input.component';
 
 type Props = React.ComponentProps<typeof TextInput> & {
   iconName: string;
@@ -22,7 +23,8 @@ const InputComponent = ({
       <View style={styles.iconContainer}>
         <Icon name={iconName} type={iconType} size={20} color={iconColor} />
       </View>
-      <TextInput
+      <CTextInput
+        autoCapitalize="none"
         placeholderTextColor={'#e4e4e4'}
         style={styles.input}
         {...props}
@@ -42,11 +44,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#0A167C',
   },
   input: {
-    ...globalStyles.text,
+    ...globalStyles.text14Medium,
     flex: 1,
     paddingLeft: 10,
     color: 'white',
     paddingVertical: 0,
+    backgroundColor: 'transparent',
   },
   iconContainer: {
     backgroundColor: 'white',
