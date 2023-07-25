@@ -24,7 +24,7 @@ type Props = React.ComponentProps<typeof View> & {
   contentContainer?: ViewStyle;
 };
 
-const PRadioButtonGroup = ({
+const RadioButtonGroup = ({
   listOptions,
   seletedOption,
   onSelection,
@@ -48,7 +48,7 @@ const PRadioButtonGroup = ({
               onPress={() => onSelection(option.value)}
               key={option.value}
               style={styles.optionContainer}>
-              <RadioButton value={option.value} />
+              <RadioButton.Android value={option.value} />
               <Text style={[styles.textOption, itemLabelStyle]}>
                 {option.label}
               </Text>
@@ -60,7 +60,7 @@ const PRadioButtonGroup = ({
   );
 };
 
-export default PRadioButtonGroup;
+export default RadioButtonGroup;
 
 const styles = StyleSheet.create({
   optionContainer: {

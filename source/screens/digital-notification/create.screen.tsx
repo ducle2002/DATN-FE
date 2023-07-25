@@ -1,50 +1,66 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useRef, useState} from 'react';
+import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {NotificationStackParamsList} from '@/routes/notification.stack';
 import {Controller, useForm} from 'react-hook-form';
-import {RichEditor} from 'react-native-pell-rich-editor';
 import Button from '@/components/button.component';
 import {useAppSelector} from '@/hooks/redux.hook';
 import DropdownMenu from '@/components/dropdown-menu.component';
 import {TOrganizationUnit} from '@/modules/organization/organization.model';
 import CTextInput from '@/components/text-input.component';
-import PRadioButtonGroup, {
+import RadioButtonGroup, {
   TRadioItem,
 } from '@/components/radio-button-group.component';
 import globalStyles from '@/config/globalStyles';
+import TextEditor from '@/components/text-editor.component';
+import * as yup from 'yup';
+import {yupResolver} from '@hookform/resolvers/yup';
+import language, {languageKeys} from '@/config/language/language';
+import {TImagePicker} from '@/utils/image-picker-handle';
+import AddImageButton from './components/add-image-button.component';
+import {useMutation} from 'react-query';
+import UtilsApi from '@/utils/utils.service';
+import NotificationApi from '@/modules/digital-notification/digital-noti.service';
+import {useToast} from 'react-native-toast-notifications';
 
 type Props = StackScreenProps<NotificationStackParamsList, 'CREATE_SCREEN'>;
+
+const notificationSchema = yup.object({
+  data: yup.string().required(languageKeys.shared.form.requiredMessage),
+  name: yup.string().required(languageKeys.shared.form.requiredMessage),
+});
 
 const CreateNotificationScreen = ({navigation, route}: Props) => {
   const noti = route.params?.noti;
 
-  const {control, handleSubmit} = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
     defaultValues: {
       data: noti?.data ?? '',
       name: noti?.name ?? '',
     },
+    resolver: yupResolver(notificationSchema),
   });
 
-  const editorRef = useRef(null);
-
-  const onSubmit = (data: {data: string}) => {
-    console.log(data);
-  };
+  const toast = useToast();
 
   const {listOrganizations} = useAppSelector(state => state.organizationUnit);
   const {tenantId} = useAppSelector(state => state.auth);
 
   const listOption: Array<TRadioItem> = [
-    {value: true, label: 'co'},
-    {value: false, label: 'khong'},
+    {value: true, label: language.t(languageKeys.digitalNoti.create.yes)},
+    {value: false, label: language.t(languageKeys.digitalNoti.create.yes)},
   ];
 
   const [seletedOrganization, setSeletedOrganization] = useState<
     TOrganizationUnit | undefined
   >(listOrganizations[0]);
 
-  const [allowComment, setAllowComment] = useState<boolean>(false);
+  const [isAllowComment, setAllowComment] = useState<boolean>(false);
+  const [file, setFile] = useState<TImagePicker | undefined>();
 
   const onSelected = (id: number) => {
     setSeletedOrganization(
@@ -54,73 +70,134 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
     );
   };
 
+  const {mutate: createOrUpdateNotification} = useMutation({
+    mutationFn: (params: any) =>
+      NotificationApi.createOrUpdateRequest(params, {
+        'Abp.Tenantid': tenantId,
+      }),
+    onSuccess: () => {
+      toast.show(language.t(languageKeys.digitalNoti.create.createSuccess));
+      navigation.goBack();
+    },
+    onError: () => {
+      toast.show(language.t(languageKeys.digitalNoti.create.createFail));
+    },
+  });
+
+  const onSubmit = (data: {data: string}) => {
+    if (file) {
+      UtilsApi.uploadImagesRequest([file]).then(result => {
+        createOrUpdateNotification({
+          ...data,
+          fileUrl: result[0],
+          isAllowComment,
+          type: 2,
+          organizationUnitId: seletedOrganization?.organizationUnitId,
+          state: 1,
+          receiveAll: 0,
+          receiverGroupCode: null,
+        });
+      });
+    } else {
+      toast.show(language.t(languageKeys.digitalNoti.create.imageRequire));
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <DropdownMenu
-        onSelected={onSelected}
-        options={[
-          ...listOrganizations.map(o => ({
-            label: o.displayName,
-            id: o.organizationUnitId,
-          })),
-        ]}
-        label="Phong ban"
-        placeholder="chonphongban"
-        selectedLabel={seletedOrganization?.displayName}
-        labelStyle={styles.textLabel}
-        itemLabelStyle={styles.textValue}
-        inputContainer={styles.dataInput}
-      />
-
-      <PRadioButtonGroup
-        onSelection={(value: boolean) => {
-          setAllowComment(value);
-        }}
-        listOptions={listOption}
-        seletedOption={listOption[allowComment ? 0 : 1]}
-        label="Chophepbinhluan"
-        labelStyle={styles.textLabel}
-        style={[styles.sectionContainer]}
-        contentContainer={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-        }}
-      />
-
-      <View style={styles.sectionContainer}>
-        <Text style={styles.textLabel}>Tieude</Text>
-        <Controller
-          control={control}
-          name="name"
-          render={({field: {value, onChange}}) => (
-            <CTextInput value={value} onChangeText={onChange} />
+    <View style={{flex: 1}}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <DropdownMenu
+          onSelected={onSelected}
+          options={[
+            ...listOrganizations.map(o => ({
+              label: o.displayName,
+              id: o.organizationUnitId,
+            })),
+          ]}
+          label={language.t(languageKeys.digitalNoti.create.department)}
+          placeholder={language.t(
+            languageKeys.digitalNoti.create.selectDeparment,
           )}
+          selectedLabel={seletedOrganization?.displayName}
+          labelStyle={styles.textLabel}
+          itemLabelStyle={styles.textValue}
+          inputContainer={styles.dataInput}
         />
-      </View>
 
-      <View style={styles.sectionContainer}>
-        <Text style={styles.textLabel}>Noidung</Text>
-        <Controller
-          control={control}
-          name="data"
-          render={({field: {value, onChange}}) => (
-            <View
-              style={{height: 200, backgroundColor: 'white', borderRadius: 10}}>
-              <RichEditor
-                androidLayerType="software"
-                ref={editorRef}
+        <RadioButtonGroup
+          onSelection={(value: boolean) => {
+            setAllowComment(value);
+          }}
+          listOptions={listOption}
+          seletedOption={listOption[isAllowComment ? 0 : 1]}
+          label={language.t(languageKeys.digitalNoti.create.allComment)}
+          labelStyle={styles.textLabel}
+          style={[styles.sectionContainer]}
+          contentContainer={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+          }}
+        />
+
+        <View style={styles.sectionContainer}>
+          <Text style={styles.textLabel}>
+            {language.t(languageKeys.digitalNoti.create.title)}
+          </Text>
+          <Controller
+            control={control}
+            name="name"
+            render={({field: {value, onChange}}) => (
+              <CTextInput
+                value={value}
+                onChangeText={onChange}
+                containerStyle={styles.dataInput}
+                errorMessage={
+                  errors.name ? language.t(errors.name.message as string) : ''
+                }
+              />
+            )}
+          />
+        </View>
+
+        <View style={styles.sectionContainer}>
+          <Text style={styles.textLabel}>
+            {language.t(languageKeys.digitalNoti.create.data)}
+          </Text>
+          <Controller
+            control={control}
+            name="data"
+            render={({field: {value, onChange}}) => (
+              <TextEditor
                 initialContentHTML={value}
                 containerStyle={styles.dataInput}
                 onChange={onChange}
+                errorMessage={
+                  errors.data ? language.t(errors.data.message as string) : ''
+                }
               />
-            </View>
-          )}
-        />
-      </View>
+            )}
+          />
+        </View>
 
-      <Button onPress={handleSubmit(onSubmit)}>
-        <Text>Submit</Text>
-      </Button>
+        <View style={styles.sectionContainer}>
+          <Text style={styles.textLabel}>
+            {language.t(languageKeys.digitalNoti.create.selectThumbnail)}
+          </Text>
+          <AddImageButton
+            source={{uri: file?.uri}}
+            pickerHandle={(image: TImagePicker) => {
+              setFile(image);
+            }}
+          />
+        </View>
+      </ScrollView>
+      <SafeAreaView>
+        <View style={{paddingHorizontal: 10}}>
+          <Button mode="contained" onPress={handleSubmit(onSubmit)}>
+            {language.t(languageKeys.digitalNoti.create.create)}
+          </Button>
+        </View>
+      </SafeAreaView>
     </View>
   );
 };
@@ -140,6 +217,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 10,
     backgroundColor: 'white',
+    paddingVertical: 10,
   },
   textLabel: {
     ...globalStyles.text15Bold,

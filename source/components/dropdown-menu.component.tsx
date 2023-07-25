@@ -101,7 +101,6 @@ const DropdownMenu = ({
           }}>
           <View
             style={{
-              // position: 'absolute',
               top: buttonPossion.height + buttonPossion.y + headerHeight,
               width: buttonPossion.width,
               left: buttonPossion.x,
