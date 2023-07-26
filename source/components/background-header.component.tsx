@@ -4,20 +4,27 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
+  ViewStyle,
 } from 'react-native';
 import React from 'react';
 
-type Props = React.ComponentProps<typeof View>;
+type Props = React.ComponentProps<typeof View> & {
+  contentContainer?: ViewStyle;
+};
 
-const BackgroundHeader = ({children}: Props) => {
+const BackgroundHeader = ({contentContainer, children}: Props) => {
   return (
     <ImageBackground
       source={require('assets/images/login.background.png')}
-      blurRadius={5}
+      blurRadius={1}
       style={styles.container}
       imageStyle={styles.imageContainer}>
       <SafeAreaView
-        style={[{backgroundColor: '#091D66B2'}, styles.contentContainer]}>
+        style={[
+          {backgroundColor: '#091D66B2'},
+          styles.contentContainer,
+          contentContainer,
+        ]}>
         <View
           style={{
             paddingBottom: 16,
@@ -44,6 +51,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    minHeight: '20%',
+    overflow: 'hidden',
   },
 });

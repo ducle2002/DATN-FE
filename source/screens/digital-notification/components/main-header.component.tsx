@@ -8,7 +8,7 @@ import CTextInput from '@/components/text-input.component';
 const MainHeader = () => {
   const navigation = useNavigation();
   return (
-    <BackgroundHeader>
+    <BackgroundHeader contentContainer={{height: 100}}>
       <View style={styles.searchContainer}>
         <Icon
           name="chevron-back"
@@ -17,7 +17,10 @@ const MainHeader = () => {
           onPress={() => navigation.goBack()}
           color={'white'}
         />
-        <CTextInput containerStyle={styles.textInput} />
+        <CTextInput
+          style={{borderRadius: 20}}
+          containerStyle={styles.textInput}
+        />
         <Icon
           name="chevron-back"
           size={25}
@@ -40,5 +43,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'space-around',
+    overflow: 'hidden',
   },
 });

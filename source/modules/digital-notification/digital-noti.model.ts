@@ -4,3 +4,9 @@ export type TDigitalNoti = {
   fileUrl: string;
   isAllowComment: boolean;
 };
+
+export type TDigitalNotiParams = {
+  type: number;
+  skipCount: number;
+  maxResultCount: number;
+};
