@@ -86,11 +86,23 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
         'Abp.Tenantid': tenantId,
       }),
     onSuccess: () => {
-      toast.show(language.t(languageKeys.digitalNoti.create.createSuccess));
-      navigation.goBack();
+      toast.show(
+        language.t(
+          languageKeys.digitalNoti.toastNoti[
+            noti ? 'updateSuccess' : 'createSuccess'
+          ],
+        ),
+      );
+      navigation.navigate('MAIN_SCREEN');
     },
     onError: () => {
-      toast.show(language.t(languageKeys.digitalNoti.create.createFail));
+      toast.show(
+        language.t(
+          languageKeys.digitalNoti.toastNoti[
+            noti ? 'updateFail' : 'createFail'
+          ],
+        ),
+      );
     },
   });
 
@@ -123,7 +135,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
         });
       }
     } else {
-      toast.show(language.t(languageKeys.digitalNoti.create.imageRequire));
+      toast.show(language.t(languageKeys.digitalNoti.toastNoti.imageRequire));
     }
   };
 
@@ -216,7 +228,11 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
         </View>
       </ScrollView>
       <BottomButton onPress={handleSubmit(onSubmit)}>
-        {language.t(languageKeys.digitalNoti.create.create)}
+        {language.t(
+          noti
+            ? languageKeys.digitalNoti.create.update
+            : languageKeys.digitalNoti.create.create,
+        )}
       </BottomButton>
     </View>
   );

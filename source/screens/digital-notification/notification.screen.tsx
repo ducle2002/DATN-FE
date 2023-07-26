@@ -24,6 +24,7 @@ const NotificationScreen = ({navigation}: Props) => {
 
   const {data, fetchNextPage, isFetchingNextPage, isLoading, remove} =
     useInfiniteQuery({
+      queryKey: ['list-noti'],
       queryFn: ({pageParam = {...paging, skipCount: 0}}) =>
         DigitalNotiApi.getRequest(pageParam),
       getNextPageParam: (_, allPages) => {
@@ -57,7 +58,7 @@ const NotificationScreen = ({navigation}: Props) => {
         o => o.organizationUnitId === data.organizationUnitId,
       );
       return RowRender(data, department?.displayName, () => {
-        navigation.navigate('CREATE_SCREEN', {noti: data});
+        navigation.navigate('DETAIL_SCREEN', {noti: data});
       });
     },
     [listOrganizations, navigation],
