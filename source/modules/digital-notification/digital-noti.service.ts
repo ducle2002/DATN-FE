@@ -25,6 +25,11 @@ class Notification {
     const url = HOST_SERVER + this.endpoint + 'DeleteNotification';
     return axiosClient.delete(url, {params: params});
   };
+
+  deleteMultipleRequest = async (params: Array<Number>) => {
+    const url = HOST_SERVER + this.endpoint + 'DeleteMultipleNotification';
+    return axiosClient.delete(url, {data: params});
+  };
 }
 
 const DigitalNotiApi = new Notification();

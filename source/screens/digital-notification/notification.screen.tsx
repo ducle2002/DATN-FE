@@ -10,13 +10,15 @@ import {LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import NotiItem from './components/noti-item.component';
 import {useAppSelector} from '@/hooks/redux.hook';
-import BottomButton from './components/bottom-button.component';
-import language, {languageKeys} from '@/config/language/language';
+import {SelectNotiContext} from './context/digital-noti.context';
+import MainBottom from './components/main-bottom.component';
 const {width} = Dimensions.get('screen');
 
 type Props = StackScreenProps<NotificationStackParamsList, 'MAIN_SCREEN'>;
 
 const NotificationScreen = ({navigation}: Props) => {
+  const [selectedNotis, setSelectedNotis] = useState<Array<Number>>([]);
+
   const [paging, setPaging] = useState({
     maxResultCount: 10,
     type: 2,
@@ -74,31 +76,51 @@ const NotificationScreen = ({navigation}: Props) => {
   };
 
   const onRefresh = () => {
+    if (selectedNotis.length > 0) {
+      return;
+    }
     remove();
     setPaging({...paging});
+  };
+
+  const deselectAll = () => {
+    setSelectedNotis([]);
+  };
+  const toggleItemSelected = (id: number) => {
+    const index = selectedNotis.findIndex(i => i === id);
+    if (index === -1) {
+      setSelectedNotis([...selectedNotis, id]);
+    } else {
+      setSelectedNotis(selectedNotis.filter(i => i !== id));
+    }
   };
 
   return (
     <View style={styles.container}>
       <MainHeader />
-      <RecyclerListView
-        dataProvider={dataProvider}
-        layoutProvider={_layoutProvider}
-        rowRenderer={renderItem}
-        forceNonDeterministicRendering
-        onEndReached={onEndReached}
-        scrollViewProps={{
-          refreshControl: (
-            <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
-          ),
-        }}
-      />
-      <BottomButton
-        onPress={() => {
-          navigation.navigate('CREATE_SCREEN', {});
+      <SelectNotiContext.Provider
+        value={{
+          selected: selectedNotis,
+          select: toggleItemSelected,
+          reset: deselectAll,
         }}>
-        {language.t(languageKeys.digitalNoti.create.create)}
-      </BottomButton>
+        <RecyclerListView
+          dataProvider={dataProvider}
+          layoutProvider={_layoutProvider}
+          rowRenderer={renderItem}
+          forceNonDeterministicRendering
+          onEndReached={onEndReached}
+          scrollViewProps={{
+            refreshControl: (
+              <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+            ),
+            contentContainerStyle: {
+              paddingTop: 10,
+            },
+          }}
+        />
+        <MainBottom />
+      </SelectNotiContext.Provider>
     </View>
   );
 };
@@ -115,5 +137,6 @@ export default NotificationScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
 });

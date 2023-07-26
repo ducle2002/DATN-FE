@@ -21,6 +21,12 @@ const header = {
   edit: 'Chỉnh sửa thông báo',
 };
 
+const main = {
+  selected: 'Đã chọn',
+  reset: 'Bỏ chọn',
+  deleteAll: 'Xóa tất cả',
+};
+
 const toastNoti = {
   createSuccess: 'Tạo thông báo thành công',
   createFail: 'Tạo thông báo thất bại',
@@ -36,4 +42,5 @@ export const digitalNoti = {
   header,
   detail,
   toastNoti,
+  main,
 };
