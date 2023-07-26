@@ -16,7 +16,7 @@ class Notification {
       data: {result},
     } = await axiosClient.get(url, {params: params});
     return {
-      totalCount: result.totalRecord,
+      totalCount: result.totalRecords,
       data: result.data,
     };
   };

@@ -3,6 +3,8 @@ export type TDigitalNoti = {
   data: string;
   fileUrl: string;
   isAllowComment: boolean;
+  id: number;
+  organizationUnitId: number;
 };
 
 export type TDigitalNotiParams = {

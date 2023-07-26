@@ -8,7 +8,8 @@ import CTextInput from '@/components/text-input.component';
 const MainHeader = () => {
   const navigation = useNavigation();
   return (
-    <BackgroundHeader contentContainer={{height: 100}}>
+    <BackgroundHeader
+      contentContainer={{height: 100, justifyContent: 'center'}}>
       <View style={styles.searchContainer}>
         <Icon
           name="chevron-back"

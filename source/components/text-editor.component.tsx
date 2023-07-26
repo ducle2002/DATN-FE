@@ -21,11 +21,10 @@ export default TextEditor;
 
 const styles = StyleSheet.create({
   container: {
-    height: 200,
+    minHeight: 200,
     backgroundColor: 'white',
     borderRadius: 10,
     overflow: 'hidden',
-    paddingVertical: 5,
   },
   textError: {
     ...globalStyles.text12Medium,
