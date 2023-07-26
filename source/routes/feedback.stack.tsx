@@ -1,17 +1,19 @@
+import React, {useLayoutEffect} from 'react';
+
 import FeedbackScreen from '@/screens/feedback/feedback.screen';
 import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
-
 export type FeedbackStackParamsList = {
-  MAIN_SCREEN: undefined;
+  FeedBackScreen: {};
 };
-
 const Stack = createStackNavigator<FeedbackStackParamsList>();
 
 const FeedbackStack = () => {
   return (
-    <Stack.Navigator initialRouteName="MAIN_SCREEN">
-      <Stack.Screen name="MAIN_SCREEN" component={FeedbackScreen} />
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen name={'FeedBackScreen'} component={FeedbackScreen} />
     </Stack.Navigator>
   );
 };

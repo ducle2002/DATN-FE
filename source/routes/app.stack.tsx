@@ -7,6 +7,7 @@ import NotificationStack, {
 } from './notification.stack';
 import FeedbackStack, {FeedbackStackParamsList} from './feedback.stack';
 import {NavigatorScreenParams} from '@react-navigation/native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -19,33 +20,35 @@ const Stack = createStackNavigator<AppStackParamsList>();
 
 const AppStack = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerBackTitleVisible: false,
-      }}>
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name={'HOME_SCREEN'}
-        component={HomeScreen}
-      />
-      <Stack.Screen name={'SETTING_SCREEN'} component={SettingScreen} />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="NOTIFICATION_STACK"
-        component={NotificationStack}
-      />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="FEEDBACK_STACK"
-        component={FeedbackStack}
-      />
-    </Stack.Navigator>
+    <SafeAreaView style={{flex: 1}}>
+      <Stack.Navigator
+        screenOptions={{
+          headerBackTitleVisible: false,
+        }}>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name={'HOME_SCREEN'}
+          component={HomeScreen}
+        />
+        <Stack.Screen name={'SETTING_SCREEN'} component={SettingScreen} />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="NOTIFICATION_STACK"
+          component={NotificationStack}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="FEEDBACK_STACK"
+          component={FeedbackStack}
+        />
+      </Stack.Navigator>
+    </SafeAreaView>
   );
 };
 
