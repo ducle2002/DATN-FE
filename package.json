@@ -24,6 +24,7 @@
     "axios": "^1.4.0",
     "i18n-keys": "^1.0.8",
     "i18next": "^23.2.6",
+    "node-html-parser": "^6.1.5",
     "moment": "^2.29.4",
     "qs": "^6.11.2",
     "react": "18.2.0",
@@ -49,6 +50,7 @@
     "react-native-webview": "^13.2.3",
     "react-query": "^3.39.3",
     "react-redux": "^8.1.1",
+    "recyclerlistview": "^4.2.0",
     "yup": "^1.2.0"
   },
   "devDependencies": {
