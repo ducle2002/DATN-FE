@@ -22,11 +22,12 @@ const NotificationScreen = ({navigation}: Props) => {
   const [paging, setPaging] = useState({
     maxResultCount: 10,
     type: 2,
+    keyword: '',
   });
 
   const {data, fetchNextPage, isFetchingNextPage, isLoading, remove} =
     useInfiniteQuery({
-      queryKey: ['list-noti'],
+      queryKey: ['list-noti', paging.keyword],
       queryFn: ({pageParam = {...paging, skipCount: 0}}) =>
         DigitalNotiApi.getRequest(pageParam),
       getNextPageParam: (_, allPages) => {
@@ -83,6 +84,11 @@ const NotificationScreen = ({navigation}: Props) => {
     setPaging({...paging});
   };
 
+  const onKeywordChange = (value: string) => {
+    setPaging({...paging, keyword: value});
+    remove();
+  };
+
   const deselectAll = () => {
     setSelectedNotis([]);
   };
@@ -97,7 +103,7 @@ const NotificationScreen = ({navigation}: Props) => {
 
   return (
     <View style={styles.container}>
-      <MainHeader />
+      <MainHeader keywordChange={onKeywordChange} />
       <SelectNotiContext.Provider
         value={{
           selected: selectedNotis,
