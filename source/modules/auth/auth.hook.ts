@@ -12,6 +12,10 @@ export const useLogout = () => {
       AsyncStorage.removeItem('Token');
       dispatch(logoutSuccess());
     },
+    onError: () => {
+      AsyncStorage.removeItem('Token');
+      dispatch(logoutSuccess());
+    },
   });
   return {logout};
 };

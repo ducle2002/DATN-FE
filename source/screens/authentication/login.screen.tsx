@@ -39,6 +39,7 @@ const LoginScreen = (): JSX.Element => {
         JSON.stringify({
           accessToken: result.accessToken,
           refreshToken: result.refreshToken,
+          tenantId: result.tenantId,
         }),
       );
       dispatch(loginSuccess(result));

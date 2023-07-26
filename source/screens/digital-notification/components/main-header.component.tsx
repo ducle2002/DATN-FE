@@ -17,7 +17,7 @@ const MainHeader = () => {
           onPress={() => navigation.goBack()}
           color={'white'}
         />
-        <CTextInput style={styles.textInput} />
+        <CTextInput containerStyle={styles.textInput} />
         <Icon
           name="chevron-back"
           size={25}

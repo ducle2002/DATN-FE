@@ -45,39 +45,39 @@ interface Props extends IconProps {
 const Icon = ({type, ...props}: Props) => {
   switch (type) {
     case 'Ionicons':
-      return <Ionicons {...props} />;
+      return <Ionicons color={'black'} {...props} />;
     case 'AntDesign':
-      return <AntDesign {...props} />;
+      return <AntDesign color={'black'} {...props} />;
     case 'Entypo':
-      return <Entypo {...props} />;
+      return <Entypo color={'black'} {...props} />;
     case 'EvilIcons':
-      return <EvilIcons {...props} />;
+      return <EvilIcons color={'black'} {...props} />;
     case 'Feather':
-      return <Feather {...props} />;
+      return <Feather color={'black'} {...props} />;
     case 'FontAwesome':
-      return <FontAwesome {...props} />;
+      return <FontAwesome color={'black'} {...props} />;
     case 'FontAwesome5':
-      return <FontAwesome5 {...props} />;
+      return <FontAwesome5 color={'black'} {...props} />;
     case 'FontAwesome5Pro':
-      return <FontAwesome5Pro {...props} />;
+      return <FontAwesome5Pro color={'black'} {...props} />;
     case 'FontAwesome6':
-      return <FontAwesome6 {...props} />;
+      return <FontAwesome6 color={'black'} {...props} />;
     case 'FontAwesome6Pro':
-      return <FontAwesome6Pro {...props} />;
+      return <FontAwesome6Pro color={'black'} {...props} />;
     case 'Fontisto':
-      return <Fontisto {...props} />;
+      return <Fontisto color={'black'} {...props} />;
     case 'Foundation':
-      return <Foundation {...props} />;
+      return <Foundation color={'black'} {...props} />;
     case 'MaterialCommunityIcons':
-      return <MaterialCommunityIcons {...props} />;
+      return <MaterialCommunityIcons color={'black'} {...props} />;
     case 'MaterialIcons':
-      return <MaterialIcons {...props} />;
+      return <MaterialIcons color={'black'} {...props} />;
     case 'Octicons':
-      return <Octicons {...props} />;
+      return <Octicons color={'black'} {...props} />;
     case 'SimpleLineIcons':
-      return <SimpleLineIcons {...props} />;
+      return <SimpleLineIcons color={'black'} {...props} />;
     case 'Zocial':
-      return <Zocial {...props} />;
+      return <Zocial color={'black'} {...props} />;
     default:
       return undefined;
   }
