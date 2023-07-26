@@ -389,6 +389,8 @@ PODS:
     - React-Core
   - react-native-flipper (0.163.0):
     - React-Core
+  - react-native-render-html (6.3.4):
+    - React-Core
   - react-native-safe-area-context (4.6.3):
     - RCT-Folly
     - RCTRequired
@@ -619,6 +621,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - "react-native-cameraroll (from `../node_modules/@react-native-camera-roll/camera-roll`)"
   - react-native-flipper (from `../node_modules/react-native-flipper`)
+  - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -718,6 +721,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-camera-roll/camera-roll"
   react-native-flipper:
     :path: "../node_modules/react-native-flipper"
+  react-native-render-html:
+    :path: "../node_modules/react-native-render-html"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-webview:
@@ -811,6 +816,7 @@ SPEC CHECKSUMS:
   React-logger: b8103c9b04e707b50cdd2b1aeb382483900cbb37
   react-native-cameraroll: 134805127580aed23403b8c2cb1548920dd77b3a
   react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
+  react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
   react-native-webview: b85dfe0bf95bef83e82fc354d6987c80fed5e7ad
   React-NativeModulesApple: 4f31a812364443cee6ef768d256c594ad3b20f53
@@ -846,4 +852,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7bff00a803b551ca94269eafe401ca5d6e574068
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.12.0

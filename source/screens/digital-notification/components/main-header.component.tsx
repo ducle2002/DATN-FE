@@ -4,11 +4,24 @@ import BackgroundHeader from '@/components/background-header.component';
 import Icon from '@/components/icon.component';
 import {useNavigation} from '@react-navigation/native';
 import CTextInput from '@/components/text-input.component';
+import {Controller, useForm} from 'react-hook-form';
 
-const MainHeader = () => {
+type Props = {
+  keywordChange: Function;
+};
+const MainHeader = ({keywordChange = () => {}}: Props) => {
   const navigation = useNavigation();
+  const {control, handleSubmit} = useForm({
+    defaultValues: {keyword: ''},
+  });
+
+  const onSubmit = (data: any) => {
+    keywordChange(data.keyword);
+  };
+
   return (
-    <BackgroundHeader contentContainer={{height: 100}}>
+    <BackgroundHeader
+      contentContainer={{height: 100, justifyContent: 'center'}}>
       <View style={styles.searchContainer}>
         <Icon
           name="chevron-back"
@@ -17,9 +30,18 @@ const MainHeader = () => {
           onPress={() => navigation.goBack()}
           color={'white'}
         />
-        <CTextInput
-          style={{borderRadius: 20}}
-          containerStyle={styles.textInput}
+        <Controller
+          control={control}
+          name="keyword"
+          render={({field: {value, onChange}}) => (
+            <CTextInput
+              style={{borderRadius: 20}}
+              containerStyle={styles.textInput}
+              value={value}
+              onChangeText={onChange}
+              onSubmitEditing={handleSubmit(onSubmit)}
+            />
+          )}
         />
         <Icon
           name="chevron-back"

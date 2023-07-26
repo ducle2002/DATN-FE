@@ -1,6 +1,6 @@
 import axiosClient from '@/utils/axios.client';
 import {HOST_SERVER} from '@env';
-import {TDigitalNotiParams} from './digital-noti.model';
+import {TDeleteParams, TDigitalNotiParams} from './digital-noti.model';
 
 class Notification {
   endpoint = '/api/services/app/CityAdminNotification/';
@@ -16,9 +16,19 @@ class Notification {
       data: {result},
     } = await axiosClient.get(url, {params: params});
     return {
-      totalCount: result.totalRecord,
+      totalCount: result.totalRecords,
       data: result.data,
     };
+  };
+
+  deleteRequest = async (params: TDeleteParams) => {
+    const url = HOST_SERVER + this.endpoint + 'DeleteNotification';
+    return axiosClient.delete(url, {params: params});
+  };
+
+  deleteMultipleRequest = async (params: Array<Number>) => {
+    const url = HOST_SERVER + this.endpoint + 'DeleteMultipleNotification';
+    return axiosClient.delete(url, {data: params});
   };
 }
 

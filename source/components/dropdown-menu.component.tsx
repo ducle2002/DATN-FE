@@ -88,6 +88,8 @@ const DropdownMenu = ({
         <Icon type="Ionicons" name="chevron-forward" size={20} />
       </View>
       <ReactNativeModal
+        useNativeDriverForBackdrop
+        statusBarTranslucent
         backdropOpacity={0.2}
         animationIn={'fadeIn'}
         animationOut={'fadeOut'}

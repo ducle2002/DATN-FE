@@ -11,7 +11,14 @@ type Props = React.ComponentProps<typeof RichEditor> & {
 const TextEditor = ({containerStyle, errorMessage, ...props}: Props) => {
   return (
     <View style={[styles.container, containerStyle]}>
-      <RichEditor style={{flex: 1}} androidLayerType="software" {...props} />
+      <RichEditor
+        allowsLinkPreview
+        allowFileAccessFromFileURLs
+        style={{flex: 1}}
+        androidLayerType="software"
+        renderToHardwareTextureAndroid={true}
+        {...props}
+      />
       <Text style={styles.textError}>{errorMessage}</Text>
     </View>
   );
@@ -21,11 +28,10 @@ export default TextEditor;
 
 const styles = StyleSheet.create({
   container: {
-    height: 200,
+    minHeight: 200,
     backgroundColor: 'white',
     borderRadius: 10,
     overflow: 'hidden',
-    paddingVertical: 5,
   },
   textError: {
     ...globalStyles.text12Medium,

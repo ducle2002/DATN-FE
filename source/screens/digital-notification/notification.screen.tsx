@@ -1,7 +1,7 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useMemo, useRef} from 'react';
+/* eslint-disable @typescript-eslint/no-shadow */
+import {Dimensions, RefreshControl, StyleSheet, View} from 'react-native';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import MainHeader from './components/main-header.component';
-import Button from '@/components/button.component';
 import {StackScreenProps} from '@react-navigation/stack';
 import {NotificationStackParamsList} from '@/routes/notification.stack';
 import {useInfiniteQuery} from 'react-query';
@@ -9,20 +9,35 @@ import DigitalNotiApi from '@/modules/digital-notification/digital-noti.service'
 import {LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import NotiItem from './components/noti-item.component';
-import {useAppDispatch, useAppSelector} from '@/hooks/redux.hook';
+import {useAppSelector} from '@/hooks/redux.hook';
+import {SelectNotiContext} from './context/digital-noti.context';
+import MainBottom from './components/main-bottom.component';
 const {width} = Dimensions.get('screen');
 
 type Props = StackScreenProps<NotificationStackParamsList, 'MAIN_SCREEN'>;
 
 const NotificationScreen = ({navigation}: Props) => {
-  const {data} = useInfiniteQuery({
-    queryFn: () =>
-      DigitalNotiApi.getRequest({
-        maxResultCount: 20,
-        skipCount: 0,
-        type: 2,
-      }),
+  const [selectedNotis, setSelectedNotis] = useState<Array<Number>>([]);
+
+  const [paging, setPaging] = useState({
+    maxResultCount: 10,
+    type: 2,
+    keyword: '',
   });
+
+  const {data, fetchNextPage, isFetchingNextPage, isLoading, remove} =
+    useInfiniteQuery({
+      queryKey: ['list-noti', paging.keyword],
+      queryFn: ({pageParam = {...paging, skipCount: 0}}) =>
+        DigitalNotiApi.getRequest(pageParam),
+      getNextPageParam: (_, allPages) => {
+        const skipCount = allPages.length * paging.maxResultCount;
+        return {
+          ...paging,
+          skipCount: skipCount,
+        };
+      },
+    });
 
   const dataProvider = useMemo(() => {
     return dataProviderMaker(data?.pages.map(page => page.data).flat() ?? []);
@@ -41,44 +56,93 @@ const NotificationScreen = ({navigation}: Props) => {
   const {listOrganizations} = useAppSelector(state => state.organizationUnit);
 
   const renderItem = useCallback(
-    (_, data) => {
+    (_: any, data: any) => {
       const department = listOrganizations.find(
         o => o.organizationUnitId === data.organizationUnitId,
       );
-      return RowRender(data, department?.displayName);
+      return RowRender(data, department?.displayName, () => {
+        navigation.navigate('DETAIL_SCREEN', {noti: data});
+      });
     },
-    [listOrganizations],
+    [listOrganizations, navigation],
   );
 
+  const onEndReached = () => {
+    if (
+      !isFetchingNextPage &&
+      data?.pages[0].totalCount > dataProvider.getSize()
+    ) {
+      fetchNextPage();
+    }
+  };
+
+  const onRefresh = () => {
+    if (selectedNotis.length > 0) {
+      return;
+    }
+    remove();
+    setPaging({...paging});
+  };
+
+  const onKeywordChange = (value: string) => {
+    setPaging({...paging, keyword: value});
+    remove();
+  };
+
+  const deselectAll = () => {
+    setSelectedNotis([]);
+  };
+  const toggleItemSelected = (id: number) => {
+    const index = selectedNotis.findIndex(i => i === id);
+    if (index === -1) {
+      setSelectedNotis([...selectedNotis, id]);
+    } else {
+      setSelectedNotis(selectedNotis.filter(i => i !== id));
+    }
+  };
+
   return (
-    <View style={{flex: 1}}>
-      <MainHeader />
-      <RecyclerListView
-        dataProvider={dataProvider}
-        layoutProvider={_layoutProvider}
-        rowRenderer={renderItem}
-        forceNonDeterministicRendering
-      />
-      <Button
-        onPress={() => {
-          navigation.navigate('CREATE_SCREEN', {});
+    <View style={styles.container}>
+      <MainHeader keywordChange={onKeywordChange} />
+      <SelectNotiContext.Provider
+        value={{
+          selected: selectedNotis,
+          select: toggleItemSelected,
+          reset: deselectAll,
         }}>
-        <Text>Tao bai</Text>
-      </Button>
+        <RecyclerListView
+          dataProvider={dataProvider}
+          layoutProvider={_layoutProvider}
+          rowRenderer={renderItem}
+          forceNonDeterministicRendering
+          onEndReached={onEndReached}
+          scrollViewProps={{
+            refreshControl: (
+              <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+            ),
+            contentContainerStyle: {
+              paddingTop: 10,
+            },
+          }}
+        />
+        <MainBottom />
+      </SelectNotiContext.Provider>
     </View>
   );
 };
 
-const RowRender = (data: any, department: string | undefined) => {
-  // const {listOrganizations} = useAppSelector(state => state.organizationUnit);
-  // console.log(
-  //   listOrganizations.find(
-  //     o => o.organizationUnitId === data.organizationUnitId,
-  //   ),
-  // );
-
-  return <NotiItem item={data} department={department} />;
+const RowRender = (
+  data: any,
+  department: string | undefined,
+  onPress: Function = () => {},
+) => {
+  return <NotiItem item={data} department={department} onPress={onPress} />;
 };
 export default NotificationScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+});

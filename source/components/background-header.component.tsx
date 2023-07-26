@@ -1,7 +1,7 @@
 import {
   ImageBackground,
-  Platform,
   SafeAreaView,
+  StatusBar,
   StyleSheet,
   View,
   ViewStyle,
@@ -28,7 +28,6 @@ const BackgroundHeader = ({contentContainer, children}: Props) => {
         <View
           style={{
             paddingBottom: 16,
-            paddingTop: Platform.OS === 'android' ? 16 : 0,
           }}>
           {children}
         </View>
@@ -52,5 +51,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     overflow: 'hidden',
+    paddingTop: StatusBar.currentHeight,
   },
 });
