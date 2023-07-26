@@ -1,0 +1,41 @@
+export type TFeedback = {
+  fullName: string;
+  userName: string;
+  imageUrl: string;
+  countAllComment: number;
+  note: string | null;
+  fileOfNote: string | null;
+  apartmentCode: number | null;
+  buildingId: number | null;
+  email: string | null;
+  address: string | null;
+  organizationUnitName: string;
+  handlerName: string | null;
+  name: string;
+  data: string;
+  fileUrl: string;
+  type: number;
+  tenantId: number;
+  finishTime: Date | null;
+  state: number;
+  rating: number | null;
+  ratingContent: string | null;
+  organizationUnitId: number;
+  checkVerify: boolean | null;
+  phone: string | null;
+  nameFeeder: string | null;
+  countUnreadComment: number;
+  handleUserId: number | null;
+  handleOrganizationUnitId: number | null;
+  reflectReport: string | null;
+  reportName: string | null;
+  lastModificationTime?: string;
+  creationTime: string;
+  creatorUserId: number;
+  id: number;
+};
+
+export type TFeedbackPage = {
+  listFeedback: Array<TFeedback>;
+  total: number;
+};
