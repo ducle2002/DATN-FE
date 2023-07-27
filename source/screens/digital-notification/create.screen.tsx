@@ -1,4 +1,11 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {NotificationStackParamsList} from '@/routes/notification.stack';
@@ -140,8 +147,12 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
   };
 
   return (
-    <View style={{height: '100%'}}>
-      <ScrollView contentContainerStyle={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={{height: '100%'}}>
+      <ScrollView
+        removeClippedSubviews={false}
+        contentContainerStyle={styles.container}>
         <DropdownMenu
           onSelected={onSelected}
           options={[
@@ -210,6 +221,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
                 errorMessage={
                   errors.data ? language.t(errors.data.message as string) : ''
                 }
+                hideKeyboardAccessoryView={false}
               />
             )}
           />
@@ -234,7 +246,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
             : languageKeys.digitalNoti.create.create,
         )}
       </BottomButton>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
