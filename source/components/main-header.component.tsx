@@ -7,7 +7,7 @@ import CTextInput from '@/components/text-input.component';
 import {Controller, useForm} from 'react-hook-form';
 
 type Props = {
-  keywordChange: Function;
+  keywordChange?: Function;
 };
 const MainHeader = ({keywordChange = () => {}}: Props) => {
   const navigation = useNavigation();

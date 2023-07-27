@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import {Dimensions, RefreshControl, StyleSheet, View} from 'react-native';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import MainHeader from './components/main-header.component';
+import MainHeader from '../../components/main-header.component';
 import {StackScreenProps} from '@react-navigation/stack';
 import {NotificationStackParamsList} from '@/routes/notification.stack';
 import {useInfiniteQuery} from 'react-query';
@@ -111,6 +111,7 @@ const NotificationScreen = ({navigation}: Props) => {
           reset: deselectAll,
         }}>
         <RecyclerListView
+          optimizeForInsertDeleteAnimations
           dataProvider={dataProvider}
           layoutProvider={_layoutProvider}
           rowRenderer={renderItem}

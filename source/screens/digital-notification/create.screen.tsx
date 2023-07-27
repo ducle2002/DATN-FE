@@ -28,7 +28,7 @@ import {useMutation} from 'react-query';
 import UtilsApi from '@/utils/utils.service';
 import NotificationApi from '@/modules/digital-notification/digital-noti.service';
 import {useToast} from 'react-native-toast-notifications';
-import BottomButton from './components/bottom-button.component';
+import BottomButton from '../../components/bottom-button.component';
 
 type Props = StackScreenProps<NotificationStackParamsList, 'CREATE_SCREEN'>;
 
@@ -187,14 +187,12 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
         />
 
         <View style={styles.sectionContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.digitalNoti.create.title)}
-          </Text>
           <Controller
             control={control}
             name="name"
             render={({field: {value, onChange}}) => (
               <CTextInput
+                label={language.t(languageKeys.digitalNoti.create.title)}
                 value={value}
                 onChangeText={onChange}
                 containerStyle={styles.dataInput}
@@ -264,7 +262,6 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 10,
     backgroundColor: 'white',
-    paddingVertical: 10,
   },
   textLabel: {
     ...globalStyles.text15Bold,

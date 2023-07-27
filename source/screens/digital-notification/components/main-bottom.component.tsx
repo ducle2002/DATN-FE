@@ -34,7 +34,7 @@ const MainBottom = () => {
         <Button
           mode="contained"
           onPress={() => navigation.navigate('CREATE_SCREEN', {})}
-          style={{flex: 1}}>
+          icon={'plus'}>
           {language.t(languageKeys.digitalNoti.create.create)}
         </Button>
       ) : (
@@ -54,7 +54,8 @@ const MainBottom = () => {
             onPress={() => {
               deleteAll();
             }}
-            mode="contained">
+            mode="contained"
+            icon="delete">
             {language.t(languageKeys.digitalNoti.main.deleteAll)}
           </Button>
         </>

@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useMemo} from 'react';
 import HTMLParser from 'node-html-parser';
 import globalStyles from '@/config/globalStyles';
@@ -8,6 +8,7 @@ import FastImage from 'react-native-fast-image';
 import {SelectNotiContext} from '../context/digital-noti.context';
 import {RadioButton} from 'react-native-paper';
 import Animated, {SlideInLeft, SlideOutLeft} from 'react-native-reanimated';
+import ItemCard from '@/components/item-card.component';
 type Props = {
   item: any;
   department?: string;
@@ -15,9 +16,10 @@ type Props = {
 };
 
 const NotiItem = ({item, department, onPress = () => {}}: Props) => {
-  const root = HTMLParser.parse(item.data);
-
   const {select, selected} = useContext(SelectNotiContext);
+
+  const root = useMemo(() => HTMLParser.parse(item?.data), [item?.data]);
+  console.log(root);
 
   const isSelected = useMemo(
     () => selected.includes(item.id),
@@ -25,7 +27,7 @@ const NotiItem = ({item, department, onPress = () => {}}: Props) => {
   );
 
   return (
-    <Pressable
+    <ItemCard
       onLongPress={() => {
         select(item.id);
       }}
@@ -36,12 +38,9 @@ const NotiItem = ({item, department, onPress = () => {}}: Props) => {
           select(item.id);
         }
       }}
-      style={[
-        styles.container,
-        {
-          backgroundColor: isSelected ? '#f1f2f8' : 'white',
-        },
-      ]}>
+      style={{
+        backgroundColor: isSelected ? '#f1f2f8' : 'white',
+      }}>
       {isSelected && (
         <Animated.View
           entering={SlideInLeft}
@@ -64,13 +63,13 @@ const NotiItem = ({item, department, onPress = () => {}}: Props) => {
           {item.name}
         </Text>
         <Text style={styles.textData} numberOfLines={2}>
-          {root.textContent.trim() + '\n'}
+          {root?.textContent?.trim() + '\n'}
         </Text>
         <Text style={styles.textTime}>
           {moment(item.creationTime).format('HH:mm DD/MM/YYYY')}
         </Text>
       </View>
-    </Pressable>
+    </ItemCard>
   );
 };
 
@@ -80,21 +79,9 @@ const styles = StyleSheet.create({
   image: {
     height: '100%',
     aspectRatio: 1,
+    borderRadius: 8,
   },
-  container: {
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: 'white',
-    marginBottom: 20,
-    width: '100%',
-    elevation: 2,
-    shadowOpacity: 0.1,
-    shadowOffset: {
-      height: 2,
-      width: 1,
-    },
-  },
+
   contentContainer: {
     flex: 1,
     marginLeft: 10,
