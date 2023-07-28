@@ -5,6 +5,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import AppStack from '@/routes/app.stack';
 import {useAppSelector} from '@/hooks/redux.hook';
 import {ToastProvider} from 'react-native-toast-notifications';
+import {StatusBar} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const queryClient = new QueryClient();
@@ -15,6 +16,7 @@ function App(): JSX.Element {
       <QueryClientProvider client={queryClient}>
         <ToastProvider placement="center" duration={1500}>
           <NavigationContainer>
+            <StatusBar translucent={true} backgroundColor={'transparent'} />
             {isLogin ? <AppStack /> : <AuthenticationStack />}
           </NavigationContainer>
         </ToastProvider>

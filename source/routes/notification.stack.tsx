@@ -4,10 +4,11 @@ import NotificationScreen from '@/screens/digital-notification/notification.scre
 import CreateNotificationScreen from '@/screens/digital-notification/create.screen';
 import {TDigitalNoti} from '@/modules/digital-notification/digital-noti.model';
 import language, {languageKeys} from '@/config/language/language';
+import DetailScreen from '@/screens/digital-notification/detail.screen';
 
 export type NotificationStackParamsList = {
   MAIN_SCREEN: undefined;
-  DETAIL_SCREEN: undefined;
+  DETAIL_SCREEN: {noti: TDigitalNoti};
   CREATE_SCREEN: {noti?: TDigitalNoti};
 };
 
@@ -28,8 +29,15 @@ const NotificationStack = () => {
       <Stack.Screen
         name="CREATE_SCREEN"
         component={CreateNotificationScreen}
-        options={{title: language.t(languageKeys.digitalNoti.header.create)}}
+        options={({route}) => ({
+          title: language.t(
+            route.params?.noti
+              ? languageKeys.digitalNoti.header.edit
+              : languageKeys.digitalNoti.header.create,
+          ),
+        })}
       />
+      <Stack.Screen name="DETAIL_SCREEN" component={DetailScreen} />
     </Stack.Navigator>
   );
 };

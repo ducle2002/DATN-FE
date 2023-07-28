@@ -12,11 +12,19 @@ import globalStyles from '@/config/globalStyles';
 type Props = React.ComponentProps<typeof TextInput> & {
   errorMessage?: string;
   containerStyle?: ViewStyle;
+  label?: string;
 };
 
-const CTextInput = ({style, errorMessage, containerStyle, ...props}: Props) => {
+const CTextInput = ({
+  style,
+  label,
+  errorMessage,
+  containerStyle,
+  ...props
+}: Props) => {
   return (
     <>
+      {label && <Text style={styles.textLabel}>{label}</Text>}
       <View style={[styles.container, containerStyle]}>
         <TextInput style={[styles.textInput, style]} {...props} />
       </View>
@@ -32,6 +40,10 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     minHeight: 35,
+  },
+  textLabel: {
+    ...globalStyles.text15Bold,
+    marginBottom: 5,
   },
   textInput: {
     ...globalStyles.text15Medium,
