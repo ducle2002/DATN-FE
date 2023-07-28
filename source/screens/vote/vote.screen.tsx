@@ -10,7 +10,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {VoteStackParamsList} from '@/routes/vote.stack';
 import {RefreshControl} from 'react-native-gesture-handler';
 import VoteItem from './components/vote-item.component';
-import {TVote} from '@/modules/vote/vote.model';
+import {EVoteState, TVote, votesFilter} from '@/modules/vote/vote.model';
 import FilterVote from './components/filter.component';
 
 type Props = StackScreenProps<VoteStackParamsList>;
@@ -18,13 +18,13 @@ type Props = StackScreenProps<VoteStackParamsList>;
 const VoteScreen = ({navigation}: Props) => {
   const [paging, setPaging] = useState({
     maxResultCount: 10,
-    type: 2,
     keyword: '',
+    state: votesFilter[0].state,
   });
 
   const {data, fetchNextPage, isFetchingNextPage, isLoading, remove} =
     useInfiniteQuery({
-      queryKey: ['list-vote', paging.keyword],
+      queryKey: ['list-vote', paging.keyword, paging.state],
       queryFn: ({pageParam = {...paging, skipCount: 0}}) =>
         VoteApi.getRequest(pageParam),
       getNextPageParam: (_, allPages) => {
@@ -81,6 +81,11 @@ const VoteScreen = ({navigation}: Props) => {
     [onKeywordChange],
   );
 
+  const onFilterChange = (filter: EVoteState) => {
+    setPaging({...paging, state: filter});
+    remove();
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
       header: renderHeader,
@@ -89,7 +94,8 @@ const VoteScreen = ({navigation}: Props) => {
   }, [navigation, renderHeader]);
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.container}>
+      <FilterVote selected={paging.state} onChange={onFilterChange} />
       <FlatList
         data={dataProvider.getAllData()}
         renderItem={renderItem}
@@ -99,7 +105,6 @@ const VoteScreen = ({navigation}: Props) => {
         onEndReached={onEndReached}
         contentContainerStyle={{paddingTop: 10}}
       />
-      <FilterVote />
       <BottomButton
         onPress={() => {
           navigation.navigate('CREATE_SCREEN', {});
@@ -109,6 +114,7 @@ const VoteScreen = ({navigation}: Props) => {
     </View>
   );
 };
+
 const RowRender = (
   data: any,
   department: string | undefined,
@@ -118,4 +124,8 @@ const RowRender = (
 };
 export default VoteScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

@@ -23,10 +23,22 @@ const toastNoti = {
   optionRequired: 'Hãy thêm lựa chọn',
 };
 
+const main = {
+  status: 'Trạng thái',
+};
+
+const status = {
+  all: 'Tất cả',
+  expired: 'Đã kết thúc',
+  inProgress: 'Đang diễn ra',
+};
+
 const vote = {
   header,
   toastNoti,
   create,
+  main,
+  status,
 };
 
 export default vote;

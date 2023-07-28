@@ -1,22 +1,35 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import React, {useMemo} from 'react';
 import DropdownMenu from '@/components/dropdown-menu.component';
+import globalStyles from '@/config/globalStyles';
+import {EVoteState, TVoteStatus, votesFilter} from '@/modules/vote/vote.model';
+import language, {languageKeys} from '@/config/language/language';
 
-type Props = {};
+type Props = {
+  onChange: Function;
+  selected: EVoteState;
+};
 
-const FilterVote = (props: Props) => {
+const FilterVote = ({onChange = () => {}, selected}: Props) => {
+  const selectedLabel = useMemo<TVoteStatus>(
+    () => votesFilter.find(v => v.state === selected)?.label ?? 'all',
+    [selected],
+  );
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        backgroundColor: 'white',
-        paddingHorizontal: 10,
-      }}>
+    <View style={styles.container}>
       <DropdownMenu
-        selectedLabel="tat ca"
+        selectedLabel={language.t(languageKeys.vote.status[selectedLabel])}
+        label={language.t(languageKeys.vote.main.status)}
+        labelStyle={{...globalStyles.text15Medium}}
         style={{flexDirection: 'row', alignItems: 'center'}}
-        options={[{label: 'tat ca', id: 1}]}
-        onSelected={() => {}}
+        valueStyle={{...globalStyles.text15Bold}}
+        options={votesFilter.map(f => ({
+          id: f.state,
+          label: language.t(languageKeys.vote.status[f.label]),
+        }))}
+        onSelected={(option: EVoteState) => {
+          onChange(option);
+        }}
       />
     </View>
   );
@@ -24,4 +37,13 @@ const FilterVote = (props: Props) => {
 
 export default FilterVote;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    elevation: 1,
+    shadowOpacity: 0.2,
+  },
+});
