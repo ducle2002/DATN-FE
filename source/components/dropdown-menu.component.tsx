@@ -21,14 +21,15 @@ export type TOptionItem = {
 };
 
 type Props = React.ComponentProps<typeof View> & {
-  label: string;
+  label?: string;
   labelStyle?: TextStyle;
   options: Array<TOptionItem>;
   selectedLabel: string | undefined;
-  placeholder: string;
+  placeholder?: string;
   itemLabelStyle?: TextStyle;
   onSelected: Function;
   inputContainer?: ViewStyle;
+  valueStyle?: TextStyle;
 };
 
 const DropdownMenu = ({
@@ -40,6 +41,7 @@ const DropdownMenu = ({
   labelStyle,
   itemLabelStyle,
   inputContainer,
+  valueStyle,
   ...props
 }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -80,11 +82,15 @@ const DropdownMenu = ({
       onPress={toggleIsVisible}
       style={[styles.container, props.style]}
       {...props}>
-      <View>
-        <Text style={[styles.textLabel, labelStyle]}>{label}</Text>
-      </View>
+      {label && (
+        <View>
+          <Text style={[styles.textLabel, labelStyle]}>{label}</Text>
+        </View>
+      )}
       <View style={[styles.inputContainer, inputContainer]}>
-        <Text style={styles.textValue}>{selectedLabel ?? placeholder}</Text>
+        <Text style={[styles.textValue, valueStyle]}>
+          {selectedLabel ?? placeholder}
+        </Text>
         <Icon type="Ionicons" name="chevron-forward" size={20} />
       </View>
       <ReactNativeModal
@@ -134,6 +140,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   listOption: {
     backgroundColor: 'white',

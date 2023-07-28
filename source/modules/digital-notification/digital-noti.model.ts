@@ -8,12 +8,13 @@ export type TDigitalNoti = {
   creationTime: string;
 };
 
-export type TDigitalNotiParams = {
+export type TDigitalNotiGetParams = {
   type: number;
   skipCount: number;
   maxResultCount: number;
+  keyword?: string;
 };
 
-export type TDeleteParams = {
+export type TDigitalDeleteParams = {
   id: number;
 };

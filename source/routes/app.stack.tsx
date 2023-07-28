@@ -7,12 +7,14 @@ import NotificationStack, {
 } from './notification.stack';
 import FeedbackStack, {FeedbackStackParamsList} from './feedback.stack';
 import {NavigatorScreenParams} from '@react-navigation/native';
+import VoteStack, {VoteStackParamsList} from './vote.stack';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
   SETTING_SCREEN: undefined;
   NOTIFICATION_STACK: NavigatorScreenParams<NotificationStackParamsList>;
   FEEDBACK_STACK: NavigatorScreenParams<FeedbackStackParamsList>;
+  VOTE_STACK: NavigatorScreenParams<VoteStackParamsList>;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -44,6 +46,13 @@ const AppStack = () => {
         }}
         name="FEEDBACK_STACK"
         component={FeedbackStack}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="VOTE_STACK"
+        component={VoteStack}
       />
     </Stack.Navigator>
   );

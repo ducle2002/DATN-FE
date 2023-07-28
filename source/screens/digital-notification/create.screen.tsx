@@ -1,4 +1,11 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {NotificationStackParamsList} from '@/routes/notification.stack';
@@ -21,7 +28,7 @@ import {useMutation} from 'react-query';
 import UtilsApi from '@/utils/utils.service';
 import NotificationApi from '@/modules/digital-notification/digital-noti.service';
 import {useToast} from 'react-native-toast-notifications';
-import BottomButton from './components/bottom-button.component';
+import BottomButton from '../../components/bottom-button.component';
 
 type Props = StackScreenProps<NotificationStackParamsList, 'CREATE_SCREEN'>;
 
@@ -140,8 +147,12 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
   };
 
   return (
-    <View style={{height: '100%'}}>
-      <ScrollView contentContainerStyle={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={{height: '100%'}}>
+      <ScrollView
+        removeClippedSubviews={false}
+        contentContainerStyle={styles.container}>
         <DropdownMenu
           onSelected={onSelected}
           options={[
@@ -176,14 +187,12 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
         />
 
         <View style={styles.sectionContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.digitalNoti.create.title)}
-          </Text>
           <Controller
             control={control}
             name="name"
             render={({field: {value, onChange}}) => (
               <CTextInput
+                label={language.t(languageKeys.digitalNoti.create.title)}
                 value={value}
                 onChangeText={onChange}
                 containerStyle={styles.dataInput}
@@ -210,6 +219,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
                 errorMessage={
                   errors.data ? language.t(errors.data.message as string) : ''
                 }
+                hideKeyboardAccessoryView={false}
               />
             )}
           />
@@ -234,7 +244,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
             : languageKeys.digitalNoti.create.create,
         )}
       </BottomButton>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -252,7 +262,6 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 10,
     backgroundColor: 'white',
-    paddingVertical: 10,
   },
   textLabel: {
     ...globalStyles.text15Bold,
