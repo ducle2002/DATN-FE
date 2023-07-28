@@ -31,6 +31,7 @@ const status = {
   all: 'Tất cả',
   expired: 'Đã kết thúc',
   inProgress: 'Đang diễn ra',
+  comming: 'Sắp diễn ra',
 };
 
 const vote = {

@@ -1,4 +1,10 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useLayoutEffect, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import BottomButton from '@/components/bottom-button.component';
@@ -41,7 +47,7 @@ const CreateScreen = ({navigation, route}: Props) => {
   const {listOrganizations} = useAppSelector(state => state.organizationUnit);
   const queryClient = useQueryClient();
 
-  const {mutate: createOrUpdate} = useMutation({
+  const {mutate: createOrUpdate, status} = useMutation({
     mutationFn: params => VoteApi.createOrUpdateRequest(params),
     onSuccess: () => {
       toast.show(
@@ -116,7 +122,10 @@ const CreateScreen = ({navigation, route}: Props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : undefined}
+      style={styles.container}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{paddingHorizontal: 16, paddingTop: 5}}>
@@ -213,10 +222,12 @@ const CreateScreen = ({navigation, route}: Props) => {
           />
         </View>
       </ScrollView>
-      <BottomButton onPress={handleSubmit(onSubmit)}>
+      <BottomButton
+        onPress={handleSubmit(onSubmit)}
+        disabled={status === 'loading'}>
         {language.t(languageKeys.vote.create[vote ? 'update' : 'create'])}
       </BottomButton>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -226,9 +237,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flex: 1,
+    marginTop: 5,
   },
   optionItem: {
-    // marginBottom: 10,
     backgroundColor: 'red',
   },
   textLabel: {

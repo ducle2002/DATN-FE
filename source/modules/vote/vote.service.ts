@@ -19,6 +19,16 @@ class Vote {
     const url = HOST_SERVER + this.endpoint + 'CreateOrUpdateCityVote';
     return axiosClient.post(url, params);
   };
+
+  deleteRequest = async (params: {id: number}) => {
+    const url = HOST_SERVER + this.endpoint + 'DeleteCityVote';
+    return axiosClient.delete(url, {params});
+  };
+
+  deleteMultipleRequest = async (params: Array<number>) => {
+    const url = HOST_SERVER + this.endpoint + 'DeleteMultipleCityVote';
+    return axiosClient.delete(url, {data: params});
+  };
 }
 
 const VoteApi = new Vote();

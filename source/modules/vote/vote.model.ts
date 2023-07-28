@@ -31,9 +31,11 @@ export enum EVoteState {
   DISABLE = 5,
   UNEXPIRED = 6,
   EXPIRED = 7,
+  COMMING = 8,
+  IN_PROGRESS = 9,
 }
 
-export type TVoteStatus = 'all' | 'expired' | 'inProgress';
+export type TVoteStatus = 'all' | 'expired' | 'inProgress' | 'comming';
 
 export type TVoteFilter = {
   state: EVoteState;
@@ -47,7 +49,11 @@ export const votesFilter: Array<TVoteFilter> = [
   },
   {
     label: 'inProgress',
-    state: EVoteState.UNEXPIRED,
+    state: EVoteState.IN_PROGRESS,
+  },
+  {
+    label: 'comming',
+    state: EVoteState.COMMING,
   },
   {
     label: 'expired',

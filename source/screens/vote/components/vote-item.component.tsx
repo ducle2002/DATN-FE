@@ -1,10 +1,11 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import ItemCard from '@/components/item-card.component';
 import globalStyles from '@/config/globalStyles';
 import {TVote} from '@/modules/vote/vote.model';
 import {ProgressBar} from 'react-native-paper';
 import moment from 'moment';
+import {SelectItemContext} from '@/contexts/select-item.context';
 
 type Props = {
   item: TVote;
@@ -14,6 +15,7 @@ type Props = {
 
 const VoteItem = ({item, onPress = () => {}}: Props) => {
   const [now, setNow] = useState(moment());
+  const {select, selected} = useContext(SelectItemContext);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -37,10 +39,23 @@ const VoteItem = ({item, onPress = () => {}}: Props) => {
     }
   }, [item.finishTime, item.startTime, now]);
 
+  const isSelected = useMemo(
+    () => selected.includes(item.id),
+    [item.id, selected],
+  );
+
   return (
     <ItemCard
+      isSelected={isSelected}
+      onLongPress={() => {
+        select(item.id);
+      }}
       onPress={() => {
-        onPress();
+        if (selected.length === 0) {
+          onPress();
+        } else {
+          select(item.id);
+        }
       }}
       style={styles.container}>
       <View style={{flex: 1}}>

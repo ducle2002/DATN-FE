@@ -1,7 +1,6 @@
 import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 import React, {useCallback, useLayoutEffect, useMemo, useState} from 'react';
 import MainHeader from '@/components/main-header.component';
-import BottomButton from '../../components/bottom-button.component';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {useInfiniteQuery} from 'react-query';
 import VoteApi from '@/modules/vote/vote.service';
@@ -12,6 +11,8 @@ import {RefreshControl} from 'react-native-gesture-handler';
 import VoteItem from './components/vote-item.component';
 import {EVoteState, TVote, votesFilter} from '@/modules/vote/vote.model';
 import FilterVote from './components/filter.component';
+import MainBottom from './components/main-bottom.component';
+import {SelectItemContext} from '../../contexts/select-item.context';
 
 type Props = StackScreenProps<VoteStackParamsList>;
 
@@ -21,6 +22,8 @@ const VoteScreen = ({navigation}: Props) => {
     keyword: '',
     state: votesFilter[0].state,
   });
+
+  const [selectedVotes, setSelectedVote] = useState<Array<number>>([]);
 
   const {data, fetchNextPage, isFetchingNextPage, isLoading, remove} =
     useInfiniteQuery({
@@ -93,24 +96,38 @@ const VoteScreen = ({navigation}: Props) => {
     });
   }, [navigation, renderHeader]);
 
+  const deselectAll = () => {
+    setSelectedVote([]);
+  };
+  const toggleItemSelected = (id: number) => {
+    const index = selectedVotes.findIndex(i => i === id);
+    if (index === -1) {
+      setSelectedVote([...selectedVotes, id]);
+    } else {
+      setSelectedVote(selectedVotes.filter(i => i !== id));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <FilterVote selected={paging.state} onChange={onFilterChange} />
-      <FlatList
-        data={dataProvider.getAllData()}
-        renderItem={renderItem}
-        refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
-        }
-        onEndReached={onEndReached}
-        contentContainerStyle={{paddingTop: 10}}
-      />
-      <BottomButton
-        onPress={() => {
-          navigation.navigate('CREATE_SCREEN', {});
+      <SelectItemContext.Provider
+        value={{
+          selected: selectedVotes,
+          select: toggleItemSelected,
+          reset: deselectAll,
         }}>
-        Tạo vote
-      </BottomButton>
+        <FlatList
+          data={dataProvider.getAllData()}
+          renderItem={renderItem}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+          }
+          onEndReached={onEndReached}
+          contentContainerStyle={{paddingTop: 10}}
+        />
+        <MainBottom />
+      </SelectItemContext.Provider>
     </View>
   );
 };
