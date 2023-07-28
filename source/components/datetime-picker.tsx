@@ -1,17 +1,27 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TextStyle, View, ViewStyle} from 'react-native';
 import React, {useState} from 'react';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import globalStyles from '@/config/globalStyles';
 
-type Props = React.ComponentProps<typeof DatePicker>;
+type Props = React.ComponentProps<typeof DatePicker> & {
+  textDisplayStyle?: TextStyle;
+  textContainerStyle?: ViewStyle;
+};
 
-const DateTimePicker = ({onConfirm, ...props}: Props) => {
+const DateTimePicker = ({
+  onConfirm,
+  textDisplayStyle,
+  textContainerStyle,
+  ...props
+}: Props) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <View>
-        <Text style={styles.text} onPress={() => setOpen(true)}>
+      <View style={textContainerStyle}>
+        <Text
+          style={[styles.text, textDisplayStyle]}
+          onPress={() => setOpen(true)}>
           {moment(props.date).format('HH:mm DD/MM/YYYY')}
         </Text>
       </View>
@@ -35,8 +45,7 @@ export default DateTimePicker;
 
 const styles = StyleSheet.create({
   text: {
-    ...globalStyles.text15Regular,
-    backgroundColor: 'white',
+    ...globalStyles.text15Medium,
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 10,

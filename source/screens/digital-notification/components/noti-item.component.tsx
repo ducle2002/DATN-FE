@@ -19,7 +19,6 @@ const NotiItem = ({item, department, onPress = () => {}}: Props) => {
   const {select, selected} = useContext(SelectNotiContext);
 
   const root = useMemo(() => HTMLParser.parse(item?.data), [item?.data]);
-  console.log(root);
 
   const isSelected = useMemo(
     () => selected.includes(item.id),

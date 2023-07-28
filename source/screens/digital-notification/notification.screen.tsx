@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import {Dimensions, RefreshControl, StyleSheet, View} from 'react-native';
+import {Dimensions, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import MainHeader from '../../components/main-header.component';
 import {StackScreenProps} from '@react-navigation/stack';
@@ -104,6 +104,9 @@ const NotificationScreen = ({navigation}: Props) => {
   return (
     <View style={styles.container}>
       <MainHeader keywordChange={onKeywordChange} />
+      <View style={{flexDirection: 'row', backgroundColor: 'white'}}>
+        <Text>Tat ca</Text>
+      </View>
       <SelectNotiContext.Provider
         value={{
           selected: selectedNotis,
@@ -144,6 +147,5 @@ export default NotificationScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
   },
 });

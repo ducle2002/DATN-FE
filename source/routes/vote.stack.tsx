@@ -15,7 +15,10 @@ const Stack = createStackNavigator<VoteStackParamsList>();
 
 const VoteStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleAlign: 'center',
+      }}>
       <Stack.Screen
         name="MAIN_PAGE"
         component={MainPage}

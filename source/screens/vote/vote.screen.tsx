@@ -1,18 +1,17 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-import {Dimensions, StyleSheet, View} from 'react-native';
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
+import React, {useCallback, useLayoutEffect, useMemo, useState} from 'react';
 import MainHeader from '@/components/main-header.component';
 import BottomButton from '../../components/bottom-button.component';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {useInfiniteQuery} from 'react-query';
-import {LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import VoteApi from '@/modules/vote/vote.service';
 import {useAppSelector} from '@/hooks/redux.hook';
 import {StackScreenProps} from '@react-navigation/stack';
 import {VoteStackParamsList} from '@/routes/vote.stack';
 import {RefreshControl} from 'react-native-gesture-handler';
 import VoteItem from './components/vote-item.component';
-const {width} = Dimensions.get('screen');
+import {TVote} from '@/modules/vote/vote.model';
+import FilterVote from './components/filter.component';
 
 type Props = StackScreenProps<VoteStackParamsList>;
 
@@ -25,7 +24,7 @@ const VoteScreen = ({navigation}: Props) => {
 
   const {data, fetchNextPage, isFetchingNextPage, isLoading, remove} =
     useInfiniteQuery({
-      queryKey: ['list-noti', paging.keyword],
+      queryKey: ['list-vote', paging.keyword],
       queryFn: ({pageParam = {...paging, skipCount: 0}}) =>
         VoteApi.getRequest(pageParam),
       getNextPageParam: (_, allPages) => {
@@ -41,25 +40,15 @@ const VoteScreen = ({navigation}: Props) => {
     return dataProviderMaker(data?.pages.map(page => page.data).flat() ?? []);
   }, [data?.pages]);
 
-  const _layoutProvider = useRef(
-    new LayoutProvider(
-      () => {
-        return 'single_type';
-      },
-      (_, dim) => {
-        dim.width = width;
-      },
-    ),
-  ).current;
   const {listOrganizations} = useAppSelector(state => state.organizationUnit);
 
-  const renderItem = useCallback(
-    (_: any, data: any) => {
+  const renderItem = useCallback<ListRenderItem<TVote>>(
+    ({item}) => {
       const department = listOrganizations.find(
-        o => o.organizationUnitId === data.organizationUnitId,
+        o => o.organizationUnitId === item.organizationUnitId,
       );
-      return RowRender(data, department?.displayName, () => {
-        navigation.navigate('CREATE_SCREEN', {vote: data});
+      return RowRender(item, department?.displayName, () => {
+        navigation.navigate('CREATE_SCREEN', {vote: item});
       });
     },
     [listOrganizations, navigation],
@@ -75,36 +64,42 @@ const VoteScreen = ({navigation}: Props) => {
   };
 
   const onRefresh = () => {
-    // if (selectedNotis.length > 0) {
-    //   return;
-    // }
     remove();
     setPaging({...paging});
   };
 
-  const onKeywordChange = (value: string) => {
-    setPaging({...paging, keyword: value});
-    remove();
-  };
+  const onKeywordChange = useCallback(
+    (value: string) => {
+      setPaging({...paging, keyword: value});
+      remove();
+    },
+    [paging, remove],
+  );
+
+  const renderHeader = useCallback(
+    () => <MainHeader keywordChange={onKeywordChange} />,
+    [onKeywordChange],
+  );
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      header: renderHeader,
+      headerShown: true,
+    });
+  }, [navigation, renderHeader]);
 
   return (
     <View style={{flex: 1}}>
-      <MainHeader />
-      <RecyclerListView
-        dataProvider={dataProvider}
-        layoutProvider={_layoutProvider}
-        rowRenderer={renderItem}
-        forceNonDeterministicRendering
+      <FlatList
+        data={dataProvider.getAllData()}
+        renderItem={renderItem}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+        }
         onEndReached={onEndReached}
-        scrollViewProps={{
-          refreshControl: (
-            <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
-          ),
-          contentContainerStyle: {
-            paddingTop: 10,
-          },
-        }}
+        contentContainerStyle={{paddingTop: 10}}
       />
+      <FilterVote />
       <BottomButton
         onPress={() => {
           navigation.navigate('CREATE_SCREEN', {});

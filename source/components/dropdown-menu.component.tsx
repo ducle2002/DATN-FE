@@ -21,11 +21,11 @@ export type TOptionItem = {
 };
 
 type Props = React.ComponentProps<typeof View> & {
-  label: string;
+  label?: string;
   labelStyle?: TextStyle;
   options: Array<TOptionItem>;
   selectedLabel: string | undefined;
-  placeholder: string;
+  placeholder?: string;
   itemLabelStyle?: TextStyle;
   onSelected: Function;
   inputContainer?: ViewStyle;

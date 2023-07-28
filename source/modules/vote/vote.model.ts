@@ -14,6 +14,8 @@ export type TVote = {
   creationTime: string;
   startTime: string;
   finishTime: string;
+  options: string;
+  voteOptions: Array<TOption>;
 };
 export type TOption = {
   id: string;
