@@ -5,6 +5,7 @@ const initialState: IUser = {
   userName: '',
   imageUrl: '',
   fullName: '',
+  userId: -1,
 };
 
 const userSlice = createSlice({
@@ -15,6 +16,7 @@ const userSlice = createSlice({
       state.userName = action.payload.userName;
       state.imageUrl = action.payload.imageUrl;
       state.fullName = action.payload.fullName;
+      state.userId = action.payload.userId;
     },
   },
 });

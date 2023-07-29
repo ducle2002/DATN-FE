@@ -80,7 +80,7 @@ const HeaderFeedback = ({searchQuery = '', setSearchQuery}: Props) => {
         }}>
         <TouchableOpacity
           onPress={() => {
-            // navigation.goBack();
+            navigation.navigate('CreateFeedbackScreen', {});
           }}
           style={{
             paddingRight: 5,

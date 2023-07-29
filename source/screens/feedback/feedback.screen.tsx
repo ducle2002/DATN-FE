@@ -16,6 +16,7 @@ import FeedbackApi from '@/modules/feedback/feedback.service';
 import ItemFeedback from './components/item-feedback';
 import {TFeedback} from '@/modules/feedback/feedback.model';
 import FeedbackInfo from './components/feedback-info';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -41,12 +42,17 @@ const FeedbackScreen = (props: Props) => {
     {
       title: 'Phản ánh mới',
       type: 2,
-      layout: 2,
+      layout: 3,
+    },
+    {
+      title: 'Đã phân công',
+      type: 3,
+      layout: 3,
     },
     {
       title: 'Đang xử lý',
       type: 4,
-      layout: 2,
+      layout: 3,
     },
     {
       title: 'Đã xử lý',

@@ -39,3 +39,23 @@ export type TFeedbackPage = {
   listFeedback: Array<TFeedback>;
   total: number;
 };
+export type TMessageFeedback = {
+  fullName: string;
+  imageUrl: string;
+  creatorFeedbackId: number;
+  feedbackId: number;
+  comment: string;
+  readState: number;
+  tenantId: number;
+  fileUrl: string;
+  typeComment: number;
+  organizationUnitId: number;
+  creationTime: string;
+  creatorUserId: number;
+  id: number;
+};
+
+export type TMessageFeedbackPage = {
+  listMessageFeedback: Array<TMessageFeedback>;
+  total: number;
+};
