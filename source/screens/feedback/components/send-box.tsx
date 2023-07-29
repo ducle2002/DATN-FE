@@ -7,10 +7,9 @@ import {
   Keyboard,
   Dimensions,
 } from 'react-native';
-import React, {memo, useEffect, useState} from 'react';
+import React, {memo, useState} from 'react';
 // import ChooseImageModal from '@/components/modals/choose-image-modal';
 // import httpUtil from '@/utils/http.util';
-import Toast from 'react-native-toast-message';
 import DocumentPicker, {
   isInProgress,
   types,
@@ -169,7 +168,7 @@ function SendBox({
           }}>
           <Icon
             type="Ionicons"
-            name="ios-document-attach-outline"
+            name="document-attach-outline"
             color={'#2B5783'}
             size={width > 440 ? 40 : 32}
           />
@@ -194,7 +193,7 @@ function SendBox({
             }}>
             <Icon
               type="Ionicons"
-              name="ios-image-outline"
+              name="image-outline"
               size={width > 440 ? 36 : 28}
               color="#2B5783"
             />

@@ -17,10 +17,12 @@ import ItemFeedback from './components/item-feedback';
 import {TFeedback} from '@/modules/feedback/feedback.model';
 import FeedbackInfo from './components/feedback-info';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {StackScreenProps} from '@react-navigation/stack';
+import {FeedbackStackParamsList} from '@/routes/feedback.stack';
 
 const {width, height} = Dimensions.get('screen');
 
-type Props = {};
+type Props = StackScreenProps<FeedbackStackParamsList>;
 
 const FeedbackScreen = (props: Props) => {
   const [status, setStatus] = useState(2);
@@ -180,7 +182,18 @@ const FeedbackScreen = (props: Props) => {
               backgroundColor: 'white',
             }}>
             {!!showDetail.data && (
-              <FeedbackInfo data={showDetail.data} onClose={onClose} />
+              <FeedbackInfo
+                data={showDetail.data}
+                onClose={onClose}
+                onClickChat={() => {
+                  if (showDetail.data) {
+                    props.navigation.navigate('ChatFeedbackScreen', {
+                      inforFeedback: showDetail.data,
+                    });
+                  }
+                  onClose();
+                }}
+              />
             )}
           </TouchableWithoutFeedback>
         </Pressable>

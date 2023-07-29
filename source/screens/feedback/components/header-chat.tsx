@@ -6,6 +6,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 
 import AvatarImage from '@/components/avatar-image';
 import {FeedbackStackParamsList} from '@/routes/feedback.stack';
+import Icon from '@/components/icon.component';
 
 type Props = {
   avatarUrl?: string;
@@ -29,7 +30,12 @@ const HeaderChat = ({
             navigation.goBack();
             onPressBack();
           }}>
-          <Ionicons name="md-arrow-back-outline" color="#2B5783" size={22} />
+          <Icon
+            type="Ionicons"
+            name="chevron-back-outline"
+            color="#2B5783"
+            size={22}
+          />
         </TouchableOpacity>
         <View>
           <AvatarImage
@@ -61,7 +67,8 @@ const HeaderChat = ({
         </View>
       </View>
       <TouchableOpacity style={styles.iconRight}>
-        <Ionicons
+        <Icon
+          type="Ionicons"
           name="ellipsis-vertical"
           // color="#0078fe"
           color="#2B5783"

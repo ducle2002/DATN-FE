@@ -1,5 +1,6 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {IUser} from './user.model';
+import {RootState} from '@/hooks/redux.hook';
 
 const initialState: IUser = {
   userName: '',
@@ -16,10 +17,16 @@ const userSlice = createSlice({
       state.userName = action.payload.userName;
       state.imageUrl = action.payload.imageUrl;
       state.fullName = action.payload.fullName;
-      state.userId = action.payload.userId;
+      state.userId = action.payload.userId ?? -1;
     },
   },
 });
 
 export default userSlice.reducer;
 export const {setUser} = userSlice.actions;
+export const selectCurrentUser = (state: RootState) => ({
+  userName: state.user.userName,
+  imageUrl: state.user.imageUrl,
+  fullName: state.user.fullName,
+  userId: state.user.userId,
+});

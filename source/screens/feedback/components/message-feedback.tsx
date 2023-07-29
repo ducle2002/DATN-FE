@@ -26,11 +26,13 @@ import {TMessageFeedback} from '@/modules/feedback/feedback.model';
 const {width, height} = Dimensions.get('screen');
 type Props = {
   mess: TMessageFeedback;
+  side: number;
   emotionDisable: boolean;
   deleteMess: Function;
 };
 const MessageFeedback = ({
   mess,
+  side,
   emotionDisable = false,
   deleteMess = () => {},
 }: Props) => {
@@ -68,7 +70,7 @@ const MessageFeedback = ({
     <View
       style={{
         flex: 1,
-        alignItems: mess.side === 1 ? 'flex-end' : 'flex-start',
+        alignItems: side === 1 ? 'flex-end' : 'flex-start',
       }}>
       <Menu
         visible={emotionVisible}
@@ -102,7 +104,7 @@ const MessageFeedback = ({
               style={{
                 padding: 10,
                 marginVertical: 5,
-                alignSelf: mess.side === 1 ? 'flex-end' : 'flex-start',
+                alignSelf: side === 1 ? 'flex-end' : 'flex-start',
                 maxWidth: '100%',
               }}>
               {mess.typeComment === 2 ? (
@@ -110,7 +112,7 @@ const MessageFeedback = ({
               ) : (
                 <ListMediaChat
                   message={mess.comment}
-                  side={1}
+                  side={side}
                   setImgOverlay={setImgOverlay}
                 />
               )}
@@ -118,8 +120,8 @@ const MessageFeedback = ({
                 style={{
                   fontSize: 11,
                   color: 'rgba(0,0,0,0.7)',
-                  paddingRight: mess.side === 1 ? 10 : 0,
-                  alignSelf: mess.side === 1 ? 'flex-end' : 'flex-start',
+                  paddingRight: side === 1 ? 10 : 0,
+                  alignSelf: side === 1 ? 'flex-end' : 'flex-start',
                 }}>
                 {moment(mess.creationTime).format('HH:mm')}
               </Text>
@@ -151,7 +153,7 @@ const MessageFeedback = ({
                     backgroundColor: '#dedede',
                     padding: 10,
                     marginVertical: 5,
-                    alignSelf: mess.side === 1 ? 'flex-end' : 'flex-start',
+                    alignSelf: side === 1 ? 'flex-end' : 'flex-start',
                     maxWidth: '70%',
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -185,10 +187,10 @@ const MessageFeedback = ({
                 style={{
                   fontSize: 11,
                   color: 'rgba(0,0,0,0.7)',
-                  paddingRight: mess.side === 1 ? 10 : 0,
-                  alignSelf: mess.side === 1 ? 'flex-end' : 'flex-start',
-                  marginRight: mess.side === 1 ? '5%' : 0,
-                  marginLeft: mess.side === 1 ? 0 : '5%',
+                  paddingRight: side === 1 ? 10 : 0,
+                  alignSelf: side === 1 ? 'flex-end' : 'flex-start',
+                  marginRight: side === 1 ? '5%' : 0,
+                  marginLeft: side === 1 ? 0 : '5%',
                 }}>
                 {moment(mess.creationTime).format('HH:mm')}
               </Text>
@@ -196,7 +198,7 @@ const MessageFeedback = ({
           ) : (
             <Pressable
               style={[
-                mess.side === 1 ? styles.mesSend : styles.mesRecv,
+                side === 1 ? styles.mesSend : styles.mesRecv,
                 styles.mess,
               ]}
               onLongPress={event => {
@@ -218,8 +220,8 @@ const MessageFeedback = ({
               <Text
                 style={{
                   fontSize: 16,
-                  color: mess.side === 1 ? '#ffffff' : '#333333',
-                  alignSelf: mess.side === 1 ? 'flex-start' : 'flex-end',
+                  color: side === 1 ? '#ffffff' : '#333333',
+                  alignSelf: side === 1 ? 'flex-start' : 'flex-end',
                 }}>
                 {mess.comment}
               </Text>
@@ -227,10 +229,8 @@ const MessageFeedback = ({
                 style={{
                   fontSize: 11,
                   color:
-                    mess.side === 1
-                      ? 'rgba(255,255,255,0.7)'
-                      : 'rgba(0,0,0,0.7)',
-                  alignSelf: mess.side === 1 ? 'flex-start' : 'flex-end',
+                    side === 1 ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)',
+                  alignSelf: side === 1 ? 'flex-start' : 'flex-end',
                 }}>
                 {moment(mess.creationTime).format('HH:mm')}
               </Text>
@@ -415,7 +415,7 @@ const MessageFeedback = ({
                 <>
                   <View
                     style={{
-                      alignItems: mess.side === 1 ? 'flex-end' : 'flex-start',
+                      alignItems: side === 1 ? 'flex-end' : 'flex-start',
                       width: '100%',
                       paddingBottom: height * 0.01,
                     }}>

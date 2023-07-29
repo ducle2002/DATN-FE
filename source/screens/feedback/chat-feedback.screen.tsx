@@ -27,6 +27,7 @@ import {
 import {FeedbackStackParamsList} from '@/routes/feedback.stack';
 import {StackScreenProps} from '@react-navigation/stack';
 import FeedbackApi from '@/modules/feedback/feedback.service';
+import {selectCurrentUser} from '@/modules/user/user.slice';
 
 type Props = StackScreenProps<FeedbackStackParamsList, 'ChatFeedbackScreen'>;
 
@@ -34,8 +35,8 @@ const {width, height} = Dimensions.get('screen');
 
 const ChatFeedbackScreen = ({route}: Props) => {
   const ref_flat_list = useRef<FlatList>(null);
-  const customer = route.params.customer;
-  // const idStore = useAppSelector(selectCurrentStore);
+  const inforFeedback = route.params.inforFeedback;
+  const currentUser = useAppSelector(selectCurrentUser);
   const queryClient = useQueryClient();
   // const hubConnection = useAppSelector(selecthubSignalR);
   const [progress, setProgress] = useState(false);
@@ -72,8 +73,8 @@ const ChatFeedbackScreen = ({route}: Props) => {
   };
   const showAvatar = (item: TMessageFeedback, index: number) => {
     return (
-      item.side === 2 &&
-      (listMessage?.[index - 1]?.side !== item.side ||
+      item.creatorUserId !== currentUser.userId &&
+      (listMessage?.[index - 1]?.creatorUserId !== item.creatorUserId ||
         !compareDate(
           item?.creationTime,
           listMessage?.[index - 1]?.creationTime,
@@ -84,10 +85,10 @@ const ChatFeedbackScreen = ({route}: Props) => {
 
   const {isLoading, data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
     {
-      queryKey: ['messageFeedback', customer?.friendUserId],
+      queryKey: ['messageFeedback', inforFeedback?.id],
       queryFn: ({pageParam}) =>
         FeedbackApi.getMessageFeedback({
-          CitizenReflectId: customer?.friendUserId,
+          CitizenReflectId: inforFeedback?.id,
           SkipCount: pageParam,
         }),
 
@@ -115,13 +116,16 @@ const ChatFeedbackScreen = ({route}: Props) => {
 
   const sendMess = (sendMessageData: {message: string; type: number}) => {
     const mess = {
-      userTenantId: customer?.friendTenantId,
-      messageRepliedId: null,
-      userId: customer?.friendUserId,
-      providerId: customer?.providerId,
-      userImageUrl: customer?.friendImageUrl,
-      message: sendMessageData.message,
-      typeMessage: sendMessageData.type,
+      fullName: 'string',
+      imageUrl: 'string',
+      creatorFeedbackId: inforFeedback.creatorUserId,
+      feedbackId: inforFeedback.id,
+      comment: sendMessageData.message,
+      tenantId: inforFeedback.tenantId,
+      // fileUrl: string;
+      typeComment: sendMessageData.type,
+      organizationUnitId: inforFeedback.organizationUnitId,
+      // creatorUserId: inforFeedback.;
     };
     // queryClient.setQueryData<InfiniteData<TMessageFeedbackPage>>(
     //   ['messages', customer?.friendUserId],
@@ -256,15 +260,15 @@ const ChatFeedbackScreen = ({route}: Props) => {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1}} edges={['bottom', 'left', 'right']}>
+    <SafeAreaView style={{flex: 1}} edges={['left', 'right', 'top']}>
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
         <HeaderChat
-          avatarUrl={customer?.friendImageUrl}
-          name={customer?.friendName}
-          isOnline={customer?.isOnline}
+          avatarUrl={inforFeedback?.imageUrl}
+          name={inforFeedback?.fullName}
+          isOnline={false}
         />
         <FlatList
           ref={ref_flat_list}
@@ -276,7 +280,6 @@ const ChatFeedbackScreen = ({route}: Props) => {
           style={{
             backgroundColor: '#eeeeee',
           }}
-          // data={listMessage}
           data={
             data?.pages
               ? data.pages.flatMap((page: TMessageFeedbackPage) => [
@@ -308,7 +311,7 @@ const ChatFeedbackScreen = ({route}: Props) => {
                 <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
                   {showAvatar(item, index) ? (
                     <AvatarImage
-                      source={{uri: customer?.friendImageUrl}}
+                      source={{uri: inforFeedback?.imageUrl}}
                       size={28}
                     />
                   ) : (
@@ -318,6 +321,7 @@ const ChatFeedbackScreen = ({route}: Props) => {
                   <MessageComponent
                     // {...props}
                     mess={item}
+                    side={currentUser.userId === item.creatorUserId ? 1 : 2}
                     emotionDisable={false}
                     // setReplyMess={setReplyMess}
                     deleteMess={deleteMess}
