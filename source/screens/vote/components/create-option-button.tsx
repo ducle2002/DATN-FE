@@ -9,7 +9,7 @@ import {v4 as uuidv4} from 'uuid';
 import 'react-native-get-random-values';
 import {TOption} from '@/modules/vote/vote.model';
 
-type Props = {
+type Props = React.ComponentProps<typeof CTextInput> & {
   onAddOption?: Function;
   option?: TOption;
   containerStyle?: ViewStyle;
@@ -30,8 +30,10 @@ const CreateOptionButton = ({
   } = useForm({defaultValues: {option: option?.option}});
 
   const onSubmit = (data: any) => {
-    onAddOption({option: data.option, id: uuidv4()});
-    reset();
+    onAddOption({option: data.option, id: option?.id ?? uuidv4()});
+    if (!option?.id) {
+      reset();
+    }
   };
 
   return (
@@ -50,15 +52,26 @@ const CreateOptionButton = ({
             <CTextInput
               value={value}
               onChangeText={onChange}
-              containerStyle={{flex: 1, flexDirection: 'row'}}
+              containerStyle={{
+                flex: 1,
+                flexDirection: 'row',
+              }}
+              style={{
+                backgroundColor: 'transparent',
+              }}
               onSubmitEditing={handleSubmit(onSubmit)}
+              onBlur={handleSubmit(onSubmit)}
             />
           )}
         />
         {!option ? (
-          <Button onPress={handleSubmit(onSubmit)}>Them</Button>
+          <Button onPress={handleSubmit(onSubmit)}>
+            {language.t(languageKeys.vote.create.add)}
+          </Button>
         ) : (
-          <Button onPress={() => deleteOption(option)}>Xoa</Button>
+          <Button onPress={() => deleteOption(option)}>
+            {language.t(languageKeys.vote.create.delete)}
+          </Button>
         )}
       </View>
       <Text style={styles.textError}>{errors?.option?.message}</Text>

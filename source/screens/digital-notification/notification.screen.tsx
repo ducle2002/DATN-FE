@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-import {Dimensions, RefreshControl, StyleSheet, View} from 'react-native';
+import {Dimensions, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import MainHeader from '../../components/main-header.component';
 import {StackScreenProps} from '@react-navigation/stack';
@@ -10,14 +9,14 @@ import {LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import NotiItem from './components/noti-item.component';
 import {useAppSelector} from '@/hooks/redux.hook';
-import {SelectNotiContext} from './context/digital-noti.context';
+import {SelectItemContext} from '../../contexts/select-item.context';
 import MainBottom from './components/main-bottom.component';
 const {width} = Dimensions.get('screen');
 
 type Props = StackScreenProps<NotificationStackParamsList, 'MAIN_SCREEN'>;
 
 const NotificationScreen = ({navigation}: Props) => {
-  const [selectedNotis, setSelectedNotis] = useState<Array<Number>>([]);
+  const [selectedNotis, setSelectedNotis] = useState<Array<number>>([]);
 
   const [paging, setPaging] = useState({
     maxResultCount: 10,
@@ -56,6 +55,7 @@ const NotificationScreen = ({navigation}: Props) => {
   const {listOrganizations} = useAppSelector(state => state.organizationUnit);
 
   const renderItem = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     (_: any, data: any) => {
       const department = listOrganizations.find(
         o => o.organizationUnitId === data.organizationUnitId,
@@ -104,7 +104,10 @@ const NotificationScreen = ({navigation}: Props) => {
   return (
     <View style={styles.container}>
       <MainHeader keywordChange={onKeywordChange} />
-      <SelectNotiContext.Provider
+      <View style={{flexDirection: 'row', backgroundColor: 'white'}}>
+        <Text>Tat ca</Text>
+      </View>
+      <SelectItemContext.Provider
         value={{
           selected: selectedNotis,
           select: toggleItemSelected,
@@ -127,7 +130,7 @@ const NotificationScreen = ({navigation}: Props) => {
           }}
         />
         <MainBottom />
-      </SelectNotiContext.Provider>
+      </SelectItemContext.Provider>
     </View>
   );
 };
@@ -144,6 +147,5 @@ export default NotificationScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
   },
 });

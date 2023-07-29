@@ -10,8 +10,8 @@ type Props = React.ComponentProps<typeof DateTimePicker> & {
 const TimePicker = ({label, ...props}: Props) => {
   return (
     <View>
-      <Text style={styles.textLabel}>{label}</Text>
-      <DateTimePicker {...props} />
+      {label && <Text style={styles.textLabel}>{label}</Text>}
+      <DateTimePicker textDisplayStyle={styles.textLabel} {...props} />
     </View>
   );
 };

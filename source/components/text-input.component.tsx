@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TextStyle,
   View,
   ViewStyle,
 } from 'react-native';
@@ -13,6 +14,7 @@ type Props = React.ComponentProps<typeof TextInput> & {
   errorMessage?: string;
   containerStyle?: ViewStyle;
   label?: string;
+  labelSyle?: TextStyle;
 };
 
 const CTextInput = ({
@@ -20,11 +22,12 @@ const CTextInput = ({
   label,
   errorMessage,
   containerStyle,
+  labelSyle,
   ...props
 }: Props) => {
   return (
     <>
-      {label && <Text style={styles.textLabel}>{label}</Text>}
+      {label && <Text style={[styles.textLabel, labelSyle]}>{label}</Text>}
       <View style={[styles.container, containerStyle]}>
         <TextInput style={[styles.textInput, style]} {...props} />
       </View>

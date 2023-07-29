@@ -1,11 +1,12 @@
 import {createContext} from 'react';
 
 type ValueContext = {
-  selected: Array<Number>;
+  selected: Array<number>;
   select: Function;
   reset: Function;
 };
-export const SelectNotiContext = createContext<ValueContext>({
+
+export const SelectItemContext = createContext<ValueContext>({
   selected: [],
   select: () => {},
   reset: () => {},

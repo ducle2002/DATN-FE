@@ -5,9 +5,7 @@ import globalStyles from '@/config/globalStyles';
 import moment from 'moment';
 import Icon from '@/components/icon.component';
 import FastImage from 'react-native-fast-image';
-import {SelectNotiContext} from '../context/digital-noti.context';
-import {RadioButton} from 'react-native-paper';
-import Animated, {SlideInLeft, SlideOutLeft} from 'react-native-reanimated';
+import {SelectItemContext} from '../../../contexts/select-item.context';
 import ItemCard from '@/components/item-card.component';
 type Props = {
   item: any;
@@ -16,10 +14,9 @@ type Props = {
 };
 
 const NotiItem = ({item, department, onPress = () => {}}: Props) => {
-  const {select, selected} = useContext(SelectNotiContext);
+  const {select, selected} = useContext(SelectItemContext);
 
   const root = useMemo(() => HTMLParser.parse(item?.data), [item?.data]);
-  console.log(root);
 
   const isSelected = useMemo(
     () => selected.includes(item.id),
@@ -28,6 +25,7 @@ const NotiItem = ({item, department, onPress = () => {}}: Props) => {
 
   return (
     <ItemCard
+      isSelected={isSelected}
       onLongPress={() => {
         select(item.id);
       }}
@@ -37,18 +35,7 @@ const NotiItem = ({item, department, onPress = () => {}}: Props) => {
         } else {
           select(item.id);
         }
-      }}
-      style={{
-        backgroundColor: isSelected ? '#f1f2f8' : 'white',
       }}>
-      {isSelected && (
-        <Animated.View
-          entering={SlideInLeft}
-          exiting={SlideOutLeft}
-          style={{alignItems: 'center', justifyContent: 'center'}}>
-          <RadioButton.Android value={''} status="checked" />
-        </Animated.View>
-      )}
       <FastImage source={{uri: item.fileUrl}} style={styles.image} />
       <View style={styles.contentContainer}>
         <Icon

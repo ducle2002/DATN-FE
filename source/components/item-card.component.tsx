@@ -1,10 +1,13 @@
 import React from 'react';
 import {Pressable, StyleSheet, View, ViewStyle} from 'react-native';
+import {RadioButton} from 'react-native-paper';
+import Animated, {SlideInLeft, SlideOutLeft} from 'react-native-reanimated';
 
 type Props = React.ComponentProps<typeof View> & {
   containerStyle?: ViewStyle | Array<ViewStyle>;
   onPress?: Function;
   onLongPress?: Function;
+  isSelected?: boolean;
 };
 
 const ItemCard = ({
@@ -13,6 +16,7 @@ const ItemCard = ({
   style,
   onPress = () => {},
   onLongPress = () => {},
+  isSelected = false,
   ...props
 }: Props) => {
   return (
@@ -24,7 +28,21 @@ const ItemCard = ({
         onLongPress();
       }}
       style={[styles.container, containerStyle]}>
-      <View style={[styles.contentContainer, style]} {...props}>
+      <View
+        style={[
+          styles.contentContainer,
+          {backgroundColor: !isSelected ? 'white' : '#f1f2f8'},
+          style,
+        ]}
+        {...props}>
+        {isSelected && (
+          <Animated.View
+            entering={SlideInLeft}
+            exiting={SlideOutLeft}
+            style={{alignItems: 'center', justifyContent: 'center'}}>
+            <RadioButton.Android value={''} status="checked" />
+          </Animated.View>
+        )}
         {children}
       </View>
     </Pressable>
