@@ -1,0 +1,73 @@
+export type TMessageChat = {
+  creationTime?: string;
+  fileUrl?: string;
+  id: number;
+  isOrganizationUnit: boolean;
+  message: string;
+  messageRepliedId?: number;
+  readState: number;
+  receiverReadState: number;
+  sharedMessageId?: string;
+  side: number;
+  targetTenantId: number;
+  targetUserId: number;
+  tenantId: number;
+  typeMessage: number;
+  userId: number;
+};
+export type TMessageChatPage = {
+  listMessage: TMessageChat[];
+  total: number;
+};
+
+export type TFriendsChat = {
+  accountId: number;
+  address: string | null;
+  apartmentCode: string;
+  birthYear: string | null;
+  buildingCode: string;
+  career: string | null;
+  citizenCode: string | null;
+  citizenTempId: number | null;
+  creationTime: string;
+  creatorUserId: number;
+  dateOfBirth: string;
+  email: string | null;
+  fullName: string;
+  gender: string;
+  id: number;
+  identityNumber: '';
+  imageUrl: string | null;
+  isStayed: boolean | null;
+  isVoter: boolean;
+  memberNum: number | null;
+  nationality: string | null;
+  organizationUnitId: number;
+  otherPhones: string | null;
+  phoneNumber: string;
+  relationShip: string | null;
+  state: number;
+  tenantId: number;
+  type: number | null;
+};
+
+export type TUserChat = {
+  creationTime: string;
+  friendInfo: TFriendsChat | null;
+  friendProfilePictureId: string | null;
+  friendTenancyName: string;
+  friendTenantId: number;
+  friendUserId: number;
+  friendUserName: string;
+  id: number;
+  isBlockOrDelete: boolean;
+  isGroupOrFriend: boolean;
+  isOnline: boolean;
+  isOrganizationUnit: boolean;
+  lastMessage: TMessageChat;
+  lastMessageDate: string;
+  state: number;
+  stateAddFriend: number;
+  tenantId: number | null;
+  unreadMessageCount: number;
+};

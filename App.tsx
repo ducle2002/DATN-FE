@@ -7,6 +7,7 @@ import {useAppSelector} from '@/hooks/redux.hook';
 import {ToastProvider} from 'react-native-toast-notifications';
 import {StatusBar} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {PaperProvider} from 'react-native-paper';
 
 const queryClient = new QueryClient();
 function App(): JSX.Element {
@@ -14,12 +15,14 @@ function App(): JSX.Element {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        <ToastProvider placement="center" duration={1500}>
-          <NavigationContainer>
-            <StatusBar translucent={true} backgroundColor={'transparent'} />
-            {isLogin ? <AppStack /> : <AuthenticationStack />}
-          </NavigationContainer>
-        </ToastProvider>
+        <PaperProvider theme={{dark: false}}>
+          <ToastProvider placement="center" duration={1500}>
+            <NavigationContainer>
+              <StatusBar translucent={true} backgroundColor={'transparent'} />
+              {isLogin ? <AppStack /> : <AuthenticationStack />}
+            </NavigationContainer>
+          </ToastProvider>
+        </PaperProvider>
       </QueryClientProvider>
     </SafeAreaProvider>
   );

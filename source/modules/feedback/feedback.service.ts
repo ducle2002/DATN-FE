@@ -1,6 +1,11 @@
 import axiosClient from '@/utils/axios.client';
 import {HOST_SERVER} from '@env';
-import {TFeedback, TFeedbackPage, TMessageFeedbackPage} from './feedback.model';
+import {
+  TFeedback,
+  TFeedbackPage,
+  TMessageFeedback,
+  TMessageFeedbackPage,
+} from './feedback.model';
 
 class FeedbackService {
   endpoint = '/api/services/app/AdminGovernmentReflect/';
@@ -46,9 +51,18 @@ class FeedbackService {
       params: params,
     });
     return {
-      listMessageFeedback: result.items,
-      total: result.totalRecords,
+      listMessageFeedback: result?.items ?? [],
+      total: result?.totalRecords ?? 0,
     };
+  };
+
+  sendMessFeedback = async (body: TMessageFeedback): Promise<any> => {
+    const url =
+      HOST_SERVER + this.endpoint + 'CreateOrUpdateCitizenReflectComment';
+    const {
+      data: {result},
+    } = await axiosClient.post(url, body);
+    return result;
   };
 }
 

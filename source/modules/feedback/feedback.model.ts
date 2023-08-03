@@ -45,17 +45,17 @@ export type TMessageFeedback = {
   creatorFeedbackId: number;
   feedbackId: number;
   comment: string;
-  readState: number;
+  readState?: number;
   tenantId: number;
-  fileUrl: string;
+  fileUrl?: string;
   typeComment: number;
   organizationUnitId: number;
-  creationTime: string;
+  creationTime?: string;
   creatorUserId: number;
-  id: number;
+  id?: number;
 };
 
 export type TMessageFeedbackPage = {
-  listMessageFeedback: Array<TMessageFeedback>;
+  listMessageFeedback: TMessageFeedback[];
   total: number;
 };

@@ -11,6 +11,7 @@ class UserService {
       fullName: data.result.fullName,
       userName: data.result.fullName,
       imageUrl: data.result.imageUrl,
+      userId: data.result.id,
     };
   };
 }

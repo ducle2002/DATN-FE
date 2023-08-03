@@ -14,7 +14,8 @@
     "emitDecoratorMetadata": true,
     "baseUrl": "./",
     "paths": {
-      "@/*": ["source/*"]
+      "@/*": ["source/*"],
+      "@assets/*": ["assets/*"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

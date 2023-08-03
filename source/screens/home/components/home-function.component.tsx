@@ -21,7 +21,15 @@ const HomeFunction = ({type, style, ...props}: Props) => {
           screen: 'MAIN_SCREEN',
         });
       case 'Pages.Management.Citizens.Reflects':
-        return navigation.navigate('FEEDBACK_STACK', {screen: 'MAIN_SCREEN'});
+        return navigation.navigate('FEEDBACK_STACK', {
+          screen: 'FeedBackScreen',
+          params: {},
+        });
+      case 'Pages.Management.ChatCitizen':
+        return navigation.navigate('CHAT_STACK', {
+          screen: 'ChatScreen',
+          params: {},
+        });
       case 'Pages.Management.Citizens.Vote':
         return navigation.navigate('VOTE_STACK', {screen: 'MAIN_PAGE'});
     }

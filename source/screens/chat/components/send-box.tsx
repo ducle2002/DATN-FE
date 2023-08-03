@@ -16,6 +16,8 @@ import DocumentPicker, {
 } from 'react-native-document-picker';
 import Icon from '@/components/icon.component';
 import {useToast} from 'react-native-toast-notifications';
+import ChooseImageModal from '@/components/choose-image-modal';
+import UtilsApi from '@/utils/utils.service';
 
 const {width, height} = Dimensions.get('screen');
 type Props = {
@@ -66,32 +68,25 @@ function SendBox({
       setProgress(false);
     }
     if (listImages.length > 1) {
-      //   httpUtil
-      //     .uploadListImage({
-      //       files: listImages,
-      //     })
-      //     .then((res: any) => {
-      //       const payload = {
-      //         message: JSON.stringify(res.result.data),
-      //         type: 5,
-      //       };
-      //       // sendMess(payload);
-      //       setProgress(false);
-      //     });
+      UtilsApi.uploadImagesRequest(listImages).then((res: any) => {
+        const payload = {
+          message: JSON.stringify(res),
+          type: 5,
+        };
+        sendMess(payload);
+        setProgress(false);
+      });
     } else if (listImages.length > 0) {
-      //   httpUtil
-      //     .uploadImage({
-      //       file: listImages[0],
-      //     })
-      //     .then((res: any) => {
-      //       const payload = {
-      //         message: res.result.data,
-      //         type: 2,
-      //       };
-      //       console.log(res);
-      //       // sendMess(payload);
-      //       setProgress(false);
-      //     });
+      UtilsApi.uploadImagesRequest(listImages).then((res: any) => {
+        const payload = {
+          message: res[0],
+          type: 2,
+        };
+        // console.log(res);
+        sendMess(payload);
+        console.log(payload);
+        setProgress(false);
+      });
     }
   };
   const handleError = (err: any) => {
@@ -113,6 +108,12 @@ function SendBox({
         },
       );
     } else {
+      toast.show('Tải file lên bị lỗi', {
+        type: 'danger',
+        placement: 'center',
+        duration: 2000,
+        animationType: 'slide-in',
+      });
       throw err;
     }
   };
@@ -142,16 +143,22 @@ function SendBox({
         name: pickerResult.name,
       };
       setProgress(true);
-      //   httpUtil.uploadFile({file: file}).then((res: any) => {
-      //     const payload = {
-      //       message: res.result.data,
-      //       type: 4,
-      //     };
-      //     sendMess(payload);
+      UtilsApi.uploadFilesRequest(file)
+        .then((res: any) => {
+          const payload = {
+            message: res,
+            type: 4,
+          };
+          sendMess(payload);
 
-      //     setProgress(false);
-      //   });
+          setProgress(false);
+        })
+        .catch(e => {
+          setProgress(false);
+          handleError(e);
+        });
     } catch (e) {
+      setProgress(false);
       handleError(e);
     }
   };
@@ -221,15 +228,15 @@ function SendBox({
             size={width > 440 ? 40 : 32}
           />
         </Pressable>
-        {/* <ChooseImageModal
+        <ChooseImageModal
           setVisibleChooseImg={setVisibleChooseImg}
           visibleChooseImg={visibleChooseImg}
           setImages={sendMedia}
           multiple={true}
           compressImageMaxHeight={height}
           compressImageMaxWidth={width}
-          mediaType={'any'}
-        /> */}
+          mediaType={'photo'}
+        />
       </View>
     </View>
   );

@@ -14,8 +14,13 @@ import MessageComponent from './components/message-feedback';
 import HeaderChat from './components/header-chat';
 import {faker} from '@faker-js/faker';
 import {useAppSelector} from '@/hooks/redux.hook';
-import {InfiniteData, useInfiniteQuery, useQueryClient} from 'react-query';
-import SendBox from './components/send-box';
+import {
+  InfiniteData,
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from 'react-query';
+import SendBox from '../chat/components/send-box';
 // import {selecthubSignalR} from '@/features/chat/chat.slice';
 import LineDatetime from '@/components/line-datetime';
 import AvatarImage from '@/components/avatar-image';
@@ -28,6 +33,8 @@ import {FeedbackStackParamsList} from '@/routes/feedback.stack';
 import {StackScreenProps} from '@react-navigation/stack';
 import FeedbackApi from '@/modules/feedback/feedback.service';
 import {selectCurrentUser} from '@/modules/user/user.slice';
+import MessageTagFeedbackState from './components/message-feedback-tag';
+import {selecthubSignalR} from '@/modules/hubconnection/hubconnection.slice';
 
 type Props = StackScreenProps<FeedbackStackParamsList, 'ChatFeedbackScreen'>;
 
@@ -38,7 +45,7 @@ const ChatFeedbackScreen = ({route}: Props) => {
   const inforFeedback = route.params.inforFeedback;
   const currentUser = useAppSelector(selectCurrentUser);
   const queryClient = useQueryClient();
-  // const hubConnection = useAppSelector(selecthubSignalR);
+  const hubConnection = useAppSelector(selecthubSignalR);
   const [progress, setProgress] = useState(false);
   const [sending, setSending] = useState<TMessageFeedbackPage[] | undefined>(
     [],
@@ -85,7 +92,7 @@ const ChatFeedbackScreen = ({route}: Props) => {
 
   const {isLoading, data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
     {
-      queryKey: ['messageFeedback', inforFeedback?.id],
+      queryKey: ['messageFeedback', inforFeedback.id],
       queryFn: ({pageParam}) =>
         FeedbackApi.getMessageFeedback({
           CitizenReflectId: inforFeedback?.id,
@@ -108,6 +115,19 @@ const ChatFeedbackScreen = ({route}: Props) => {
     },
   );
 
+  const {mutate: sendMessFeedback} = useMutation(
+    async (messSubmit: TMessageFeedback) =>
+      await FeedbackApi.sendMessFeedback(messSubmit),
+    {
+      onSuccess: (res: any) => {
+        console.log('gửi tin nhắn feedback thành công', res);
+      },
+      onError: (err: any) => {
+        console.error('Lỗi gửi tin nhắn feedback', err);
+      },
+    },
+  );
+
   const listMessage = data?.pages
     ? data.pages.flatMap((page: TMessageFeedbackPage) => [
         ...page.listMessageFeedback,
@@ -116,56 +136,55 @@ const ChatFeedbackScreen = ({route}: Props) => {
 
   const sendMess = (sendMessageData: {message: string; type: number}) => {
     const mess = {
-      fullName: 'string',
-      imageUrl: 'string',
+      fullName: currentUser.fullName,
+      imageUrl: currentUser.imageUrl,
       creatorFeedbackId: inforFeedback.creatorUserId,
       feedbackId: inforFeedback.id,
       comment: sendMessageData.message,
       tenantId: inforFeedback.tenantId,
-      // fileUrl: string;
       typeComment: sendMessageData.type,
       organizationUnitId: inforFeedback.organizationUnitId,
-      // creatorUserId: inforFeedback.;
+      creatorUserId: currentUser.userId,
     };
-    // queryClient.setQueryData<InfiniteData<TMessageFeedbackPage>>(
-    //   ['messages', customer?.friendUserId],
-    //   (
-    //     oldData: InfiniteData<TMessageFeedbackPage> | undefined,
-    //   ): InfiniteData<TMessageFeedbackPage> | undefined => {
-    //     if (oldData) {
-    //       oldData?.pages.map((page, i) => {
-    //         if (i === 0) {
-    //           page.listMessageFeedback.unshift({
-    //             // creationTime: moment().toDate(),
-    //             message: sendMessageData.message,
-    //             providerId: customer?.providerId ?? 0,
-    //             readState: 0,
-    //             receiverReadState: 0,
-    //             side: 1,
-    //             targetUserId: customer?.friendUserId ?? 0,
-    //             typeMessage: sendMessageData.type,
-    //             userId: customer?.userId ?? 0,
-    //             id: 0,
-    //             sharedMessageId: '',
-    //             targetTenantId: customer?.friendTenantId ?? 0,
-    //           });
-    //         }
-    //         return page;
-    //       });
-    //     }
+    queryClient.setQueryData<InfiniteData<TMessageFeedbackPage> | undefined>(
+      ['messageFeedback', inforFeedback.id],
+      (
+        oldData: InfiniteData<TMessageFeedbackPage> | undefined,
+      ): InfiniteData<TMessageFeedbackPage> | undefined => {
+        if (oldData) {
+          oldData?.pages.map((page, i) => {
+            if (i === 0) {
+              page.listMessageFeedback.unshift({
+                fullName: currentUser.fullName,
+                imageUrl: currentUser.imageUrl,
+                creatorFeedbackId: inforFeedback.creatorUserId,
+                feedbackId: inforFeedback.id,
+                comment: sendMessageData.message,
+                tenantId: inforFeedback.tenantId,
+                typeComment: sendMessageData.type,
+                organizationUnitId: inforFeedback.organizationUnitId,
+                creationTime: moment().toISOString(),
+                creatorUserId: currentUser.userId,
+                id: 0,
+              });
+            }
+            return page;
+          });
+        }
 
-    //     return oldData;
-    //   },
-    // );
+        return oldData;
+      },
+    );
     const newValueSending = data?.pages ? [...data.pages] : [];
     setSending(newValueSending);
+    sendMessFeedback(mess);
 
     // hubConnection
-    //   .invoke('ProviderSendMessageUser', mess)
+    //   .invoke('sendcmfbtoadtenant', mess)
     //   .then((res: any) => {
     //     console.log('done send', res);
     //   })
-    //   .catch((err: any) => console.error('Lỗi gửi tin nhắn đến cửa hàng', err));
+    //   .catch((err: any) => console.error('Lỗi gửi tin nhắn feedback', err));
   };
   const deleteMess = (sendMessageData: TMessageFeedback) => {
     // hubConnection
@@ -178,80 +197,82 @@ const ChatFeedbackScreen = ({route}: Props) => {
     //     Alert.alert('Thu hồi tin nhắn thất bại');
     //   });
   };
-  // useEffect(() => {
-  //   hubConnection.on('getBusinessChatMessage', (message: IMessage) => {
-  //     if (
-  //       message.targetUserId === customer?.friendUserId ||
-  //       message.userId === customer?.friendUserId
-  //     ) {
-  //       queryClient.setQueryData(
-  //         ['messages', customer?.friendUserId],
-  //         (
-  //           oldData: InfiniteData<IPageMessage> | undefined,
-  //         ): InfiniteData<IPageMessage> | undefined => {
-  //           if (oldData) {
-  //             oldData?.pages.map((page, i) => {
-  //               if (i === 0) {
-  //                 page.data.unshift(message);
-  //                 page.data.forEach((el, index) => {
-  //                   if (!el.id) {
-  //                     page.data.splice(index, 1);
-  //                   }
-  //                 });
-  //               }
-  //               page.totalRecords += 1;
-  //               return page;
-  //             });
-  //           }
+  useEffect(() => {
+    hubConnection.on(
+      'SendCommentFeedbackToUserTenant',
+      (message: TMessageFeedback) => {
+        if (message.feedbackId === inforFeedback?.id) {
+          queryClient.setQueryData<
+            InfiniteData<TMessageFeedbackPage> | undefined
+          >(
+            ['messageFeedback', inforFeedback.id],
+            (
+              oldData: InfiniteData<TMessageFeedbackPage> | undefined,
+            ): InfiniteData<TMessageFeedbackPage> | undefined => {
+              if (oldData) {
+                oldData?.pages.map((page, i) => {
+                  if (i === 0) {
+                    page.listMessageFeedback.unshift(message);
+                    page.listMessageFeedback.forEach((el, index) => {
+                      if (!el.id) {
+                        page.listMessageFeedback.splice(index, 1);
+                      }
+                    });
+                  }
+                  page.total += 1;
+                  return page;
+                });
+              }
 
-  //           return oldData;
-  //         },
-  //       );
-  //       const newValueSent = data?.pages ? [...data?.pages] : [];
-  //       setSending(newValueSent);
-  //       queryClient.refetchQueries(['customer', idStore]);
-  //     }
-  //   });
-  //   hubConnection.on('deleteBusinessChatMessage', (message: IMessage) => {
-  //     if (
-  //       message.targetUserId === customer?.friendUserId ||
-  //       message.userId === customer?.friendUserId
-  //     ) {
-  //       queryClient.setQueryData(
-  //         ['messages', customer?.friendUserId],
-  //         (
-  //           oldData: InfiniteData<IPageMessage> | undefined,
-  //         ): InfiniteData<IPageMessage> => {
-  //           const newData = oldData?.pages ? [...oldData.pages] : [];
-  //           let numDel = 0;
-  //           newData.forEach(item => {
-  //             item.data.forEach((el, i) => {
-  //               if (el.id === message.id) {
-  //                 item.data.splice(i, 1);
-  //                 numDel++;
-  //               }
-  //             });
-  //           });
-  //           newData.forEach(item => {
-  //             item.totalRecords -= numDel;
-  //           });
-  //           return {
-  //             pageParams: oldData?.pageParams ?? [],
-  //             pages: newData,
-  //           };
-  //         },
-  //       );
-  //       const newValueDelete = data?.pages ? [...data?.pages] : [];
-  //       setSending(newValueDelete);
-  //       queryClient.refetchQueries(['customer', idStore]);
-  //     }
-  //   });
-  //   return () => {
-  //     hubConnection.off('getBusinessChatMessage');
-  //     hubConnection.off('deleteBusinessChatMessage');
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+              return oldData;
+            },
+          );
+          const newValueSent = data?.pages ? [...data?.pages] : [];
+          setSending(newValueSent);
+          // queryClient.refetchQueries(['customer', idStore]);
+        }
+      },
+    );
+    // hubConnection.on('deleteBusinessChatMessage', (message: TMessageFeedback) => {
+    //   if (
+    //     message.targetUserId === customer?.friendUserId ||
+    //     message.userId === customer?.friendUserId
+    //   ) {
+    //     queryClient.setQueryData(
+    //       ['messages', customer?.friendUserId],
+    //       (
+    //         oldData: InfiniteData<IPageMessage> | undefined,
+    //       ): InfiniteData<IPageMessage> => {
+    //         const newData = oldData?.pages ? [...oldData.pages] : [];
+    //         let numDel = 0;
+    //         newData.forEach(item => {
+    //           item.data.forEach((el, i) => {
+    //             if (el.id === message.id) {
+    //               item.data.splice(i, 1);
+    //               numDel++;
+    //             }
+    //           });
+    //         });
+    //         newData.forEach(item => {
+    //           item.totalRecords -= numDel;
+    //         });
+    //         return {
+    //           pageParams: oldData?.pageParams ?? [],
+    //           pages: newData,
+    //         };
+    //       },
+    //     );
+    //     const newValueDelete = data?.pages ? [...data?.pages] : [];
+    //     setSending(newValueDelete);
+    //     queryClient.refetchQueries(['customer', idStore]);
+    //   }
+    // });
+    return () => {
+      hubConnection.off('getBusinessChatMessage');
+      hubConnection.off('deleteBusinessChatMessage');
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     return () => {
       queryClient.clear();
@@ -295,12 +316,12 @@ const ChatFeedbackScreen = ({route}: Props) => {
           showsVerticalScrollIndicator={false}
           keyExtractor={item => {
             if (!item.id) {
-              return faker.datatype.uuid();
+              return faker.string.uuid();
             }
             return item.id.toString();
           }}
           renderItem={({item, index}) => {
-            return (
+            return item.typeComment < 8 ? (
               <View>
                 {compareDate(
                   item?.creationTime,
@@ -319,15 +340,18 @@ const ChatFeedbackScreen = ({route}: Props) => {
                   )}
 
                   <MessageComponent
-                    // {...props}
                     mess={item}
                     side={currentUser.userId === item.creatorUserId ? 1 : 2}
                     emotionDisable={false}
-                    // setReplyMess={setReplyMess}
                     deleteMess={deleteMess}
                   />
                 </View>
               </View>
+            ) : (
+              <MessageTagFeedbackState
+                typeMess={item.typeComment}
+                message={item}
+              />
             );
           }}
         />

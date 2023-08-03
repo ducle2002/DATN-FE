@@ -40,8 +40,10 @@ const LoginScreen = (): JSX.Element => {
           accessToken: result.accessToken,
           refreshToken: result.refreshToken,
           tenantId: result.tenantId,
+          encryptedAccessToken: result.encryptedAccessToken,
         }),
       );
+
       dispatch(loginSuccess(result));
     },
     onError: error => {

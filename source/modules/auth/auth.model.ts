@@ -6,6 +6,7 @@ export interface ILoginPayload {
 
 export interface IToken {
   accessToken: string;
+  encryptedAccessToken: string;
   refreshToken: string;
   tenantId: number;
 }
