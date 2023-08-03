@@ -1,5 +1,6 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {TOrganizationUnitState} from './organization.model';
+import {RootState} from '@/store';
 
 const initialState: TOrganizationUnitState = {
   listOrganizations: [],
@@ -20,3 +21,5 @@ const organizationSlice = createSlice({
 export default organizationSlice.reducer;
 
 export const {setOrganization} = organizationSlice.actions;
+export const selectorOrganizationUnit = (state: RootState) =>
+  state.organizationUnit.listOrganizations;

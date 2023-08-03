@@ -1,27 +1,26 @@
 import {
   Dimensions,
   NativeModules,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {Searchbar} from 'react-native-paper';
 import Icon from '@/components/icon.component';
 import LinearGradient from 'react-native-linear-gradient';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {FeedbackStackParamsList} from '@/routes/feedback.stack';
+import {ChatStackParamsList} from '@/routes/chat.stack';
+import {Searchbar} from 'react-native-paper';
 const {StatusBarManager} = NativeModules;
 const {width, height} = Dimensions.get('screen');
 type Props = {
   searchQuery: string;
   setSearchQuery: Function;
 };
-const HeaderFeedback = ({searchQuery = '', setSearchQuery}: Props) => {
+const HeaderChatScreen = ({searchQuery = '', setSearchQuery}: Props) => {
   const [value, setValue] = useState(searchQuery);
-  const navigation = useNavigation<NavigationProp<FeedbackStackParamsList>>();
+  const navigation = useNavigation<NavigationProp<ChatStackParamsList>>();
   return (
     <LinearGradient
       style={{
@@ -77,35 +76,12 @@ const HeaderFeedback = ({searchQuery = '', setSearchQuery}: Props) => {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('CreateFeedbackScreen', {});
-          }}
-          style={{
-            paddingRight: 5,
-          }}>
-          <Icon
-            type="MaterialIcons"
-            name="my-library-add"
-            color={'white'}
-            size={24}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            // navigation.goBack();
-          }}
-          style={{
-            paddingLeft: 5,
-          }}>
-          <Icon type="Ionicons" name="options" color={'white'} size={24} />
-        </TouchableOpacity>
-      </View>
+        }}
+      />
     </LinearGradient>
   );
 };
 
-export default HeaderFeedback;
+export default HeaderChatScreen;
 
 const styles = StyleSheet.create({});
