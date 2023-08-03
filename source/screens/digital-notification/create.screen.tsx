@@ -116,7 +116,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
   const onSubmit = (data: {data: string}) => {
     if (file) {
       if (typeof file !== 'string') {
-        UtilsApi.uploadImagesRequest([file]).then(result => {
+        UtilsApi.ImagesRequest([file]).then(result => {
           createOrUpdateNotification({
             ...noti,
             ...data,

@@ -10,12 +10,10 @@ import Button from '@/components/button.component';
 import language, {languageKeys} from '@/config/language/language';
 import TimeLineComponent from './components/time-line.component';
 import {TOption} from '@/modules/vote/vote.model';
-import globalStyles from '@/config/globalStyles';
+import globalStyles, {voteChartColor} from '@/config/globalStyles';
 import moment from 'moment';
 
 type Props = StackScreenProps<VoteStackParamsList, 'DETAIL_SCREEN'>;
-
-const colorVote = ['#FFC341', '#CEDAFF', '#FF6565'];
 
 const DetailScreen = ({navigation, route}: Props) => {
   const id = route.params.id;
@@ -31,7 +29,7 @@ const DetailScreen = ({navigation, route}: Props) => {
         ? [
             ...data.voteOptions.map((option: TOption, index: number) => ({
               ...option,
-              svg: {fill: colorVote[index % 3]},
+              svg: {fill: voteChartColor[index % 3]},
               key: index,
             })),
             {

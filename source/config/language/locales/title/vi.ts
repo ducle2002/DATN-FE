@@ -56,7 +56,7 @@ const title = {
   'Pages.Services.Economy.Work': '',
   'Pages.Services.Local_Amenities': '',
   'Pages.Services.Local_Amenities.Approve_Store': '',
-  'Pages.Services.Local_Amenities.Create_Store': '',
+  'Pages.Services.Local_Amenities.Create_Store': 'Tiện ích',
   'Pages.Services.Local_Amenities.Report_User': '',
   'Pages.Services.Society': '',
   'Pages.Services.Society.Education': '',

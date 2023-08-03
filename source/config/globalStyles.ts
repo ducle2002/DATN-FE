@@ -1,5 +1,28 @@
 import {StyleSheet} from 'react-native';
 
+export const homeIconBackgrounColor = [
+  '#505DCF',
+  '#5BBAEF',
+  '#235195',
+  '#284DCE',
+  '#64C6DD',
+  '#5BA9EF',
+  '#237A95',
+  '#3A2395',
+];
+
+export const voteChartColor = [
+  '#F86F03',
+  '#CEDAFF',
+  '#FF6565',
+  '#C8AE7D',
+  '#916DB3',
+  '#CECE5A',
+  '#557A46',
+  '#9BE8D8',
+  '#176B87',
+];
+
 const globalStyles = StyleSheet.create({
   text12Medium: {
     fontFamily: 'Inter-Medium',
