@@ -83,7 +83,7 @@ const DetailScreen = ({route, navigation}: Props) => {
           mode="outlined"
           style={{width: '45%'}}
           onPress={() => deleteRequest()}>
-          {language.t(languageKeys.digitalNoti.detail.delete)}
+          {language.t(languageKeys.shared.button.delete)}
         </Button>
         <Button
           mode="contained"
@@ -91,7 +91,7 @@ const DetailScreen = ({route, navigation}: Props) => {
           onPress={() => {
             navigation.navigate('CREATE_SCREEN', {noti: noti});
           }}>
-          {language.t(languageKeys.digitalNoti.detail.edit)}
+          {language.t(languageKeys.shared.button.edit)}
         </Button>
       </BottomContainer>
     </View>

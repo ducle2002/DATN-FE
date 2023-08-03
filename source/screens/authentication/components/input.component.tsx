@@ -1,5 +1,5 @@
 import {StyleProp, StyleSheet, TextInput, View, ViewStyle} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Icon, {TypeIcon} from '@/components/icon.component';
 import globalStyles from '@/config/globalStyles';
 import CTextInput from '@/components/text-input.component';
@@ -16,19 +16,36 @@ const InputComponent = ({
   iconType,
   iconColor,
   containerStyle,
+  secureTextEntry,
   ...props
 }: Props) => {
+  const [isSecure, setIsSecure] = useState(secureTextEntry);
+  const toggleIsSecure = () => {
+    setIsSecure(!isSecure);
+  };
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.iconContainer}>
         <Icon name={iconName} type={iconType} size={20} color={iconColor} />
       </View>
-      <CTextInput
-        autoCapitalize="none"
-        placeholderTextColor={'#e4e4e4'}
-        style={styles.input}
-        {...props}
-      />
+      <View style={{flexDirection: 'row', flex: 1}}>
+        <CTextInput
+          autoCapitalize="none"
+          placeholderTextColor={'#e4e4e4'}
+          style={styles.input}
+          secureTextEntry={isSecure}
+          {...props}
+        />
+      </View>
+      {secureTextEntry && (
+        <Icon
+          onPress={toggleIsSecure}
+          type="Ionicons"
+          name={isSecure ? 'eye-off' : 'eye'}
+          size={25}
+          color={'white'}
+        />
+      )}
     </View>
   );
 };
@@ -42,6 +59,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 20,
     backgroundColor: '#0A167C',
+    alignItems: 'center',
   },
   input: {
     ...globalStyles.text14Medium,
@@ -56,5 +74,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 5,
     aspectRatio: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

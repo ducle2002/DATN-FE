@@ -240,8 +240,8 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
       <BottomButton onPress={handleSubmit(onSubmit)}>
         {language.t(
           noti
-            ? languageKeys.digitalNoti.create.update
-            : languageKeys.digitalNoti.create.create,
+            ? languageKeys.shared.button.update
+            : languageKeys.shared.button.save,
         )}
       </BottomButton>
     </KeyboardAvoidingView>

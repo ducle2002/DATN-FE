@@ -3,7 +3,8 @@ import {HOST_SERVER} from '@env';
 import {TVoteGetParams} from './vote.model';
 
 class Vote {
-  endpoint = '/api/services/app/CityVote/';
+  private endpoint = '/api/services/app/CityVote/';
+
   getRequest = async (params: TVoteGetParams) => {
     const url = HOST_SERVER + this.endpoint + 'GetAllCityVote';
     const {
@@ -15,6 +16,15 @@ class Vote {
       data: result.data,
     };
   };
+
+  getByIdRequest = async (id: number) => {
+    const url = HOST_SERVER + this.endpoint + 'GetVoteById';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: {id: id}});
+    return result.data;
+  };
+
   createOrUpdateRequest = async (params: any) => {
     const url = HOST_SERVER + this.endpoint + 'CreateOrUpdateCityVote';
     return axiosClient.post(url, params);

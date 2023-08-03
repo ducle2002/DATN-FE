@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
     justifyContent: 'center',
+    width: '100%',
   },
   textName: {
     ...globalStyles.text15Medium,
