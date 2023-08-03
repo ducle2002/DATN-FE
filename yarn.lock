@@ -4546,6 +4546,11 @@ i18n-keys@^1.0.8:
   resolved "https://registry.npmjs.org/i18n-keys/-/i18n-keys-1.0.8.tgz"
   integrity sha512-oAR99GZ3vthegOran5ZpOAy0quJsYlnT6aPtykyckTYzl+VWTRGbvuqZ9oCeOZq/I4isy2F+RG9/2d9vtOHo2Q==
 
+i18next-intervalplural-postprocessor@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/i18next-intervalplural-postprocessor/-/i18next-intervalplural-postprocessor-3.0.0.tgz#35580abdaff5e838c44c22740a7178063b7bdd0b"
+  integrity sha512-ZJWg2Gcb0kQqVI7kygLj9wVwQHK3mzRAg94uLsdoHqss0M9n0HSPr1pThd2AttkBsJFWR26G18hnKCqcTB8shQ==
+
 i18next@^23.2.6:
   version "23.2.11"
   resolved "https://registry.npmjs.org/i18next/-/i18next-23.2.11.tgz"
