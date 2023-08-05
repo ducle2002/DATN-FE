@@ -11,12 +11,14 @@ export const compressImageHandel = async (image: TImageCompressInput) => {
   const imageRatio = image.width / image.height;
   let width;
   let height;
-  if (image.width > image.height && image.width > 3000) {
-    width = 3000;
-    height = 3000 / imageRatio;
-  } else if (image.width > image.height && image.height > 3000) {
-    height = 3000;
-    width = 3000 * imageRatio;
+  if (image.width > 3000 || image.height > 3000) {
+    if (image.width > image.height) {
+      width = 3000;
+      height = 3000 / imageRatio;
+    } else {
+      height = 3000;
+      width = 3000 * imageRatio;
+    }
   } else {
     height = image.height;
     width = image.width;

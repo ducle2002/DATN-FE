@@ -6,6 +6,8 @@ import {AdministrativeStackParamsList} from '@/routes/administrative.stack';
 import Icon from '@/components/icon.component';
 import moment from 'moment';
 import InforTypeHtml from './components/infor-type-html';
+import InforTypeOptions from './components/infor-type-options';
+import InforTypeTable from './components/infor-type-table';
 type Props = StackScreenProps<
   AdministrativeStackParamsList,
   'AdministrativeDetailScreen'
@@ -47,19 +49,41 @@ const AdministrativeDetailScreen = ({route}: Props) => {
       {properties && config && (
         <View>
           {config.properties?.map((item, index) => {
-            return item.type === 13 ? (
-              <InforTypeHtml
-                label={item.displayName}
-                value={properties[item.key]}
-              />
-            ) : (
-              <View key={index} style={{flexDirection: 'row'}}>
-                <Text>{item.displayName}: </Text>
-                {item.type !== 9 && item.type !== 11 && (
-                  <Text>{properties[item.key]}</Text>
-                )}
-              </View>
-            );
+            switch (item.type) {
+              case 13:
+                return (
+                  <InforTypeHtml
+                    key={index}
+                    label={item.displayName}
+                    value={properties[item.key]}
+                  />
+                );
+              case 11:
+                return (
+                  <InforTypeOptions
+                    key={index}
+                    label={item.displayName}
+                    optionValue={properties[item.key]}
+                  />
+                );
+              case 9:
+                return (
+                  <InforTypeTable
+                    key={index}
+                    label={item.displayName}
+                    tableValue={properties[item.key]}
+                  />
+                );
+              default:
+                return (
+                  <View key={index} style={{flexDirection: 'row'}}>
+                    <Text>{item.displayName}: </Text>
+                    {item.type !== 9 && item.type !== 11 && (
+                      <Text>{properties[item.key]}</Text>
+                    )}
+                  </View>
+                );
+            }
           })}
         </View>
       )}

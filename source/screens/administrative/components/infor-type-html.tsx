@@ -13,7 +13,7 @@ const InforTypeHtml = ({label, value}: Props) => {
         paddingHorizontal: '2%',
       }}>
       <RenderHTML source={{html: label}} contentWidth={width} />
-      <RenderHTML source={{html: value}} contentWidth={width} />
+      {value && <RenderHTML source={{html: value}} contentWidth={width} />}
     </View>
   );
 };
