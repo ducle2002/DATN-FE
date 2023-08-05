@@ -1,6 +1,7 @@
 const header = {
   create: 'Tạo khảo sát',
   update: 'Thay đổi',
+  detail: 'Chi tiết',
 };
 
 const create = {
@@ -34,12 +35,23 @@ const status = {
   comming: 'Sắp diễn ra',
 };
 
+const detail = {
+  name: 'Tên khảo sát',
+  description: 'Nội dung',
+  scope: 'Phạm vi khảo sát',
+  totalVotes: 'Tổng số người đã tham gia',
+  timeVote: 'Thời gian khảo sát',
+  result: 'Kết quả khảo sát',
+  notParticipate: 'Chưa tham gia',
+};
+
 const vote = {
   header,
   toastNoti,
   create,
   main,
   status,
+  detail,
 };
 
 export default vote;

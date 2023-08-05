@@ -1,4 +1,10 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import React from 'react';
 import HomeIcon from './home-icon.components';
 import {TPermission} from 'types/permissions';
@@ -9,9 +15,10 @@ import {AppStackParamsList} from '@/routes/app.stack';
 
 type Props = React.ComponentProps<typeof TouchableOpacity> & {
   type: TPermission;
+  iconContainerStyle?: ViewStyle;
 };
 
-const HomeFunction = ({type, style, ...props}: Props) => {
+const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
   const navigation = useNavigation<NavigationProp<AppStackParamsList>>();
 
   const onPress = () => {
@@ -46,7 +53,7 @@ const HomeFunction = ({type, style, ...props}: Props) => {
         style={[styles.container, style]}
         onPress={onPress}
         {...props}>
-        <View style={styles.iconContainer}>
+        <View style={[styles.iconContainer, iconContainerStyle]}>
           <HomeIcon type={type} />
         </View>
         <Text style={styles.text}>{language.t(languageKeys[type])}</Text>

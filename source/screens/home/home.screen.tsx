@@ -8,6 +8,7 @@ import {AppStackParamsList} from '@/routes/app.stack';
 import {useAccount} from '@/modules/user/user.hook';
 import {useOrganizationUnit} from '@/modules/organization/organization.hook';
 import {useConfigPermissions} from '@/modules/config/config.hook';
+import {homeIconBackgrounColor} from '@/config/globalStyles';
 
 export type HomeScreenProps = StackScreenProps<
   AppStackParamsList,
@@ -36,11 +37,15 @@ const HomeScreen = (props: HomeScreenProps) => {
       <ScrollView bounces={false}>
         <HomeHeader {...props} />
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-          {grantedPermissions?.map(p => (
+          {grantedPermissions?.map((p, index) => (
             <HomeFunction
               key={p}
               type={p}
               style={{flexBasis: '33%', marginTop: 20}}
+              iconContainerStyle={{
+                backgroundColor:
+                  homeIconBackgrounColor[index % homeIconBackgrounColor.length],
+              }}
             />
           ))}
         </View>

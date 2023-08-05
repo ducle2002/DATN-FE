@@ -3,9 +3,9 @@ import React, {useContext, useEffect, useMemo, useState} from 'react';
 import ItemCard from '@/components/item-card.component';
 import globalStyles from '@/config/globalStyles';
 import {TVote} from '@/modules/vote/vote.model';
-import {ProgressBar} from 'react-native-paper';
 import moment from 'moment';
 import {SelectItemContext} from '@/contexts/select-item.context';
+import TimeLineComponent from './time-line.component';
 
 type Props = {
   item: TVote;
@@ -22,22 +22,12 @@ const VoteItem = ({item, onPress = () => {}}: Props) => {
       if (now.isBefore(moment(item.finishTime))) {
         setNow(moment());
       }
-    }, 60000);
+    }, 1000);
 
     return () => {
       clearInterval(interval);
     };
   }, [item.finishTime, now]);
-
-  const timeProgress = useMemo(() => {
-    const start = moment(item.startTime);
-    const end = moment(item.finishTime);
-    if (now.isAfter(end)) {
-      return 1;
-    } else {
-      return start.diff(now) / start.diff(end);
-    }
-  }, [item.finishTime, item.startTime, now]);
 
   const isSelected = useMemo(
     () => selected.includes(item.id),
@@ -77,11 +67,7 @@ const VoteItem = ({item, onPress = () => {}}: Props) => {
             {moment(item.finishTime).format('HH:mm DD/MM/YYYY')}
           </Text>
         </View>
-        <ProgressBar
-          progress={timeProgress}
-          style={styles.progress}
-          color="#506EDF"
-        />
+        <TimeLineComponent start={item.startTime} finish={item.finishTime} />
       </View>
     </ItemCard>
   );

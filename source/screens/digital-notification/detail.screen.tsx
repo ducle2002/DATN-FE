@@ -1,4 +1,11 @@
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useLayoutEffect} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {NotificationStackParamsList} from '@/routes/notification.stack';
@@ -61,6 +68,21 @@ const DetailScreen = ({route, navigation}: Props) => {
           </Text>
           <Text style={styles.textName}>{noti.name}</Text>
         </View>
+
+        <Pressable
+          onPress={() => {
+            navigation.navigate('LIST_COMMENT_SCREEN', {
+              notiId: noti.id,
+            });
+          }}>
+          <Text style={styles.textName}>Bình luận</Text>
+          <Text style={styles.textContent}>
+            {language.t('digitalNoti.comment.countComment_interval', {
+              postProcess: 'interval',
+              count: noti.countComment,
+            })}
+          </Text>
+        </Pressable>
         <View style={styles.dataContainer}>
           <RenderHTML
             source={{html: noti.data}}
@@ -83,7 +105,7 @@ const DetailScreen = ({route, navigation}: Props) => {
           mode="outlined"
           style={{width: '45%'}}
           onPress={() => deleteRequest()}>
-          {language.t(languageKeys.digitalNoti.detail.delete)}
+          {language.t(languageKeys.shared.button.delete)}
         </Button>
         <Button
           mode="contained"
@@ -91,7 +113,7 @@ const DetailScreen = ({route, navigation}: Props) => {
           onPress={() => {
             navigation.navigate('CREATE_SCREEN', {noti: noti});
           }}>
-          {language.t(languageKeys.digitalNoti.detail.edit)}
+          {language.t(languageKeys.shared.button.edit)}
         </Button>
       </BottomContainer>
     </View>
@@ -114,6 +136,9 @@ const styles = StyleSheet.create({
   textDepartment: {
     ...globalStyles.text16Medium,
     color: '#47a5ff',
+  },
+  textContent: {
+    ...globalStyles.text15Regular,
   },
   dataContainer: {
     marginTop: 10,

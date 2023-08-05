@@ -35,7 +35,7 @@ const MainBottom = () => {
           mode="contained"
           onPress={() => navigation.navigate('CREATE_SCREEN', {})}
           icon={'plus'}>
-          {language.t(languageKeys.digitalNoti.create.create)}
+          {language.t(languageKeys.shared.button.add)}
         </Button>
       ) : (
         <>
@@ -48,7 +48,7 @@ const MainBottom = () => {
               reset();
             }}
             mode="contained-tonal">
-            {language.t(languageKeys.digitalNoti.main.reset)}
+            {language.t(languageKeys.shared.button.deselect)}
           </Button>
           <Button
             onPress={() => {
@@ -56,7 +56,7 @@ const MainBottom = () => {
             }}
             mode="contained"
             icon="delete">
-            {language.t(languageKeys.digitalNoti.main.deleteAll)}
+            {language.t(languageKeys.shared.button.deleteAll)}
           </Button>
         </>
       )}

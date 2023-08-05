@@ -21,6 +21,8 @@ export type TVote = {
 export type TOption = {
   id: string;
   option: string;
+  countVote?: number;
+  percent?: number;
 };
 
 export enum EVoteState {

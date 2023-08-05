@@ -1,3 +1,4 @@
+import language, {languageKeys} from '@/config/language/language';
 import {TVote} from '@/modules/vote/vote.model';
 import CreateScreen from '@/screens/vote/create.screen';
 import DetailScreen from '@/screens/vote/detail.screen';
@@ -18,6 +19,7 @@ const VoteStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerTitleAlign: 'center',
+        headerBackTitleVisible: false,
       }}>
       <Stack.Screen
         name="MAIN_PAGE"
@@ -26,7 +28,13 @@ const VoteStack = () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="DETAIL_SCREEN" component={DetailScreen} />
+      <Stack.Screen
+        name="DETAIL_SCREEN"
+        component={DetailScreen}
+        options={{
+          headerTitle: language.t(languageKeys.vote.header.detail),
+        }}
+      />
       <Stack.Screen name="CREATE_SCREEN" component={CreateScreen} />
     </Stack.Navigator>
   );
