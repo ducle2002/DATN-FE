@@ -16,10 +16,13 @@ import FeedbackApi from '@/modules/feedback/feedback.service';
 import ItemFeedback from './components/item-feedback';
 import {TFeedback} from '@/modules/feedback/feedback.model';
 import FeedbackInfo from './components/feedback-info';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {StackScreenProps} from '@react-navigation/stack';
+import {FeedbackStackParamsList} from '@/routes/feedback.stack';
 
 const {width, height} = Dimensions.get('screen');
 
-type Props = {};
+type Props = StackScreenProps<FeedbackStackParamsList>;
 
 const FeedbackScreen = (props: Props) => {
   const [status, setStatus] = useState(2);
@@ -41,12 +44,17 @@ const FeedbackScreen = (props: Props) => {
     {
       title: 'Phản ánh mới',
       type: 2,
-      layout: 2,
+      layout: 3,
+    },
+    {
+      title: 'Đã phân công',
+      type: 3,
+      layout: 3,
     },
     {
       title: 'Đang xử lý',
       type: 4,
-      layout: 2,
+      layout: 3,
     },
     {
       title: 'Đã xử lý',
@@ -174,7 +182,18 @@ const FeedbackScreen = (props: Props) => {
               backgroundColor: 'white',
             }}>
             {!!showDetail.data && (
-              <FeedbackInfo data={showDetail.data} onClose={onClose} />
+              <FeedbackInfo
+                data={showDetail.data}
+                onClose={onClose}
+                onClickChat={() => {
+                  if (showDetail.data) {
+                    props.navigation.navigate('ChatFeedbackScreen', {
+                      inforFeedback: showDetail.data,
+                    });
+                  }
+                  onClose();
+                }}
+              />
             )}
           </TouchableWithoutFeedback>
         </Pressable>

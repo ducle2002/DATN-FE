@@ -4,6 +4,7 @@ import configSlice from './modules/config/config.slice';
 import userSlice from './modules/user/user.slice';
 import organizationSlice from './modules/organization/organization.slice';
 import localServiceSlice from './modules/local-service/local-service.slice';
+import hubconnectionSlice from './modules/hubconnection/hubconnection.slice';
 
 const rootReducer = combineReducers({
   auth: authenticationSlice,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   user: userSlice,
   organizationUnit: organizationSlice,
   localService: localServiceSlice,
+  hubconnection: hubconnectionSlice,
 });
 
 const middlewares: any[] = [];
@@ -25,11 +27,15 @@ const store = configureStore({
   middleware: getDefaultMiddleware => [
     ...getDefaultMiddleware({
       thunk: true,
+      serializableCheck: false,
+      immutableCheck: false,
     }),
     ...middlewares,
   ],
 });
 
 store.dispatch(authInitAction());
+
+export type RootState = ReturnType<typeof store.getState>;
 
 export default store;

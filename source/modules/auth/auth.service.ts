@@ -20,6 +20,7 @@ class Authentication {
       accessToken: data.result.accessToken,
       refreshToken: data.result.refreshToken,
       tenantId: data.result.tenantId,
+      encryptedAccessToken: data.result.encryptedAccessToken,
     };
   };
 

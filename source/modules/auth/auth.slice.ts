@@ -2,16 +2,19 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {IToken} from './auth.model';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createAppAsyncThunk} from '@/hooks/redux.hook';
+import {RootState} from '@/store';
 
 type authState = {
   isLogin: boolean;
   accessToken: string;
+  encryptedAccessToken: string;
   tenantId: number;
 };
 
 const initialState: authState = {
   isLogin: false,
   accessToken: '',
+  encryptedAccessToken: '',
   tenantId: -1,
 };
 
@@ -31,11 +34,13 @@ const authenticationSlice = createSlice({
     loginSuccess: (state, action: PayloadAction<IToken>) => {
       state.isLogin = true;
       state.accessToken = action.payload.accessToken;
+      state.encryptedAccessToken = action.payload.encryptedAccessToken;
       state.tenantId = action.payload.tenantId;
     },
     logoutSuccess: state => {
       state.isLogin = false;
       state.accessToken = initialState.accessToken;
+      state.encryptedAccessToken = initialState.encryptedAccessToken;
       state.tenantId = initialState.tenantId;
     },
   },
@@ -45,6 +50,7 @@ const authenticationSlice = createSlice({
       (state, action: PayloadAction<IToken>) => {
         state.isLogin = true;
         state.accessToken = action.payload.accessToken;
+        state.encryptedAccessToken = action.payload.encryptedAccessToken;
         state.tenantId = action.payload.tenantId;
       },
     );
@@ -52,3 +58,5 @@ const authenticationSlice = createSlice({
 });
 export const {loginSuccess, logoutSuccess} = authenticationSlice.actions;
 export default authenticationSlice.reducer;
+export const selectedEncryptedAccessToken = (state: RootState) =>
+  state.auth.encryptedAccessToken;
