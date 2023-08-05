@@ -32,6 +32,11 @@ const HomeFunction = ({type, style, ...props}: Props) => {
         });
       case 'Pages.Management.Citizens.Vote':
         return navigation.navigate('VOTE_STACK', {screen: 'MAIN_PAGE'});
+      case 'Pages.Administrative':
+        return navigation.navigate('ADMINISTRATIVE_STACK', {
+          screen: 'AdministrativeScreen',
+          params: {},
+        });
     }
   };
 
