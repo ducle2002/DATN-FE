@@ -7,7 +7,7 @@ import Administrative from 'assets/icons/administrative.svg';
 import LocalServiceIcon from 'assets/icons/utilities.svg';
 
 import {SvgProps} from 'react-native-svg';
-import {TPermission} from 'types/permissions';
+import {TPermission} from 'types/type';
 
 import Icon from '@/components/icon.component';
 

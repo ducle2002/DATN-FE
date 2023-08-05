@@ -96,3 +96,8 @@ export type TPermission =
   | 'Pages.User.Detail'
   | 'Pages.Users'
   | 'Pages.Users.Activation';
+
+export type TPagingParams = {
+  skipCount?: number;
+  maxResultCount?: number;
+};

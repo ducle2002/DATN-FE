@@ -6,7 +6,6 @@ export const homeIconBackgrounColor = [
   '#235195',
   '#284DCE',
   '#64C6DD',
-  '#5BA9EF',
   '#237A95',
   '#3A2395',
 ];

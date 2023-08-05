@@ -1,9 +1,9 @@
-import React, {useLayoutEffect} from 'react';
+import React from 'react';
 
 import FeedbackScreen from '@/screens/feedback/feedback.screen';
 import {createStackNavigator} from '@react-navigation/stack';
 export type FeedbackStackParamsList = {
-  FeedBackScreen: {};
+  FeedBackScreen: undefined;
 };
 const Stack = createStackNavigator<FeedbackStackParamsList>();
 

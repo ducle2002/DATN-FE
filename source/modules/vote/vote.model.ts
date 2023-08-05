@@ -1,7 +1,7 @@
-export type TVoteGetParams = {
+import {TPagingParams} from 'types/type';
+
+export type TVoteGetParams = TPagingParams & {
   type?: number;
-  skipCount: number;
-  maxResultCount: number;
 };
 
 export type TVote = {
