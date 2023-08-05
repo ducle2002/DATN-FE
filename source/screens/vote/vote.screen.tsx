@@ -118,6 +118,7 @@ const VoteScreen = ({navigation}: Props) => {
           reset: deselectAll,
         }}>
         <FlatList
+          maxToRenderPerBatch={50}
           data={dataProvider.getAllData()}
           renderItem={renderItem}
           refreshControl={

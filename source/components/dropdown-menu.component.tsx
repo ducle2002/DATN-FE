@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   FlatList,
   LayoutRectangle,
   ListRenderItem,
@@ -9,11 +10,13 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {memo, useState} from 'react';
 import ReactNativeModal from 'react-native-modal';
 import {useHeaderHeight} from '@react-navigation/elements';
 import globalStyles from '@/config/globalStyles';
 import Icon from './icon.component';
+
+const {width} = Dimensions.get('screen');
 
 export type TOptionItem = {
   label: string;
@@ -125,7 +128,7 @@ const DropdownMenu = ({
   );
 };
 
-export default DropdownMenu;
+export default memo(DropdownMenu);
 
 const styles = StyleSheet.create({
   container: {},
@@ -146,6 +149,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 5,
     borderRadius: 5,
+    // maxHeight: '60%',
+    minWidth: 0.4 * width,
   },
   itemOption: {
     paddingHorizontal: 10,
