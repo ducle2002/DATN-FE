@@ -17,6 +17,9 @@ import {selectedEncryptedAccessToken} from '@/modules/auth/auth.slice';
 import * as signalR from '@microsoft/signalr';
 import {setConnection} from '@/modules/hubconnection/hubconnection.slice';
 import ChatStack, {ChatStackParamsList} from './chat.stack';
+import AdministrativeStack, {
+  AdministrativeStackParamsList,
+} from './administrative.stack';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -26,6 +29,7 @@ export type AppStackParamsList = {
   VOTE_STACK: NavigatorScreenParams<VoteStackParamsList>;
   LOCAL_SERVICE_STACK: NavigatorScreenParams<LocalServiceStackParamsList>;
   CHAT_STACK: NavigatorScreenParams<ChatStackParamsList>;
+  ADMINISTRATIVE_STACK: NavigatorScreenParams<AdministrativeStackParamsList>;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -98,6 +102,13 @@ const AppStack = () => {
         }}
         name="FEEDBACK_STACK"
         component={FeedbackStack}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="ADMINISTRATIVE_STACK"
+        component={AdministrativeStack}
       />
       <Stack.Screen
         options={{

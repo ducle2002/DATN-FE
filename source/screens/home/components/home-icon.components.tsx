@@ -11,6 +11,8 @@ import {TPermission} from 'types/type';
 
 import Icon from '@/components/icon.component';
 
+import Icon from '@/components/icon.component';
+
 export type HomeIconProp = SvgProps & {
   type: TPermission;
 };
