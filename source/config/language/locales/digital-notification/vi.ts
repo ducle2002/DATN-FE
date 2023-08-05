@@ -19,6 +19,7 @@ const detail = {
 const header = {
   create: 'Tạo thông báo',
   edit: 'Chỉnh sửa thông báo',
+  comment: 'Bình luận',
 };
 
 const main = {
@@ -37,10 +38,16 @@ const toastNoti = {
   imageRequire: 'Thêm ảnh bìa',
 };
 
+const comment = {
+  countComment_interval:
+    '(0)[Không có bình luận nào];(1-inf)[Có {{count}} bình luận]',
+};
+
 export const digitalNoti = {
   create,
   header,
   detail,
   toastNoti,
   main,
+  comment,
 };

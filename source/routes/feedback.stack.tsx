@@ -1,4 +1,4 @@
-import React, {useLayoutEffect} from 'react';
+import React from 'react';
 
 import FeedbackScreen from '@/screens/feedback/feedback.screen';
 import {createStackNavigator} from '@react-navigation/stack';

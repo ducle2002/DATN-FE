@@ -51,7 +51,7 @@ const VoteScreen = ({navigation}: Props) => {
         o => o.organizationUnitId === item.organizationUnitId,
       );
       return RowRender(item, department?.displayName, () => {
-        navigation.navigate('CREATE_SCREEN', {vote: item});
+        navigation.navigate('DETAIL_SCREEN', {id: item.id});
       });
     },
     [listOrganizations, navigation],
@@ -118,6 +118,7 @@ const VoteScreen = ({navigation}: Props) => {
           reset: deselectAll,
         }}>
         <FlatList
+          maxToRenderPerBatch={50}
           data={dataProvider.getAllData()}
           renderItem={renderItem}
           refreshControl={

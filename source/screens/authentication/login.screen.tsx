@@ -93,6 +93,7 @@ const LoginScreen = (): JSX.Element => {
                 iconType="Ionicons"
                 iconColor="#0A167C"
                 containerStyle={styles.inputContainer}
+                secureTextEntry={true}
               />
             )}
           />

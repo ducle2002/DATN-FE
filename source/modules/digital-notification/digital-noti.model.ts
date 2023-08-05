@@ -1,3 +1,5 @@
+import {TPagingParams} from 'types/type';
+
 export type TDigitalNoti = {
   name: string;
   data: string;
@@ -6,13 +8,21 @@ export type TDigitalNoti = {
   id: number;
   organizationUnitId: number;
   creationTime: string;
+  countComment: number;
 };
 
-export type TDigitalNotiGetParams = {
+export type TDigitalNotiGetParams = TPagingParams & {
   type: number;
-  skipCount: number;
-  maxResultCount: number;
   keyword?: string;
+};
+
+export type TCommentNoti = {
+  avatar?: string;
+  comment: string;
+  id: number;
+  creatorUserId: number;
+  fullName: string;
+  creationTime: string;
 };
 
 export type TDigitalDeleteParams = {

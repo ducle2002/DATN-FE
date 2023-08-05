@@ -40,6 +40,7 @@ const MainHeader = ({keywordChange = () => {}}: Props) => {
               value={value}
               onChangeText={onChange}
               onSubmitEditing={handleSubmit(onSubmit)}
+              placeholder="Tìm kiếm"
             />
           )}
         />

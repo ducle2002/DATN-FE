@@ -1,7 +1,7 @@
-export type TVoteGetParams = {
+import {TPagingParams} from 'types/type';
+
+export type TVoteGetParams = TPagingParams & {
   type?: number;
-  skipCount: number;
-  maxResultCount: number;
 };
 
 export type TVote = {
@@ -21,6 +21,8 @@ export type TVote = {
 export type TOption = {
   id: string;
   option: string;
+  countVote?: number;
+  percent?: number;
 };
 
 export enum EVoteState {

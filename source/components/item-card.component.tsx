@@ -1,7 +1,7 @@
 import React from 'react';
 import {Pressable, StyleSheet, View, ViewStyle} from 'react-native';
 import {RadioButton} from 'react-native-paper';
-import Animated, {SlideInLeft, SlideOutLeft} from 'react-native-reanimated';
+import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 
 type Props = React.ComponentProps<typeof View> & {
   containerStyle?: ViewStyle | Array<ViewStyle>;
@@ -37,13 +37,15 @@ const ItemCard = ({
         {...props}>
         {isSelected && (
           <Animated.View
-            entering={SlideInLeft}
-            exiting={SlideOutLeft}
+            entering={FadeIn}
+            exiting={FadeOut}
             style={{alignItems: 'center', justifyContent: 'center'}}>
             <RadioButton.Android value={''} status="checked" />
           </Animated.View>
         )}
-        {children}
+        <Animated.View style={{flexDirection: 'row', flex: 1}}>
+          {children}
+        </Animated.View>
       </View>
     </Pressable>
   );
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: 'white',
-    marginBottom: 20,
+    marginBottom: 15,
     width: '100%',
     elevation: 2,
     shadowOpacity: 0.1,

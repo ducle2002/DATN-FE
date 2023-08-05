@@ -116,7 +116,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
   const onSubmit = (data: {data: string}) => {
     if (file) {
       if (typeof file !== 'string') {
-        UtilsApi.uploadImagesRequest([file]).then(result => {
+        UtilsApi.ImagesRequest([file]).then(result => {
           createOrUpdateNotification({
             ...noti,
             ...data,
@@ -240,8 +240,8 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
       <BottomButton onPress={handleSubmit(onSubmit)}>
         {language.t(
           noti
-            ? languageKeys.digitalNoti.create.update
-            : languageKeys.digitalNoti.create.create,
+            ? languageKeys.shared.button.update
+            : languageKeys.shared.button.save,
         )}
       </BottomButton>
     </KeyboardAvoidingView>
