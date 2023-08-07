@@ -43,6 +43,7 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
         return navigation.navigate('ADMINISTRATIVE_STACK', {
           screen: 'AdministrativeScreen',
           params: {},
+        });
       case 'Pages.Services.Local_Amenities.Create_Store':
         return navigation.navigate('LOCAL_SERVICE_STACK', {
           screen: 'MAIN_SCREEN',

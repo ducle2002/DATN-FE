@@ -27,8 +27,10 @@ const ServiceItem = ({item, onPress}: Props) => {
         style={styles.image}
       />
       <View style={styles.contentContainer}>
-        <Text style={styles.textName}>{item.name}</Text>
-        <Text numberOfLines={2}>{properties.storeInfo.address?.trim()}</Text>
+        <Text numberOfLines={1} style={styles.textName}>
+          {item.name}
+        </Text>
+        <Text numberOfLines={1}>{properties.storeInfo.address?.trim()}</Text>
         <View style={{flexDirection: 'row'}}>
           <Icon type="Ionicons" name="star" size={15} color="#FFDF00" />
           <Text>{item.countRate}</Text>
