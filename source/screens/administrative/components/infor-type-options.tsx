@@ -6,19 +6,32 @@ type Props = {
   optionValue: any;
 };
 const InforTypeOptions = ({label, optionValue}: Props) => {
-  //   console.log(optionValue);
-
   return (
     <View
       style={{
         flexDirection: 'row',
+        paddingHorizontal: '2%',
+        paddingTop: '2%',
       }}>
-      <Text>{label}: </Text>
-      <Text>{optionValue?.displayName}</Text>
+      <Text style={styles.txtLabel}>{label}: </Text>
+      <Text style={styles.txtContent}>
+        {optionValue?.displayName ?? 'Không có thông tin'}
+      </Text>
     </View>
   );
 };
 
 export default InforTypeOptions;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  txtLabel: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#333',
+  },
+  txtContent: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: '#333',
+  },
+});
