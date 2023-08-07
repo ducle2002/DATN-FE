@@ -1,3 +1,5 @@
+import {TPagingParams} from 'types/type';
+
 export type TDigitalNoti = {
   name: string;
   data: string;
@@ -9,10 +11,8 @@ export type TDigitalNoti = {
   countComment: number;
 };
 
-export type TDigitalNotiGetParams = {
+export type TDigitalNotiGetParams = TPagingParams & {
   type: number;
-  skipCount: number;
-  maxResultCount: number;
   keyword?: string;
 };
 

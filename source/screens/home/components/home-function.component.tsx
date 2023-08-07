@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import HomeIcon from './home-icon.components';
-import {TPermission} from 'types/permissions';
+import {TPermission} from 'types/type';
 import language, {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
@@ -43,6 +43,10 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
         return navigation.navigate('ADMINISTRATIVE_STACK', {
           screen: 'AdministrativeScreen',
           params: {},
+        });
+      case 'Pages.Services.Local_Amenities.Create_Store':
+        return navigation.navigate('LOCAL_SERVICE_STACK', {
+          screen: 'MAIN_SCREEN',
         });
     }
   };

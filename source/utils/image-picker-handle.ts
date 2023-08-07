@@ -6,6 +6,7 @@ export type TImagePicker = {
   type: string;
   size: number;
   uri: string;
+  source?: string;
 };
 
 export const handlePicker = (images: Array<Image>): Array<TImagePicker> => {
@@ -17,5 +18,6 @@ export const handlePicker = (images: Array<Image>): Array<TImagePicker> => {
     type: image.mime,
     size: image.size,
     uri: image.path,
+    source: image.sourceURL,
   }));
 };

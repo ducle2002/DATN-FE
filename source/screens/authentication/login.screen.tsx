@@ -22,6 +22,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 const loginSchema = yup.object({
   userNameOrEmailAddress: yup.string().required(),
   password: yup.string().required(),
+  tenancyName: yup.string().required(),
 });
 
 const LoginScreen = (): JSX.Element => {
@@ -52,7 +53,7 @@ const LoginScreen = (): JSX.Element => {
   });
 
   const onSubmit = (data: ILoginPayload) => {
-    login({...data, tenancyName: 'keangnam'});
+    login({...data});
   };
 
   return (
@@ -62,6 +63,24 @@ const LoginScreen = (): JSX.Element => {
       blurRadius={10}>
       <SafeAreaView style={styles.container}>
         <View style={styles.contentContainer}>
+          <Controller
+            {...{control}}
+            name="tenancyName"
+            render={({field: {value, onChange}}) => (
+              <InputComponent
+                containerStyle={styles.inputContainer}
+                placeholder={language.t(
+                  languageKeys.auth.form.tenancyPlaceholder,
+                )}
+                value={value}
+                onChangeText={onChange}
+                iconName="building"
+                iconType="FontAwesome"
+                iconColor="#0A167C"
+              />
+            )}
+          />
+
           <Controller
             {...{control}}
             name="userNameOrEmailAddress"
