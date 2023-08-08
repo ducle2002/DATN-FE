@@ -9,12 +9,19 @@ import moment from 'moment';
 import language, {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
 import Icon from '@/components/icon.component';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {LocalServiceStackParamsList} from '@/routes/local-service.stack';
 
 type Props = {item: TBooking};
 
 const BookingItem = ({item}: Props) => {
+  const navigation =
+    useNavigation<NavigationProp<LocalServiceStackParamsList>>();
   return (
-    <ItemCard>
+    <ItemCard
+      onPress={() => {
+        navigation.navigate('DETAIL_BOOKING_SCREEN', {booking: item});
+      }}>
       <View style={styles.iconContainer}>
         <Icon type="Ionicons" name="document-text" size={30} color={'white'} />
       </View>

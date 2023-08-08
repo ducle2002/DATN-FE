@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {useInfiniteQuery} from 'react-query';
+import {useInfiniteQuery, useQuery} from 'react-query';
 import {StackScreenProps} from '@react-navigation/stack';
 import {LocalServiceStackParamsList} from '@/routes/local-service.stack';
 import LocalServiceApi from '@/modules/local-service/local-service.service';
@@ -24,6 +24,9 @@ const BookingScreen = ({route}: Props) => {
   const {storeId} = route.params;
 
   const [state, setState] = useState<EBookingFormId>(1);
+  const [selectedItem, setSelectedItem] = useState<number | undefined>(
+    undefined,
+  );
 
   const {data, refetch, remove, fetchNextPage, isLoading} = useInfiniteQuery({
     queryKey: ['booking', storeId],
@@ -36,6 +39,7 @@ const BookingScreen = ({route}: Props) => {
         ...pageParam,
         storeId: storeId,
         formId: state,
+        itemBookingId: selectedItem,
       }),
     getNextPageParam: (lastPage, allPages) => {
       const skipCount = allPages.length * 10;
@@ -47,6 +51,11 @@ const BookingScreen = ({route}: Props) => {
           }
         : undefined;
     },
+  });
+
+  const {data: itemBooking} = useQuery({
+    queryKey: ['items-booking', storeId],
+    queryFn: () => LocalServiceApi.getAllItemBookingRequest({storeId: storeId}),
   });
 
   const dataProvider = useMemo(
@@ -66,7 +75,7 @@ const BookingScreen = ({route}: Props) => {
   useEffect(() => {
     remove();
     refetch();
-  }, [refetch, remove, state]);
+  }, [refetch, remove, state, selectedItem]);
 
   const onEndReached = () => {
     fetchNextPage();
@@ -79,7 +88,13 @@ const BookingScreen = ({route}: Props) => {
 
   return (
     <View style={styles.container}>
-      <FilterBooking selected={state ?? 0} onChange={onChangeFormId} />
+      <FilterBooking
+        selectedState={state ?? 0}
+        onChangeState={onChangeFormId}
+        selectedItem={selectedItem}
+        onChangeItem={(id: number | undefined) => setSelectedItem(id)}
+        items={itemBooking ?? []}
+      />
       <FlatList
         data={dataProvider.getAllData()}
         renderItem={renderItem}
