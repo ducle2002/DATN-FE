@@ -20,6 +20,7 @@ import ChatStack, {ChatStackParamsList} from './chat.stack';
 import AdministrativeStack, {
   AdministrativeStackParamsList,
 } from './administrative.stack';
+import SettingStack from './settings.stack';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -81,7 +82,13 @@ const AppStack = () => {
         name={'HOME_SCREEN'}
         component={HomeScreen}
       />
-      <Stack.Screen name={'SETTING_SCREEN'} component={SettingScreen} />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name={'SETTING_SCREEN'}
+        component={SettingStack}
+      />
       <Stack.Screen
         options={{
           headerShown: false,

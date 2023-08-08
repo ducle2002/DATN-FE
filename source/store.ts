@@ -1,6 +1,6 @@
-import {combineReducers, configureStore} from '@reduxjs/toolkit';
+import {AnyAction, combineReducers, configureStore} from '@reduxjs/toolkit';
 import authenticationSlice, {authInitAction} from './modules/auth/auth.slice';
-import configSlice from './modules/config/config.slice';
+import configSlice, {languageInitAction} from './modules/config/config.slice';
 import userSlice from './modules/user/user.slice';
 import organizationSlice from './modules/organization/organization.slice';
 import localServiceSlice from './modules/local-service/local-service.slice';
@@ -35,6 +35,7 @@ const store = configureStore({
 });
 
 store.dispatch(authInitAction());
+store.dispatch(languageInitAction());
 
 export type RootState = ReturnType<typeof store.getState>;
 
