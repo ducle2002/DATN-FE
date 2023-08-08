@@ -12,6 +12,7 @@ import language, {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AppStackParamsList} from '@/routes/app.stack';
+import {useTranslation} from 'react-i18next';
 
 type Props = React.ComponentProps<typeof TouchableOpacity> & {
   type: TPermission;
@@ -20,6 +21,7 @@ type Props = React.ComponentProps<typeof TouchableOpacity> & {
 
 const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
   const navigation = useNavigation<NavigationProp<AppStackParamsList>>();
+  const {t} = useTranslation();
 
   const onPress = () => {
     switch (type) {
@@ -60,7 +62,7 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
         <View style={[styles.iconContainer, iconContainerStyle]}>
           <HomeIcon type={type} />
         </View>
-        <Text style={styles.text}>{language.t(languageKeys[type])}</Text>
+        <Text style={styles.text}>{t(languageKeys[type])}</Text>
       </TouchableOpacity>
     );
   }

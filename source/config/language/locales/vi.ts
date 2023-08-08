@@ -4,6 +4,7 @@ import shared from './shared/vi';
 import {digitalNoti} from './digital-notification/vi';
 import vote from './vote/vi';
 import localService from './local-service/vi';
+import setting from './setting/vi';
 
 const vi = {
   auth,
@@ -12,6 +13,7 @@ const vi = {
   digitalNoti,
   vote,
   localService,
+  setting,
 };
 
 export default vi;

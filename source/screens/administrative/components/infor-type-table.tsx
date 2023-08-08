@@ -1,25 +1,40 @@
-import {
-  Dimensions,
-  LayoutChangeEvent,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import React, {useState} from 'react';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React from 'react';
 const {width} = Dimensions.get('screen');
 type Props = {
   label: string;
-  tableValue: any;
+  tableValue: any[];
 };
 const InforTypeTable = ({label, tableValue}: Props) => {
   const numCol = tableValue ? Object.keys(tableValue[0]).length : 0;
-  const [widthCells, setWidthCells] = useState(
-    Array.from(Array(5), (x, index) => width / numCol),
-  );
+  const getDataTable = () => {
+    const dataCols: string[][] = [];
+    if (tableValue && numCol) {
+      Object.keys(tableValue[0]).forEach(item => {
+        let element = [item];
+        tableValue.forEach(val => {
+          element.push(val[item]);
+        });
+        dataCols.push(element);
+      });
+    }
+    return dataCols;
+  };
   return (
-    <View>
-      <Text>{label}</Text>
+    <View
+      style={{
+        paddingHorizontal: '2%',
+      }}>
+      <Text
+        style={{
+          fontSize: 14,
+          color: '#333',
+          fontWeight: '700',
+          paddingBottom: 4,
+          paddingTop: '2%',
+        }}>
+        {label}
+      </Text>
       {tableValue && numCol && (
         <ScrollView horizontal>
           <View>
@@ -27,61 +42,28 @@ const InforTypeTable = ({label, tableValue}: Props) => {
               style={{
                 flexDirection: 'row',
               }}>
-              {Object.keys(tableValue[0]).map((item, index) => {
+              {getDataTable().map((item, index) => {
                 return (
-                  <View
-                    key={index}
-                    style={{
-                      borderWidth: 1,
-                      alignItems: 'center',
-                      minWidth: widthCells[index],
-                      paddingHorizontal: 5,
-                      paddingVertical: 5,
-                    }}
-                    onLayout={({nativeEvent}) => {
-                      if (widthCells[index] < nativeEvent.layout.width) {
-                        let newCells = widthCells;
-                        newCells[index] = nativeEvent.layout.width;
-                        setWidthCells(newCells);
-                      }
-                    }}>
-                    <Text>{item}</Text>
+                  <View style={{}} key={index}>
+                    {item.map((el, i) => {
+                      return (
+                        <View
+                          key={i}
+                          style={{
+                            borderWidth: 1,
+                            alignItems: 'center',
+                            minWidth: width / numCol,
+                            paddingHorizontal: 5,
+                            paddingVertical: 5,
+                          }}>
+                          <Text>{el}</Text>
+                        </View>
+                      );
+                    })}
                   </View>
                 );
               })}
             </View>
-            {tableValue.map((item, index) => {
-              return (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}
-                  key={index}>
-                  {Object.keys(tableValue[0]).map((el, i) => {
-                    return (
-                      <View
-                        key={i}
-                        style={{
-                          borderWidth: 1,
-                          alignItems: 'center',
-                          minWidth: widthCells[i],
-                          paddingHorizontal: 5,
-                          paddingVertical: 5,
-                        }}
-                        onLayout={({nativeEvent}) => {
-                          if (widthCells[index] < nativeEvent.layout.width) {
-                            let newCells = widthCells;
-                            newCells[index] = nativeEvent.layout.width;
-                            setWidthCells(newCells);
-                          }
-                        }}>
-                        <Text>{item[el]}</Text>
-                      </View>
-                    );
-                  })}
-                </View>
-              );
-            })}
           </View>
         </ScrollView>
       )}

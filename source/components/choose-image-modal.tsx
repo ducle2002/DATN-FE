@@ -5,7 +5,7 @@ import {Divider} from 'react-native-paper';
 import ImageCropPicker, {Image} from 'react-native-image-crop-picker';
 import {useTranslation} from 'react-i18next';
 import {useToast} from 'react-native-toast-notifications';
-import {compressImageHandel} from '@/utils/compress-handle';
+import {compressImageHandle} from '@/utils/compress-handle';
 type Props = {
   visibleChooseImg: boolean;
   setVisibleChooseImg: Function;
@@ -47,7 +47,7 @@ const ChooseImageModal = ({
       const img = images[i];
       let imgPushed = null;
       if (!img.mime.includes('video') && img.size > 1048576) {
-        imgPushed = await compressImageHandel({
+        imgPushed = await compressImageHandle({
           width: img.width,
           height: img.height,
           size: img.size,

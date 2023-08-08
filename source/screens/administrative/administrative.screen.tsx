@@ -46,7 +46,12 @@ const AdministrativeScreen = ({navigation}: Props) => {
         </Pressable>
 
         <Text style={styles.txtHeader}>Hành chính công</Text>
-        <View />
+        <Pressable
+          onPress={() => {
+            // navigation.goBack();
+          }}>
+          <Icon type="Ionicons" name="options" color={'#333'} size={24} />
+        </Pressable>
       </View>
       {listTypeAdministrative && (
         <View style={{flex: 1}}>

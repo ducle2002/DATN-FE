@@ -7,6 +7,7 @@ import {
 
 class AdministrativeService {
   endpoint = '/api/services/app/CommonAdministrative/';
+  endpointCommon = '/api/services/app/Administrative/';
 
   GetAdministratvieGridView = async (params: {
     ADTypeId: number;
@@ -33,6 +34,18 @@ class AdministrativeService {
       data: {result},
     } = await axiosClient.get(url);
     return result.data;
+  };
+  UpdateStateAdministrative = async (data: {
+    id: number;
+    state: number;
+  }): Promise<any> => {
+    const url =
+      HOST_SERVER + this.endpointCommon + 'HandleStateUserAdministrative';
+    const {
+      data: {result},
+    } = await axiosClient.post(url, data);
+
+    return result;
   };
 }
 

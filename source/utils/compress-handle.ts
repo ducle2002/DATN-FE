@@ -7,7 +7,7 @@ export type TImageCompressInput = {
   source?: string;
   size: number;
 };
-export const compressImageHandel = async (image: TImageCompressInput) => {
+export const compressImageHandle = async (image: TImageCompressInput) => {
   const imageRatio = image.width / image.height;
   let width;
   let height;

@@ -12,7 +12,10 @@ import {NotificationStackParamsList} from '@/routes/notification.stack';
 import {Controller, useForm} from 'react-hook-form';
 import {useAppSelector} from '@/hooks/redux.hook';
 import DropdownMenu from '@/components/dropdown-menu.component';
-import {TOrganizationUnit} from '@/modules/organization/organization.model';
+import {
+  TOrganizationUnit,
+  TOrganizationUnitType,
+} from '@/modules/organization/organization.model';
 import CTextInput from '@/components/text-input.component';
 import RadioButtonGroup, {
   TRadioItem,
@@ -116,7 +119,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
   const onSubmit = (data: {data: string}) => {
     if (file) {
       if (typeof file !== 'string') {
-        UtilsApi.ImagesRequest([file]).then(result => {
+        UtilsApi.uploadImagesRequest([file]).then(result => {
           createOrUpdateNotification({
             ...noti,
             ...data,
@@ -156,10 +159,12 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
         <DropdownMenu
           onSelected={onSelected}
           options={[
-            ...listOrganizations.map(o => ({
-              label: o.displayName,
-              id: o.organizationUnitId,
-            })),
+            ...listOrganizations
+              .filter(o => o.types.includes(TOrganizationUnitType.Notification))
+              .map(o => ({
+                label: o.displayName,
+                id: o.organizationUnitId,
+              })),
           ]}
           label={language.t(languageKeys.digitalNoti.create.department)}
           placeholder={language.t(
