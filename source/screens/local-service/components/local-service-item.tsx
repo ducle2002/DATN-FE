@@ -5,11 +5,11 @@ import {
   TServiceProperties,
 } from '@/modules/local-service/local-service.model';
 import ItemCard from '@/components/item-card.component';
-import FastImage from 'react-native-fast-image';
 import globalStyles from '@/config/globalStyles';
 import Icon from '@/components/icon.component';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {LocalServiceStackParamsList} from '@/routes/local-service.stack';
+import ThumbnailImage from '@/components/thumbnail-image';
 
 type Props = {
   item: TLocalService;
@@ -22,7 +22,8 @@ const ServiceItem = ({item, onPress}: Props) => {
   const properties: TServiceProperties = JSON.parse(item.properties);
   return (
     <ItemCard onPress={() => onPress()}>
-      <FastImage
+      <ThumbnailImage
+        size="512x512"
         source={{uri: properties.storeInfo.imageUrl[0] ?? ''}}
         style={styles.image}
       />

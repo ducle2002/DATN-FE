@@ -11,6 +11,8 @@ const button = {
   edit: 'Chỉnh sửa',
   deselect: 'Bỏ chọn',
   deleteAll: 'Xóa tất cả',
+  deny: 'Từ chối',
+  accept: 'Xác nhận',
 };
 
 const shared = {

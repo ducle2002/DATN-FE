@@ -49,8 +49,9 @@ const DetailScreen = ({route, navigation}: Props) => {
   });
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white', paddingHorizontal: 10}}>
-      <ScrollView contentContainerStyle={{minHeight: '100%'}}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      <ScrollView
+        contentContainerStyle={{minHeight: '100%', paddingHorizontal: 10}}>
         <View>
           <Text style={styles.textTime}>
             {moment(noti.creationTime).format('HH:mm DD/MM/YYYY')}
@@ -98,7 +99,6 @@ const DetailScreen = ({route, navigation}: Props) => {
       <BottomContainer
         style={{
           flexDirection: 'row',
-          marginHorizontal: -10,
           justifyContent: 'space-between',
         }}>
         <Button

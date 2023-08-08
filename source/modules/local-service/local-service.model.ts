@@ -58,6 +58,7 @@ export type TBooking = {
   customerInfo?: {
     fullName?: string;
     creatorUserId?: number;
+    buildingCode?: string;
   };
   customerName: string;
   customerPhoneNumber: string;
@@ -132,4 +133,44 @@ export type TServiceType = {
 export type TServiceFilter = {
   label: string;
   state: number;
+};
+
+export enum EItemUnit {
+  OneHour = 1,
+  HalfHour = 2,
+  OneDay = 3,
+  HalfDay = 4,
+}
+
+export const UnitTime = {
+  [EItemUnit.OneHour]: 1,
+  [EItemUnit.HalfHour]: 0.5,
+  [EItemUnit.OneDay]: 12,
+  [EItemUnit.HalfDay]: 6,
+};
+
+export type TBookingItem = {
+  description: string;
+  id: number;
+  imageUrl: string;
+  name: string;
+  isFree: boolean;
+  price: number;
+  storeId: number;
+  unit: EItemUnit;
+  tenantId: 25;
+  openTimes: {
+    CN: Array<TOpenTime>;
+    T2: Array<TOpenTime>;
+    T3: Array<TOpenTime>;
+    T4: Array<TOpenTime>;
+    T5: Array<TOpenTime>;
+    T6: Array<TOpenTime>;
+    T7: Array<TOpenTime>;
+  };
+};
+
+export type TOpenTime = {
+  closeTime: string;
+  openTime: string;
 };
