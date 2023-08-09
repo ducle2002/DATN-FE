@@ -1,14 +1,23 @@
-import {StyleProp, StyleSheet, TextInput, View, ViewStyle} from 'react-native';
+import {
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ViewStyle,
+} from 'react-native';
 import React, {useState} from 'react';
 import Icon, {TypeIcon} from '@/components/icon.component';
 import globalStyles from '@/config/globalStyles';
 import CTextInput from '@/components/text-input.component';
+import language from '@/config/language/language';
 
 type Props = React.ComponentProps<typeof TextInput> & {
   iconName: string;
   iconType: TypeIcon;
   iconColor: string;
   containerStyle?: StyleProp<ViewStyle>;
+  errorMessage: string | undefined;
 };
 
 const InputComponent = ({
@@ -17,6 +26,7 @@ const InputComponent = ({
   iconColor,
   containerStyle,
   secureTextEntry,
+  errorMessage,
   ...props
 }: Props) => {
   const [isSecure, setIsSecure] = useState(secureTextEntry);
@@ -28,14 +38,19 @@ const InputComponent = ({
       <View style={styles.iconContainer}>
         <Icon name={iconName} type={iconType} size={20} color={iconColor} />
       </View>
-      <View style={{flexDirection: 'row', flex: 1}}>
-        <CTextInput
-          autoCapitalize="none"
-          placeholderTextColor={'#e4e4e4'}
-          style={styles.input}
-          secureTextEntry={isSecure}
-          {...props}
-        />
+      <View style={{flex: 1}}>
+        <View style={{flexDirection: 'row'}}>
+          <CTextInput
+            autoCapitalize="none"
+            placeholderTextColor={'#e4e4e4'}
+            style={styles.input}
+            secureTextEntry={isSecure}
+            {...props}
+          />
+        </View>
+        {errorMessage && (
+          <Text style={styles.error}>{language.t(errorMessage)}</Text>
+        )}
       </View>
       {secureTextEntry && (
         <Icon
@@ -62,7 +77,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
-    ...globalStyles.text14Medium,
+    ...globalStyles.text15Bold,
     flex: 1,
     paddingLeft: 10,
     color: 'white',
@@ -77,5 +92,10 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  error: {
+    ...globalStyles.text12SemiBold,
+    color: 'white',
+    marginLeft: 10,
   },
 });
