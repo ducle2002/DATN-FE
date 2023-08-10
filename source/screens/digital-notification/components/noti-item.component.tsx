@@ -4,9 +4,9 @@ import HTMLParser from 'node-html-parser';
 import globalStyles from '@/config/globalStyles';
 import moment from 'moment';
 import Icon from '@/components/icon.component';
-import FastImage from 'react-native-fast-image';
 import {SelectItemContext} from '../../../contexts/select-item.context';
 import ItemCard from '@/components/item-card.component';
+import ThumbnailImage from '@/components/thumbnail-image';
 type Props = {
   item: any;
   department?: string;
@@ -36,7 +36,11 @@ const NotiItem = ({item, department, onPress = () => {}}: Props) => {
           select(item.id);
         }
       }}>
-      <FastImage source={{uri: item.fileUrl}} style={styles.image} />
+      <ThumbnailImage
+        size="512x512"
+        source={{uri: item.fileUrl}}
+        style={styles.image}
+      />
       <View style={styles.contentContainer}>
         <Icon
           type="Ionicons"

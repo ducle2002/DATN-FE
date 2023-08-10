@@ -1,24 +1,52 @@
 import {StyleSheet, View} from 'react-native';
 import React, {useMemo} from 'react';
-import DropdownMenu from '@/components/dropdown-menu.component';
+import DropdownMenu, {TOptionItem} from '@/components/dropdown-menu.component';
 import globalStyles from '@/config/globalStyles';
 import language, {languageKeys} from '@/config/language/language';
 import {
   EBookingFormId,
   EBookingState,
+  TBookingItem,
   TBookingStatus,
   bookingFilter,
 } from '@/modules/local-service/local-service.model';
 
 type Props = {
-  onChange: Function;
-  selected: EBookingFormId;
+  onChangeState: Function;
+  selectedState: EBookingFormId;
+  selectedItem: number | undefined;
+  onChangeItem: Function;
+  items: Array<TBookingItem>;
 };
 
-const FilterBooking = ({onChange = () => {}, selected}: Props) => {
+const FilterBooking = ({
+  onChangeState = () => {},
+  selectedState,
+  onChangeItem,
+  selectedItem,
+  items,
+}: Props) => {
   const selectedLabel = useMemo<TBookingStatus>(
-    () => bookingFilter.find(v => v.state === selected)?.label ?? 'all',
-    [selected],
+    () => bookingFilter.find(v => v.state === selectedState)?.label ?? 'all',
+    [selectedState],
+  );
+
+  const listItems = useMemo<Array<TOptionItem>>(() => {
+    if (items && items.length > 0) {
+      return [
+        {
+          id: undefined,
+          label: language.t(languageKeys.localService.status.all),
+        },
+        ...items?.map(item => ({id: item.id, label: item.name})),
+      ];
+    }
+    return [];
+  }, [items]);
+
+  const selectedItemLabel = useMemo(
+    () => listItems.find(v => v.id === selectedItem)?.label,
+    [listItems, selectedItem],
   );
 
   return (
@@ -36,9 +64,20 @@ const FilterBooking = ({onChange = () => {}, selected}: Props) => {
           label: language.t(languageKeys.localService.status[f.label]),
         }))}
         onSelected={(option: EBookingState) => {
-          onChange(option);
+          onChangeState(option);
         }}
       />
+      {listItems.length > 1 && (
+        <DropdownMenu
+          options={listItems}
+          selectedLabel={selectedItemLabel}
+          label={language.t(languageKeys.localService.booking.service)}
+          labelStyle={{...globalStyles.text15Medium}}
+          style={{flexDirection: 'row', alignItems: 'center'}}
+          valueStyle={{...globalStyles.text15Bold}}
+          onSelected={(option: number | undefined) => onChangeItem(option)}
+        />
+      )}
     </View>
   );
 };
@@ -53,5 +92,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     elevation: 1,
     shadowOpacity: 0.2,
+    justifyContent: 'space-between',
   },
 });
