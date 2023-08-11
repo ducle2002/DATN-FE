@@ -1,7 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
 import HomeScreen from '@/screens/home/home.screen';
-import SettingScreen from '@/screens/setting/settings.screen';
 import NotificationStack, {
   NotificationStackParamsList,
 } from './notification.stack';
@@ -21,6 +20,7 @@ import AdministrativeStack, {
   AdministrativeStackParamsList,
 } from './administrative.stack';
 import SettingStack from './settings.stack';
+import QAStack, {QAStackParamsList} from './question-answer.stack.screen';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -31,6 +31,7 @@ export type AppStackParamsList = {
   LOCAL_SERVICE_STACK: NavigatorScreenParams<LocalServiceStackParamsList>;
   CHAT_STACK: NavigatorScreenParams<ChatStackParamsList>;
   ADMINISTRATIVE_STACK: NavigatorScreenParams<AdministrativeStackParamsList>;
+  QUESTION_ANSWER_STACK: NavigatorScreenParams<QAStackParamsList>;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -74,63 +75,20 @@ const AppStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerBackTitleVisible: false,
+        headerShown: false,
       }}>
+      <Stack.Screen name={'HOME_SCREEN'} component={HomeScreen} />
+      <Stack.Screen name={'SETTING_SCREEN'} component={SettingStack} />
+      <Stack.Screen name="NOTIFICATION_STACK" component={NotificationStack} />
+      <Stack.Screen name="CHAT_STACK" component={ChatStack} />
+      <Stack.Screen name="FEEDBACK_STACK" component={FeedbackStack} />
       <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name={'HOME_SCREEN'}
-        component={HomeScreen}
-      />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name={'SETTING_SCREEN'}
-        component={SettingStack}
-      />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="NOTIFICATION_STACK"
-        component={NotificationStack}
-      />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="CHAT_STACK"
-        component={ChatStack}
-      />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="FEEDBACK_STACK"
-        component={FeedbackStack}
-      />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
         name="ADMINISTRATIVE_STACK"
         component={AdministrativeStack}
       />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="VOTE_STACK"
-        component={VoteStack}
-      />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="LOCAL_SERVICE_STACK"
-        component={LocalServiceStack}
-      />
+      <Stack.Screen name="VOTE_STACK" component={VoteStack} />
+      <Stack.Screen name="LOCAL_SERVICE_STACK" component={LocalServiceStack} />
+      <Stack.Screen name="QUESTION_ANSWER_STACK" component={QAStack} />
     </Stack.Navigator>
   );
 };

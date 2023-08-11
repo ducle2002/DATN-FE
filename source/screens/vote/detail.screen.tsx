@@ -109,7 +109,11 @@ const DetailScreen = ({navigation, route}: Props) => {
                   {chartData.map(option => (
                     <View
                       key={option.key}
-                      style={{flexDirection: 'row', marginBottom: 10}}>
+                      style={{
+                        flexDirection: 'row',
+                        marginBottom: 10,
+                        alignItems: 'center',
+                      }}>
                       <View
                         style={{
                           width: 15,
@@ -118,7 +122,10 @@ const DetailScreen = ({navigation, route}: Props) => {
                           borderRadius: 20,
                         }}
                       />
-                      <Text style={{marginLeft: 5}}>{option.option}</Text>
+                      <Text
+                        style={{...globalStyles.text12Regular, marginLeft: 5}}>
+                        {option.option}
+                      </Text>
                     </View>
                   ))}
                 </View>
