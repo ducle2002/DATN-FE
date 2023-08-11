@@ -3,7 +3,7 @@ import React, {useContext, useMemo} from 'react';
 import HTMLParser from 'node-html-parser';
 import globalStyles from '@/config/globalStyles';
 import moment from 'moment';
-import Icon from '@/components/icon.component';
+// import Icon from '@/components/icon.component';
 import {SelectItemContext} from '../../../contexts/select-item.context';
 import ItemCard from '@/components/item-card.component';
 import ThumbnailImage from '@/components/thumbnail-image';
@@ -42,18 +42,18 @@ const NotiItem = ({item, department, onPress = () => {}}: Props) => {
         style={styles.image}
       />
       <View style={styles.contentContainer}>
-        <Icon
+        {/* <Icon
           type="Ionicons"
           name="ellipsis-horizontal"
           style={{marginLeft: 'auto'}}
-          size={30}
+          size={25}
           color="#BDB7B7"
-        />
+        /> */}
         <Text style={styles.textDepartment}>{department}</Text>
         <Text style={styles.textName} numberOfLines={1}>
           {item.name}
         </Text>
-        <Text style={styles.textData} numberOfLines={2}>
+        <Text style={styles.textData} numberOfLines={1}>
           {root?.textContent?.trim() + '\n'}
         </Text>
         <Text style={styles.textTime}>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   textData: {
     ...globalStyles.text15Regular,
-    marginTop: 5,
+    marginTop: 2,
     marginBottom: 10,
   },
   textDepartment: {
