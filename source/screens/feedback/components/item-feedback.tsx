@@ -7,18 +7,25 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {forwardRef} from 'react';
 import {TFeedback} from '@/modules/feedback/feedback.model';
 import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import {Swipeable} from 'react-native-gesture-handler';
 import Icon from '@/components/icon.component';
+import ThumbnailImage from '@/components/thumbnail-image';
 const {width} = Dimensions.get('screen');
 type Props = {
   item: TFeedback;
   onPress: (event: GestureResponderEvent) => void;
+  onDelete?: (event: GestureResponderEvent) => void;
+  onAssign?: (event: GestureResponderEvent) => void;
+  closeRow?: () => void;
 };
-const ItemFeedback = ({item, onPress}: Props) => {
+const ItemFeedback = forwardRef(function (
+  {item, onPress, onDelete, onAssign, closeRow}: Props,
+  ref: React.LegacyRef<Swipeable>,
+) {
   const rightSwipeActions = () => {
     return item.state !== 4 && item.state !== 5 && item.state !== 3 ? (
       <View
@@ -30,7 +37,7 @@ const ItemFeedback = ({item, onPress}: Props) => {
         item.state === 6 ||
         item.state === 7 ||
         item.state === 8 ? (
-          <Pressable>
+          <Pressable onPress={onAssign}>
             <View style={styles.btnSwipe}>
               <Icon
                 type="FontAwesome"
@@ -58,9 +65,7 @@ const ItemFeedback = ({item, onPress}: Props) => {
             </View>
           </Pressable>
         ) : null}
-        <Pressable
-        //  onPress={onPressDelete}
-        >
+        <Pressable onPress={onDelete}>
           <View style={styles.btnSwipe}>
             <Icon
               type="Ionicons"
@@ -76,13 +81,24 @@ const ItemFeedback = ({item, onPress}: Props) => {
       <View />
     );
   };
+
   return (
     <Swipeable
+      ref={ref}
+      friction={1}
+      overshootFriction={8}
+      leftThreshold={80}
+      rightThreshold={40}
       renderRightActions={rightSwipeActions}
+      onSwipeableOpen={closeRow}
       containerStyle={{marginBottom: 10}}
       enabled={item.state !== 4 && item.state !== 5 && item.state !== 3}>
       <TouchableOpacity style={styles.container} onPress={onPress}>
-        <FastImage source={{uri: item.imageUrl}} style={styles.image} />
+        <ThumbnailImage
+          source={{uri: item.imageUrl}}
+          style={styles.image}
+          size="100x100"
+        />
         <View
           style={{
             paddingLeft: '2%',
@@ -108,7 +124,7 @@ const ItemFeedback = ({item, onPress}: Props) => {
       </TouchableOpacity>
     </Swipeable>
   );
-};
+});
 
 export default ItemFeedback;
 

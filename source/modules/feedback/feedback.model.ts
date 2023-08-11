@@ -59,3 +59,22 @@ export type TMessageFeedbackPage = {
   listMessageFeedback: TMessageFeedback[];
   total: number;
 };
+export type TOrganizationUnitCitizenReflect = {
+  organizationUnitId: number;
+  name: string;
+  imageUrl?: string;
+  type: number;
+  description?: string;
+  code: string;
+};
+export type TOrganizationUnitUser = {
+  name: string;
+  surname: string;
+  userName: string;
+  fullName: string;
+  positionName?: string;
+  emailAddress?: string;
+  profilePictureId?: string;
+  addedTime: string;
+  id: number;
+};

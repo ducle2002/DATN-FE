@@ -5,10 +5,13 @@ import {
   TFeedbackPage,
   TMessageFeedback,
   TMessageFeedbackPage,
+  TOrganizationUnitCitizenReflect,
+  TOrganizationUnitUser,
 } from './feedback.model';
 
 class FeedbackService {
   endpoint = '/api/services/app/AdminGovernmentReflect/';
+  endpointUser = '/api/services/app/UserCitizenReflect/';
 
   getFeedback = async (params: {
     FormId: number;
@@ -26,6 +29,36 @@ class FeedbackService {
       total: result.totalRecords,
     };
   };
+  GetAllOrganizationUnitCitizenReflect = async (params: {
+    orgId?: number;
+  }): Promise<TOrganizationUnitCitizenReflect[]> => {
+    const url =
+      HOST_SERVER + this.endpointUser + 'GetAllOrganizationUnitCitizenReflect';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {
+      params: params,
+    });
+    return result.data;
+  };
+  GetOrganizationUnitUsers = async (params: {
+    id: number | null;
+  }): Promise<TOrganizationUnitUser[]> => {
+    const url =
+      HOST_SERVER +
+      '/api/services/app/OrganizationUnit/GetOrganizationUnitUsers';
+    if (params.id) {
+      const {
+        data: {result},
+      } = await axiosClient.get(url, {
+        params: params,
+      });
+      return result.items;
+    } else {
+      return [];
+    }
+  };
+
   assignFeedback = async (data: {
     handleOrganizationUnitId: number;
     handleUserId: number;
@@ -34,8 +67,16 @@ class FeedbackService {
     const url = HOST_SERVER + this.endpoint + 'AssignGovernmentReflect';
     const {
       data: {result},
-    } = await axiosClient.post(url, {
-      data: data,
+    } = await axiosClient.post(url, data);
+    return result;
+  };
+
+  deleteFeedback = async (data: {id: number}): Promise<any> => {
+    const url = HOST_SERVER + this.endpoint + 'DeleteGovernmentReflect';
+    const {
+      data: {result},
+    } = await axiosClient.delete(url, {
+      params: data,
     });
     return result;
   };
@@ -62,6 +103,19 @@ class FeedbackService {
     const {
       data: {result},
     } = await axiosClient.post(url, body);
+    return result;
+  };
+  createFeedback = async (data: {
+    data: string;
+    fileUrl?: string;
+    handleOrganizationUnitId?: number;
+    handleUserId?: number;
+    name: string;
+  }) => {
+    const url = HOST_SERVER + this.endpoint + 'CreateOrUpdateGovernmentReflect';
+    const {
+      data: {result},
+    } = await axiosClient.post(url, data);
     return result;
   };
 }
