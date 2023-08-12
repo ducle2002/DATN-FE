@@ -19,6 +19,17 @@ export type TQuestion = {
   commentCount: number;
 };
 
+export type TAnswer = {
+  creatorName: string;
+  creatorAvatar: string;
+  tenantId: number;
+  comment: string;
+  forumId: number;
+  creationTime: string;
+  creatorUserId: number;
+  id: number;
+};
+
 export const QAFormID = [
   {
     label: 'all',
@@ -37,3 +48,10 @@ export const QAFormID = [
     id: EQAFormID.ADMIN_GETALL_DISABLE,
   },
 ];
+
+export type TCreateUpdateCommentParams = {
+  id?: number | undefined;
+  tenantId?: number;
+  forumId: number;
+  comment: string;
+};

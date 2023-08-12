@@ -5,7 +5,7 @@ import {digitalNoti} from './digital-notification/vi';
 import vote from './vote/vi';
 import localService from './local-service/vi';
 import setting from './setting/vi';
-import {qa} from './qa/vi';
+import qa from './qa/vi';
 
 const vi = {
   auth,
