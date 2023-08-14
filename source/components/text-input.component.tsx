@@ -15,6 +15,7 @@ type Props = React.ComponentProps<typeof TextInput> & {
   containerStyle?: ViewStyle;
   label?: string;
   labelSyle?: TextStyle;
+  withError?: boolean;
 };
 
 const CTextInput = ({
@@ -23,6 +24,7 @@ const CTextInput = ({
   errorMessage,
   containerStyle,
   labelSyle,
+  withError = true,
   ...props
 }: Props) => {
   return (
@@ -31,7 +33,7 @@ const CTextInput = ({
       <View style={[styles.container, containerStyle]}>
         <TextInput style={[styles.textInput, style]} {...props} />
       </View>
-      <Text style={styles.textError}>{errorMessage}</Text>
+      {withError && <Text style={styles.textError}>{errorMessage}</Text>}
     </>
   );
 };

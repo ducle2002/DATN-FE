@@ -13,7 +13,8 @@ import {QAStackParamsList} from '@/routes/question-answer.stack.screen';
 type Props = {question: TQuestion};
 
 const QuestionItem = ({question}: Props) => {
-  const navigation = useNavigation<StackNavigationProp<QAStackParamsList>>();
+  const navigation =
+    useNavigation<StackNavigationProp<QAStackParamsList, 'MAIN_SCREEN'>>();
   return (
     <ItemCard
       onPress={() => {
@@ -77,14 +78,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textThread: {
-    ...globalStyles.text15Medium,
+    ...globalStyles.text16SemiBold,
   },
   content: {
     marginLeft: 10,
     flex: 1,
   },
   textTime: {
-    ...globalStyles.text12Regular,
+    ...globalStyles.text14Regular,
   },
   tagContainer: {
     paddingVertical: 2,
@@ -98,6 +99,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   textName: {
-    ...globalStyles.text14Medium,
+    ...globalStyles.text15Medium,
   },
 });
