@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.yootekoperatingapplication"
+    namespace "com.yootek.ioc"
     defaultConfig {
-        applicationId "com.yootekoperatingapplication"
+        applicationId "com.yootek.ioc"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
