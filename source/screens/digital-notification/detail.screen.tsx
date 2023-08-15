@@ -2,6 +2,7 @@ import {
   Dimensions,
   Pressable,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -50,6 +51,7 @@ const DetailScreen = ({route, navigation}: Props) => {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
+      <StatusBar barStyle={'dark-content'} />
       <ScrollView
         contentContainerStyle={{minHeight: '100%', paddingHorizontal: 10}}>
         <View>
