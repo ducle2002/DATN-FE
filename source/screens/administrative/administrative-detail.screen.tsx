@@ -18,7 +18,8 @@ import {useMutation, useQueryClient} from 'react-query';
 import AdministrativeApi from '@/modules/administrative/administrative.service';
 import {useToast} from 'react-native-toast-notifications';
 import LoadingComponent from '@/components/loading';
-import {FILTER_FORMID} from '@/modules/administrative/administrative.contants';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 const {width} = Dimensions.get('screen');
 type Props = StackScreenProps<
   AdministrativeStackParamsList,
@@ -30,6 +31,7 @@ const AdministrativeDetailScreen = ({route, navigation}: Props) => {
   const properties = JSON.parse(data.properties);
   const queryClient = useQueryClient();
   const toast = useToast();
+  const {t} = useTranslation();
   const {mutate: updateState, isLoading} = useMutation({
     mutationKey: ['confirmAdministrative'],
     mutationFn: (state: number) =>
@@ -167,7 +169,9 @@ const AdministrativeDetailScreen = ({route, navigation}: Props) => {
             onPress={() => {
               updateState(3);
             }}>
-            <Text style={styles.txtBtn}>Từ chối</Text>
+            <Text style={styles.txtBtn}>
+              {t(languageKeys.administrative.main.decline)}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             disabled={isLoading}
@@ -175,7 +179,9 @@ const AdministrativeDetailScreen = ({route, navigation}: Props) => {
             onPress={() => {
               updateState(2);
             }}>
-            <Text style={styles.txtBtn}>Chấp nhận</Text>
+            <Text style={styles.txtBtn}>
+              {t(languageKeys.administrative.main.accept)}
+            </Text>
           </TouchableOpacity>
         </View>
       )}

@@ -12,6 +12,8 @@ import {TouchableOpacity} from 'react-native';
 import {TFeedback} from '@/modules/feedback/feedback.model';
 import moment from 'moment';
 import ImagesGridGallery from '@/components/images-grid-gallery';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 
 const {width, height} = Dimensions.get('screen');
 type Props = {
@@ -24,6 +26,7 @@ const FeedbackInfo = ({
   onClickChat = () => {},
   onClose = () => {},
 }: Props) => {
+  const {t} = useTranslation();
   return (
     <View
       style={{
@@ -35,22 +38,28 @@ const FeedbackInfo = ({
         borderTopRightRadius: 8,
       }}>
       <View style={styles.header}>
-        <Text style={styles.txtTitleASheet}>{'Chi tiết phản ánh'}</Text>
+        <Text style={styles.txtTitleASheet}>
+          {t(languageKeys.feedback.main.feedbackInfo.title)}
+        </Text>
         <Pressable onPress={onClose}>
-          <Text style={styles.txtbtnTitle}>{'Đóng'}</Text>
+          <Text style={styles.txtbtnTitle}>
+            {t(languageKeys.feedback.main.feedbackInfo.close)}
+          </Text>
         </Pressable>
       </View>
       <ScrollView
         style={{paddingBottom: 16}}
         showsVerticalScrollIndicator={false}>
         <View style={styles.containerContent}>
-          <Text style={styles.txtLabelDetail}>{'Tiêu đề'}</Text>
-          <Text style={styles.txtContentDetail}>
-            {'Phản ánh'} {data ? data.name : ''}
+          <Text style={styles.txtLabelDetail}>
+            {t(languageKeys.feedback.main.feedbackInfo.label)}:
           </Text>
+          <Text style={styles.txtContentDetail}>{data ? data.name : ''}</Text>
         </View>
         <View style={styles.state}>
-          <Text style={styles.txtLabelDetail}>{'Trạng thái'}</Text>
+          <Text style={styles.txtLabelDetail}>
+            {t(languageKeys.feedback.main.feedbackInfo.status)}:
+          </Text>
           <Text
             style={{
               ...styles.txtState,
@@ -64,15 +73,17 @@ const FeedbackInfo = ({
             }}>
             {data
               ? data.state === null || data.state === 1
-                ? 'Phản ánh mới'
+                ? t(languageKeys.feedback.main.pending)
                 : data.state <= 2 || data.state === -1
-                ? 'Đang xử lí'
-                : 'Đã xử lí'
+                ? t(languageKeys.feedback.main.handling)
+                : t(languageKeys.feedback.main.Finished)
               : ''}
           </Text>
         </View>
         <View style={styles.feedBackTime}>
-          <Text style={styles.txtLabelDetail}>{'Thời gian phản ánh:'}:</Text>
+          <Text style={styles.txtLabelDetail}>
+            {t(languageKeys.feedback.main.feedbackInfo.time)}:
+          </Text>
           <Text style={styles.txtContentDetail}>
             {data ? moment(data.creationTime).format('HH:mm DD/MM/YYYY') : ''}
           </Text>
@@ -84,7 +95,9 @@ const FeedbackInfo = ({
           </View>
         ) : null} */}
         <View style={{paddingVertical: 10}}>
-          <Text style={styles.txtLabelDetail}>Nội dung:</Text>
+          <Text style={styles.txtLabelDetail}>
+            {t(languageKeys.feedback.main.feedbackInfo.content)}:
+          </Text>
           <Text
             style={[
               styles.txtContentDetail,
@@ -100,7 +113,7 @@ const FeedbackInfo = ({
               paddingVertical: 10,
             }}>
             <Text style={[styles.txtLabelDetail, {paddingBottom: 10}]}>
-              Ảnh phản ánh:
+              {t(languageKeys.feedback.main.feedbackInfo.imgfeedback)}:
             </Text>
             <View
               style={{
@@ -116,7 +129,9 @@ const FeedbackInfo = ({
 
       <View style={{marginBottom: 24, alignItems: 'center'}}>
         <TouchableOpacity onPress={onClickChat} style={styles.btnCreate}>
-          <Text style={styles.txtBtnCreate}>{'Trả lời tin nhắn'}</Text>
+          <Text style={styles.txtBtnCreate}>
+            {t(languageKeys.feedback.main.feedbackInfo.chat)}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

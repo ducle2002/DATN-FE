@@ -1,14 +1,17 @@
+import language, {languageKeys} from '@/config/language/language';
+
 export const FILTER_FORMID = [
   {
-    name: 'Đang yêu cầu',
+    name: language.t(languageKeys.administrative.language.requesting),
     type: 21,
   },
   {
-    name: 'Chấp nhận',
+    name: language.t(languageKeys.administrative.language.accept),
+
     type: 22,
   },
   {
-    name: 'Từ chối',
+    name: language.t(languageKeys.administrative.language.decline),
     type: 23,
   },
 ];

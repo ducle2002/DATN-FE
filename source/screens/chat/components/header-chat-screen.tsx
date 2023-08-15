@@ -12,6 +12,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {ChatStackParamsList} from '@/routes/chat.stack';
 import {Searchbar} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 const {StatusBarManager} = NativeModules;
 const {width, height} = Dimensions.get('screen');
 type Props = {
@@ -19,6 +21,7 @@ type Props = {
   setSearchQuery: Function;
 };
 const HeaderChatScreen = ({searchQuery = '', setSearchQuery}: Props) => {
+  const {t} = useTranslation();
   const [value, setValue] = useState(searchQuery);
   const navigation = useNavigation<NavigationProp<ChatStackParamsList>>();
   return (
@@ -44,7 +47,7 @@ const HeaderChatScreen = ({searchQuery = '', setSearchQuery}: Props) => {
       </TouchableOpacity>
 
       <Searchbar
-        placeholder="Tìm kiếm"
+        placeholder={t(languageKeys.chat.main.search)}
         onChangeText={text => {
           setValue(text);
         }}

@@ -3,6 +3,7 @@ import {
   FlatList,
   Modal,
   Pressable,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,20 +12,27 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import HeaderFeedback from './components/header-feedback';
-import {useInfiniteQuery} from 'react-query';
+import {useInfiniteQuery, useMutation} from 'react-query';
 import FeedbackApi from '@/modules/feedback/feedback.service';
 import ItemFeedback from './components/item-feedback';
 import {TFeedback} from '@/modules/feedback/feedback.model';
 import FeedbackInfo from './components/feedback-info';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {StackScreenProps} from '@react-navigation/stack';
 import {FeedbackStackParamsList} from '@/routes/feedback.stack';
+import {useToast} from 'react-native-toast-notifications';
+import LoadingComponent from '@/components/loading';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 
 const {width, height} = Dimensions.get('screen');
 
 type Props = StackScreenProps<FeedbackStackParamsList>;
 
 const FeedbackScreen = (props: Props) => {
+  const toast = useToast();
+  const {t} = useTranslation();
+  let row: Array<any> = [];
+  let prevOpenedRow: any;
   const [status, setStatus] = useState(2);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [showDetail, setShowDetail] = useState<{
@@ -42,62 +50,115 @@ const FeedbackScreen = (props: Props) => {
   };
   const statusBtnArr = [
     {
-      title: 'Phản ánh mới',
+      title: t(languageKeys.feedback.main.pending),
       type: 2,
       layout: 3,
     },
     {
-      title: 'Đã phân công',
+      title: t(languageKeys.feedback.main.assigned),
       type: 3,
       layout: 3,
     },
     {
-      title: 'Đang xử lý',
+      title: t(languageKeys.feedback.main.handling),
       type: 4,
       layout: 3,
     },
     {
-      title: 'Đã xử lý',
+      title: t(languageKeys.feedback.main.Finished),
       type: 6,
       layout: 3,
     },
     {
-      title: 'Đã đánh giá',
+      title: t(languageKeys.feedback.main.Rated),
       type: 7,
       layout: 3,
     },
     {
-      title: 'Tiếp nhận lại',
+      title: t(languageKeys.feedback.main.declined),
       type: 5,
       layout: 3,
     },
   ];
-  const {data, isLoading, fetchNextPage, refetch} = useInfiniteQuery({
-    queryKey: ['feedback', status],
-    queryFn: ({pageParam}) =>
-      FeedbackApi.getFeedback({
-        FormId: status,
-        skipCount: pageParam,
-        KeyWord: searchQuery,
-      }),
-    getNextPageParam: (lastPage, allPages) => {
-      let skip = 0;
-      allPages.forEach(page => {
-        if (page.listFeedback) {
-          skip += page.listFeedback.length;
-        }
-      });
+  const {data, isLoading, fetchNextPage, refetch, isRefetching} =
+    useInfiniteQuery({
+      queryKey: ['feedback', status],
+      queryFn: ({pageParam}) =>
+        FeedbackApi.getFeedback({
+          FormId: status,
+          skipCount: pageParam,
+          KeyWord: searchQuery,
+        }),
+      getNextPageParam: (lastPage, allPages) => {
+        let skip = 0;
+        allPages.forEach(page => {
+          if (page.listFeedback) {
+            skip += page.listFeedback.length;
+          }
+        });
 
-      if (skip < lastPage.total) {
-        return skip;
-      }
-      return null;
-    },
-  });
+        if (skip < lastPage.total) {
+          return skip;
+        }
+        return null;
+      },
+    });
   useEffect(() => {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, searchQuery]);
+
+  const {mutate: deleteFeedback, isLoading: isLoadingDelete} = useMutation({
+    mutationKey: ['assignFeedback'],
+    mutationFn: (id: number) =>
+      FeedbackApi.deleteFeedback({
+        id: id,
+      }),
+    onError: err => {
+      console.log(err);
+      toast.show('Xóa phản ánh thất bại', {
+        type: 'danger',
+        duration: 1000,
+      });
+    },
+    onSuccess: res => {
+      toast.show('Xóa phản ánh thành công', {
+        type: 'success',
+        duration: 1000,
+      });
+      refetch();
+    },
+  });
+  const {mutate: updateStateFeedback, isLoading: isLoadingUpdateState} =
+    useMutation({
+      mutationKey: ['updateStateFeedback'],
+      mutationFn: (id: number) =>
+        FeedbackApi.updateFeedback({
+          id: id,
+          state: 2,
+        }),
+      onError: err => {
+        console.log(err);
+        toast.show(t(languageKeys.feedback.main.FailReceiveFeedback), {
+          type: 'danger',
+          duration: 1000,
+        });
+      },
+      onSuccess: res => {
+        toast.show(t(languageKeys.feedback.main.SuccessReceiveFeedback), {
+          type: 'success',
+          duration: 1000,
+        });
+        refetch();
+      },
+    });
+
+  const closeRow = (index: number) => {
+    if (prevOpenedRow && prevOpenedRow !== row[index]) {
+      prevOpenedRow.close();
+    }
+    prevOpenedRow = row[index];
+  };
   return (
     <View style={{flex: 1}}>
       <HeaderFeedback
@@ -111,6 +172,9 @@ const FeedbackScreen = (props: Props) => {
               key={index}
               onPress={() => {
                 setStatus(item.type);
+                row.forEach((el, i) => {
+                  closeRow(i);
+                });
               }}
               style={[
                 styles.btnFilter,
@@ -143,12 +207,30 @@ const FeedbackScreen = (props: Props) => {
           renderItem={({item, index}) => {
             return (
               <ItemFeedback
+                ref={ref => (row[index] = ref)}
                 item={item}
                 onPress={() => {
                   setShowDetail({
                     data: item,
                     visible: true,
                   });
+                }}
+                onAssign={() => {
+                  props.navigation.navigate('AssignFeedbackScreen', {
+                    feedbackId: item.id,
+                  });
+                  closeRow(index);
+                }}
+                onDelete={() => {
+                  deleteFeedback(item.id);
+                  closeRow(index);
+                }}
+                closeRow={() => {
+                  closeRow(index);
+                }}
+                onConfirm={() => {
+                  updateStateFeedback(item.id);
+                  closeRow(index);
                 }}
               />
             );
@@ -167,6 +249,9 @@ const FeedbackScreen = (props: Props) => {
               fetchNextPage();
             }
           }}
+          refreshControl={
+            <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+          }
         />
       </View>
       <Modal visible={showDetail.visible} transparent={true}>
@@ -198,6 +283,7 @@ const FeedbackScreen = (props: Props) => {
           </TouchableWithoutFeedback>
         </Pressable>
       </Modal>
+      {(isLoading || isLoadingDelete) && <LoadingComponent />}
     </View>
   );
 };

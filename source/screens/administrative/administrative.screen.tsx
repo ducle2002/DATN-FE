@@ -16,11 +16,14 @@ import Icon from '@/components/icon.component';
 import {StackScreenProps} from '@react-navigation/stack';
 import {AdministrativeStackParamsList} from '@/routes/administrative.stack';
 import ListAdministrativeOrder from './components/list-administrative-order';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 type Props = StackScreenProps<
   AdministrativeStackParamsList,
   'AdministrativeScreen'
 >;
 const AdministrativeScreen = ({navigation}: Props) => {
+  const {t} = useTranslation();
   const {data: listTypeAdministrative} = useQuery({
     queryKey: ['administrativeConfig'],
     queryFn: () => AdministrativeApi.GetInitViewTypeAdministrative(),
@@ -45,7 +48,9 @@ const AdministrativeScreen = ({navigation}: Props) => {
           />
         </Pressable>
 
-        <Text style={styles.txtHeader}>Hành chính công</Text>
+        <Text style={styles.txtHeader}>
+          {t(languageKeys.administrative.main.title)}
+        </Text>
         <Pressable
           onPress={() => {
             // navigation.goBack();
@@ -81,10 +86,13 @@ const AdministrativeScreen = ({navigation}: Props) => {
             <View style={styles.contentModal}>
               <View style={styles.headerModalTypeAdmin}>
                 <Text style={styles.txtHeaderModalTypeAdmin}>
-                  Chọn loại hành chính công
+                  {t(languageKeys.administrative.main.modalType.title)}
                 </Text>
                 <TouchableOpacity onPress={onClose}>
-                  <Text style={styles.txtClose}>Đóng</Text>
+                  <Text style={styles.txtClose}>
+                    {' '}
+                    {t(languageKeys.administrative.main.modalType.close)}
+                  </Text>
                 </TouchableOpacity>
               </View>
               {listTypeAdministrative?.map((item, index) => {

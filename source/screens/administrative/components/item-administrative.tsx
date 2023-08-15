@@ -13,12 +13,15 @@ import Icon from '@/components/icon.component';
 import {TAdministrativeOrder} from '@/modules/administrative/administrative.model';
 import moment from 'moment';
 import AdministrativeIcon from '@assets/icons/administrative.svg';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 const {width} = Dimensions.get('screen');
 type Props = {
   item: TAdministrativeOrder;
   onPress: (event: GestureResponderEvent) => void;
 };
 const ItemAdministrative = ({item, onPress}: Props) => {
+  const {t} = useTranslation();
   const rightSwipeActions = () => {
     return (
       <View
@@ -36,7 +39,9 @@ const ItemAdministrative = ({item, onPress}: Props) => {
               size={20}
               color="#bd1f36"
             />
-            <Text style={styles.txtBtnSwipe}>Xóa</Text>
+            <Text style={styles.txtBtnSwipe}>
+              {t(languageKeys.administrative.main.delete)}
+            </Text>
           </View>
         </Pressable>
       </View>

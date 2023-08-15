@@ -13,28 +13,31 @@ import {useLogout} from '@/modules/auth/auth.hook';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from '@/components/icon.component';
 import {SettingStackParamsList} from '@/routes/settings.stack';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 
 type Props = StackScreenProps<SettingStackParamsList, 'SettingScreen'>;
 
 const SettingScreen = ({navigation}: Props) => {
   const {logout} = useLogout();
+  const {t} = useTranslation();
   const func_setting = [
     {
-      name: 'Ngôn ngữ',
+      name: t(languageKeys.setting.main.language),
       icon: (
         <Icon type="Ionicons" name="earth-sharp" color={'#2B5783'} size={24} />
       ),
       type: 1,
     },
     {
-      name: 'Bảo mật',
+      name: t(languageKeys.setting.main.security),
       icon: (
         <Icon type="Ionicons" name="lock-open" color={'#2B5783'} size={24} />
       ),
       type: 2,
     },
     {
-      name: 'Về chúng tôi',
+      name: t(languageKeys.setting.main.aboutUs),
       icon: (
         <Icon
           type="Ionicons"
@@ -46,7 +49,7 @@ const SettingScreen = ({navigation}: Props) => {
       type: 3,
     },
     {
-      name: 'Đăng xuất',
+      name: t(languageKeys.setting.main.logOut),
       icon: (
         <Icon type="Ionicons" name="power-sharp" color={'#2B5783'} size={24} />
       ),
@@ -67,7 +70,9 @@ const SettingScreen = ({navigation}: Props) => {
             color={'#2B5783'}
           />
         </Pressable>
-        <Text style={styles.txtHeader}>Cài đặt</Text>
+        <Text style={styles.txtHeader}>
+          {t(languageKeys.setting.main.title)}
+        </Text>
         <View />
       </View>
       <View

@@ -13,6 +13,8 @@ import Icon from '@/components/icon.component';
 import LinearGradient from 'react-native-linear-gradient';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {FeedbackStackParamsList} from '@/routes/feedback.stack';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 const {StatusBarManager} = NativeModules;
 const {width, height} = Dimensions.get('screen');
 type Props = {
@@ -21,6 +23,7 @@ type Props = {
 };
 const HeaderFeedback = ({searchQuery = '', setSearchQuery}: Props) => {
   const [value, setValue] = useState(searchQuery);
+  const {t} = useTranslation();
   const navigation = useNavigation<NavigationProp<FeedbackStackParamsList>>();
   return (
     <LinearGradient
@@ -45,7 +48,7 @@ const HeaderFeedback = ({searchQuery = '', setSearchQuery}: Props) => {
       </TouchableOpacity>
 
       <Searchbar
-        placeholder="Tìm kiếm"
+        placeholder={t(languageKeys.feedback.main.search) as string}
         onChangeText={text => {
           setValue(text);
         }}
