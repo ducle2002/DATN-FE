@@ -18,8 +18,11 @@ import {selectorOrganizationUnit} from '@/modules/organization/organization.slic
 import Icon from '@/components/icon.component';
 import UserChatItem from './components/user-chat-item';
 import HeaderChatScreen from './components/header-chat-screen';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 const {height} = Dimensions.get('screen');
 const ChatScreen = () => {
+  const {t} = useTranslation();
   const organizationUnit = useAppSelector(selectorOrganizationUnit);
   const [selectOrganization, setSelectOrganization] = useState(0);
   const [keywordSearch, setKeywordSearch] = useState('');
@@ -104,12 +107,12 @@ const ChatScreen = () => {
                   justifyContent: 'space-between',
                 }}>
                 <Text style={{color: '#333', fontWeight: '700', fontSize: 14}}>
-                  Chọn phòng ban
+                  {t(languageKeys.chat.main.department.title)}
                 </Text>
                 <TouchableOpacity onPress={onClose}>
                   <Text
                     style={{color: '#333', fontWeight: '400', fontSize: 14}}>
-                    Đóng
+                    {t(languageKeys.chat.main.department.close)}
                   </Text>
                 </TouchableOpacity>
               </View>

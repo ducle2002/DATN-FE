@@ -118,6 +118,18 @@ class FeedbackService {
     } = await axiosClient.post(url, data);
     return result;
   };
+  updateFeedback = async (data: {
+    state: number;
+    note?: string;
+    fileOfNote?: string;
+    id: number;
+  }) => {
+    const url = HOST_SERVER + this.endpoint + 'UpdateStateGovernmentReflect';
+    const {
+      data: {result},
+    } = await axiosClient.put(url, data);
+    return result;
+  };
 }
 
 const FeedbackApi = new FeedbackService();

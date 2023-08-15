@@ -18,6 +18,8 @@ import Icon from '@/components/icon.component';
 import {useToast} from 'react-native-toast-notifications';
 import ChooseImageModal from '@/components/choose-image-modal';
 import UtilsApi from '@/utils/utils.service';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 
 const {width, height} = Dimensions.get('screen');
 type Props = {
@@ -30,6 +32,7 @@ function SendBox({
   sendMess = () => {},
   setProgress = () => {},
 }: Props) {
+  const {t} = useTranslation();
   const [textValue, setTextValue] = useState('');
   const [visibleChooseImg, setVisibleChooseImg] = useState(false);
   const toast = useToast();
@@ -91,12 +94,17 @@ function SendBox({
   };
   const handleError = (err: any) => {
     if (DocumentPicker.isCancel(err)) {
-      toast.show('Huỷ tải tệp lên.\n Vui lòng thử lại', {
-        type: 'normal',
-        placement: 'center',
-        duration: 2000,
-        animationType: 'slide-in',
-      });
+      toast.show(
+        `${t(languageKeys.chat.main.toastMessage.uploadFileCancel)}\n${t(
+          languageKeys.chat.main.toastMessage.uploadFileCancel,
+        )}`,
+        {
+          type: 'normal',
+          placement: 'center',
+          duration: 2000,
+          animationType: 'slide-in',
+        },
+      );
     } else if (isInProgress(err)) {
       toast.show(
         'multiple pickers were opened, only the last will be considered',
@@ -108,7 +116,7 @@ function SendBox({
         },
       );
     } else {
-      toast.show('Tải file lên bị lỗi', {
+      toast.show(t(languageKeys.chat.main.toastMessage.uploadFileFail), {
         type: 'danger',
         placement: 'center',
         duration: 2000,
@@ -186,7 +194,7 @@ function SendBox({
               value={textValue}
               multiline={true}
               onChangeText={setTextValue}
-              placeholder={'Nhập tin nhắn'}
+              placeholder={t(languageKeys.chat.main.inputChat)}
               placeholderTextColor={'#BDBDBD'}
               style={styles.inputCenter}
             />

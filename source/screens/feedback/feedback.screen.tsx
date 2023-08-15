@@ -21,6 +21,8 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {FeedbackStackParamsList} from '@/routes/feedback.stack';
 import {useToast} from 'react-native-toast-notifications';
 import LoadingComponent from '@/components/loading';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -28,6 +30,7 @@ type Props = StackScreenProps<FeedbackStackParamsList>;
 
 const FeedbackScreen = (props: Props) => {
   const toast = useToast();
+  const {t} = useTranslation();
   let row: Array<any> = [];
   let prevOpenedRow: any;
   const [status, setStatus] = useState(2);
@@ -47,32 +50,32 @@ const FeedbackScreen = (props: Props) => {
   };
   const statusBtnArr = [
     {
-      title: 'Phản ánh mới',
+      title: t(languageKeys.feedback.main.pending),
       type: 2,
       layout: 3,
     },
     {
-      title: 'Đã phân công',
+      title: t(languageKeys.feedback.main.assigned),
       type: 3,
       layout: 3,
     },
     {
-      title: 'Đang xử lý',
+      title: t(languageKeys.feedback.main.handling),
       type: 4,
       layout: 3,
     },
     {
-      title: 'Đã xử lý',
+      title: t(languageKeys.feedback.main.Finished),
       type: 6,
       layout: 3,
     },
     {
-      title: 'Đã đánh giá',
+      title: t(languageKeys.feedback.main.Rated),
       type: 7,
       layout: 3,
     },
     {
-      title: 'Tiếp nhận lại',
+      title: t(languageKeys.feedback.main.declined),
       type: 5,
       layout: 3,
     },
@@ -126,6 +129,30 @@ const FeedbackScreen = (props: Props) => {
       refetch();
     },
   });
+  const {mutate: updateStateFeedback, isLoading: isLoadingUpdateState} =
+    useMutation({
+      mutationKey: ['updateStateFeedback'],
+      mutationFn: (id: number) =>
+        FeedbackApi.updateFeedback({
+          id: id,
+          state: 2,
+        }),
+      onError: err => {
+        console.log(err);
+        toast.show(t(languageKeys.feedback.main.FailReceiveFeedback), {
+          type: 'danger',
+          duration: 1000,
+        });
+      },
+      onSuccess: res => {
+        toast.show(t(languageKeys.feedback.main.SuccessReceiveFeedback), {
+          type: 'success',
+          duration: 1000,
+        });
+        refetch();
+      },
+    });
+
   const closeRow = (index: number) => {
     if (prevOpenedRow && prevOpenedRow !== row[index]) {
       prevOpenedRow.close();
@@ -199,6 +226,10 @@ const FeedbackScreen = (props: Props) => {
                   closeRow(index);
                 }}
                 closeRow={() => {
+                  closeRow(index);
+                }}
+                onConfirm={() => {
+                  updateStateFeedback(item.id);
                   closeRow(index);
                 }}
               />

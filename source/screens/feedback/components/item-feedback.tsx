@@ -14,18 +14,22 @@ import moment from 'moment';
 import {Swipeable} from 'react-native-gesture-handler';
 import Icon from '@/components/icon.component';
 import ThumbnailImage from '@/components/thumbnail-image';
+import {useTranslation} from 'react-i18next';
+import {languageKeys} from '@/config/language/language';
 const {width} = Dimensions.get('screen');
 type Props = {
   item: TFeedback;
   onPress: (event: GestureResponderEvent) => void;
   onDelete?: (event: GestureResponderEvent) => void;
   onAssign?: (event: GestureResponderEvent) => void;
+  onConfirm?: (event: GestureResponderEvent) => void;
   closeRow?: () => void;
 };
 const ItemFeedback = forwardRef(function (
-  {item, onPress, onDelete, onAssign, closeRow}: Props,
+  {item, onPress, onDelete, onAssign, closeRow, onConfirm}: Props,
   ref: React.LegacyRef<Swipeable>,
 ) {
+  const {t} = useTranslation();
   const rightSwipeActions = () => {
     return item.state !== 4 && item.state !== 5 && item.state !== 3 ? (
       <View
@@ -45,7 +49,9 @@ const ItemFeedback = forwardRef(function (
                 size={20}
                 color="#4AC3FB"
               />
-              <Text style={styles.txtBtnSwipe}>Phân công</Text>
+              <Text style={styles.txtBtnSwipe}>
+                {t(languageKeys.feedback.main.itemFeedback.assign)}
+              </Text>
             </View>
           </Pressable>
         ) : null}
@@ -53,7 +59,7 @@ const ItemFeedback = forwardRef(function (
         item.state === 6 ||
         item.state === 7 ||
         item.state === 8 ? (
-          <Pressable>
+          <Pressable onPress={onConfirm}>
             <View style={styles.btnSwipe}>
               <Icon
                 type="MaterialCommunityIcons"
@@ -61,7 +67,9 @@ const ItemFeedback = forwardRef(function (
                 size={22}
                 color="#4AC3FB"
               />
-              <Text style={styles.txtBtnSwipe}>Tiếp nhận</Text>
+              <Text style={styles.txtBtnSwipe}>
+                {t(languageKeys.feedback.main.itemFeedback.agree)}
+              </Text>
             </View>
           </Pressable>
         ) : null}
@@ -73,7 +81,9 @@ const ItemFeedback = forwardRef(function (
               size={20}
               color="#bd1f36"
             />
-            <Text style={styles.txtBtnSwipe}>Xóa</Text>
+            <Text style={styles.txtBtnSwipe}>
+              {t(languageKeys.feedback.main.itemFeedback.delete)}
+            </Text>
           </View>
         </Pressable>
       </View>
@@ -103,14 +113,19 @@ const ItemFeedback = forwardRef(function (
           style={{
             paddingLeft: '2%',
           }}>
-          <Text>Tên: {item.fullName ?? 'Đang cập nhật'}</Text>
-          <Text>Phản ánh: {item.name}</Text>
+          <Text>
+            {t(languageKeys.feedback.main.itemFeedback.name)}:{' '}
+            {item.fullName ?? 'Đang cập nhật'}
+          </Text>
+          <Text>
+            {t(languageKeys.feedback.main.itemFeedback.feedback)}: {item.name}
+          </Text>
           <Text
             numberOfLines={1}
             style={{
               maxWidth: width * 0.7,
             }}>
-            Nội dung: {item.data}
+            {t(languageKeys.feedback.main.itemFeedback.content)}: {item.data}
           </Text>
         </View>
         <Text style={styles.txtDate}>
