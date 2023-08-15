@@ -2,6 +2,10 @@ const form = {
   requiredMessage: 'Không được để trống',
 };
 
+const error = {
+  connectionError: 'Lỗi kết nối',
+};
+
 const button = {
   update: 'Cập nhật',
   add: 'Thêm mới',
@@ -18,6 +22,7 @@ const button = {
 const shared = {
   form,
   button,
+  error,
 };
 
 export default shared;

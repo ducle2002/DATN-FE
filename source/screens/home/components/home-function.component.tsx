@@ -50,6 +50,10 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
         return navigation.navigate('LOCAL_SERVICE_STACK', {
           screen: 'MAIN_SCREEN',
         });
+      case 'Pages.Management.Question_Answer':
+        return navigation.navigate('QUESTION_ANSWER_STACK', {
+          screen: 'MAIN_SCREEN',
+        });
     }
   };
 

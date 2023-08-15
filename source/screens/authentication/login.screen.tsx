@@ -18,18 +18,27 @@ import Button from '@/components/button.component';
 import InputComponent from './components/input.component';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {useToast} from 'react-native-toast-notifications';
 
 const loginSchema = yup.object({
-  userNameOrEmailAddress: yup.string().required(),
-  password: yup.string().required(),
-  tenancyName: yup.string().required(),
+  userNameOrEmailAddress: yup
+    .string()
+    .required(languageKeys.shared.form.requiredMessage),
+  password: yup.string().required(languageKeys.shared.form.requiredMessage),
+  tenancyName: yup.string().required(languageKeys.shared.form.requiredMessage),
 });
 
 const LoginScreen = (): JSX.Element => {
   const dispatch = useDispatch();
-  const {control, handleSubmit} = useForm<ILoginPayload>({
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<ILoginPayload>({
     resolver: yupResolver(loginSchema),
   });
+
+  const toast = useToast();
 
   const {mutate: login} = useMutation({
     mutationFn: (params: ILoginPayload) =>
@@ -47,8 +56,12 @@ const LoginScreen = (): JSX.Element => {
 
       dispatch(loginSuccess(result));
     },
-    onError: error => {
-      console.log(error);
+    onError: ({response}) => {
+      toast.show(
+        response?.data?.error?.details
+          ? response?.data?.error?.details
+          : language.t(languageKeys.shared.error.connectionError),
+      );
     },
   });
 
@@ -77,6 +90,7 @@ const LoginScreen = (): JSX.Element => {
                 iconName="building"
                 iconType="FontAwesome"
                 iconColor="#0A167C"
+                errorMessage={errors.tenancyName?.message}
               />
             )}
           />
@@ -95,6 +109,7 @@ const LoginScreen = (): JSX.Element => {
                 iconName="person"
                 iconType="Ionicons"
                 iconColor="#0A167C"
+                errorMessage={errors.userNameOrEmailAddress?.message}
               />
             )}
           />
@@ -113,6 +128,7 @@ const LoginScreen = (): JSX.Element => {
                 iconColor="#0A167C"
                 containerStyle={styles.inputContainer}
                 secureTextEntry={true}
+                errorMessage={errors.password?.message}
               />
             )}
           />
