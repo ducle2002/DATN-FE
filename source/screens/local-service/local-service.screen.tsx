@@ -2,6 +2,7 @@ import {
   FlatList,
   ListRenderItem,
   RefreshControl,
+  StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
@@ -68,6 +69,7 @@ const LocalServiceScreen = ({navigation}: Props) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={'dark-content'} />
       <FilterService
         selected={type}
         onChange={(t: number | undefined) => setType(t)}
