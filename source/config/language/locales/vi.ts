@@ -11,8 +11,8 @@ import administrative from './administrative/vi';
 import chat from './chat/vi';
 
 const vi = {
-  auth,
   ...title,
+  auth,
   shared,
   digitalNoti,
   vote,
