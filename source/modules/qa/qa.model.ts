@@ -19,6 +19,12 @@ export type TQuestion = {
   commentCount: number;
 };
 
+export enum EQuestionState {
+  NEW = 1,
+  ACCEPT = 2,
+  DISABLE = 3,
+}
+
 export type TAnswer = {
   creatorName: string;
   creatorAvatar: string;
