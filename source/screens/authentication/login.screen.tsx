@@ -19,6 +19,9 @@ import InputComponent from './components/input.component';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useToast} from 'react-native-toast-notifications';
+import globalStyles from '@/config/globalStyles';
+import {StackScreenProps} from '@react-navigation/stack';
+import {AuthenticationStackParamsList} from '@/routes/auth.stack';
 
 const loginSchema = yup.object({
   userNameOrEmailAddress: yup
@@ -28,7 +31,9 @@ const loginSchema = yup.object({
   tenancyName: yup.string().required(languageKeys.shared.form.requiredMessage),
 });
 
-const LoginScreen = (): JSX.Element => {
+type Props = StackScreenProps<AuthenticationStackParamsList, 'LOGIN'>;
+
+const LoginScreen = ({navigation}: Props) => {
   const dispatch = useDispatch();
   const {
     control,
@@ -132,6 +137,13 @@ const LoginScreen = (): JSX.Element => {
               />
             )}
           />
+          <Text
+            onPress={() => {
+              navigation.navigate('PRIVACY');
+            }}
+            style={styles.textPrivacy}>
+            {language.t(languageKeys.auth.privacy.privacyPolicy)}
+          </Text>
           <Button
             style={styles.button}
             mode="contained-tonal"
@@ -163,5 +175,13 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
+  },
+  textPrivacy: {
+    ...globalStyles.text13Bold,
+    color: 'white',
+    marginTop: 30,
+    textAlign: 'left',
+    alignSelf: 'flex-end',
+    padding: 2,
   },
 });
