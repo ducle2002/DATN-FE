@@ -113,18 +113,21 @@ const ItemFeedback = forwardRef(function (
           style={{
             paddingLeft: '2%',
           }}>
-          <Text>
+          <Text style={styles.txtNormal}>
             {t(languageKeys.feedback.main.itemFeedback.name)}:{' '}
             {item.fullName ?? 'Đang cập nhật'}
           </Text>
-          <Text>
+          <Text style={styles.txtNormal}>
             {t(languageKeys.feedback.main.itemFeedback.feedback)}: {item.name}
           </Text>
           <Text
             numberOfLines={1}
-            style={{
-              maxWidth: width * 0.7,
-            }}>
+            style={[
+              styles.txtNormal,
+              {
+                maxWidth: width * 0.7,
+              },
+            ]}>
             {t(languageKeys.feedback.main.itemFeedback.content)}: {item.data}
           </Text>
         </View>
@@ -193,6 +196,11 @@ const styles = StyleSheet.create({
   },
   txtBtnSwipe: {
     fontSize: 12,
+    fontWeight: '500',
+    color: '#333',
+  },
+  txtNormal: {
+    fontSize: 14,
     fontWeight: '500',
     color: '#333',
   },

@@ -23,6 +23,7 @@ import {useToast} from 'react-native-toast-notifications';
 import LoadingComponent from '@/components/loading';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
+import PickerBeginEndDate from '@/components/picker-begin-end-date';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -42,9 +43,22 @@ const FeedbackScreen = (props: Props) => {
     data: undefined,
     visible: false,
   });
+  const [filter, setFilter] = useState<{
+    data?: any;
+    visible: boolean;
+  }>({
+    data: undefined,
+    visible: false,
+  });
   const onClose = () => {
     setShowDetail({
       data: undefined,
+      visible: false,
+    });
+  };
+  const onCloseFilter = () => {
+    setFilter({
+      ...filter,
       visible: false,
     });
   };
@@ -164,6 +178,12 @@ const FeedbackScreen = (props: Props) => {
       <HeaderFeedback
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        openModalFilter={() => {
+          setFilter({
+            ...filter,
+            visible: true,
+          });
+        }}
       />
       <View style={styles.containerBtn}>
         {statusBtnArr.map((item, index) => {
@@ -280,6 +300,24 @@ const FeedbackScreen = (props: Props) => {
                 }}
               />
             )}
+          </TouchableWithoutFeedback>
+        </Pressable>
+      </Modal>
+      <Modal visible={filter.visible} transparent={true}>
+        <Pressable
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            flex: 1,
+            justifyContent: 'flex-end',
+          }}
+          onPress={onCloseFilter}>
+          <TouchableWithoutFeedback
+            style={{
+              backgroundColor: 'white',
+            }}>
+            <View>
+              <PickerBeginEndDate />
+            </View>
           </TouchableWithoutFeedback>
         </Pressable>
       </Modal>
