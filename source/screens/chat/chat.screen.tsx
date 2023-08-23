@@ -53,7 +53,7 @@ const ChatScreen = () => {
         onPress={() => {
           setVisible(true);
         }}>
-        <Text>{organizationUnit[0].displayName}</Text>
+        <Text>{organizationUnit[0]?.displayName}</Text>
         <Icon
           type="Ionicons"
           name="chevron-down-sharp"

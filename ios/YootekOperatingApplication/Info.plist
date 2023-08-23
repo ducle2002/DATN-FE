@@ -1,99 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
-	<key>CFBundleDisplayName</key>
-	<string>Yoo Smart IOC</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<false/>
-		<key>NSExceptionDomains</key>
+		<key>CFBundleDevelopmentRegion</key>
+		<string>en</string>
+		<key>CFBundleDisplayName</key>
+		<string>Yoo Smart IOC</string>
+		<key>CFBundleExecutable</key>
+		<string>$(EXECUTABLE_NAME)</string>
+		<key>CFBundleIdentifier</key>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6.0</string>
+		<key>CFBundleName</key>
+		<string>$(PRODUCT_NAME)</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+		<key>CFBundleShortVersionString</key>
+		<string>$(MARKETING_VERSION)</string>
+		<key>CFBundleSignature</key>
+		<string>????</string>
+		<key>CFBundleVersion</key>
+		<string>$(CURRENT_PROJECT_VERSION)</string>
+		<key>LSRequiresIPhoneOS</key>
+		<true />
+		<key>NSAppTransportSecurity</key>
 		<dict>
-			<key>localhost</key>
+			<key>NSAllowsArbitraryLoads</key>
+			<false />
+			<key>NSExceptionDomains</key>
 			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
+				<key>localhost</key>
+				<dict>
+					<key>NSExceptionAllowsInsecureHTTPLoads</key>
+					<true />
+				</dict>
 			</dict>
 		</dict>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string> The app uses your location to find nearby services and maps.This will help users
+			convenient when searching and using the service.</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string> Allows the application to access your library so that it can use Image upload features
+			such as changing avatars, ...</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string> Allows the application to access your library so that it can use Image upload features
+			such as changing avatars, ...</string>
+		<key>UIAppFonts</key>
+		<array>
+			<string>assets/Icons/AntDesign.ttf</string>
+			<string>assets/Icons/Entypo.ttf</string>
+			<string>assets/Icons/EvilIcons.ttf</string>
+			<string>assets/Icons/Feather.ttf</string>
+			<string>assets/Icons/FontAwesome.ttf</string>
+			<string>assets/Icons/FontAwesome5_Brands.ttf</string>
+			<string>assets/Icons/FontAwesome5_Regular.ttf</string>
+			<string>assets/Icons/FontAwesome5_Solid.ttf</string>
+			<string>assets/Icons/FontAwesome6_Brands.ttf</string>
+			<string>assets/Icons/FontAwesome6_Regular.ttf</string>
+			<string>assets/Icons/FontAwesome6_Solid.ttf</string>
+			<string>assets/Icons/Fontisto.ttf</string>
+			<string>assets/Icons/Foundation.ttf</string>
+			<string>assets/Icons/Ionicons.ttf</string>
+			<string>assets/Icons/MaterialCommunityIcons.ttf</string>
+			<string>assets/Icons/MaterialIcons.ttf</string>
+			<string>assets/Icons/Octicons.ttf</string>
+			<string>assets/Icons/SimpleLineIcons.ttf</string>
+			<string>assets/Icons/Zocial.ttf</string>
+			<string>assets/Fonts/Inter-Back.ttf</string>
+			<string>assets/Fonts/Inter-Bold.ttf</string>
+			<string>assets/Fonts/Inter-ExtraBold.ttf</string>
+			<string>assets/Fonts/Inter-ExtraLight.ttf</string>
+			<string>assets/Fonts/Inter-Light.ttf</string>
+			<string>assets/Fonts/Inter-Medium.ttf</string>
+			<string>assets/Fonts/Inter-Regular.ttf</string>
+			<string>assets/Fonts/Inter-SemiBold.ttf</string>
+			<string>assets/Fonts/Inter-Thin.ttf</string>
+		</array>
+		<key>UILaunchStoryboardName</key>
+		<string>LaunchScreen</string>
+		<key>UIRequiredDeviceCapabilities</key>
+		<array>
+			<string>armv7</string>
+		</array>
+		<key>UIStatusBarStyle</key>
+		<string></string>
+		<key>UISupportedInterfaceOrientations</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+		</array>
+		<key>UISupportedInterfaceOrientations~ipad</key>
+		<array>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		</array>
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false />
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string></string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>assets/Icons/AntDesign.ttf</string>
-		<string>assets/Icons/Entypo.ttf</string>
-		<string>assets/Icons/EvilIcons.ttf</string>
-		<string>assets/Icons/Feather.ttf</string>
-		<string>assets/Icons/FontAwesome.ttf</string>
-		<string>assets/Icons/FontAwesome5_Brands.ttf</string>
-		<string>assets/Icons/FontAwesome5_Regular.ttf</string>
-		<string>assets/Icons/FontAwesome5_Solid.ttf</string>
-		<string>assets/Icons/FontAwesome6_Brands.ttf</string>
-		<string>assets/Icons/FontAwesome6_Regular.ttf</string>
-		<string>assets/Icons/FontAwesome6_Solid.ttf</string>
-		<string>assets/Icons/Fontisto.ttf</string>
-		<string>assets/Icons/Foundation.ttf</string>
-		<string>assets/Icons/Ionicons.ttf</string>
-		<string>assets/Icons/MaterialCommunityIcons.ttf</string>
-		<string>assets/Icons/MaterialIcons.ttf</string>
-		<string>assets/Icons/Octicons.ttf</string>
-		<string>assets/Icons/SimpleLineIcons.ttf</string>
-		<string>assets/Icons/Zocial.ttf</string>
-		<string>assets/Fonts/Inter-Back.ttf</string>
-		<string>assets/Fonts/Inter-Bold.ttf</string>
-		<string>assets/Fonts/Inter-ExtraBold.ttf</string>
-		<string>assets/Fonts/Inter-ExtraLight.ttf</string>
-		<string>assets/Fonts/Inter-Light.ttf</string>
-		<string>assets/Fonts/Inter-Medium.ttf</string>
-		<string>assets/Fonts/Inter-Regular.ttf</string>
-		<string>assets/Fonts/Inter-SemiBold.ttf</string>
-		<string>assets/Fonts/Inter-Thin.ttf</string>
-	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>armv7</string>
-	</array>
-	<key>UIStatusBarStyle</key>
-	<string></string>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-</dict>
 </plist>
