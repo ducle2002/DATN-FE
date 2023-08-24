@@ -6,10 +6,12 @@ import {Avatar} from 'react-native-paper';
 import {useAppSelector} from '@/hooks/redux.hook';
 import globalStyles from '@/config/globalStyles';
 import BackgroundHeader from '@/components/background-header.component';
+import {useToast} from 'react-native-toast-notifications';
 const {height} = Dimensions.get('screen');
 
 const HomeHeader = ({navigation}: HomeScreenProps) => {
   const {imageUrl, fullName} = useAppSelector(state => state.user);
+  const toast = useToast();
   return (
     <BackgroundHeader>
       <View style={styles.contentContainer}>
@@ -20,6 +22,7 @@ const HomeHeader = ({navigation}: HomeScreenProps) => {
             size={30}
             color={'white'}
             style={styles.icon}
+            onPress={() => toast.show('Chức năng đang phát triển')}
           />
           <Icon
             type="Ionicons"
@@ -27,6 +30,7 @@ const HomeHeader = ({navigation}: HomeScreenProps) => {
             size={30}
             color={'white'}
             style={styles.icon}
+            onPress={() => toast.show('Chức năng đang phát triển')}
           />
           <Icon
             type="Ionicons"
