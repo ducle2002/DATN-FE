@@ -6,7 +6,7 @@ const {width} = Dimensions.get('screen');
 const PrivatePolicyScreen = () => {
   const policy = `<div>
   <h2><span style="font-weight: bold;">CHÍNH SÁCH QUYỀN RIÊNG TƯ (PRIVACY POLICY)&nbsp;</span></h2>
-  <p>Ứng dụng Yoo Smart IOC là một ứng dụng được phát triển với nền tảng IMAX IoT Platform của SONG NAM GROUP JSC. Ứng dụng được thiết kế theo triết lý số hóa các nhu cầu từ cá nhân, gia đình, cộng đồng và xã hội trong mô hình xã hội thông minh. YooLife kết nối người sử dụng/cư dân với ban quản lý/ban quản trị/chính quyền/cộng đồng cư dân, với các dịch vụ tiện ích xã hội.&nbsp;&nbsp;</p>
+  <p>Ứng dụng YooSmartIOC là một ứng dụng được phát triển với nền tảng IMAX IoT Platform của SONG NAM GROUP JSC. Ứng dụng được thiết kế theo triết lý số hóa các nhu cầu từ cá nhân, gia đình, cộng đồng và xã hội trong mô hình xã hội thông minh. YooLife kết nối người sử dụng/cư dân với ban quản lý/ban quản trị/chính quyền/cộng đồng cư dân, với các dịch vụ tiện ích xã hội.&nbsp;&nbsp;</p>
   <h3><span style="font-weight: bold;">1. Chính sách thu thập dữ liệu&nbsp;&nbsp;</span></h3>
   <p>Bằng cách sử dụng ứng dụng này, bạn đồng ý cho chúng tôi quyền thu thập dữ liệu cá nhân của bạn để phục vụ cho hoạt động đúng đắn của ứng dụng.&nbsp;</p>
   <p>Để phục vụ cho hoạt động đúng đắn của ứng dụng, chúng tôi cần các thông tin bao gồm và không giới hạn như họ tên, ngày tháng năm sinh, địa chỉ cư trú, địa chỉ email, số điện thoại, hình ảnh chân dung, thông tin hóa đơn, thông tin thanh toán, các dữ liệu gián tiếp về hành vi người dùng khi truy cập vào ứng dụng.&nbsp;&nbsp;</p>
