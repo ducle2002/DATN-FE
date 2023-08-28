@@ -7,10 +7,12 @@ import {TPermission} from 'types/type';
 type configState = {
   grantedPermissions: Array<TPermission>;
   language: string;
+  isRefreshingPermisstions: boolean;
 };
 const initialState: configState = {
   grantedPermissions: [],
   language: '',
+  isRefreshingPermisstions: false,
 };
 export const languageInitAction = createAppAsyncThunk(
   'language/init',
@@ -31,6 +33,10 @@ const configSlice = createSlice({
   reducers: {
     setConfig: (state, action) => {
       state.grantedPermissions = action.payload.grantedPermissions;
+      state.isRefreshingPermisstions = false;
+    },
+    refreshConfig: state => {
+      state.isRefreshingPermisstions = true;
     },
     setLanguage: (state, action) => {
       state.language = action.payload;
@@ -46,6 +52,6 @@ const configSlice = createSlice({
   },
 });
 
-export const {setConfig, setLanguage} = configSlice.actions;
+export const {setConfig, refreshConfig, setLanguage} = configSlice.actions;
 
 export default configSlice.reducer;
