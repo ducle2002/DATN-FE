@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import HomeIcon from './home-icon.components';
 import {TPermission} from 'types/type';
-import language, {languageKeys} from '@/config/language/language';
+import {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AppStackParamsList} from '@/routes/app.stack';
@@ -62,19 +62,17 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
     }
   };
 
-  if (language.t(languageKeys[type])) {
-    return (
-      <TouchableOpacity
-        style={[styles.container, style]}
-        onPress={onPress}
-        {...props}>
-        <View style={[styles.iconContainer, iconContainerStyle]}>
-          <HomeIcon type={type} />
-        </View>
-        <Text style={styles.text}>{t(languageKeys[type])}</Text>
-      </TouchableOpacity>
-    );
-  }
+  return (
+    <TouchableOpacity
+      style={[styles.container, style]}
+      onPress={onPress}
+      {...props}>
+      <View style={[styles.iconContainer, iconContainerStyle]}>
+        <HomeIcon type={type} />
+      </View>
+      <Text style={styles.text}>{t(languageKeys[type])}</Text>
+    </TouchableOpacity>
+  );
 };
 
 export default HomeFunction;

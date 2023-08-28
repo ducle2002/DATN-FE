@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useAppSelector} from '@/hooks/redux.hook';
 import HomeFunction from './components/home-function.component';
 import HomeHeader from './components/home-hearder.component';
@@ -9,6 +9,11 @@ import {useAccount} from '@/modules/user/user.hook';
 import {useOrganizationUnit} from '@/modules/organization/organization.hook';
 import {useConfigPermissions} from '@/modules/config/config.hook';
 import {homeIconBackgrounColor} from '@/config/globalStyles';
+import {
+  communicateFunction,
+  residentManagementFunction,
+  serviceFunction,
+} from '@/modules/config/config.model';
 
 export type HomeScreenProps = StackScreenProps<
   AppStackParamsList,
@@ -40,12 +45,21 @@ const HomeScreen = (props: HomeScreenProps) => {
     }
   }, [getConfigPermission, isRefreshingPermisstions]);
 
+  const {community, resident, service} = useMemo(() => {
+    const c = grantedPermissions?.filter(g => communicateFunction.includes(g));
+    const r = grantedPermissions?.filter(g =>
+      residentManagementFunction.includes(g),
+    );
+    const s = grantedPermissions?.filter(g => serviceFunction.includes(g));
+    return {community: c, resident: r, service: s};
+  }, [grantedPermissions]);
+
   return (
     <View style={styles.container}>
       <ScrollView bounces={false}>
         <HomeHeader {...props} />
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-          {grantedPermissions?.map((p, index) => (
+          {community.map((p, index) => (
             <HomeFunction
               key={p}
               type={p}
@@ -53,6 +67,32 @@ const HomeScreen = (props: HomeScreenProps) => {
               iconContainerStyle={{
                 backgroundColor:
                   homeIconBackgrounColor[index % homeIconBackgrounColor.length],
+              }}
+            />
+          ))}
+          {resident.map((p, index) => (
+            <HomeFunction
+              key={p}
+              type={p}
+              style={{flexBasis: '33%', marginTop: 20}}
+              iconContainerStyle={{
+                backgroundColor:
+                  homeIconBackgrounColor[
+                    (index % homeIconBackgrounColor.length) + 1
+                  ],
+              }}
+            />
+          ))}
+          {service.map((p, index) => (
+            <HomeFunction
+              key={p}
+              type={p}
+              style={{flexBasis: '33%', marginTop: 20}}
+              iconContainerStyle={{
+                backgroundColor:
+                  homeIconBackgrounColor[
+                    (index % homeIconBackgrounColor.length) + 1
+                  ],
               }}
             />
           ))}
