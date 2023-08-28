@@ -27,7 +27,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import language, {languageKeys} from '@/config/language/language';
 import {TImagePicker} from '@/utils/image-picker-handle';
 import AddImageButton from './components/add-image-button.component';
-import {useMutation} from 'react-query';
+import {useMutation, useQueryClient} from 'react-query';
 import UtilsApi from '@/utils/utils.service';
 import NotificationApi from '@/modules/digital-notification/digital-noti.service';
 import {useToast} from 'react-native-toast-notifications';
@@ -90,12 +90,15 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
     );
   };
 
-  const {mutate: createOrUpdateNotification} = useMutation({
+  const queryClient = useQueryClient();
+
+  const {mutate: createOrUpdateNotification, status} = useMutation({
     mutationFn: (params: any) =>
       NotificationApi.createOrUpdateRequest(params, {
         'Abp.Tenantid': tenantId,
       }),
     onSuccess: () => {
+      queryClient.refetchQueries(['list-noti']);
       toast.show(
         language.t(
           languageKeys.digitalNoti.toastNoti[
@@ -116,21 +119,31 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
     },
   });
 
+  const {mutate: uploadImage, status: uploadStatus} = useMutation({
+    mutationFn: (params: any) => UtilsApi.uploadImagesRequest(params.files),
+    onSuccess: (result, params) => {
+      createOrUpdateNotification({
+        ...params.data,
+        fileUrl: result[0],
+      });
+    },
+  });
+
   const onSubmit = (data: {data: string}) => {
     if (file) {
       if (typeof file !== 'string') {
-        UtilsApi.uploadImagesRequest([file]).then(result => {
-          createOrUpdateNotification({
+        uploadImage({
+          data: {
             ...noti,
             ...data,
-            fileUrl: result[0],
             isAllowComment,
             type: 2,
             organizationUnitId: seletedOrganization?.organizationUnitId,
             state: 1,
             receiveAll: 0,
             receiverGroupCode: null,
-          });
+          },
+          files: [file],
         });
       } else {
         createOrUpdateNotification({
@@ -242,7 +255,9 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
           />
         </View>
       </ScrollView>
-      <BottomButton onPress={handleSubmit(onSubmit)}>
+      <BottomButton
+        disabled={status === 'loading' || uploadStatus === 'loading'}
+        onPress={handleSubmit(onSubmit)}>
         {language.t(
           noti
             ? languageKeys.shared.button.update

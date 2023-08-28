@@ -36,18 +36,18 @@ const SettingScreen = ({navigation}: Props) => {
       ),
       type: 2,
     },
-    {
-      name: t(languageKeys.setting.main.aboutUs),
-      icon: (
-        <Icon
-          type="Ionicons"
-          name="information-circle"
-          color={'#2B5783'}
-          size={24}
-        />
-      ),
-      type: 3,
-    },
+    // {
+    //   name: t(languageKeys.setting.main.aboutUs),
+    //   icon: (
+    //     <Icon
+    //       type="Ionicons"
+    //       name="information-circle"
+    //       color={'#2B5783'}
+    //       size={24}
+    //     />
+    //   ),
+    //   type: 3,
+    // },
     {
       name: t(languageKeys.setting.main.logOut),
       icon: (

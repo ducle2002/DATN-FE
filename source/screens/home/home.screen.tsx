@@ -22,7 +22,9 @@ const HomeScreen = (props: HomeScreenProps) => {
   const {getUserInfor} = useAccount();
 
   const {isLogin} = useAppSelector(state => state.auth);
-  const {grantedPermissions} = useAppSelector(state => state.config);
+  const {grantedPermissions, isRefreshingPermisstions} = useAppSelector(
+    state => state.config,
+  );
 
   useEffect(() => {
     if (isLogin) {
@@ -31,6 +33,12 @@ const HomeScreen = (props: HomeScreenProps) => {
       getUserInfor();
     }
   }, [getConfigPermission, getOrganizationUnitByUser, getUserInfor, isLogin]);
+
+  useEffect(() => {
+    if (isRefreshingPermisstions) {
+      getConfigPermission();
+    }
+  }, [getConfigPermission, isRefreshingPermisstions]);
 
   return (
     <View style={styles.container}>

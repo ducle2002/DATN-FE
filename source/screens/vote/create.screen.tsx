@@ -110,7 +110,7 @@ const CreateScreen = ({navigation, route}: Props) => {
         ...data,
         voteOptions: options,
         options: JSON.stringify(options),
-        organizationUnitId: listOrganizations[0].organizationUnitId,
+        organizationUnitId: listOrganizations[0]?.organizationUnitId,
         finishTime:
           moment(data.finishTime).format('YYYY-MM-DDTHH:mm:ss.sss') + 'Z',
         startTime:
