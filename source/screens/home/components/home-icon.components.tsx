@@ -50,6 +50,14 @@ const HomeIcon = ({type, ...props}: HomeIconProp) => {
       );
     case 'Pages.Services.Local_Amenities.Create_Store':
       return <LocalServiceIcon />;
+    case 'Pages.SmartCommunity.OperationManagement.Material':
+      return (
+        <Icon type="FontAwesome5" name="toolbox" size={35} color={'white'} />
+      );
+    case 'Pages.SmartCommunity.OperationManagement.MaterialCategory':
+      return (
+        <Icon type="MaterialIcons" name="inventory" size={35} color={'white'} />
+      );
   }
 };
 

@@ -21,6 +21,9 @@ import AdministrativeStack, {
 } from './administrative.stack';
 import SettingStack from './settings.stack';
 import QAStack, {QAStackParamsList} from './question-answer.stack.screen';
+import MaterialAssetStack, {
+  MaterialAssetStackParamsList,
+} from './material-asset.stack';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -32,6 +35,7 @@ export type AppStackParamsList = {
   CHAT_STACK: NavigatorScreenParams<ChatStackParamsList>;
   ADMINISTRATIVE_STACK: NavigatorScreenParams<AdministrativeStackParamsList>;
   QUESTION_ANSWER_STACK: NavigatorScreenParams<QAStackParamsList>;
+  MATERIAL_ASSET_STACK: NavigatorScreenParams<MaterialAssetStackParamsList>;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -89,6 +93,10 @@ const AppStack = () => {
       <Stack.Screen name="VOTE_STACK" component={VoteStack} />
       <Stack.Screen name="LOCAL_SERVICE_STACK" component={LocalServiceStack} />
       <Stack.Screen name="QUESTION_ANSWER_STACK" component={QAStack} />
+      <Stack.Screen
+        name="MATERIAL_ASSET_STACK"
+        component={MaterialAssetStack}
+      />
     </Stack.Navigator>
   );
 };

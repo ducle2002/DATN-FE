@@ -46,7 +46,7 @@ const HomeHeader = ({navigation}: HomeScreenProps) => {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Avatar.Image source={{uri: imageUrl}} size={72} />
           <View style={styles.textContainer}>
-            <Text style={styles.textWelcome}>Wellcome</Text>
+            <Text style={styles.textWelcome}>Welcome</Text>
             <Text style={styles.textName}>{fullName}</Text>
           </View>
         </View>

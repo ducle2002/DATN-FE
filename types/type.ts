@@ -95,7 +95,19 @@ export type TPermission =
   | 'Pages.Tenants'
   | 'Pages.User.Detail'
   | 'Pages.Users'
-  | 'Pages.Users.Activation';
+  | 'Pages.Users.Activation'
+  | 'Pages.SmartCommunity.OperationManagement'
+  | 'Pages.SmartCommunity.OperationManagement.Material'
+  | 'Pages.SmartCommunity.OperationManagement.Material.Delivery'
+  | 'Pages.SmartCommunity.OperationManagement.Material.Inventory'
+  | 'Pages.SmartCommunity.OperationManagement.Material.List'
+  | 'Pages.SmartCommunity.OperationManagement.Material.Statistical'
+  | 'Pages.SmartCommunity.OperationManagement.MaterialCategory'
+  | 'Pages.SmartCommunity.OperationManagement.MaterialCategory.Group'
+  | 'Pages.SmartCommunity.OperationManagement.MaterialCategory.Inventory'
+  | 'Pages.SmartCommunity.OperationManagement.MaterialCategory.Producer'
+  | 'Pages.SmartCommunity.OperationManagement.MaterialCategory.Type'
+  | 'Pages.SmartCommunity.OperationManagement.MaterialCategory.Unit';
 
 export type TPagingParams = {
   skipCount?: number;

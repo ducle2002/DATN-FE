@@ -4,19 +4,19 @@ import {
   LayoutRectangle,
   ListRenderItem,
   Pressable,
+  StatusBar,
   StyleSheet,
   Text,
   TextStyle,
   View,
   ViewStyle,
 } from 'react-native';
-import React, {memo, useState} from 'react';
+import React, {memo, useEffect, useRef, useState} from 'react';
 import ReactNativeModal from 'react-native-modal';
-import {useHeaderHeight} from '@react-navigation/elements';
 import globalStyles from '@/config/globalStyles';
 import Icon from './icon.component';
 
-const {width} = Dimensions.get('screen');
+const {width: sWidth} = Dimensions.get('screen');
 
 export type TOptionItem = {
   label: string;
@@ -29,10 +29,12 @@ type Props = React.ComponentProps<typeof View> & {
   options: Array<TOptionItem>;
   selectedLabel: string | undefined;
   placeholder?: string;
+  placeholderTextColor?: string;
   itemLabelStyle?: TextStyle;
   onSelected: Function;
   inputContainer?: ViewStyle;
   valueStyle?: TextStyle;
+  disable?: boolean;
 };
 
 const DropdownMenu = ({
@@ -45,6 +47,8 @@ const DropdownMenu = ({
   itemLabelStyle,
   inputContainer,
   valueStyle,
+  disable = false,
+  placeholderTextColor,
   ...props
 }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -52,14 +56,12 @@ const DropdownMenu = ({
     setIsVisible(!isVisible);
   };
 
-  const [buttonPossion, setButtonPossion] = useState<LayoutRectangle>({
+  const [buttonPosition, setButtonPosition] = useState<LayoutRectangle>({
     height: 0,
     width: 0,
     y: 0,
     x: 0,
   });
-
-  const headerHeight = useHeaderHeight();
 
   const renderItemOption: ListRenderItem<TOptionItem> = ({item}) => {
     return (
@@ -77,14 +79,31 @@ const DropdownMenu = ({
     );
   };
 
+  const ref = useRef<View | null>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      ref.current?.measure((x, y, width, height, pageX, pageY) => {
+        // console.log(Platform.OS, {x, y, width, height, pageX, pageY});
+        // console.log(sWidth);
+
+        setButtonPosition({
+          height: height,
+          width: width,
+          x: pageX < sWidth ? (x > 0 ? x : pageX) : pageX - sWidth,
+          y: pageY + (y > 0 ? y : StatusBar.currentHeight ?? 0),
+        });
+      });
+    }, 500);
+  }, []);
+
   return (
     <Pressable
-      onLayout={({nativeEvent}) => {
-        setButtonPossion(nativeEvent.layout);
-      }}
+      ref={ref}
       onPress={toggleIsVisible}
       style={[styles.container, props.style]}
-      {...props}>
+      {...props}
+      disabled={disable}>
       {label && (
         <View>
           <Text style={[styles.textLabel, labelStyle]}>{label}</Text>
@@ -92,7 +111,11 @@ const DropdownMenu = ({
       )}
       <View style={[styles.inputContainer, inputContainer]}>
         <Text style={[styles.textValue, valueStyle]}>
-          {selectedLabel ?? placeholder}
+          {selectedLabel ? (
+            selectedLabel
+          ) : (
+            <Text style={{color: placeholderTextColor}}>{placeholder}</Text>
+          )}
         </Text>
         <Icon type="Ionicons" name="chevron-forward" size={20} />
       </View>
@@ -112,9 +135,9 @@ const DropdownMenu = ({
           }}>
           <View
             style={{
-              top: buttonPossion.height + buttonPossion.y + headerHeight,
-              width: buttonPossion.width,
-              left: buttonPossion.x,
+              top: buttonPosition.height + buttonPosition.y,
+              width: buttonPosition.width,
+              left: buttonPosition.x,
             }}>
             <FlatList
               style={styles.listOption}
@@ -150,7 +173,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 5,
     // maxHeight: '60%',
-    minWidth: 0.4 * width,
+    minWidth: 0.4 * sWidth,
   },
   itemOption: {
     paddingHorizontal: 10,

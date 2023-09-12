@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-export const homeIconBackgrounColor = [
+export const homeIconBackgroundColor = [
   '#505DCF',
   '#5BBAEF',
   '#235195',

@@ -1,5 +1,6 @@
 const form = {
   requiredMessage: 'Không được để trống',
+  minValue: 'Giá trị tối thiểu là ',
 };
 
 const error = {
@@ -17,6 +18,7 @@ const button = {
   deleteAll: 'Xóa tất cả',
   deny: 'Từ chối',
   accept: 'Xác nhận',
+  back: 'Quay lại',
 };
 
 const shared = {

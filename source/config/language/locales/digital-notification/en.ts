@@ -1,6 +1,6 @@
 const create = {
   department: 'Department',
-  selectDeparment: 'Select Department',
+  selectDepartment: 'Select Department',
   allComment: 'Allow Comments',
   title: 'Title',
   data: 'Content',

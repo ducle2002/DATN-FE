@@ -16,7 +16,7 @@ export type TRadioItem = {
 };
 type Props = React.ComponentProps<typeof View> & {
   listOptions: Array<TRadioItem>;
-  seletedOption: TRadioItem;
+  selectedOption: TRadioItem;
   onSelection: Function;
   label?: string;
   labelStyle?: TextStyle;
@@ -26,7 +26,7 @@ type Props = React.ComponentProps<typeof View> & {
 
 const RadioButtonGroup = ({
   listOptions,
-  seletedOption,
+  selectedOption,
   onSelection,
   label,
   labelStyle,
@@ -36,7 +36,7 @@ const RadioButtonGroup = ({
 }: Props) => {
   return (
     <RadioButton.Group
-      value={seletedOption.value}
+      value={selectedOption.value}
       onValueChange={value => {
         onSelection(value);
       }}>

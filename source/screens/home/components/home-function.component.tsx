@@ -57,6 +57,19 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
         return navigation.navigate('QUESTION_ANSWER_STACK', {
           screen: 'MAIN_SCREEN',
         });
+      case 'Pages.SmartCommunity.OperationManagement.Material':
+        return navigation.navigate('MATERIAL_ASSET_STACK', {
+          screen: 'MAIN_SCREEN',
+          params: {type: 'Pages.SmartCommunity.OperationManagement.Material'},
+        });
+      case 'Pages.SmartCommunity.OperationManagement.MaterialCategory': {
+        return navigation.navigate('MATERIAL_ASSET_STACK', {
+          screen: 'MAIN_SCREEN',
+          params: {
+            type: 'Pages.SmartCommunity.OperationManagement.MaterialCategory',
+          },
+        });
+      }
       default:
         toast.show('Chức năng đang phát triển');
     }
@@ -92,5 +105,6 @@ const styles = StyleSheet.create({
   text: {
     ...globalStyles.text13SemiBold,
     marginTop: 5,
+    textAlign: 'center',
   },
 });
