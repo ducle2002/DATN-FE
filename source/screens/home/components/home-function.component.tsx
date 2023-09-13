@@ -64,10 +64,7 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
         });
       case 'Pages.SmartCommunity.OperationManagement.MaterialCategory': {
         return navigation.navigate('MATERIAL_ASSET_STACK', {
-          screen: 'MAIN_SCREEN',
-          params: {
-            type: 'Pages.SmartCommunity.OperationManagement.MaterialCategory',
-          },
+          screen: 'CATEGORY_MANAGEMENT',
         });
       }
       default:

@@ -1,5 +1,6 @@
-import {useQueries} from 'react-query';
+import {useInfiniteQuery, useQueries} from 'react-query';
 import MaterialCategoryApi from './material-category.service';
+import {ECategoryType} from './material-asset.model';
 
 export const useMaterialCategory = () => {
   const result = useQueries([
@@ -37,4 +38,28 @@ export const useMaterialCategory = () => {
     categoryUnit: result[3],
     categoryGroup: result[4],
   };
+};
+
+export const useListCategory = (type: ECategoryType) => {
+  const {data, fetchNextPage, hasNextPage} = useInfiniteQuery({
+    queryKey: ['category', type],
+    queryFn: ({pageParam}) =>
+      MaterialCategoryApi.getAll({
+        ...pageParam,
+        type: type,
+        maxResultCount: 20,
+      }),
+    getNextPageParam: (lastPage, allPages) => {
+      const skipCount = allPages.length * 20;
+      return (allPages.length - 1) * 20 + lastPage.dataFilter.length !==
+        lastPage.totalRecords
+        ? {
+            skipCount: skipCount,
+            maxResultCount: 20,
+          }
+        : undefined;
+    },
+  });
+
+  return {data, fetchNextPage, hasNextPage};
 };

@@ -79,6 +79,14 @@ export type TImportExportMaterial = {
   id: number;
 };
 
+export enum ECategoryType {
+  GROUP = 1,
+  INVENTORY = 2,
+  PRODUCER = 3,
+  TYPE = 4,
+  UNIT = 5,
+}
+
 export type TImportExportDocs = {
   id: string;
   importExportDate: string;

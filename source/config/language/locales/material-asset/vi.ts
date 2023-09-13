@@ -43,8 +43,15 @@ const docs = {
   listMaterial: 'Danh sách vật tư',
 };
 
+const category = {
+  code: 'Mã',
+  name: 'Tên',
+  description: 'Mô tả',
+};
+
 export default {
   materialDetail,
   inventory,
   docs,
+  category,
 };
