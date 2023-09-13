@@ -16,6 +16,7 @@ import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
 import {MaterialTabParamsList} from './main.screen';
 import {StackScreenProps} from '@react-navigation/stack';
 import {MaterialAssetStackParamsList} from '@/routes/material-asset.stack';
+import language, {languageKeys} from '@/config/language/language';
 
 type Props = CompositeScreenProps<
   MaterialTopTabScreenProps<MaterialTabParamsList, 'INVENTORY'>,
@@ -73,14 +74,14 @@ const InventoryTab = ({navigation}: Props) => {
             onPress={() =>
               navigation.navigate('IMPORT_EXPORT', {type: 'IMPORT'})
             }>
-            NhapKho
+            {language.t(languageKeys.materialAsset.docs.importInventory)}
           </Button>
           <Button
             onPress={() =>
               navigation.navigate('IMPORT_EXPORT', {type: 'EXPORT'})
             }
             mode="contained">
-            xuatkho
+            {language.t(languageKeys.materialAsset.docs.exportInventory)}
           </Button>
         </View>
       </BottomContainer>

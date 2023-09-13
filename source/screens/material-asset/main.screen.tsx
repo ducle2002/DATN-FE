@@ -5,6 +5,7 @@ import {useAppSelector} from '@/hooks/redux.hook';
 import ListTab from './list-assets.tab';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import InventoryTab from './inventory.tab';
+import language, {languageKeys} from '@/config/language/language';
 
 type Props = StackScreenProps<MaterialAssetStackParamsList, 'MAIN_SCREEN'>;
 
@@ -31,32 +32,38 @@ const MainScreen = ({route}: Props) => {
   return (
     <MaterialTab.Navigator
       screenOptions={{
-        tabBarScrollEnabled: true,
         lazy: true,
       }}>
-      {/* {permissions.map(p => (
-        <MaterialTab.Screen
-          name={p.split('.')[4] as any}
-          component={
-            p === 'Pages.SmartCommunity.OperationManagement.Material.List'
-              ? ListTab
-              : p ===
-                'Pages.SmartCommunity.OperationManagement.Material.Delivery'
-              ? DeliveryTab
-              : p ===
-                'Pages.SmartCommunity.OperationManagement.Material.Inventory'
-              ? InventoryTab
-              : ListTab
-          }
-          key={p}
-        />
-      ))} */}
       {permissions.includes(
         'Pages.SmartCommunity.OperationManagement.Material.List',
-      ) && <MaterialTab.Screen component={ListTab} name="LIST" />}
+      ) && (
+        <MaterialTab.Screen
+          component={ListTab}
+          name="LIST"
+          options={{
+            title: language.t(
+              languageKeys[
+                'Pages.SmartCommunity.OperationManagement.Material.List'
+              ],
+            ),
+          }}
+        />
+      )}
       {permissions.includes(
         'Pages.SmartCommunity.OperationManagement.Material.Inventory',
-      ) && <MaterialTab.Screen component={InventoryTab} name="INVENTORY" />}
+      ) && (
+        <MaterialTab.Screen
+          component={InventoryTab}
+          name="INVENTORY"
+          options={{
+            title: language.t(
+              languageKeys[
+                'Pages.SmartCommunity.OperationManagement.Material.Inventory'
+              ],
+            ),
+          }}
+        />
+      )}
     </MaterialTab.Navigator>
   );
 };

@@ -1,35 +1,35 @@
 const title = {
-  'Pages.Administrative': 'Hành chính',
-  'Pages.Forum': 'Diễn đàn',
+  'Pages.Administrative': 'Administration',
+  'Pages.Forum': 'Forum',
   'Pages.Management.ChatCitizen': 'Chat',
-  'Pages.Management.Citizens.Reflects': 'Phản ánh',
-  'Pages.Management.Citizens.Vote': 'Khảo sát',
-  'Pages.Management.Digital.Notices': 'Thông báo số',
+  'Pages.Management.Citizens.Reflects': 'Feedback',
+  'Pages.Management.Citizens.Vote': 'Survey',
+  'Pages.Management.Digital.Notices': 'Digital Notices',
   'Pages.Management.Hotline': 'Hotline',
-  'Pages.Management.Newsfeed': 'Bảng tin',
-  'Pages.Management.Question_Answer': 'Hỏi đáp',
-  'Pages.Services.Local_Amenities.Create_Store': 'Tiện ích',
+  'Pages.Management.Newsfeed': 'Newsfeed',
+  'Pages.Management.Question_Answer': 'Q&A',
+  'Pages.Services.Local_Amenities.Create_Store': 'Local Amenities',
   'Pages.Users.Activation': '',
-  'Pages.SmartCommunity.OperationManagement': 'Vận hành',
-  'Pages.SmartCommunity.OperationManagement.Material': 'Tài sản Vật tư',
+  'Pages.SmartCommunity.OperationManagement': 'Operation Management',
+  'Pages.SmartCommunity.OperationManagement.Material': 'Assets and Materials',
   'Pages.SmartCommunity.OperationManagement.Material.Delivery':
-    'Qiao nhận tài sản',
-  'Pages.SmartCommunity.OperationManagement.Material.Inventory': 'Quản lý Kho',
-  'Pages.SmartCommunity.OperationManagement.Material.List': 'Danh sách tài sản',
+    'Asset Delivery',
+  'Pages.SmartCommunity.OperationManagement.Material.Inventory':
+    'Inventory Management',
+  'Pages.SmartCommunity.OperationManagement.Material.List': 'Asset List',
   'Pages.SmartCommunity.OperationManagement.Material.Statistical':
-    'Thống kê tài sản',
-  'Pages.SmartCommunity.OperationManagement.MaterialCategory':
-    'Danh mục tài sản',
+    'Asset Statistical',
+  'Pages.SmartCommunity.OperationManagement.MaterialCategory': 'Asset Category',
   'Pages.SmartCommunity.OperationManagement.MaterialCategory.Group':
-    'Nhóm tài sản',
+    'Asset Group',
   'Pages.SmartCommunity.OperationManagement.MaterialCategory.Inventory':
-    'Vị trí Kho',
+    'Inventory Location',
   'Pages.SmartCommunity.OperationManagement.MaterialCategory.Producer':
-    'Nhà sản xuất',
+    'Manufacturer',
   'Pages.SmartCommunity.OperationManagement.MaterialCategory.Type':
-    'Loại tài sản',
+    'Asset Type',
   'Pages.SmartCommunity.OperationManagement.MaterialCategory.Unit':
-    'Đơn vị tài sản',
+    'Asset Unit',
 };
 
 export default title;
