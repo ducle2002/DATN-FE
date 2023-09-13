@@ -60,8 +60,11 @@ export const useCreateInventory = (onSuccessCallback: () => void) => {
       materialId: number;
     }) => MaterialAssetApi.createInventory(params),
     onSuccess: (_, params) => {
-      queryClient.refetchQueries(['material-inventory', params.inventoryId]);
-      onSuccessCallback();
+      queryClient
+        .refetchQueries(['material-inventory', params.inventoryId])
+        .then(() => {
+          onSuccessCallback();
+        });
     },
   });
 
@@ -73,8 +76,9 @@ export const useCreateMaterial = (onSuccessCallback: () => void) => {
   const {mutate: createMaterial} = useMutation({
     mutationFn: (params: TMaterialAsset) => MaterialAssetApi.create(params),
     onSuccess: () => {
-      queryClient.refetchQueries(['list-material']);
-      onSuccessCallback();
+      queryClient.refetchQueries(['list-material']).then(() => {
+        onSuccessCallback();
+      });
     },
     onError: error => {
       console.log(error);
@@ -88,8 +92,9 @@ export const useUpdateMaterial = (onSuccessCallback: () => void) => {
   const {mutate: updateMaterial} = useMutation({
     mutationFn: (params: TMaterialAsset) => MaterialAssetApi.update(params),
     onSuccess: () => {
-      queryClient.refetchQueries(['list-material']);
-      onSuccessCallback();
+      queryClient.refetchQueries(['list-material']).then(() => {
+        onSuccessCallback();
+      });
     },
     onError: error => {
       console.log(error);
@@ -103,8 +108,9 @@ export const useDeleteMaterial = (onSuccessCallback: () => void) => {
   const {mutate: deleteMaterial} = useMutation({
     mutationFn: (id: number) => MaterialAssetApi.delete(id),
     onSuccess: () => {
-      queryClient.refetchQueries(['list-material']);
-      onSuccessCallback();
+      queryClient.refetchQueries(['list-material']).then(() => {
+        onSuccessCallback();
+      });
     },
     onError: error => {
       console.log(error);

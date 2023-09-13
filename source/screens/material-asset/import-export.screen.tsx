@@ -5,9 +5,6 @@ import {MaterialAssetStackParamsList} from '@/routes/material-asset.stack';
 import {useListImportExport} from './hooks/hook';
 import {TImportExportDocs} from '@/modules/material-asset/material-asset.model';
 import ImportExportCard from './components/import-export.card';
-import BottomContainer from '@/components/bottom-container.component';
-import Button from '@/components/button.component';
-import language, {languageKeys} from '@/config/language/language';
 import ImportExportDetail from './components/import-export-detail';
 import {LayoutProvider, RecyclerListView} from 'recyclerlistview';
 const {width, height} = Dimensions.get('screen');
@@ -51,11 +48,11 @@ const ImportExportScreen = ({route}: Props) => {
           selectItem(undefined);
         }}
       />
-      <BottomContainer>
+      {/* <BottomContainer>
         <Button mode="contained">
           {language.t(languageKeys.shared.button.add)}
         </Button>
-      </BottomContainer>
+      </BottomContainer> */}
     </View>
   );
 };

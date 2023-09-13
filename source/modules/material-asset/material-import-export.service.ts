@@ -19,6 +19,11 @@ class MaterialImportExportService {
 
     return {importExportDocs: result.data, totalRecords: result.totalRecords};
   };
+
+  approve = async (params: {id: string; isImport: boolean}) => {
+    const url = HOST_SERVER + this.endpoint + 'ApproveMaterialImportExport';
+    return axiosClient.post(url, params);
+  };
 }
 
 const MaterialImportExportApi = new MaterialImportExportService();

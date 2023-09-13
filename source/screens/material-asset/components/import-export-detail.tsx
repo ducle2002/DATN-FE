@@ -15,6 +15,8 @@ import globalStyles from '@/config/globalStyles';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
 import {find, propEq} from 'ramda';
 import ImportExportItemCard from './import-export-item.card';
+import {useMutation, useQueryClient} from 'react-query';
+import MaterialImportExportApi from '@/modules/material-asset/material-import-export.service';
 
 type Props = {
   doc: TImportExportDocs | undefined;
@@ -25,6 +27,23 @@ const ImportExportDetail = ({doc, onBackdropPress}: Props) => {
   const {allInventory} = useAllInventory();
 
   const {control, reset} = useForm({defaultValues: doc});
+
+  const queryClient = useQueryClient();
+
+  const {mutate: approve} = useMutation({
+    mutationFn: (params: {id: string; isImport: boolean}) =>
+      MaterialImportExportApi.approve(params),
+    onSuccess: () => {
+      queryClient
+        .refetchQueries([
+          'data-import-export',
+          doc?.isImport ? 'IMPORT' : 'EXPORT',
+        ])
+        .then(() => {
+          onBackdropPress();
+        });
+    },
+  });
 
   const watchedValue = useWatch({
     control: control,
@@ -65,7 +84,11 @@ const ImportExportDetail = ({doc, onBackdropPress}: Props) => {
       style={{margin: 0}}>
       <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
         <View style={styles.container}>
-          <Text>
+          <Text
+            style={[
+              styles.textStatus,
+              {backgroundColor: doc?.isApproved ? '#557A46' : '#ffcc00'},
+            ]}>
             {language.t(
               languageKeys.materialAsset.docs[
                 doc?.isApproved ? 'approved' : 'waiting'
@@ -189,7 +212,27 @@ const ImportExportDetail = ({doc, onBackdropPress}: Props) => {
           </View>
         </View>
         <BottomContainer>
-          <Button onPress={onBackdropPress}>quay lai</Button>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'space-around',
+            }}>
+            <Button onPress={onBackdropPress} mode="outlined">
+              {language.t(languageKeys.shared.button.back)}
+            </Button>
+            {!doc?.isApproved && (
+              <Button
+                onPress={() => {
+                  if (doc) {
+                    approve({id: doc?.id, isImport: doc?.isImport});
+                  }
+                }}
+                mode="contained">
+                {language.t(languageKeys.shared.button.accept)}
+              </Button>
+            )}
+          </View>
         </BottomContainer>
       </SafeAreaView>
     </ReactNativeModal>
@@ -222,5 +265,11 @@ const styles = StyleSheet.create({
     ...globalStyles.text15Medium,
     paddingVertical: 0,
     backgroundColor: '#f1f2f8',
+  },
+  textStatus: {
+    ...globalStyles.text16Bold,
+    textAlign: 'center',
+    paddingVertical: 10,
+    color: 'white',
   },
 });

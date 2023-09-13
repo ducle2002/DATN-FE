@@ -75,7 +75,13 @@ const InventoryTab = ({navigation}: Props) => {
             }>
             NhapKho
           </Button>
-          <Button mode="contained">xuatkho</Button>
+          <Button
+            onPress={() =>
+              navigation.navigate('IMPORT_EXPORT', {type: 'EXPORT'})
+            }
+            mode="contained">
+            xuatkho
+          </Button>
         </View>
       </BottomContainer>
     </View>
