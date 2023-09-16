@@ -24,6 +24,7 @@ import QAStack, {QAStackParamsList} from './question-answer.stack.screen';
 import MaterialAssetStack, {
   MaterialAssetStackParamsList,
 } from './material-asset.stack';
+import CameraScreen from '@/screens/camera/camera.screen';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -36,6 +37,7 @@ export type AppStackParamsList = {
   ADMINISTRATIVE_STACK: NavigatorScreenParams<AdministrativeStackParamsList>;
   QUESTION_ANSWER_STACK: NavigatorScreenParams<QAStackParamsList>;
   MATERIAL_ASSET_STACK: NavigatorScreenParams<MaterialAssetStackParamsList>;
+  CAMERA_SCREEN: undefined;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -97,6 +99,7 @@ const AppStack = () => {
         name="MATERIAL_ASSET_STACK"
         component={MaterialAssetStack}
       />
+      <Stack.Screen name="CAMERA_SCREEN" component={CameraScreen} />
     </Stack.Navigator>
   );
 };

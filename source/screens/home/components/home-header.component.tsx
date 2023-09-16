@@ -30,7 +30,7 @@ const HomeHeader = ({navigation}: HomeScreenProps) => {
             size={30}
             color={'white'}
             style={styles.icon}
-            onPress={() => toast.show('Chức năng đang phát triển')}
+            onPress={() => navigation.navigate('CAMERA_SCREEN')}
           />
           <Icon
             type="Ionicons"
