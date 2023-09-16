@@ -2,6 +2,7 @@ import {NativeModules, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import Icon from '@/components/icon.component';
+import {useScanBarcodes, BarcodeFormat} from 'vision-camera-code-scanner';
 
 const {ExampleModule} = NativeModules;
 
@@ -17,17 +18,21 @@ const CameraScreen = (props: Props) => {
     });
   }, []);
 
+  const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
+    checkInverted: true,
+  });
+
   const devices = useCameraDevices('wide-angle-camera');
 
   // console.log(devices);
 
-  // const back = devices.back;
+  const back = devices.back;
 
   return (
     <View style={styles.container}>
-      {/* {back && (
+      {back && (
         <Camera device={back} style={StyleSheet.absoluteFill} isActive={true} />
-      )} */}
+      )}
       <Icon
         type="Ionicons"
         name="radio-button-on"
