@@ -1,50 +1,65 @@
-import {NativeModules, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect} from 'react';
-import {Camera, useCameraDevices} from 'react-native-vision-camera';
-import Icon from '@/components/icon.component';
-import {useScanBarcodes, BarcodeFormat} from 'vision-camera-code-scanner';
+import {
+  Dimensions,
+  PixelRatio,
+  StyleSheet,
+  View,
+  findNodeHandle,
+} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {ScannerView, createFragment} from '@/components/scanner-view';
+import Button from '@/components/button.component';
+import BottomContainer from '@/components/bottom-container.component';
 
-const {ExampleModule} = NativeModules;
+const {width, height} = Dimensions.get('screen');
 
-type Props = {};
+const CameraScreen = () => {
+  const ref = useRef(null);
 
-const CameraScreen = (props: Props) => {
   useEffect(() => {
-    Camera.getCameraPermissionStatus().then(result => {
-      console.log(result);
-      if (result !== 'authorized') {
-        Camera.requestCameraPermission();
-      }
-    });
+    const viewId = findNodeHandle(ref.current);
+    if (viewId) {
+      createFragment(viewId);
+    }
   }, []);
 
-  const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
-    checkInverted: true,
-  });
-
-  const devices = useCameraDevices('wide-angle-camera');
-
-  // console.log(devices);
-
-  const back = devices.back;
+  const [code, setCode] = useState<String>();
 
   return (
-    <View style={styles.container}>
-      {back && (
-        <Camera device={back} style={StyleSheet.absoluteFill} isActive={true} />
-      )}
-      <Icon
-        type="Ionicons"
-        name="radio-button-on"
-        size={50}
-        color={'white'}
-        style={{marginTop: 'auto'}}
-        onPress={() => {
-          console.log(ExampleModule);
-          ExampleModule.getParamsFromJS('100');
+    <View style={{backgroundColor: 'red', flex: 1}}>
+      <ScannerView
+        style={{
+          height: PixelRatio.getPixelSizeForLayoutSize(height),
+          width: PixelRatio.getPixelSizeForLayoutSize(width),
+        }}
+        ref={ref}
+        onScanned={({message}) => {
+          setCode(message);
         }}
       />
-      <View />
+      <View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+        }}>
+        {code && (
+          <BottomContainer>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+              }}>
+              <Button
+                onPress={() => {
+                  console.log(code);
+                }}>
+                direct
+              </Button>
+              <Button onPress={() => setCode(undefined)}>reset</Button>
+            </View>
+          </BottomContainer>
+        )}
+      </View>
     </View>
   );
 };
