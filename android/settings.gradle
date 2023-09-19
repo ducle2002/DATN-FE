@@ -7,3 +7,4 @@ project(':react-native-splash-screen').projectDir = new File(rootProject.project
 
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
+include ':code-scanner'

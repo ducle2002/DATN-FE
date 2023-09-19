@@ -8,6 +8,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
+import com.yootek.ioc.codescannermodule.CodeScannerModule;
 import com.yootek.ioc.codescannermodule.ScannerViewManager;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class MyPackage  implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactApplicationContext) {
         List<NativeModule> modules = new ArrayList<>();
+        modules.add(new CodeScannerModule());
         return modules;
     }
 

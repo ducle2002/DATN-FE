@@ -2,6 +2,9 @@ package com.yootek.ioc.codescannermodule;
 
 import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Camera;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,26 +15,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
-import com.budiyev.android.codescanner.CodeScanner;
-import com.budiyev.android.codescanner.CodeScannerView;
-import com.budiyev.android.codescanner.DecodeCallback;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.zxing.Result;
 import com.yootek.ioc.R;
-
 public class CodeScannerFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
-    private CodeScanner mCodeScanner;
-    private ReactContext reactContext = null;
+    protected static CodeScanner mCodeScanner;
 
-    private CodeScannerModule codeScannerModule = null;
+    protected static CodeScannerView mScannerView;
+
+    protected static Window mScannerWindow;
+    private ReactContext reactContext = null;
 
     public void setReactContext (ReactContext context){
         reactContext = context;
@@ -48,34 +51,31 @@ public class CodeScannerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        CodeScannerView scannerView = view.findViewById(R.id.scanner_view);
-        mCodeScanner = new CodeScanner(view.getContext(), scannerView);
-
-
-
+        mScannerView = view.findViewById(R.id.scanner_view);
+        mCodeScanner = new CodeScanner(view.getContext(), mScannerView);
         mCodeScanner.setCamera(CodeScanner.CAMERA_BACK);
         mCodeScanner.setFormats(CodeScanner.ALL_FORMATS);
-
+        mScannerWindow = getActivity().getWindow();
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull Result result) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Context context = mScannerView.getContext();
+                        Log.d("TAG", "run: context "+ context.toString());
                         onReceiveNativeEvent(result.getText());
                     }
                 });
 
             }
         });
-
-        scannerView.setOnClickListener(new View.OnClickListener() {
+        mScannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mCodeScanner.startPreview();
             }
         });
-
     }
 
     public void onReceiveNativeEvent(String message) {
