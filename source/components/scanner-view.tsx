@@ -1,9 +1,16 @@
-import {UIManager, ViewProps, requireNativeComponent} from 'react-native';
+import {
+  NativeModules,
+  UIManager,
+  ViewProps,
+  requireNativeComponent,
+} from 'react-native';
 import React, {forwardRef} from 'react';
 
 type Props = ViewProps & {
   onScanned?: (params: {message: string}) => void;
 };
+
+export const {CodeScannerModule} = NativeModules;
 
 export const ScannerManager = requireNativeComponent('ScannerManager');
 
