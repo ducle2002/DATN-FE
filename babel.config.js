@@ -25,6 +25,7 @@ module.exports = {
       'react-native-reanimated/plugin',
       {
         relativeSourceLocation: true,
+        globals: ['__scanCodes'],
       },
     ],
   ],
