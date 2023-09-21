@@ -2,7 +2,7 @@ import axios, {AxiosError} from 'axios';
 import QueryString from 'qs';
 import {HOST_SERVER} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {IToken} from '@/modules/auth/auth.model';
+import {IToken} from '@/screens/authentication/services/auth.model';
 import store from '@/store';
 import {refreshConfig} from '@/modules/config/config.slice';
 // Set up default config for http requests here

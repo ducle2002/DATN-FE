@@ -67,6 +67,8 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
           screen: 'CATEGORY_MANAGEMENT',
         });
       }
+      case 'Pages.Residents.Verification':
+        return navigation.navigate('RESIDENT_STACK');
       default:
         toast.show('Chức năng đang phát triển');
     }

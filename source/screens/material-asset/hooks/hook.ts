@@ -1,9 +1,9 @@
 import {
   TInventory,
   TMaterialAsset,
-} from '@/modules/material-asset/material-asset.model';
-import MaterialAssetApi from '@/modules/material-asset/material-asset.service';
-import MaterialImportExportApi from '@/modules/material-asset/material-import-export.service';
+} from '@/screens/material-asset/services/material-asset.model';
+import MaterialAssetApi from '@/screens/material-asset/services/material-asset.service';
+import MaterialImportExportApi from '@/screens/material-asset/services/material-import-export.service';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {find, flatten, map, propEq} from 'ramda';
 import {useMemo} from 'react';

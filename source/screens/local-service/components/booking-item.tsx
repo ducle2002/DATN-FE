@@ -3,7 +3,7 @@ import React from 'react';
 import {
   EBookingState,
   TBooking,
-} from '@/modules/local-service/local-service.model';
+} from '@/screens/local-service/services/local-service.model';
 import ItemCard from '@/components/item-card.component';
 import moment from 'moment';
 import language, {languageKeys} from '@/config/language/language';

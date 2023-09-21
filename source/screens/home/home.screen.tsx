@@ -13,6 +13,7 @@ import {
   administrativeFunction,
   managementFunction,
   operatorFunction,
+  residentFunction,
   serviceFunction,
 } from '@/modules/config/config.model';
 import {languageKeys} from '@/config/language/language';
@@ -49,16 +50,26 @@ const HomeScreen = (props: HomeScreenProps) => {
     }
   }, [getConfigPermission, isRefreshingPermissions]);
 
-  const {management, administrative, service, operator} = useMemo(() => {
-    const m = grantedPermissions?.filter(g => managementFunction.includes(g));
-    const ad = grantedPermissions?.filter(g =>
-      administrativeFunction.includes(g),
-    );
-    const s = grantedPermissions?.filter(g => serviceFunction.includes(g));
+  const {management, administrative, service, operator, resident} =
+    useMemo(() => {
+      const m = grantedPermissions?.filter(g => managementFunction.includes(g));
+      const ad = grantedPermissions?.filter(g =>
+        administrativeFunction.includes(g),
+      );
+      const s = grantedPermissions?.filter(g => serviceFunction.includes(g));
 
-    const o = grantedPermissions?.filter(g => operatorFunction.includes(g));
-    return {management: m, administrative: ad, service: s, operator: o};
-  }, [grantedPermissions]);
+      const o = grantedPermissions?.filter(g => operatorFunction.includes(g));
+
+      const r = grantedPermissions?.filter(g => residentFunction.includes(g));
+
+      return {
+        management: m,
+        administrative: ad,
+        service: s,
+        operator: o,
+        resident: r,
+      };
+    }, [grantedPermissions]);
 
   return (
     <View style={styles.container}>
@@ -93,6 +104,28 @@ const HomeScreen = (props: HomeScreenProps) => {
             </Text>
             <View style={styles.section}>
               {administrative.map((p, index) => (
+                <HomeFunction
+                  key={p}
+                  type={p}
+                  style={styles.iconContainer}
+                  iconContainerStyle={{
+                    backgroundColor:
+                      homeIconBackgroundColor[
+                        (index % homeIconBackgroundColor.length) + 1
+                      ],
+                  }}
+                />
+              ))}
+            </View>
+          </View>
+        )}
+        {resident.length > 0 && (
+          <View>
+            <Text style={styles.sectionTitle}>
+              {language.t(languageKeys.adminis)}
+            </Text>
+            <View style={styles.section}>
+              {resident.map((p, index) => (
                 <HomeFunction
                   key={p}
                   type={p}

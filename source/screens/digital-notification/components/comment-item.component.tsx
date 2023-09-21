@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useMemo} from 'react';
-import {TCommentNoti} from '@/modules/digital-notification/digital-noti.model';
+import {TCommentNoti} from '@/screens/digital-notification/services/digital-noti.model';
 import moment from 'moment';
 import {Avatar} from 'react-native-paper';
 import globalStyles from '@/config/globalStyles';

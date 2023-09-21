@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {memo} from 'react';
-import {TImportExportDocs} from '@/modules/material-asset/material-asset.model';
+import {TImportExportDocs} from '@/screens/material-asset/services/material-asset.model';
 import ItemCard from '@/components/item-card.component';
 import Icon from '@/components/icon.component';
 import {useInventoryName} from '../hooks/hook';

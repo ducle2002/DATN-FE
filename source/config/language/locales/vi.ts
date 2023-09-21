@@ -10,6 +10,7 @@ import feedback from './feedback/vi';
 import administrative from './administrative/vi';
 import chat from './chat/vi';
 import materialAsset from './material-asset/vi';
+import residentLanguage from './resident/vi';
 
 const vi = {
   ...title,
@@ -28,6 +29,7 @@ const vi = {
   adminis: 'Hành chính / Dịch vụ số',
   service: 'Dịch vụ tiện ích nội khu',
   inventory: 'Quản lý tài sản vật tư',
+  residentLanguage,
 };
 
 export default vi;

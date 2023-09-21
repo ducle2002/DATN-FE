@@ -1,4 +1,3 @@
-const assetExts = require('metro-config/src/defaults/defaults').assetExts;
 const sourceExts = require('metro-config/src/defaults/defaults').sourceExts;
 const {getDefaultConfig} = require('metro-config');
 

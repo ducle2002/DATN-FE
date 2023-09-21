@@ -12,7 +12,7 @@ import LocalServiceStack, {
 } from './local-service.stack';
 import {HOST_SERVER} from '@env';
 import {useAppDispatch, useAppSelector} from '@/hooks/redux.hook';
-import {selectedEncryptedAccessToken} from '@/modules/auth/auth.slice';
+import {selectedEncryptedAccessToken} from '@/screens/authentication/services/auth.slice';
 import * as signalR from '@microsoft/signalr';
 import {setConnection} from '@/modules/hubconnection/hubconnection.slice';
 import ChatStack, {ChatStackParamsList} from './chat.stack';
@@ -25,6 +25,7 @@ import MaterialAssetStack, {
   MaterialAssetStackParamsList,
 } from './material-asset.stack';
 import CameraScreen from '@/screens/camera/camera.screen';
+import ResidentVerifyScreen from '@/screens/resident/resident-verify.screen';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -38,6 +39,7 @@ export type AppStackParamsList = {
   QUESTION_ANSWER_STACK: NavigatorScreenParams<QAStackParamsList>;
   MATERIAL_ASSET_STACK: NavigatorScreenParams<MaterialAssetStackParamsList>;
   CAMERA_SCREEN: undefined;
+  RESIDENT_STACK: undefined;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -100,6 +102,11 @@ const AppStack = () => {
         component={MaterialAssetStack}
       />
       <Stack.Screen name="CAMERA_SCREEN" component={CameraScreen} />
+      <Stack.Screen
+        name="RESIDENT_STACK"
+        component={ResidentVerifyScreen}
+        options={{headerShown: true}}
+      />
     </Stack.Navigator>
   );
 };

@@ -20,7 +20,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {TMaterialAsset} from '@/modules/material-asset/material-asset.model';
+import {TMaterialAsset} from '@/screens/material-asset/services/material-asset.model';
 import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
 import language, {languageKeys} from '@/config/language/language';

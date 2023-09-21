@@ -3,7 +3,7 @@ import React, {useRef, useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {MaterialAssetStackParamsList} from '@/routes/material-asset.stack';
 import {useListImportExport} from './hooks/hook';
-import {TImportExportDocs} from '@/modules/material-asset/material-asset.model';
+import {TImportExportDocs} from '@/screens/material-asset/services/material-asset.model';
 import ImportExportCard from './components/import-export.card';
 import ImportExportDetail from './components/import-export-detail';
 import {LayoutProvider, RecyclerListView} from 'recyclerlistview';

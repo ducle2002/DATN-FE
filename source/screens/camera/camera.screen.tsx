@@ -5,7 +5,7 @@ import ScannerView from '@/components/scanner-view';
 import {Barcode} from 'vision-camera-code-scanner';
 
 const CameraScreen = () => {
-  const onScannedCallback = (result: Array<Barcode>, params) => {
+  const onScannedCallback = (result: Array<Barcode>, params: any) => {
     console.log(result, params);
   };
   return (

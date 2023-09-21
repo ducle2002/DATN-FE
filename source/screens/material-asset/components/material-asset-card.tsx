@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {TMaterialAsset} from '@/modules/material-asset/material-asset.model';
+import {TMaterialAsset} from '@/screens/material-asset/services/material-asset.model';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {MaterialAssetStackParamsList} from '@/routes/material-asset.stack';
 import ItemCard from '@/components/item-card.component';

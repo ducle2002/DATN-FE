@@ -1,14 +1,14 @@
 import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {memo, useEffect, useMemo, useState} from 'react';
 import ReactNativeModal from 'react-native-modal';
-import {TMaterialAsset} from '@/modules/material-asset/material-asset.model';
+import {TMaterialAsset} from '@/screens/material-asset/services/material-asset.model';
 import language, {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
 import Button from '@/components/button.component';
 import CTextInput from '@/components/text-input.component';
 import {Controller, useForm} from 'react-hook-form';
 import BottomContainer from '@/components/bottom-container.component';
-import {useMaterialCategory} from '@/modules/material-asset/material-category.hook';
+import {useMaterialCategory} from '@/screens/material-asset/services/material-category.hook';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';

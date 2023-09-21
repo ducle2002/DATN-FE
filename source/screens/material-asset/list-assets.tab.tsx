@@ -5,7 +5,7 @@ import {MaterialAssetStackParamsList} from '@/routes/material-asset.stack';
 import {
   TMaterialAsset,
   materialDefault,
-} from '@/modules/material-asset/material-asset.model';
+} from '@/screens/material-asset/services/material-asset.model';
 import MaterialCard from './components/material-asset-card';
 import MaterialDetail from './components/material-detail';
 import BottomContainer from '@/components/bottom-container.component';

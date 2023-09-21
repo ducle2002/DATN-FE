@@ -1,6 +1,6 @@
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {ECategoryType} from '@/modules/material-asset/material-asset.model';
+import {ECategoryType} from '@/screens/material-asset/services/material-asset.model';
 import ListCategory from './components/list-category';
 import language, {languageKeys} from '@/config/language/language';
 import {Text} from 'react-native';

@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
-import MaterialCategoryApi from '@/modules/material-asset/material-category.service';
+import MaterialCategoryApi from '@/screens/material-asset/services/material-category.service';
 import {useQueries} from 'react-query';
 
 type Props = {};

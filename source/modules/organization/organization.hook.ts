@@ -2,7 +2,7 @@ import {useMutation} from 'react-query';
 import OrganizationApi from './organization.service';
 import {useAppDispatch} from '@/hooks/redux.hook';
 import {setOrganization} from './organization.slice';
-import {useLocalServiceType} from '../local-service/local-service.hook';
+import {useLocalServiceType} from '../../screens/local-service/services/local-service.hook';
 
 export const useOrganizationUnit = () => {
   const dispatch = useAppDispatch();

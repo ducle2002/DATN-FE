@@ -4,7 +4,7 @@ import ReactNativeModal from 'react-native-modal';
 import {
   TImportExportDocs,
   TInventory,
-} from '@/modules/material-asset/material-asset.model';
+} from '@/screens/material-asset/services/material-asset.model';
 import {useAllInventory} from '../hooks/hook';
 import language, {languageKeys} from '@/config/language/language';
 import BottomContainer from '@/components/bottom-container.component';
@@ -16,7 +16,7 @@ import DropdownMenuComponent from '@/components/dropdown-menu.component';
 import {find, propEq} from 'ramda';
 import ImportExportItemCard from './import-export-item.card';
 import {useMutation, useQueryClient} from 'react-query';
-import MaterialImportExportApi from '@/modules/material-asset/material-import-export.service';
+import MaterialImportExportApi from '@/screens/material-asset/services/material-import-export.service';
 
 type Props = {
   doc: TImportExportDocs | undefined;

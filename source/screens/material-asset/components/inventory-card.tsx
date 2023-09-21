@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import ItemCard from '@/components/item-card.component';
-import {TInventory} from '@/modules/material-asset/material-asset.model';
+import {TInventory} from '@/screens/material-asset/services/material-asset.model';
 import globalStyles from '@/config/globalStyles';
 import language, {languageKeys} from '@/config/language/language';
 import Icon from '@/components/icon.component';

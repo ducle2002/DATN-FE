@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import NotificationScreen from '@/screens/digital-notification/notification.screen';
 import CreateNotificationScreen from '@/screens/digital-notification/create.screen';
-import {TDigitalNoti} from '@/modules/digital-notification/digital-noti.model';
+import {TDigitalNoti} from '@/screens/digital-notification/services/digital-noti.model';
 import language, {languageKeys} from '@/config/language/language';
 import DetailScreen from '@/screens/digital-notification/detail.screen';
 import ListCommentScreen from '@/screens/digital-notification/list-comments.screen';

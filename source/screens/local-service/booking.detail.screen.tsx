@@ -6,14 +6,14 @@ import {
   EBookingState,
   TOpenTime,
   UnitTime,
-} from '@/modules/local-service/local-service.model';
+} from '@/screens/local-service/services/local-service.model';
 import language, {languageKeys} from '@/config/language/language';
 import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import LocalServiceApi, {
   TUpdateStateParams,
-} from '@/modules/local-service/local-service.service';
+} from '@/screens/local-service/services/local-service.service';
 import ReactNativeModal from 'react-native-modal';
 import CTextInput from '@/components/text-input.component';
 import globalStyles from '@/config/globalStyles';

@@ -27,3 +27,8 @@ export const operatorFunction: Array<TPermission> = [
   'Pages.SmartCommunity.OperationManagement.Material',
   'Pages.SmartCommunity.OperationManagement.MaterialCategory',
 ];
+
+export const residentFunction: Array<TPermission> = [
+  'Pages.Residents.Information',
+  'Pages.Residents.Verification',
+];

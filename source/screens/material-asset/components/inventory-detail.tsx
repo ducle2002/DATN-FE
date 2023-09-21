@@ -10,10 +10,10 @@ import React, {useMemo, useState} from 'react';
 import {
   TInventory,
   TMaterialAsset,
-} from '@/modules/material-asset/material-asset.model';
+} from '@/screens/material-asset/services/material-asset.model';
 import ReactNativeModal from 'react-native-modal';
 import {useInfiniteQuery} from 'react-query';
-import MaterialAssetApi from '@/modules/material-asset/material-asset.service';
+import MaterialAssetApi from '@/screens/material-asset/services/material-asset.service';
 import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
 import language, {languageKeys} from '@/config/language/language';

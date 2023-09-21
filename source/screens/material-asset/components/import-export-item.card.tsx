@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {TImportExportMaterial} from '@/modules/material-asset/material-asset.model';
+import {TImportExportMaterial} from '@/screens/material-asset/services/material-asset.model';
 import globalStyles from '@/config/globalStyles';
 import language, {languageKeys} from '@/config/language/language';
 

@@ -1,26 +1,31 @@
 import {StyleSheet, View} from 'react-native';
 import React, {useMemo} from 'react';
-import {EQAFormID, QAFormID} from '@/screens/question-answer/services/qa.model';
-import DropdownMenuComponent, {
-  TOptionItem,
-} from '@/components/dropdown-menu.component';
-import globalStyles from '@/config/globalStyles';
+import DropdownMenuComponent from '@/components/dropdown-menu.component';
+import {EResidentFormId} from '../services/resident.model';
 import language, {languageKeys} from '@/config/language/language';
+import globalStyles from '@/config/globalStyles';
 
 type Props = {
-  onChange: Function;
-  selected: EQAFormID;
+  onChange: (formId: EResidentFormId) => void;
+  selected: EResidentFormId;
 };
 
-const Filter = ({selected, onChange}: Props) => {
-  const options = QAFormID.map<TOptionItem>(o => ({
-    id: o.id,
-    label: language.t(languageKeys.qa.state[o.label]),
-  }));
+const ResidentFilter = ({onChange, selected}: Props) => {
+  const options = Object.values(EResidentFormId)
+    .filter(v => typeof v === 'number')
+    .map(value => ({
+      id: value,
+      label: language.t(
+        languageKeys.residentLanguage.formId[
+          value as keyof typeof languageKeys.residentLanguage.formId
+        ],
+      ),
+    }));
   const selectedLabel = useMemo(
     () => options.find(o => o.id === selected)?.label,
     [options, selected],
   );
+
   return (
     <View style={styles.container}>
       <DropdownMenuComponent
@@ -36,7 +41,7 @@ const Filter = ({selected, onChange}: Props) => {
   );
 };
 
-export default Filter;
+export default ResidentFilter;
 
 const styles = StyleSheet.create({
   container: {

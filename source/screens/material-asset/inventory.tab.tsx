@@ -1,8 +1,8 @@
 import {Dimensions, StyleSheet, View} from 'react-native';
 import React, {useMemo, useRef, useState} from 'react';
 import {useInfiniteQuery} from 'react-query';
-import MaterialAssetApi from '@/modules/material-asset/material-asset.service';
-import {TInventory} from '@/modules/material-asset/material-asset.model';
+import MaterialAssetApi from '@/screens/material-asset/services/material-asset.service';
+import {TInventory} from '@/screens/material-asset/services/material-asset.model';
 import InventoryCard from './components/inventory-card';
 import {LayoutProvider, RecyclerListView} from 'recyclerlistview';
 const {width, height} = Dimensions.get('screen');

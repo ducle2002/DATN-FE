@@ -3,7 +3,7 @@ import React from 'react';
 import {
   TLocalService,
   TServiceProperties,
-} from '@/modules/local-service/local-service.model';
+} from '@/screens/local-service/services/local-service.model';
 import ItemCard from '@/components/item-card.component';
 import globalStyles from '@/config/globalStyles';
 import Icon from '@/components/icon.component';

@@ -3,14 +3,14 @@ import React, {useEffect} from 'react';
 import ReactNativeModal from 'react-native-modal';
 import {Controller, useForm} from 'react-hook-form';
 import {genCode} from '@/utils/utils';
-import {ECategoryType} from '@/modules/material-asset/material-asset.model';
+import {ECategoryType} from '@/screens/material-asset/services/material-asset.model';
 import CTextInput from '@/components/text-input.component';
 import language, {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
 import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
 import {useMutation, useQueryClient} from 'react-query';
-import MaterialCategoryApi from '@/modules/material-asset/material-category.service';
+import MaterialCategoryApi from '@/screens/material-asset/services/material-category.service';
 
 type Props = {
   isVisible: boolean;

@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useInfiniteQuery} from 'react-query';
-import LocalServiceApi from '@/modules/local-service/local-service.service';
+import LocalServiceApi from '@/screens/local-service/services/local-service.service';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
-import {TLocalService} from '@/modules/local-service/local-service.model';
+import {TLocalService} from '@/screens/local-service/services/local-service.model';
 import ServiceItem from './components/local-service-item';
 import FilterService from './components/service-filter.component';
 import {StackScreenProps} from '@react-navigation/stack';

@@ -13,12 +13,13 @@ const button = {
   save: 'Lưu',
   cancel: 'Hủy',
   delete: 'Xóa',
-  edit: 'Chỉnh sửa',
+  edit: 'Sửa',
   deselect: 'Bỏ chọn',
   deleteAll: 'Xóa tất cả',
   deny: 'Từ chối',
   accept: 'Xác nhận',
   back: 'Quay lại',
+  see: 'Xem',
 };
 
 const shared = {
