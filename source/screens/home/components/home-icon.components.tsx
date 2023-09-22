@@ -59,6 +59,7 @@ const HomeIcon = ({type, ...props}: HomeIconProp) => {
         <Icon type="MaterialIcons" name="inventory" size={35} color={'white'} />
       );
     case 'Pages.Residents.Verification':
+    case 'Pages.Citizens.Verification':
       return <Icon type="Ionicons" name="person" size={35} color={'white'} />;
   }
 };

@@ -10,6 +10,7 @@ import qa from './qa/en';
 import localService from './local-service/en';
 import {digitalNoti} from './digital-notification/en';
 import materialAsset from './material-asset/en';
+import residentLanguage from './resident/en';
 
 const en = {
   ...title,
@@ -28,6 +29,7 @@ const en = {
   adminis: 'Digital Administration',
   service: 'Internal Amenities Services',
   inventory: 'Asset and Material Management',
+  residentLanguage,
 };
 
 export default en;

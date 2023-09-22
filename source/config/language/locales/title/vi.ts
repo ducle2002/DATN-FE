@@ -31,6 +31,7 @@ const title = {
   'Pages.SmartCommunity.OperationManagement.MaterialCategory.Unit':
     'Đơn vị tài sản',
   'Pages.Residents.Verification': 'Xác minh cư dân',
+  'Pages.Citizens.Verification': 'Xác minh cư dân',
 };
 
 export default title;

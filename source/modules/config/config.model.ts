@@ -13,6 +13,7 @@ export const serviceFunction: Array<TPermission> = [
 export const administrativeFunction: Array<TPermission> = [
   'Pages.Administrative',
   'Pages.Residents.Verification',
+  'Pages.Citizens.Verification',
 ];
 
 export const managementFunction: Array<TPermission> = [

@@ -9,7 +9,7 @@ export const useResidentData = ({
   formId: EResidentFormId;
   keyword?: String;
 }) => {
-  const {data, fetchNextPage, hasNextPage} = useInfiniteQuery({
+  const {data, fetchNextPage} = useInfiniteQuery({
     queryKey: ['resident', formId, keyword],
     queryFn: ({pageParam}) =>
       ResidentApi.getResident({
@@ -29,9 +29,6 @@ export const useResidentData = ({
         : undefined;
     },
   });
-
-  console.log(hasNextPage);
-
   return {
     data,
     fetchNextPage,

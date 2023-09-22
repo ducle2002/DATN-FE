@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView} from 'react-native';
 import React from 'react';
 import ReactNativeModal from 'react-native-modal';
 import language, {languageKeys} from '@/config/language/language';
@@ -43,7 +43,7 @@ const ResidentDetail = ({
       style={{margin: 0}}
       useNativeDriverForBackdrop={true}>
       {resident ? (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
           <View style={styles.contentContainer}>
             <Text style={styles.textTitle}>
               {language.t(
@@ -165,7 +165,7 @@ const ResidentDetail = ({
               )}
             </View>
           </BottomContainer>
-        </View>
+        </SafeAreaView>
       ) : (
         <></>
       )}

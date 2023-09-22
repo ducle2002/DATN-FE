@@ -68,6 +68,7 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
         });
       }
       case 'Pages.Residents.Verification':
+      case 'Pages.Citizens.Verification':
         return navigation.navigate('RESIDENT_STACK');
       default:
         toast.show('Chức năng đang phát triển');
