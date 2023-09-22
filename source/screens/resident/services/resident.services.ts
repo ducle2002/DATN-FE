@@ -7,7 +7,7 @@ class ResidentService extends BaseService {
   endpoint = '/api/services/app/Citizen/';
 
   getResident = async (
-    params: TPagingParams & {formId: EResidentFormId},
+    params: TPagingParams & {formId: EResidentFormId; keyword?: string},
   ): Promise<{
     resident: Array<TResident>;
     totalRecords: number;
@@ -21,6 +21,11 @@ class ResidentService extends BaseService {
       resident: result.data,
       totalRecords: result.totalRecords,
     };
+  };
+
+  updateState = async (params: TResident) => {
+    const url = this.HOST + this.endpoint + 'UpdateStateCitizen';
+    return axiosClient.put(url, params);
   };
 }
 

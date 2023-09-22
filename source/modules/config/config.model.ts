@@ -12,6 +12,7 @@ export const serviceFunction: Array<TPermission> = [
 
 export const administrativeFunction: Array<TPermission> = [
   'Pages.Administrative',
+  'Pages.Residents.Verification',
 ];
 
 export const managementFunction: Array<TPermission> = [
@@ -28,7 +29,4 @@ export const operatorFunction: Array<TPermission> = [
   'Pages.SmartCommunity.OperationManagement.MaterialCategory',
 ];
 
-export const residentFunction: Array<TPermission> = [
-  'Pages.Residents.Information',
-  'Pages.Residents.Verification',
-];
+export const residentFunction: Array<TPermission> = [];

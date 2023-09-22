@@ -42,7 +42,9 @@ class LocalService {
       HOST_SERVER + '/api/services/app/TenantBusinessGridView/GetObjectData';
     const {
       data: {result},
-    } = await axiosClient.get(url, {params: {...params, formId: 1}});
+    } = await axiosClient.get(url, {
+      params: {...params, formId: 51, formCase: 1},
+    });
     return {services: result.data, totalCount: result.totalRecords};
   };
 

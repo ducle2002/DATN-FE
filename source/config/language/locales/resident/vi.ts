@@ -14,6 +14,7 @@ const resident = {
   identityNumber: 'Số định danh cá nhân',
   relationship: 'Quan hệ với chủ hộ',
   nationality: 'Quốc tịch',
+  residentInformation: 'Thông tin cư dân khai báo',
 };
 
 const formId = {

@@ -20,6 +20,7 @@ const button = {
   accept: 'Xác nhận',
   back: 'Quay lại',
   see: 'Xem',
+  requestEdit: 'Yêu cầu chỉnh sửa',
 };
 
 const shared = {

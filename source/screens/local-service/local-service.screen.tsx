@@ -6,15 +6,22 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {useInfiniteQuery} from 'react-query';
 import LocalServiceApi from '@/screens/local-service/services/local-service.service';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {TLocalService} from '@/screens/local-service/services/local-service.model';
 import ServiceItem from './components/local-service-item';
 import FilterService from './components/service-filter.component';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {LocalServiceStackParamsList} from '@/routes/local-service.stack';
+import MainHeader from '@/components/main-header.component';
 
 type Props = StackScreenProps<LocalServiceStackParamsList, 'MAIN_SCREEN'>;
 
@@ -66,6 +73,14 @@ const LocalServiceScreen = ({navigation}: Props) => {
     remove();
     refetch();
   }, [refetch, remove, type]);
+
+  const renderHeader = (props: StackHeaderProps) => <MainHeader {...props} />;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      header: renderHeader,
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>

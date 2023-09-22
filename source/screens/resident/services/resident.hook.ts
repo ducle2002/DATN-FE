@@ -1,18 +1,22 @@
-import {useInfiniteQuery} from 'react-query';
+import {useInfiniteQuery, useMutation} from 'react-query';
 import {ResidentApi} from './resident.services';
-import {EResidentFormId} from './resident.model';
-import {useMemo} from 'react';
-import {dataProviderMaker} from '@/utils/recycler-list-view';
-import {flatten, map} from 'ramda';
+import {EResidentFormId, TResident} from './resident.model';
 
-export const useResidentData = (formId: EResidentFormId) => {
-  const {data, fetchNextPage} = useInfiniteQuery({
-    queryKey: ['resident', formId],
+export const useResidentData = ({
+  formId,
+  keyword,
+}: {
+  formId: EResidentFormId;
+  keyword?: String;
+}) => {
+  const {data, fetchNextPage, hasNextPage} = useInfiniteQuery({
+    queryKey: ['resident', formId, keyword],
     queryFn: ({pageParam}) =>
       ResidentApi.getResident({
         ...pageParam,
         formId: formId,
         maxResultCount: 10,
+        keyword,
       }),
     getNextPageParam: (lastPage, allPages) => {
       const skipCount = allPages.length * 10;
@@ -26,15 +30,20 @@ export const useResidentData = (formId: EResidentFormId) => {
     },
   });
 
-  const dataProvider = useMemo(() => {
-    return dataProviderMaker(
-      data ? flatten(map(page => page.resident, data.pages)) : [],
-    );
-  }, [data]);
+  console.log(hasNextPage);
 
   return {
     data,
     fetchNextPage,
-    dataProvider,
   };
+};
+
+export const useUpdateResidentState = (onSuccessCallback: () => void) => {
+  const {mutate} = useMutation({
+    mutationFn: (params: TResident) => ResidentApi.updateState(params),
+    onSuccess: () => {
+      onSuccessCallback();
+    },
+  });
+  return {updateState: mutate};
 };
