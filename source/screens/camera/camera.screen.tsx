@@ -1,18 +1,28 @@
-import {StyleSheet, View} from 'react-native';
+import {Linking, StyleSheet, View} from 'react-native';
 import React from 'react';
 
 import ScannerView from '@/components/scanner-view';
-import {Barcode} from 'vision-camera-code-scanner';
+import {useIsFocused} from '@react-navigation/native';
+import {StackScreenProps} from '@react-navigation/stack';
+import {AppStackParamsList} from '@/routes/app.stack';
 
-const CameraScreen = () => {
-  const onScannedCallback = (result: Array<Barcode>, params: any) => {
-    console.log(result, params);
+type Props = StackScreenProps<AppStackParamsList, 'CAMERA_SCREEN'>;
+
+const CameraScreen = ({route}: Props) => {
+  const isReturnPhoto = route.params?.isReturnPhoto;
+
+  const onScannedCallback = (result?: string, params?: any) => {
+    if (result?.includes('yooioc://water-bill/add')) {
+      Linking.openURL(result + `&image=${JSON.stringify(params.image)}`);
+    }
   };
+  const isFocused = useIsFocused();
   return (
     <View style={styles.container}>
       <ScannerView
-        hasCaptureButton={true}
         onScannedCallback={onScannedCallback}
+        active={isFocused}
+        isReturnPhoto={isReturnPhoto}
       />
     </View>
   );

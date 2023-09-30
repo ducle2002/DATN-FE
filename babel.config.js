@@ -28,5 +28,6 @@ module.exports = {
         globals: ['__scanCodes'],
       },
     ],
+    ['react-native-worklets-core/plugin'],
   ],
 };

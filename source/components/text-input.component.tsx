@@ -14,29 +14,34 @@ type Props = React.ComponentProps<typeof TextInput> & {
   errorMessage?: string;
   containerStyle?: ViewStyle;
   label?: string;
-  labelSyle?: TextStyle;
+  labelStyle?: TextStyle;
   withError?: boolean;
 };
 
-const CTextInput = ({
-  style,
-  label,
-  errorMessage,
-  containerStyle,
-  labelSyle,
-  withError = true,
-  ...props
-}: Props) => {
-  return (
-    <>
-      {label && <Text style={[styles.textLabel, labelSyle]}>{label}</Text>}
-      <View style={[styles.container, containerStyle]}>
-        <TextInput style={[styles.textInput, style]} {...props} />
-      </View>
-      {withError && <Text style={styles.textError}>{errorMessage}</Text>}
-    </>
-  );
-};
+const CTextInput = React.forwardRef(
+  (
+    {
+      style,
+      label,
+      errorMessage,
+      containerStyle,
+      labelStyle,
+      withError = true,
+      ...props
+    }: Props,
+    ref: React.LegacyRef<TextInput>,
+  ) => {
+    return (
+      <>
+        {label && <Text style={[styles.textLabel, labelStyle]}>{label}</Text>}
+        <View style={[styles.container, containerStyle]}>
+          <TextInput ref={ref} style={[styles.textInput, style]} {...props} />
+        </View>
+        {withError && <Text style={styles.textError}>{errorMessage}</Text>}
+      </>
+    );
+  },
+);
 
 export default CTextInput;
 

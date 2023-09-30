@@ -4,7 +4,6 @@ import {
   LayoutRectangle,
   ListRenderItem,
   Pressable,
-  StatusBar,
   StyleSheet,
   Text,
   TextStyle,
@@ -15,6 +14,12 @@ import React, {memo, useEffect, useRef, useState} from 'react';
 import ReactNativeModal from 'react-native-modal';
 import globalStyles from '@/config/globalStyles';
 import Icon from './icon.component';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 const {width: sWidth} = Dimensions.get('screen');
 
@@ -84,18 +89,33 @@ const DropdownMenu = ({
   useEffect(() => {
     setTimeout(() => {
       ref.current?.measure((x, y, width, height, pageX, pageY) => {
-        // console.log(Platform.OS, {x, y, width, height, pageX, pageY});
-        // console.log(sWidth);
-
+        // console.log({x, y, width, height, pageX, pageY});
         setButtonPosition({
           height: height,
           width: width,
-          x: pageX < sWidth ? (x > 0 ? x : pageX) : pageX - sWidth,
-          y: pageY + (y > 0 ? y : StatusBar.currentHeight ?? 0),
+          x: pageX,
+          y: pageY + (y > 0 ? y : 0),
         });
       });
-    }, 500);
+    }, 1000);
   }, []);
+
+  const sharedValue = useSharedValue(0);
+  useEffect(() => {
+    if (isVisible) {
+      sharedValue.value = withTiming(1);
+    } else {
+      sharedValue.value = withTiming(0);
+    }
+  }, [isVisible, sharedValue]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {rotate: interpolate(sharedValue.value, [0, 1], [0, 90]) + 'deg'},
+      ],
+    };
+  });
 
   return (
     <Pressable
@@ -117,11 +137,13 @@ const DropdownMenu = ({
             <Text style={{color: placeholderTextColor}}>{placeholder}</Text>
           )}
         </Text>
-        <Icon type="Ionicons" name="chevron-forward" size={20} />
+        <Animated.View style={animatedStyle}>
+          <Icon type="Ionicons" name="chevron-forward" size={20} />
+        </Animated.View>
       </View>
       <ReactNativeModal
         useNativeDriverForBackdrop
-        statusBarTranslucent
+        statusBarTranslucent={true}
         backdropOpacity={0.2}
         animationIn={'fadeIn'}
         animationOut={'fadeOut'}

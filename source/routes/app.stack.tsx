@@ -26,6 +26,9 @@ import MaterialAssetStack, {
 } from './material-asset.stack';
 import CameraScreen from '@/screens/camera/camera.screen';
 import ResidentVerifyScreen from '@/screens/resident/resident-verify.screen';
+import OperatingStack, {
+  OperatingStackParamsList,
+} from './operating/operating.stack';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -38,8 +41,13 @@ export type AppStackParamsList = {
   ADMINISTRATIVE_STACK: NavigatorScreenParams<AdministrativeStackParamsList>;
   QUESTION_ANSWER_STACK: NavigatorScreenParams<QAStackParamsList>;
   MATERIAL_ASSET_STACK: NavigatorScreenParams<MaterialAssetStackParamsList>;
-  CAMERA_SCREEN: undefined;
+  CAMERA_SCREEN:
+    | {
+        isReturnPhoto?: boolean;
+      }
+    | undefined;
   RESIDENT_STACK: undefined;
+  OPERATING_STACK: NavigatorScreenParams<OperatingStackParamsList>;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -84,6 +92,7 @@ const AppStack = () => {
       screenOptions={{
         headerBackTitleVisible: false,
         headerShown: false,
+        freezeOnBlur: true,
       }}>
       <Stack.Screen name={'HOME_SCREEN'} component={HomeScreen} />
       <Stack.Screen name={'SETTING_SCREEN'} component={SettingStack} />
@@ -101,12 +110,17 @@ const AppStack = () => {
         name="MATERIAL_ASSET_STACK"
         component={MaterialAssetStack}
       />
-      <Stack.Screen name="CAMERA_SCREEN" component={CameraScreen} />
+      <Stack.Screen
+        initialParams={{isReturnPhoto: true}}
+        name="CAMERA_SCREEN"
+        component={CameraScreen}
+      />
       <Stack.Screen
         name="RESIDENT_STACK"
         component={ResidentVerifyScreen}
         options={{headerShown: true}}
       />
+      <Stack.Screen name="OPERATING_STACK" component={OperatingStack} />
     </Stack.Navigator>
   );
 };

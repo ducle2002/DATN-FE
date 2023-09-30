@@ -185,6 +185,26 @@ const HomeScreen = (props: HomeScreenProps) => {
             </View>
           </View>
         )}
+        {
+          <View>
+            <Text style={styles.sectionTitle}>Vận hành tòa nhà</Text>
+            <View style={styles.section}>
+              <HomeFunction
+                type="Pages.SmartCommunity.Fees.Waters"
+                style={styles.iconContainer}
+                iconContainerStyle={{
+                  backgroundColor: homeIconBackgroundColor[0],
+                }}
+                onPress={() => {
+                  props.navigation.navigate('OPERATING_STACK', {
+                    screen: 'WATER_BILL',
+                    params: {screen: 'MAIN_WATER'},
+                  });
+                }}
+              />
+            </View>
+          </View>
+        }
       </ScrollView>
     </View>
   );

@@ -101,6 +101,7 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
 
   return (
     <ReactNativeModal
+      statusBarTranslucent
       swipeDirection={!editable ? 'down' : undefined}
       propagateSwipe={true}
       onSwipeComplete={() => {

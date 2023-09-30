@@ -63,10 +63,12 @@
     "react-native-view-shot": "^3.7.0",
     "react-native-vision-camera": "2",
     "react-native-webview": "^13.2.3",
+    "react-native-worklets-core": "^0.2.0",
     "react-query": "^3.39.3",
     "react-redux": "^8.1.1",
     "recyclerlistview": "^4.2.0",
     "rn-fetch-blob": "^0.12.0",
+    "string-hash-64": "^1.0.3",
     "uuid": "^9.0.0",
     "vision-camera-code-scanner": "^0.2.0",
     "yup": "^1.2.0"

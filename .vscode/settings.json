@@ -1,4 +1,8 @@
 {
   "cSpell.language": "en,vi",
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "cSpell.words": [
+    "Noti",
+    "Pressable"
+  ]
 }
