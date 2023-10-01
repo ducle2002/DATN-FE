@@ -1,25 +1,51 @@
 import AssignmentScreen from '@/screens/work-management/assignment.screen';
 import ManagementScreen from '@/screens/work-management/management.screen';
-import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {StackScreenProps} from '@react-navigation/stack';
+import React, {useCallback, useLayoutEffect} from 'react';
+import {AppStackParamsList} from './app.stack';
+import Icon from '@/components/icon.component';
+import {DrawerActions} from '@react-navigation/native';
 
-export type WorkManagementStackParamsList = {
+export type WorkManagementDrawerParamsList = {
   MANAGEMENT: undefined;
   ASSIGNMENT: undefined;
 };
-const Stack = createStackNavigator<WorkManagementStackParamsList>();
 
-const WorkManagementStack = () => {
+const Drawer = createDrawerNavigator<WorkManagementDrawerParamsList>();
+
+type Props = StackScreenProps<AppStackParamsList, 'WORK_MANAGEMENT'>;
+const WorkManagementDrawer = ({navigation}: Props) => {
+  const renderDrawerButton = useCallback(
+    () => (
+      <Icon
+        type="Ionicons"
+        name="menu"
+        size={30}
+        onPress={() => {
+          navigation.dispatch(DrawerActions.openDrawer());
+        }}
+      />
+    ),
+    [navigation],
+  );
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: renderDrawerButton,
+    });
+  }, [navigation, renderDrawerButton]);
   return (
-    <Stack.Navigator
+    <Drawer.Navigator
       initialRouteName="MANAGEMENT"
       screenOptions={{
-        headerBackTitleVisible: false,
+        headerShown: false,
+        drawerPosition: 'right',
       }}>
-      <Stack.Screen name="MANAGEMENT" component={ManagementScreen} />
-      <Stack.Screen name="ASSIGNMENT" component={AssignmentScreen} />
-    </Stack.Navigator>
+      <Drawer.Screen name="MANAGEMENT" component={ManagementScreen} />
+      <Drawer.Screen name="ASSIGNMENT" component={AssignmentScreen} />
+    </Drawer.Navigator>
   );
 };
 
-export default WorkManagementStack;
+export default WorkManagementDrawer;
