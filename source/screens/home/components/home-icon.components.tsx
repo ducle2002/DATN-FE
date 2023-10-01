@@ -63,6 +63,15 @@ const HomeIcon = ({type, ...props}: HomeIconProp) => {
       return <Icon type="Ionicons" name="person" size={35} color={'white'} />;
     case 'Pages.SmartCommunity.Fees.Waters':
       return <Icon type="Ionicons" name="water" size={35} color={'white'} />;
+    case 'Pages.WorkAssign':
+      return (
+        <Icon
+          type="MaterialIcons"
+          name="assignment"
+          size={35}
+          color={'white'}
+        />
+      );
   }
 };
 

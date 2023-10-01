@@ -107,7 +107,8 @@ export type TPermission =
   | 'Pages.SmartCommunity.OperationManagement.MaterialCategory.Inventory'
   | 'Pages.SmartCommunity.OperationManagement.MaterialCategory.Producer'
   | 'Pages.SmartCommunity.OperationManagement.MaterialCategory.Type'
-  | 'Pages.SmartCommunity.OperationManagement.MaterialCategory.Unit';
+  | 'Pages.SmartCommunity.OperationManagement.MaterialCategory.Unit'
+  | 'Pages.WorkAssign';
 
 export type TPagingParams = {
   skipCount?: number;

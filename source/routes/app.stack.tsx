@@ -29,6 +29,9 @@ import ResidentVerifyScreen from '@/screens/resident/resident-verify.screen';
 import OperatingStack, {
   OperatingStackParamsList,
 } from './operating/operating.stack';
+import WorkManagementStack, {
+  WorkManagementStackParamsList,
+} from './work-management.stack';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -48,6 +51,7 @@ export type AppStackParamsList = {
     | undefined;
   RESIDENT_STACK: undefined;
   OPERATING_STACK: NavigatorScreenParams<OperatingStackParamsList>;
+  WORK_MANAGEMENT: NavigatorScreenParams<WorkManagementStackParamsList>;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -121,6 +125,7 @@ const AppStack = () => {
         options={{headerShown: true}}
       />
       <Stack.Screen name="OPERATING_STACK" component={OperatingStack} />
+      <Stack.Screen name="WORK_MANAGEMENT" component={WorkManagementStack} />
     </Stack.Navigator>
   );
 };

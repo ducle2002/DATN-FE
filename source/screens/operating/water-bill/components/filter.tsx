@@ -7,7 +7,7 @@ type Props = {};
 
 const FilterWater = (props: Props) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} {...props}>
       <View
         style={[
           styles.rowContainer,
