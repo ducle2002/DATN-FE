@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {TQuestion} from '@/modules/qa/qa.model';
+import {TQuestion} from '@/screens/question-answer/services/qa.model';
 import ItemCard from '@/components/item-card.component';
 import ThumbnailImage from '@/components/thumbnail-image';
 import globalStyles from '@/config/globalStyles';

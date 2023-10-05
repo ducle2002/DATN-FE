@@ -19,8 +19,8 @@ import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
 import language, {languageKeys} from '@/config/language/language';
 import {useMutation, useQueryClient} from 'react-query';
-import DigitalNotiApi from '@/modules/digital-notification/digital-noti.service';
 import {useToast} from 'react-native-toast-notifications';
+import DigitalNotiApi from '@/screens/digital-notification/services/digital-noti.service';
 
 const {width} = Dimensions.get('screen');
 

@@ -1,5 +1,6 @@
 const form = {
   requiredMessage: 'This field is required',
+  minValue: 'Giá trị tối thiểu là ',
 };
 
 const error = {
@@ -17,6 +18,9 @@ const button = {
   deleteAll: 'Delete all',
   deny: 'Deny',
   accept: 'Accept',
+  back: 'Back',
+  see: 'See',
+  requestEdit: 'Request for revision',
 };
 
 const shared = {

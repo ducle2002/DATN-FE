@@ -50,6 +50,28 @@ const HomeIcon = ({type, ...props}: HomeIconProp) => {
       );
     case 'Pages.Services.Local_Amenities.Create_Store':
       return <LocalServiceIcon />;
+    case 'Pages.SmartCommunity.OperationManagement.Material':
+      return (
+        <Icon type="FontAwesome5" name="toolbox" size={35} color={'white'} />
+      );
+    case 'Pages.SmartCommunity.OperationManagement.MaterialCategory':
+      return (
+        <Icon type="MaterialIcons" name="inventory" size={35} color={'white'} />
+      );
+    case 'Pages.Residents.Verification':
+    case 'Pages.Citizens.Verification':
+      return <Icon type="Ionicons" name="person" size={35} color={'white'} />;
+    case 'Pages.SmartCommunity.Fees.Waters':
+      return <Icon type="Ionicons" name="water" size={35} color={'white'} />;
+    case 'Pages.WorkAssign':
+      return (
+        <Icon
+          type="MaterialIcons"
+          name="assignment"
+          size={35}
+          color={'white'}
+        />
+      );
   }
 };
 

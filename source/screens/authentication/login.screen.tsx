@@ -8,10 +8,10 @@ import {
 import React from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useMutation} from 'react-query';
-import AuthenticationApi from '@/modules/auth/auth.service';
-import {ILoginPayload} from '@/modules/auth/auth.model';
+import AuthenticationApi from '@/screens/authentication/services/auth.service';
+import {ILoginPayload} from '@/screens/authentication/services/auth.model';
 import {useDispatch} from 'react-redux';
-import {loginSuccess} from '@/modules/auth/auth.slice';
+import {loginSuccess} from '@/screens/authentication/services/auth.slice';
 import language, {languageKeys} from '@/config/language/language';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '@/components/button.component';

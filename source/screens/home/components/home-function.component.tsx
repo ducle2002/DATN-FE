@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import HomeIcon from './home-icon.components';
 import {TPermission} from 'types/type';
-import language, {languageKeys} from '@/config/language/language';
+import {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AppStackParamsList} from '@/routes/app.stack';
@@ -57,24 +57,35 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
         return navigation.navigate('QUESTION_ANSWER_STACK', {
           screen: 'MAIN_SCREEN',
         });
+      case 'Pages.SmartCommunity.OperationManagement.Material':
+        return navigation.navigate('MATERIAL_ASSET_STACK', {
+          screen: 'MAIN_SCREEN',
+          params: {type: 'Pages.SmartCommunity.OperationManagement.Material'},
+        });
+      case 'Pages.SmartCommunity.OperationManagement.MaterialCategory': {
+        return navigation.navigate('MATERIAL_ASSET_STACK', {
+          screen: 'CATEGORY_MANAGEMENT',
+        });
+      }
+      case 'Pages.Residents.Verification':
+      case 'Pages.Citizens.Verification':
+        return navigation.navigate('RESIDENT_STACK');
       default:
         toast.show('Chức năng đang phát triển');
     }
   };
 
-  if (language.t(languageKeys[type])) {
-    return (
-      <TouchableOpacity
-        style={[styles.container, style]}
-        onPress={onPress}
-        {...props}>
-        <View style={[styles.iconContainer, iconContainerStyle]}>
-          <HomeIcon type={type} />
-        </View>
-        <Text style={styles.text}>{t(languageKeys[type])}</Text>
-      </TouchableOpacity>
-    );
-  }
+  return (
+    <TouchableOpacity
+      style={[styles.container, style]}
+      onPress={onPress}
+      {...props}>
+      <View style={[styles.iconContainer, iconContainerStyle]}>
+        <HomeIcon type={type} />
+      </View>
+      <Text style={styles.text}>{t(languageKeys[type])}</Text>
+    </TouchableOpacity>
+  );
 };
 
 export default HomeFunction;
@@ -94,5 +105,6 @@ const styles = StyleSheet.create({
   text: {
     ...globalStyles.text13SemiBold,
     marginTop: 5,
+    textAlign: 'center',
   },
 });

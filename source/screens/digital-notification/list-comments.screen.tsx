@@ -2,14 +2,14 @@ import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {NotificationStackParamsList} from '@/routes/notification.stack';
-import {TCommentNoti} from '@/modules/digital-notification/digital-noti.model';
 import CommentItem from './components/comment-item.component';
 import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
 import {SelectItemContext} from '@/contexts/select-item.context';
 import language, {languageKeys} from '@/config/language/language';
 import {useMutation, useQuery} from 'react-query';
-import DigitalNotiApi from '@/modules/digital-notification/digital-noti.service';
+import {TCommentNoti} from './services/digital-noti.model';
+import DigitalNotiApi from './services/digital-noti.service';
 
 type Props = StackScreenProps<
   NotificationStackParamsList,

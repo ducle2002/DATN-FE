@@ -7,7 +7,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {NotificationStackParamsList} from '@/routes/notification.stack';
 import {SelectItemContext} from '../../../contexts/select-item.context';
 import {useMutation, useQueryClient} from 'react-query';
-import DigitalNotiApi from '@/modules/digital-notification/digital-noti.service';
+import DigitalNotiApi from '@/screens/digital-notification/services/digital-noti.service';
 import {useToast} from 'react-native-toast-notifications';
 import globalStyles from '@/config/globalStyles';
 

@@ -5,7 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>en</string>
 		<key>CFBundleDisplayName</key>
-		<string>YooSmartIOC</string>
+		<string>YooIOC</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
@@ -37,6 +37,8 @@
 				</dict>
 			</dict>
 		</dict>
+		<key>NSCameraUsageDescription</key>
+		<string>$(PRODUCT_NAME) needs to access your camera in order to scan QR codes and take photos.</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string> The app uses your location to find nearby services and maps.This will help users
 			convenient when searching and using the service.</string>
@@ -84,7 +86,7 @@
 			<string>armv7</string>
 		</array>
 		<key>UIStatusBarStyle</key>
-		<string></string>
+		<string />
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
@@ -98,5 +100,14 @@
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false />
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>yooioc</string>
+				</array>
+			</dict>
+		</array>
 	</dict>
 </plist>

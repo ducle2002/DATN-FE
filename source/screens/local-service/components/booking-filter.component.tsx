@@ -9,7 +9,7 @@ import {
   TBookingItem,
   TBookingStatus,
   bookingFilter,
-} from '@/modules/local-service/local-service.model';
+} from '@/screens/local-service/services/local-service.model';
 
 type Props = {
   onChangeState: Function;

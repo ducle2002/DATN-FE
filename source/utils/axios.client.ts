@@ -1,8 +1,8 @@
 import axios, {AxiosError} from 'axios';
-import QueryString, {parse, stringify} from 'qs';
+import QueryString from 'qs';
 import {HOST_SERVER} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {IToken} from '@/modules/auth/auth.model';
+import {IToken} from '@/screens/authentication/services/auth.model';
 import store from '@/store';
 import {refreshConfig} from '@/modules/config/config.slice';
 // Set up default config for http requests here
@@ -11,10 +11,7 @@ import {refreshConfig} from '@/modules/config/config.slice';
 // config` for the full list of configs
 
 const axiosClient = axios.create({
-  paramsSerializer: {
-    encode: parse,
-    serialize: stringify,
-  },
+  paramsSerializer: params => QueryString.stringify(params),
   baseURL: HOST_SERVER,
 });
 

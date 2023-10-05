@@ -9,14 +9,12 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useInfiniteQuery, useQuery} from 'react-query';
 import {StackScreenProps} from '@react-navigation/stack';
 import {LocalServiceStackParamsList} from '@/routes/local-service.stack';
-import LocalServiceApi from '@/modules/local-service/local-service.service';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
-import {
-  EBookingFormId,
-  TBooking,
-} from '@/modules/local-service/local-service.model';
+
 import BookingItem from './components/booking-item';
 import FilterBooking from './components/booking-filter.component';
+import {EBookingFormId, TBooking} from './services/local-service.model';
+import LocalServiceApi from './services/local-service.service';
 
 type Props = StackScreenProps<LocalServiceStackParamsList, 'BOOKING_SCREEN'>;
 

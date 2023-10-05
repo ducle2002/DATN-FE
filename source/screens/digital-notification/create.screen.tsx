@@ -29,9 +29,9 @@ import {TImagePicker} from '@/utils/image-picker-handle';
 import AddImageButton from './components/add-image-button.component';
 import {useMutation, useQueryClient} from 'react-query';
 import UtilsApi from '@/utils/utils.service';
-import NotificationApi from '@/modules/digital-notification/digital-noti.service';
 import {useToast} from 'react-native-toast-notifications';
 import BottomButton from '../../components/bottom-button.component';
+import DigitalNotiApi from './services/digital-noti.service';
 
 type Props = StackScreenProps<NotificationStackParamsList, 'CREATE_SCREEN'>;
 
@@ -65,7 +65,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
     {value: false, label: language.t(languageKeys.digitalNoti.create.no)},
   ];
 
-  const [seletedOrganization, setSeletedOrganization] = useState<
+  const [selectedOrganization, setSelectedOrganization] = useState<
     TOrganizationUnit | undefined
   >(
     !noti
@@ -83,7 +83,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
   );
 
   const onSelected = (id: number) => {
-    setSeletedOrganization(
+    setSelectedOrganization(
       listOrganizations[
         listOrganizations.findIndex(o => o.organizationUnitId === id)
       ],
@@ -94,7 +94,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
 
   const {mutate: createOrUpdateNotification, status} = useMutation({
     mutationFn: (params: any) =>
-      NotificationApi.createOrUpdateRequest(params, {
+      DigitalNotiApi.createOrUpdateRequest(params, {
         'Abp.Tenantid': tenantId,
       }),
     onSuccess: () => {
@@ -138,7 +138,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
             ...data,
             isAllowComment,
             type: 2,
-            organizationUnitId: seletedOrganization?.organizationUnitId,
+            organizationUnitId: selectedOrganization?.organizationUnitId,
             state: 1,
             receiveAll: 0,
             receiverGroupCode: null,
@@ -151,7 +151,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
           ...data,
           isAllowComment,
           type: 2,
-          organizationUnitId: seletedOrganization?.organizationUnitId,
+          organizationUnitId: selectedOrganization?.organizationUnitId,
           state: 1,
           receiveAll: 0,
           receiverGroupCode: null,
@@ -181,9 +181,9 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
           ]}
           label={language.t(languageKeys.digitalNoti.create.department)}
           placeholder={language.t(
-            languageKeys.digitalNoti.create.selectDeparment,
+            languageKeys.digitalNoti.create.selectDepartment,
           )}
-          selectedLabel={seletedOrganization?.displayName}
+          selectedLabel={selectedOrganization?.displayName}
           labelStyle={styles.textLabel}
           itemLabelStyle={styles.textValue}
           inputContainer={styles.dataInput}
@@ -194,7 +194,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
             setAllowComment(value);
           }}
           listOptions={listOption}
-          seletedOption={listOption[isAllowComment ? 0 : 1]}
+          selectedOption={listOption[isAllowComment ? 0 : 1]}
           label={language.t(languageKeys.digitalNoti.create.allComment)}
           labelStyle={styles.textLabel}
           style={[styles.sectionContainer]}

@@ -13,9 +13,12 @@ import React, {
   useState,
 } from 'react';
 import {useInfiniteQuery} from 'react-query';
-import QAApi from '@/modules/qa/qa.service';
+import QAApi from '@/screens/question-answer/services/qa.service';
 import Filter from './components/filter.component';
-import {EQAFormID, TQuestion} from '@/modules/qa/qa.model';
+import {
+  EQAFormID,
+  TQuestion,
+} from '@/screens/question-answer/services/qa.model';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import QuestionItem from './components/question-item.component';
 import MainHeader from '@/components/main-header.component';

@@ -9,7 +9,7 @@ import {
 import React, {memo, useLayoutEffect} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {QAStackParamsList} from '@/routes/question-answer.stack.screen';
-import {useQAData} from '@/modules/qa/qa.hook';
+import {useQAData} from '@/screens/question-answer/services/qa.hook';
 import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
 import globalStyles from '@/config/globalStyles';
 import ThumbnailImage from '@/components/thumbnail-image';
@@ -19,13 +19,13 @@ import {
   EQuestionState,
   TCreateUpdateCommentParams,
   TQuestion,
-} from '@/modules/qa/qa.model';
+} from '@/screens/question-answer/services/qa.model';
 import BottomContainer from '@/components/bottom-container.component';
 import CTextInput from '@/components/text-input.component';
 import Icon from '@/components/icon.component';
 import {Controller, useForm} from 'react-hook-form';
 import {useMutation, useQueryClient} from 'react-query';
-import QAApi from '@/modules/qa/qa.service';
+import QAApi from '@/screens/question-answer/services/qa.service';
 import {useAppSelector} from '@/hooks/redux.hook';
 const {width} = Dimensions.get('screen');
 type Props = StackScreenProps<QAStackParamsList, 'DETAIL_SCREEN'>;

@@ -1,9 +1,11 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import authenticationSlice, {authInitAction} from './modules/auth/auth.slice';
+import authenticationSlice, {
+  authInitAction,
+} from './screens/authentication/services/auth.slice';
 import configSlice, {languageInitAction} from './modules/config/config.slice';
 import userSlice from './modules/user/user.slice';
 import organizationSlice from './modules/organization/organization.slice';
-import localServiceSlice from './modules/local-service/local-service.slice';
+import localServiceSlice from './screens/local-service/services/local-service.slice';
 import hubconnectionSlice from './modules/hubconnection/hubconnection.slice';
 
 const rootReducer = combineReducers({

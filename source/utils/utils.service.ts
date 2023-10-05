@@ -3,7 +3,7 @@ import axiosClient from './axios.client';
 import {TImagePicker} from './image-picker-handle';
 import {compressImageHandle} from './compress-handle';
 
-class Utils {
+export class UtilsService {
   uploadImagesRequest = async (files: Array<TImagePicker>) => {
     let submitData = new FormData();
     const f = await Promise.all(
@@ -43,5 +43,5 @@ class Utils {
   };
 }
 
-const UtilsApi = new Utils();
+const UtilsApi = new UtilsService();
 export default UtilsApi;
