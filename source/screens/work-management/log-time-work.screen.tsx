@@ -1,14 +1,11 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import language, {languageKeys} from '@/config/language/language';
-
-const LogTimeWorkScreen = () => {
-  return (
-    <View>
-      {/* <Text>{language.t(languageKeys.)}</Text> */}
-      <Text>Log Time</Text>
-    </View>
-  );
+import {StackScreenProps} from '@react-navigation/stack';
+import {WorkStackParamsList} from '@/routes/work-management.stack';
+type Props = StackScreenProps<WorkStackParamsList, 'LOGTIME'>;
+const LogTimeWorkScreen = ({route, navigation}: Props) => {
+  return <View>{}</View>;
 };
 
 export default LogTimeWorkScreen;

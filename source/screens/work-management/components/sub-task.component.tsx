@@ -4,12 +4,17 @@ import ItemCard from '@/components/item-card.component';
 import {Checkbox} from 'react-native-paper';
 import {TWorkDetail} from '../services/work.model';
 import globalStyles from '@/config/globalStyles';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {WorkStackParamsList} from '@/routes/work-management.stack';
 
 type Props = {
   item: TWorkDetail;
+  workId: number;
 };
 
-const SubTaskItem = ({item}: Props) => {
+const SubTaskItem = ({item, workId}: Props) => {
+  const navigation = useNavigation<NavigationProp<WorkStackParamsList>>();
+
   return (
     <ItemCard
       style={{
@@ -17,6 +22,12 @@ const SubTaskItem = ({item}: Props) => {
         shadowRadius: 5,
         borderWidth: 2,
         borderColor: '#F1F1F1',
+      }}
+      onPress={() => {
+        navigation.navigate('LOGTIME', {
+          detailWork: item,
+          workId: workId,
+        });
       }}>
       <View
         style={{

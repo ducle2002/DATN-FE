@@ -11,11 +11,11 @@ import {useAppSelector} from '@/hooks/redux.hook';
 import {checkPermission} from '@/utils/utils';
 import CreateWorkScreen from '@/screens/work-management/create-work.screen';
 import language, {languageKeys} from '@/config/language/language';
+import {TWorkDetail} from '@/screens/work-management/services/work.model';
 
 export type WorkManagementDrawerParamsList = {
   MANAGEMENT: undefined;
   ASSIGNMENT: undefined;
-  LOGTIME: undefined;
 };
 const Drawer = createDrawerNavigator<WorkManagementDrawerParamsList>();
 
@@ -58,6 +58,10 @@ export type WorkStackParamsList = {
   MAIN_DRAWER: NavigatorScreenParams<WorkManagementDrawerParamsList>;
   DETAIL_WORK: {id: number};
   CREATE_WORK: undefined;
+  LOGTIME: {
+    detailWork: TWorkDetail;
+    workId: number;
+  };
 };
 const Stack = createStackNavigator<WorkStackParamsList>();
 
@@ -68,7 +72,13 @@ const WorkStack = () => {
       screenOptions={{
         headerBackTitleVisible: false,
       }}>
-      <Stack.Screen name="LOGTIME" component={LogTimeWorkScreen} />
+      <Stack.Screen
+        name="LOGTIME"
+        component={LogTimeWorkScreen}
+        options={{
+          title: language.t(languageKeys.workManagement.header.logtime),
+        }}
+      />
       <Stack.Screen name="MAIN_DRAWER" component={WorkManagementDrawer} />
       <Stack.Screen name="DETAIL_WORK" component={DetailWorkScreen} />
       {checkPermission(grantedPermissions, [

@@ -113,7 +113,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             <Text style={styles.textLabel}>Danh sách công việc</Text>
           </View>
           {work?.listWorkDetail?.map(w => (
-            <SubTaskItem item={w} key={w.id} />
+            <SubTaskItem item={w} key={w.id} workId={work.id} />
           ))}
         </View>
       </ScrollView>

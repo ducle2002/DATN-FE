@@ -28,6 +28,7 @@ const work = {
 const header = {
   create: 'Tạo công việc',
   management: 'Quản lý công việc',
+  logtime: 'Log time',
 };
 
 const workManagement = {
