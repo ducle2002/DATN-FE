@@ -30,7 +30,7 @@ import OperatingStack, {
   OperatingStackParamsList,
 } from './operating/operating.stack';
 import WorkManagementDrawer, {
-  WorkManagementDrawerParamsList,
+  WorkStackParamsList,
 } from './work-management.stack';
 
 export type AppStackParamsList = {
@@ -51,7 +51,7 @@ export type AppStackParamsList = {
     | undefined;
   RESIDENT_STACK: undefined;
   OPERATING_STACK: NavigatorScreenParams<OperatingStackParamsList>;
-  WORK_MANAGEMENT: NavigatorScreenParams<WorkManagementDrawerParamsList>;
+  WORK_MANAGEMENT: NavigatorScreenParams<WorkStackParamsList>;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -125,11 +125,7 @@ const AppStack = () => {
         options={{headerShown: true}}
       />
       <Stack.Screen name="OPERATING_STACK" component={OperatingStack} />
-      <Stack.Screen
-        name="WORK_MANAGEMENT"
-        component={WorkManagementDrawer}
-        options={{headerShown: true}}
-      />
+      <Stack.Screen name="WORK_MANAGEMENT" component={WorkManagementDrawer} />
     </Stack.Navigator>
   );
 };

@@ -34,36 +34,29 @@ const MainScreen = ({route}: Props) => {
       screenOptions={{
         lazy: true,
       }}>
-      {permissions.includes(
-        'Pages.SmartCommunity.OperationManagement.Material.List',
-      ) && (
-        <MaterialTab.Screen
-          component={ListTab}
-          name="LIST"
-          options={{
-            title: language.t(
-              languageKeys[
-                'Pages.SmartCommunity.OperationManagement.Material.List'
-              ],
-            ),
-          }}
-        />
-      )}
-      {permissions.includes(
-        'Pages.SmartCommunity.OperationManagement.Material.Inventory',
-      ) && (
-        <MaterialTab.Screen
-          component={InventoryTab}
-          name="INVENTORY"
-          options={{
-            title: language.t(
-              languageKeys[
-                'Pages.SmartCommunity.OperationManagement.Material.Inventory'
-              ],
-            ),
-          }}
-        />
-      )}
+      <MaterialTab.Screen
+        component={ListTab}
+        name="LIST"
+        options={{
+          title: language.t(
+            languageKeys[
+              'Pages.SmartCommunity.OperationManagement.Material.List'
+            ],
+          ),
+        }}
+      />
+
+      <MaterialTab.Screen
+        component={InventoryTab}
+        name="INVENTORY"
+        options={{
+          title: language.t(
+            languageKeys[
+              'Pages.SmartCommunity.OperationManagement.Material.Inventory'
+            ],
+          ),
+        }}
+      />
     </MaterialTab.Navigator>
   );
 };

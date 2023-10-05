@@ -1,3 +1,5 @@
+import {TPermission} from 'types/type';
+
 export const genCode = (length: number, head: string) => {
   let result = head ?? 'TS.';
 
@@ -9,4 +11,25 @@ export const genCode = (length: number, head: string) => {
     counter += 1;
   }
   return result;
+};
+
+function getIntersection<T>(array1: T[], array2: T[]): T[] {
+  const intersection: T[] = [];
+
+  for (const element of array1) {
+    if (array2.includes(element)) {
+      intersection.push(element);
+    }
+  }
+
+  return intersection;
+}
+export const checkPermission = (
+  grantedPermissions: TPermission[],
+  permissions?: TPermission[],
+) => {
+  if (permissions?.length === 0) {
+    return true;
+  }
+  return getIntersection(grantedPermissions, permissions || []).length > 0;
 };

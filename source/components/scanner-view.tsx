@@ -1,5 +1,5 @@
 import {
-  Dimensions,
+  LayoutRectangle,
   Platform,
   SafeAreaView,
   StyleSheet,
@@ -16,7 +16,6 @@ import {
 import {runOnJS} from 'react-native-reanimated';
 import {BarcodeFormat, scanBarcodes} from 'vision-camera-code-scanner';
 import globalStyles from '@/config/globalStyles';
-const {width} = Dimensions.get('screen');
 
 type Props = {
   onScannedCallback?: (result?: string, params?: any) => void;
@@ -99,10 +98,21 @@ const ScannerView = ({
   const devices = useCameraDevices();
   const back = devices.back;
 
+  const [layout, setLayout] = useState<LayoutRectangle>({
+    height: 0,
+    width: 0,
+    x: 0,
+    y: 0,
+  });
+
   return (
     <>
       {hasPermission ? (
-        <View style={styles.container}>
+        <View
+          onLayout={({nativeEvent}) => {
+            setLayout(nativeEvent.layout);
+          }}
+          style={styles.container}>
           {back && (
             <Camera
               ref={camera}
@@ -126,7 +136,7 @@ const ScannerView = ({
               type="Ionicons"
               name="scan-outline"
               color={'white'}
-              size={width * 0.4}
+              size={layout.width * 0.4}
             />
           </View>
           <SafeAreaView

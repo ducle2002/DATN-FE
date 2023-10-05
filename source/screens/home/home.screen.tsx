@@ -190,7 +190,7 @@ const HomeScreen = (props: HomeScreenProps) => {
         <View style={styles.section}>
           <View style={styles.section}>
             <HomeFunction
-              type="Pages.SmartCommunity.Fees.Waters"
+              type="Pages.Invoices.Monthly.GetAll"
               style={styles.iconContainer}
               iconContainerStyle={{
                 backgroundColor: homeIconBackgroundColor[0],
@@ -205,14 +205,15 @@ const HomeScreen = (props: HomeScreenProps) => {
           </View>
           <View style={styles.section}>
             <HomeFunction
-              type="Pages.WorkAssign"
+              type="Pages.Management.TaskManagement.GetAll"
               style={styles.iconContainer}
               iconContainerStyle={{
                 backgroundColor: homeIconBackgroundColor[4],
               }}
               onPress={() => {
                 props.navigation.navigate('WORK_MANAGEMENT', {
-                  screen: 'MANAGEMENT',
+                  screen: 'MAIN_DRAWER',
+                  params: {screen: 'MANAGEMENT'},
                 });
               }}
             />

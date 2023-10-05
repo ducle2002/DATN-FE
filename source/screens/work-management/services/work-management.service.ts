@@ -1,17 +1,39 @@
+import axiosClient from '@/utils/axios.client';
 import {BaseService} from '@/utils/base.service';
+import {HOST_SERVER} from '@env';
 import {TPagingParams} from 'types/type';
+import {TWork} from './work.model';
 
 class WorkManagementService extends BaseService {
-  endpoint = '';
-  getAll = async (params: TPagingParams & {status: number}) => {
+  endpoint = '/api/services/app/Work/';
+  getAll = async (
+    params: TPagingParams & {
+      status: number;
+      formId: number;
+      workTypeId: number;
+    },
+  ): Promise<{
+    works: Array<TWork>;
+    totalRecords: number;
+  }> => {
+    const url = HOST_SERVER + this.endpoint + 'GetListWork';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: params});
+
     return {
-      works: [...Array(params.maxResultCount).keys()].map(value => ({
-        id: value + (params.skipCount ?? 0),
-        label: 'Công việc tháng 9',
-        status: params.status,
-      })),
-      totalRecords: 20,
+      works: result.data,
+      totalRecords: result.totalRecords,
     };
+  };
+
+  getById = async (params: {id: number}): Promise<TWork> => {
+    const url = HOST_SERVER + this.endpoint + 'GetWorkById';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: params});
+
+    return result.data;
   };
 }
 

@@ -55,7 +55,7 @@ const TextInputSuggestion = (props: Props) => {
             position: 'absolute',
             flexDirection: 'column-reverse',
           }}>
-          <CTextInput ref={refSuggest} withError={false} {...props} />
+          <CTextInput ref={refSuggest} withError={false} {...props} label="" />
           <View
             style={[
               styles.suggestionContainer,

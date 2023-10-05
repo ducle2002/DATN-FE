@@ -1,20 +1,24 @@
 import AssignmentScreen from '@/screens/work-management/assignment.screen';
 import ManagementScreen from '@/screens/work-management/management.screen';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackScreenProps, createStackNavigator} from '@react-navigation/stack';
 import React, {useCallback, useLayoutEffect} from 'react';
-import {AppStackParamsList} from './app.stack';
 import Icon from '@/components/icon.component';
-import {DrawerActions} from '@react-navigation/native';
+import {DrawerActions, NavigatorScreenParams} from '@react-navigation/native';
+import DetailWorkScreen from '@/screens/work-management/detail-work.screen';
+import {useAppSelector} from '@/hooks/redux.hook';
+import {checkPermission} from '@/utils/utils';
+import CreateWorkScreen from '@/screens/work-management/create-work.screen';
+import language, {languageKeys} from '@/config/language/language';
 
 export type WorkManagementDrawerParamsList = {
   MANAGEMENT: undefined;
   ASSIGNMENT: undefined;
 };
-
 const Drawer = createDrawerNavigator<WorkManagementDrawerParamsList>();
 
-type Props = StackScreenProps<AppStackParamsList, 'WORK_MANAGEMENT'>;
+type Props = StackScreenProps<WorkStackParamsList, 'MAIN_DRAWER'>;
+
 const WorkManagementDrawer = ({navigation}: Props) => {
   const renderDrawerButton = useCallback(
     () => (
@@ -48,4 +52,35 @@ const WorkManagementDrawer = ({navigation}: Props) => {
   );
 };
 
-export default WorkManagementDrawer;
+export type WorkStackParamsList = {
+  MAIN_DRAWER: NavigatorScreenParams<WorkManagementDrawerParamsList>;
+  DETAIL_WORK: {id: number};
+  CREATE_WORK: undefined;
+};
+const Stack = createStackNavigator<WorkStackParamsList>();
+
+const WorkStack = () => {
+  const {grantedPermissions} = useAppSelector(state => state.config);
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+      }}>
+      <Stack.Screen name="MAIN_DRAWER" component={WorkManagementDrawer} />
+      <Stack.Screen name="DETAIL_WORK" component={DetailWorkScreen} />
+      {checkPermission(grantedPermissions, [
+        'Pages.Management.TaskManagement.Create',
+      ]) && (
+        <Stack.Screen
+          name="CREATE_WORK"
+          component={CreateWorkScreen}
+          options={{
+            title: language.t(languageKeys.workManagement.header.create),
+          }}
+        />
+      )}
+    </Stack.Navigator>
+  );
+};
+
+export default WorkStack;

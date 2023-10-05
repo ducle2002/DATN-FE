@@ -15,18 +15,17 @@ export type HomeIconProp = SvgProps & {
 };
 const HomeIcon = ({type, ...props}: HomeIconProp) => {
   switch (type) {
-    case 'Pages.Management.ChatCitizen':
+    case 'Pages.Digitals.Communications':
       return <ChatIcon {...props} />;
-    case 'Pages.Management.Internal.CityNotifications':
-    case 'Pages.Management.Digital.Notices':
+    case 'Pages.Digitals.Notifications.GetAll':
       return <NotificationIcon {...props} />;
-    case 'Pages.Management.Citizens.Reflects':
+    case 'Pages.Digitals.Reflects.GetAll':
       return <FeedbackIcon {...props} />;
-    case 'Pages.Management.Citizens.Vote':
+    case 'Pages.Digitals.Surveys.GetAll':
       return <VoteIcon {...props} />;
-    case 'Pages.Administrative':
+    case 'Pages.AdministrationService.Configurations':
       return <Administrative {...props} />;
-    case 'Pages.Management.Question_Answer':
+    case 'Pages.Digitals.QnA.GetAll':
       return (
         <Icon
           type="MaterialCommunityIcons"
@@ -35,11 +34,11 @@ const HomeIcon = ({type, ...props}: HomeIconProp) => {
           size={40}
         />
       );
-    case 'Pages.Management.Hotline':
+    case 'Pages.Digitals.Hotline.GetAll':
       return (
         <Icon type="Foundation" name="telephone" color={'white'} size={40} />
       );
-    case 'Pages.Management.Newsfeed':
+    case 'Pages.Digitals.Forums.GetAll':
       return (
         <Icon
           type="MaterialCommunityIcons"
@@ -48,22 +47,21 @@ const HomeIcon = ({type, ...props}: HomeIconProp) => {
           size={40}
         />
       );
-    case 'Pages.Services.Local_Amenities.Create_Store':
+    case 'Pages.LocalAmenities.List':
       return <LocalServiceIcon />;
-    case 'Pages.SmartCommunity.OperationManagement.Material':
+    case 'Pages.Assets.AssetCatalog.GetAll':
       return (
         <Icon type="FontAwesome5" name="toolbox" size={35} color={'white'} />
       );
-    case 'Pages.SmartCommunity.OperationManagement.MaterialCategory':
+    case 'Pages.Assets.AssetParameters.GetAll':
       return (
         <Icon type="MaterialIcons" name="inventory" size={35} color={'white'} />
       );
-    case 'Pages.Residents.Verification':
-    case 'Pages.Citizens.Verification':
+    case 'Pages.Citizen.Verifications.GetAll':
       return <Icon type="Ionicons" name="person" size={35} color={'white'} />;
-    case 'Pages.SmartCommunity.Fees.Waters':
+    case 'Pages.Invoices.Monthly.GetAll':
       return <Icon type="Ionicons" name="water" size={35} color={'white'} />;
-    case 'Pages.WorkAssign':
+    case 'Pages.Management.TaskManagement.GetAll':
       return (
         <Icon
           type="MaterialIcons"

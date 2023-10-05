@@ -29,9 +29,7 @@ const MaterialAssetStack = () => {
         name="MAIN_SCREEN"
         component={MainScreen}
         options={{
-          title: language.t(
-            languageKeys['Pages.SmartCommunity.OperationManagement.Material'],
-          ),
+          title: language.t(languageKeys['Pages.Assets.AssetCatalog.GetAll']),
         }}
       />
       <Stack.Screen

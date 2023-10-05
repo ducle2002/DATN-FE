@@ -1,21 +1,26 @@
 import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import FilterWork from './components/filter';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {DrawerScreenProps} from '@react-navigation/drawer';
-import {WorkManagementDrawerParamsList} from '@/routes/work-management.stack';
+import {
+  WorkManagementDrawerParamsList,
+  WorkStackParamsList,
+} from '@/routes/work-management.stack';
 import {StackScreenProps} from '@react-navigation/stack';
-import {AppStackParamsList} from '@/routes/app.stack';
 import {useInfiniteQuery} from 'react-query';
 import WorkManagementApi from './services/work-management.service';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {flatten, map} from 'ramda';
 import WorkItem from './components/work-item.component';
-import WorkDetail from './components/work-detail.component';
+import CreateWork from './components/create-work.component';
+import {EWorkFormID, EWorkStatus, TWork} from './services/work.model';
+import {checkPermission} from '@/utils/utils';
+import {useAppSelector} from '@/hooks/redux.hook';
 
 type Props = CompositeScreenProps<
   DrawerScreenProps<WorkManagementDrawerParamsList, 'MANAGEMENT'>,
-  StackScreenProps<AppStackParamsList, 'WORK_MANAGEMENT'>
+  StackScreenProps<WorkStackParamsList, 'MAIN_DRAWER'>
 >;
 
 const ManagementScreen = ({navigation}: Props) => {
@@ -27,9 +32,9 @@ const ManagementScreen = ({navigation}: Props) => {
 
   const status = useMemo(
     () => [
-      {id: 1, label: 'Đang làm'},
-      {id: 2, label: 'Đã hoàn thành'},
-      {id: 3, label: 'Qúa hạn'},
+      {id: EWorkStatus.DOING, label: 'Đang làm'},
+      {id: EWorkStatus.COMPLETE, label: 'Đã hoàn thành'},
+      {id: EWorkStatus.OVERDUE, label: 'Quá hạn'},
     ],
     [],
   );
@@ -43,6 +48,7 @@ const ManagementScreen = ({navigation}: Props) => {
         ...pageParam,
         maxResultCount: 10,
         status: selectedStatus,
+        formId: EWorkFormID.ASSIGNED,
       }),
     getNextPageParam: (lastPage, allPages) => {
       const skipCount = allPages.length * 10;
@@ -64,10 +70,26 @@ const ManagementScreen = ({navigation}: Props) => {
     [data],
   );
 
-  const [selectedWork, selectWork] = useState(undefined);
+  const [activeIndex, setActiveIndex] = useState(-1);
 
-  const renderItem: ListRenderItem<any> = ({item}) => (
-    <WorkItem onPress={() => selectWork(item)} {...{item}} />
+  const onMorePress = useCallback(
+    (id: number) => {
+      if (id !== activeIndex) {
+        setActiveIndex(id);
+      } else {
+        setActiveIndex(-1);
+      }
+    },
+    [activeIndex],
+  );
+
+  const renderItem: ListRenderItem<TWork> = ({item}) => (
+    <WorkItem
+      onPress={() => navigation.navigate('DETAIL_WORK', {id: item.id})}
+      {...{item}}
+      isActive={activeIndex === item.id}
+      onMorePress={() => onMorePress(item.id)}
+    />
   );
 
   return (
@@ -79,11 +101,6 @@ const ManagementScreen = ({navigation}: Props) => {
         onEndReached={() => fetchNextPage()}
         contentContainerStyle={{paddingTop: 10}}
       />
-      <WorkDetail
-        isVisible={!!selectedWork}
-        onBackdropPress={() => selectWork(undefined)}
-        work={selectedWork}
-      />
     </View>
   );
 };
@@ -93,6 +110,6 @@ export default ManagementScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#F3F3F7',
   },
 });

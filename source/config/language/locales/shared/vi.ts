@@ -21,6 +21,8 @@ const button = {
   back: 'Quay lại',
   see: 'Xem',
   requestEdit: 'Yêu cầu chỉnh sửa',
+  pickTime: 'Chọn giờ',
+  pickDate: 'Chọn ngày',
 };
 
 const shared = {
