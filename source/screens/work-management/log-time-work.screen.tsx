@@ -2,15 +2,15 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import language, {languageKeys} from '@/config/language/language';
 
-const AddNewWorkScreen = () => {
+const LogTimeWorkScreen = () => {
   return (
     <View>
       {/* <Text>{language.t(languageKeys.)}</Text> */}
-      <Text>Tạo công việc mới</Text>
+      <Text>Log Time</Text>
     </View>
   );
 };
 
-export default AddNewWorkScreen;
+export default LogTimeWorkScreen;
 
 const styles = StyleSheet.create({});
