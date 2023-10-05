@@ -13,6 +13,7 @@ import globalStyles from '@/config/globalStyles';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AppStackParamsList} from '@/routes/app.stack';
 import {useTranslation} from 'react-i18next';
+import {useToast} from 'react-native-toast-notifications';
 
 type Props = React.ComponentProps<typeof TouchableOpacity> & {
   type: TPermission;
@@ -22,6 +23,8 @@ type Props = React.ComponentProps<typeof TouchableOpacity> & {
 const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
   const navigation = useNavigation<NavigationProp<AppStackParamsList>>();
   const {t} = useTranslation();
+
+  const toast = useToast();
 
   const onPress = () => {
     switch (type) {
@@ -54,6 +57,8 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
         return navigation.navigate('QUESTION_ANSWER_STACK', {
           screen: 'MAIN_SCREEN',
         });
+      default:
+        toast.show('Chức năng đang phát triển');
     }
   };
 

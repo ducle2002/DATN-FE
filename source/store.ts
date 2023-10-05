@@ -1,4 +1,4 @@
-import {AnyAction, combineReducers, configureStore} from '@reduxjs/toolkit';
+import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import authenticationSlice, {authInitAction} from './modules/auth/auth.slice';
 import configSlice, {languageInitAction} from './modules/config/config.slice';
 import userSlice from './modules/user/user.slice';

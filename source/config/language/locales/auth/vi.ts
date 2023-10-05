@@ -8,5 +8,9 @@ const form = {
   tenancyPlaceholder: 'Khu đô thị/ Tòa nhà',
 };
 
-const auth = {login, form};
+const privacy = {
+  privacyPolicy: 'Điều khoản và bảo mật',
+};
+
+const auth = {login, form, privacy};
 export default auth;

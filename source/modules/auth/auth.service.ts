@@ -1,9 +1,6 @@
 import axiosClient from '@/utils/axios.client';
 import {HOST_SERVER} from '@env';
 import {ILoginPayload, IToken} from './auth.model';
-
-console.log(HOST_SERVER);
-
 class Authentication {
   endpoint = HOST_SERVER;
 

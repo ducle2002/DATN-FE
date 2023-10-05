@@ -15,7 +15,11 @@ import globalStyles from '@/config/globalStyles';
 import ThumbnailImage from '@/components/thumbnail-image';
 import moment from 'moment';
 import language, {languageKeys} from '@/config/language/language';
-import {TCreateUpdateCommentParams, TQuestion} from '@/modules/qa/qa.model';
+import {
+  EQuestionState,
+  TCreateUpdateCommentParams,
+  TQuestion,
+} from '@/modules/qa/qa.model';
 import BottomContainer from '@/components/bottom-container.component';
 import CTextInput from '@/components/text-input.component';
 import Icon from '@/components/icon.component';
@@ -51,13 +55,21 @@ const DetailScreen = ({navigation, route}: Props) => {
 
   const answerInput = watch('comment');
 
-  const {mutate: sendComment, status} = useMutation({
-    mutationFn: (params: TCreateUpdateCommentParams) =>
-      QAApi.createOrUpdateCommentRequest(params),
+  const {mutate: updateState} = useMutation({
+    mutationFn: () =>
+      QAApi.updateStateQuestionRequest({id: id, state: EQuestionState.ACCEPT}),
     onSuccess: () => {
       refetchAnswer();
       refetchQuestion();
       queryClient.refetchQueries(['q-a']);
+    },
+  });
+
+  const {mutate: sendComment, status} = useMutation({
+    mutationFn: (params: TCreateUpdateCommentParams) =>
+      QAApi.createOrUpdateCommentRequest(params),
+    onSuccess: () => {
+      updateState();
     },
   });
 

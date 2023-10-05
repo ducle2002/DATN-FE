@@ -3,6 +3,7 @@ import {HOST_SERVER} from '@env';
 import {TPagingParams} from 'types/type';
 import {
   EQAFormID,
+  EQuestionState,
   TAnswer,
   TCreateUpdateCommentParams,
   TQuestion,
@@ -46,6 +47,14 @@ class QA {
     const url =
       HOST_SERVER + this.endpoint + 'CreateOrUpdateCommentQuestionAndAnswer';
     return axiosClient.post(url, params);
+  };
+
+  updateStateQuestionRequest = async (params: {
+    id: number;
+    state: EQuestionState;
+  }) => {
+    const url = HOST_SERVER + this.endpoint + 'UpdateStateQuestionTopic';
+    return axiosClient.put(url, null, {params: params});
   };
 }
 
