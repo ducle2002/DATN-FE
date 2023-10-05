@@ -16,7 +16,7 @@ type Props = {
 const NotiItem = ({item, department, onPress = () => {}}: Props) => {
   const {select, selected} = useContext(SelectItemContext);
 
-  const root = useMemo(() => HTMLParser.parse(item?.data), [item?.data]);
+  const root = useMemo(() => HTMLParser.parse(item?.data ?? ''), [item?.data]);
 
   const isSelected = useMemo(
     () => selected.includes(item.id),
@@ -42,13 +42,6 @@ const NotiItem = ({item, department, onPress = () => {}}: Props) => {
         style={styles.image}
       />
       <View style={styles.contentContainer}>
-        {/* <Icon
-          type="Ionicons"
-          name="ellipsis-horizontal"
-          style={{marginLeft: 'auto'}}
-          size={25}
-          color="#BDB7B7"
-        /> */}
         <Text style={styles.textDepartment}>{department}</Text>
         <Text style={styles.textName} numberOfLines={1}>
           {item.name}

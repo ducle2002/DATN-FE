@@ -12,7 +12,7 @@ import chat from './chat/vi';
 import materialAsset from './material-asset/vi';
 import residentLanguage from './resident/vi';
 import water from './water-meter/vi';
-
+import workManagement from './work-management/vi';
 const vi = {
   ...title,
   auth,
@@ -32,6 +32,7 @@ const vi = {
   inventory: 'Quản lý tài sản vật tư',
   residentLanguage,
   water,
+  workManagement,
 };
 
 export default vi;

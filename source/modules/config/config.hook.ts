@@ -13,6 +13,7 @@ export const useConfigPermissions = () => {
       dispatch(
         setConfig({
           grantedPermissions: Object.keys(result.auth.grantedPermissions),
+          allPermissions: Object.keys(result.auth.allPermissions),
         }),
       );
     },

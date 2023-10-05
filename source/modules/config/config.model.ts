@@ -1,33 +1,30 @@
 import {TPermission} from 'types/type';
 
 export const residentManagementFunction: Array<TPermission> = [
-  'Pages.Management.Question_Answer',
-
-  'Pages.Management.Citizens.Vote',
+  'Pages.Citizen.Verifications.GetAll',
 ];
 
 export const serviceFunction: Array<TPermission> = [
-  'Pages.Services.Local_Amenities.Create_Store',
+  'Pages.LocalAmenities.List',
 ];
 
 export const administrativeFunction: Array<TPermission> = [
-  'Pages.Administrative',
-  'Pages.Residents.Verification',
-  'Pages.Citizens.Verification',
+  'Pages.AdministrationService.Configurations',
+  'Pages.Citizen.Verifications.GetAll',
 ];
 
 export const managementFunction: Array<TPermission> = [
-  'Pages.Management.Digital.Notices',
-  'Pages.Management.Citizens.Reflects',
-  'Pages.Management.Newsfeed',
-  'Pages.Management.ChatCitizen',
-  'Pages.Management.Citizens.Vote',
-  'Pages.Management.Question_Answer',
-  'Pages.Management.Hotline',
+  'Pages.Digitals.Notifications.GetAll',
+  'Pages.Digitals.Reflects.GetAll',
+  'Pages.Digitals.Forums.GetAll',
+  'Pages.Digitals.Communications',
+  'Pages.Digitals.Surveys.GetAll',
+  'Pages.Digitals.QnA.GetAll',
+  'Pages.Digitals.Hotline.GetAll',
 ];
 export const operatorFunction: Array<TPermission> = [
-  'Pages.SmartCommunity.OperationManagement.Material',
-  'Pages.SmartCommunity.OperationManagement.MaterialCategory',
+  'Pages.Assets.AssetCatalog.GetAll',
+  'Pages.Assets.AssetParameters.GetAll',
 ];
 
 export const residentFunction: Array<TPermission> = [];

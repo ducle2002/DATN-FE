@@ -28,47 +28,46 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
 
   const onPress = () => {
     switch (type) {
-      case 'Pages.Management.Digital.Notices':
+      case 'Pages.Digitals.Notifications.GetAll':
         return navigation.navigate('NOTIFICATION_STACK', {
           screen: 'MAIN_SCREEN',
         });
-      case 'Pages.Management.Citizens.Reflects':
+      case 'Pages.Digitals.Reflects.GetAll':
         return navigation.navigate('FEEDBACK_STACK', {
           screen: 'FeedBackScreen',
           params: {},
         });
-      case 'Pages.Management.ChatCitizen':
+      case 'Pages.Digitals.Communications':
         return navigation.navigate('CHAT_STACK', {
           screen: 'ChatScreen',
           params: {},
         });
-      case 'Pages.Management.Citizens.Vote':
+      case 'Pages.Digitals.Surveys.GetAll':
         return navigation.navigate('VOTE_STACK', {screen: 'MAIN_PAGE'});
-      case 'Pages.Administrative':
+      case 'Pages.AdministrationService.Configurations':
         return navigation.navigate('ADMINISTRATIVE_STACK', {
           screen: 'AdministrativeScreen',
           params: {},
         });
-      case 'Pages.Services.Local_Amenities.Create_Store':
+      case 'Pages.LocalAmenities.List':
         return navigation.navigate('LOCAL_SERVICE_STACK', {
           screen: 'MAIN_SCREEN',
         });
-      case 'Pages.Management.Question_Answer':
+      case 'Pages.Digitals.QnA.GetAll':
         return navigation.navigate('QUESTION_ANSWER_STACK', {
           screen: 'MAIN_SCREEN',
         });
-      case 'Pages.SmartCommunity.OperationManagement.Material':
+      case 'Pages.Assets.AssetCatalog.GetAll':
         return navigation.navigate('MATERIAL_ASSET_STACK', {
           screen: 'MAIN_SCREEN',
           params: {type: 'Pages.SmartCommunity.OperationManagement.Material'},
         });
-      case 'Pages.SmartCommunity.OperationManagement.MaterialCategory': {
+      case 'Pages.Assets.AssetParameters.GetAll': {
         return navigation.navigate('MATERIAL_ASSET_STACK', {
           screen: 'CATEGORY_MANAGEMENT',
         });
       }
-      case 'Pages.Residents.Verification':
-      case 'Pages.Citizens.Verification':
+      case 'Pages.Citizen.Verifications.GetAll':
         return navigation.navigate('RESIDENT_STACK');
       default:
         toast.show('Chức năng đang phát triển');

@@ -4,6 +4,7 @@ import {
   LayoutRectangle,
   ListRenderItem,
   Pressable,
+  StyleProp,
   StyleSheet,
   Text,
   TextStyle,
@@ -30,16 +31,17 @@ export type TOptionItem = {
 
 type Props = React.ComponentProps<typeof View> & {
   label?: string;
-  labelStyle?: TextStyle;
+  labelStyle?: StyleProp<TextStyle>;
   options: Array<TOptionItem>;
   selectedLabel: string | undefined;
   placeholder?: string;
   placeholderTextColor?: string;
-  itemLabelStyle?: TextStyle;
+  itemLabelStyle?: StyleProp<TextStyle>;
   onSelected: Function;
-  inputContainer?: ViewStyle;
-  valueStyle?: TextStyle;
+  inputContainer?: StyleProp<ViewStyle>;
+  valueStyle?: StyleProp<TextStyle>;
   disable?: boolean;
+  labelContainerStyle?: StyleProp<ViewStyle>;
 };
 
 const DropdownMenu = ({
@@ -54,6 +56,7 @@ const DropdownMenu = ({
   valueStyle,
   disable = false,
   placeholderTextColor,
+  labelContainerStyle,
   ...props
 }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -114,6 +117,7 @@ const DropdownMenu = ({
       transform: [
         {rotate: interpolate(sharedValue.value, [0, 1], [0, 90]) + 'deg'},
       ],
+      marginLeft: 10,
     };
   });
 
@@ -125,7 +129,7 @@ const DropdownMenu = ({
       {...props}
       disabled={disable}>
       {label && (
-        <View>
+        <View style={labelContainerStyle}>
           <Text style={[styles.textLabel, labelStyle]}>{label}</Text>
         </View>
       )}

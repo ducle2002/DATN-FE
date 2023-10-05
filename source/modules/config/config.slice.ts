@@ -6,11 +6,13 @@ import {TPermission} from 'types/type';
 
 type configState = {
   grantedPermissions: Array<TPermission>;
+  allPermissions: Array<TPermission>;
   language: string;
   isRefreshingPermissions: boolean;
 };
 const initialState: configState = {
   grantedPermissions: [],
+  allPermissions: [],
   language: '',
   isRefreshingPermissions: false,
 };
@@ -33,6 +35,7 @@ const configSlice = createSlice({
   reducers: {
     setConfig: (state, action) => {
       state.grantedPermissions = action.payload.grantedPermissions;
+      state.allPermissions = action.payload.allPermissions;
       state.isRefreshingPermissions = false;
     },
     refreshConfig: state => {
