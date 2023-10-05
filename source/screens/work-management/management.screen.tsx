@@ -1,27 +1,19 @@
 import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import FilterWork from './components/filter';
-import {CompositeScreenProps} from '@react-navigation/native';
-import {DrawerScreenProps} from '@react-navigation/drawer';
-import {
-  WorkManagementDrawerParamsList,
-  WorkStackParamsList,
-} from '@/routes/work-management.stack';
+import {WorkStackParamsList} from '@/routes/work-management.stack';
 import {StackScreenProps} from '@react-navigation/stack';
 import {useInfiniteQuery} from 'react-query';
 import WorkManagementApi from './services/work-management.service';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {flatten, map} from 'ramda';
 import WorkItem from './components/work-item.component';
-import CreateWork from './components/create-work.component';
 import {EWorkFormID, EWorkStatus, TWork} from './services/work.model';
+import CreateWorkComponent from './components/create-work.component';
 import {checkPermission} from '@/utils/utils';
 import {useAppSelector} from '@/hooks/redux.hook';
 
-type Props = CompositeScreenProps<
-  DrawerScreenProps<WorkManagementDrawerParamsList, 'MANAGEMENT'>,
-  StackScreenProps<WorkStackParamsList, 'MAIN_DRAWER'>
->;
+type Props = StackScreenProps<WorkStackParamsList, 'MAIN_DRAWER'>;
 
 const ManagementScreen = ({navigation}: Props) => {
   useEffect(() => {
@@ -32,6 +24,7 @@ const ManagementScreen = ({navigation}: Props) => {
 
   const status = useMemo(
     () => [
+      {id: undefined, label: 'All'},
       {id: EWorkStatus.DOING, label: 'Đang làm'},
       {id: EWorkStatus.COMPLETE, label: 'Đã hoàn thành'},
       {id: EWorkStatus.OVERDUE, label: 'Quá hạn'},
@@ -39,16 +32,28 @@ const ManagementScreen = ({navigation}: Props) => {
     [],
   );
 
+  const formId = useMemo(
+    () => [
+      {id: undefined, label: 'All'},
+      {id: EWorkFormID.ASSIGNED, label: 'Đã giao'},
+      {id: EWorkFormID.RECEIVED, label: 'Được giao'},
+      {id: EWorkFormID.FOLLOW, label: 'Đang theo dõi'},
+    ],
+    [],
+  );
+
   const [selectedStatus, selectStatus] = useState(status[0].id);
 
+  const [selectedFormId, selectFormId] = useState(formId[0].id);
+
   const {data, fetchNextPage} = useInfiniteQuery({
-    queryKey: ['my-work', selectedStatus],
+    queryKey: ['my-work', selectedStatus, selectedFormId],
     queryFn: ({pageParam}) =>
       WorkManagementApi.getAll({
         ...pageParam,
         maxResultCount: 10,
         status: selectedStatus,
-        formId: EWorkFormID.ASSIGNED,
+        formId: selectedFormId,
       }),
     getNextPageParam: (lastPage, allPages) => {
       const skipCount = allPages.length * 10;
@@ -70,37 +75,36 @@ const ManagementScreen = ({navigation}: Props) => {
     [data],
   );
 
-  const [activeIndex, setActiveIndex] = useState(-1);
-
-  const onMorePress = useCallback(
-    (id: number) => {
-      if (id !== activeIndex) {
-        setActiveIndex(id);
-      } else {
-        setActiveIndex(-1);
-      }
-    },
-    [activeIndex],
-  );
-
   const renderItem: ListRenderItem<TWork> = ({item}) => (
     <WorkItem
       onPress={() => navigation.navigate('DETAIL_WORK', {id: item.id})}
       {...{item}}
-      isActive={activeIndex === item.id}
-      onMorePress={() => onMorePress(item.id)}
     />
   );
 
+  const {grantedPermissions} = useAppSelector(state => state.config);
+
   return (
     <View style={styles.container}>
-      <FilterWork {...{status, selectedStatus, selectStatus}} />
+      <FilterWork
+        {...{
+          status,
+          selectedStatus,
+          selectStatus,
+          formId,
+          selectedFormId,
+          selectFormId,
+        }}
+      />
       <FlatList
         data={dataProvider.getAllData()}
         renderItem={renderItem}
         onEndReached={() => fetchNextPage()}
         contentContainerStyle={{paddingTop: 10}}
       />
+      {checkPermission(grantedPermissions, [
+        'Pages.Operations.TaskManagement.Create',
+      ]) && <CreateWorkComponent />}
     </View>
   );
 };

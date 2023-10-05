@@ -32,8 +32,12 @@ class WorkManagementService extends BaseService {
     const {
       data: {result},
     } = await axiosClient.get(url, {params: params});
-
     return result.data;
+  };
+
+  create = async (params: TWork) => {
+    const url = HOST_SERVER + this.endpoint + 'CreateWork';
+    return axiosClient.post(url, {params: params});
   };
 }
 

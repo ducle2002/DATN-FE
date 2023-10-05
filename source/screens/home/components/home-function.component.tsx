@@ -82,7 +82,7 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
       <View style={[styles.iconContainer, iconContainerStyle]}>
         <HomeIcon type={type} />
       </View>
-      <Text style={styles.text}>{t(languageKeys[type])}</Text>
+      <Text style={styles.text}>{t(languageKeys[type] ?? '')}</Text>
     </TouchableOpacity>
   );
 };

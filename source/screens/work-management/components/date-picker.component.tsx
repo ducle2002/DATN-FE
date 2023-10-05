@@ -97,8 +97,10 @@ const DatePickerComponent = ({
         }}
         mode={modal.mode}
         theme="light"
-        minimumDate={moment(minimumDate).toDate()}
-        maximumDate={moment(minimumDate).add(1, 'M').toDate()}
+        minimumDate={moment(minimumDate ? minimumDate : undefined).toDate()}
+        maximumDate={moment(minimumDate ? minimumDate : undefined)
+          .add(1, 'M')
+          .toDate()}
         locale="vi"
       />
     </>

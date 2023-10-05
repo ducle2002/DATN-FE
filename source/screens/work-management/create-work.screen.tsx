@@ -41,6 +41,19 @@ const CreateWorkScreen = ({navigation}: Props) => {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.contentContainer}>
+          <DropdownMenuComponent
+            label="Dự án"
+            inputContainer={styles.inputContainerStyle}
+            labelStyle={styles.labelStyle}
+            style={{marginBottom: 20}}
+          />
+          <DropdownMenuComponent
+            label="Phòng ban"
+            inputContainer={styles.inputContainerStyle}
+            labelStyle={styles.labelStyle}
+            style={{marginBottom: 20}}
+          />
+
           <Controller
             control={control}
             name="dateStart"

@@ -15,8 +15,8 @@ import {useTextContentOfHTML} from '@/hooks/utils.hook';
 type Props = {
   item: TWork;
   onPress: () => void;
-  onMorePress: () => void;
-  isActive: boolean;
+  onMorePress?: () => void;
+  isActive?: boolean;
 };
 
 const WorkItem = ({

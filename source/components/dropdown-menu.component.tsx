@@ -26,7 +26,7 @@ const {width: sWidth} = Dimensions.get('screen');
 
 export type TOptionItem = {
   label: string;
-  id: any;
+  id?: any;
 };
 
 type Props = React.ComponentProps<typeof View> & {
@@ -89,19 +89,16 @@ const DropdownMenu = ({
 
   const ref = useRef<View | null>(null);
 
-  useEffect(() => {
-    setTimeout(() => {
-      ref.current?.measure((x, y, width, height, pageX, pageY) => {
-        // console.log({x, y, width, height, pageX, pageY});
-        setButtonPosition({
-          height: height,
-          width: width,
-          x: pageX,
-          y: pageY + (y > 0 ? y : 0),
-        });
+  ref.current?.measure((x, y, width, height, pageX, pageY) => {
+    if (buttonPosition.x !== pageX || buttonPosition.y !== pageY) {
+      setButtonPosition({
+        height: height,
+        width: width,
+        x: pageX,
+        y: pageY,
       });
-    }, 1000);
-  }, []);
+    }
+  });
 
   const sharedValue = useSharedValue(0);
   useEffect(() => {

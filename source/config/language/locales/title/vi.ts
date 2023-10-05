@@ -13,6 +13,7 @@ const title: {[key in TPermission]?: string} = {
   'Pages.Assets.AssetParameters.GetAll': 'Danh phân loại',
   'Pages.Citizen.Verifications.GetAll': 'Xác minh cư dân',
   'Pages.LocalAmenities.List': 'Tiện ích',
+  'Pages.Operations.TaskManagement.GetAll': 'Quản lý công việc',
 };
 
 export default title;
