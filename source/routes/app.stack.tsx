@@ -12,7 +12,7 @@ import LocalServiceStack, {
 } from './local-service.stack';
 import {HOST_SERVER} from '@env';
 import {useAppDispatch, useAppSelector} from '@/hooks/redux.hook';
-import {selectedEncryptedAccessToken} from '@/modules/auth/auth.slice';
+import {selectedEncryptedAccessToken} from '@/screens/authentication/services/auth.slice';
 import * as signalR from '@microsoft/signalr';
 import {setConnection} from '@/modules/hubconnection/hubconnection.slice';
 import ChatStack, {ChatStackParamsList} from './chat.stack';
@@ -21,6 +21,17 @@ import AdministrativeStack, {
 } from './administrative.stack';
 import SettingStack from './settings.stack';
 import QAStack, {QAStackParamsList} from './question-answer.stack.screen';
+import MaterialAssetStack, {
+  MaterialAssetStackParamsList,
+} from './material-asset.stack';
+import CameraScreen from '@/screens/camera/camera.screen';
+import ResidentVerifyScreen from '@/screens/resident/resident-verify.screen';
+import OperatingStack, {
+  OperatingStackParamsList,
+} from './operating/operating.stack';
+import WorkManagementDrawer, {
+  WorkStackParamsList,
+} from './work-management.stack';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -32,6 +43,15 @@ export type AppStackParamsList = {
   CHAT_STACK: NavigatorScreenParams<ChatStackParamsList>;
   ADMINISTRATIVE_STACK: NavigatorScreenParams<AdministrativeStackParamsList>;
   QUESTION_ANSWER_STACK: NavigatorScreenParams<QAStackParamsList>;
+  MATERIAL_ASSET_STACK: NavigatorScreenParams<MaterialAssetStackParamsList>;
+  CAMERA_SCREEN:
+    | {
+        isReturnPhoto?: boolean;
+      }
+    | undefined;
+  RESIDENT_STACK: undefined;
+  OPERATING_STACK: NavigatorScreenParams<OperatingStackParamsList>;
+  WORK_MANAGEMENT: NavigatorScreenParams<WorkStackParamsList>;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -76,6 +96,7 @@ const AppStack = () => {
       screenOptions={{
         headerBackTitleVisible: false,
         headerShown: false,
+        freezeOnBlur: true,
       }}>
       <Stack.Screen name={'HOME_SCREEN'} component={HomeScreen} />
       <Stack.Screen name={'SETTING_SCREEN'} component={SettingStack} />
@@ -89,6 +110,22 @@ const AppStack = () => {
       <Stack.Screen name="VOTE_STACK" component={VoteStack} />
       <Stack.Screen name="LOCAL_SERVICE_STACK" component={LocalServiceStack} />
       <Stack.Screen name="QUESTION_ANSWER_STACK" component={QAStack} />
+      <Stack.Screen
+        name="MATERIAL_ASSET_STACK"
+        component={MaterialAssetStack}
+      />
+      <Stack.Screen
+        initialParams={{isReturnPhoto: true}}
+        name="CAMERA_SCREEN"
+        component={CameraScreen}
+      />
+      <Stack.Screen
+        name="RESIDENT_STACK"
+        component={ResidentVerifyScreen}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen name="OPERATING_STACK" component={OperatingStack} />
+      <Stack.Screen name="WORK_MANAGEMENT" component={WorkManagementDrawer} />
     </Stack.Navigator>
   );
 };

@@ -4,35 +4,44 @@ import {
   LayoutRectangle,
   ListRenderItem,
   Pressable,
+  StyleProp,
   StyleSheet,
   Text,
   TextStyle,
   View,
   ViewStyle,
 } from 'react-native';
-import React, {memo, useState} from 'react';
+import React, {memo, useEffect, useRef, useState} from 'react';
 import ReactNativeModal from 'react-native-modal';
-import {useHeaderHeight} from '@react-navigation/elements';
 import globalStyles from '@/config/globalStyles';
 import Icon from './icon.component';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
-const {width} = Dimensions.get('screen');
+const {width: sWidth} = Dimensions.get('screen');
 
 export type TOptionItem = {
   label: string;
-  id: any;
+  id?: any;
 };
 
 type Props = React.ComponentProps<typeof View> & {
   label?: string;
-  labelStyle?: TextStyle;
+  labelStyle?: StyleProp<TextStyle>;
   options: Array<TOptionItem>;
   selectedLabel: string | undefined;
   placeholder?: string;
-  itemLabelStyle?: TextStyle;
+  placeholderTextColor?: string;
+  itemLabelStyle?: StyleProp<TextStyle>;
   onSelected: Function;
-  inputContainer?: ViewStyle;
-  valueStyle?: TextStyle;
+  inputContainer?: StyleProp<ViewStyle>;
+  valueStyle?: StyleProp<TextStyle>;
+  disable?: boolean;
+  labelContainerStyle?: StyleProp<ViewStyle>;
 };
 
 const DropdownMenu = ({
@@ -45,6 +54,9 @@ const DropdownMenu = ({
   itemLabelStyle,
   inputContainer,
   valueStyle,
+  disable = false,
+  placeholderTextColor,
+  labelContainerStyle,
   ...props
 }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -52,14 +64,12 @@ const DropdownMenu = ({
     setIsVisible(!isVisible);
   };
 
-  const [buttonPossion, setButtonPossion] = useState<LayoutRectangle>({
+  const [buttonPosition, setButtonPosition] = useState<LayoutRectangle>({
     height: 0,
     width: 0,
     y: 0,
     x: 0,
   });
-
-  const headerHeight = useHeaderHeight();
 
   const renderItemOption: ListRenderItem<TOptionItem> = ({item}) => {
     return (
@@ -77,28 +87,64 @@ const DropdownMenu = ({
     );
   };
 
+  const ref = useRef<View | null>(null);
+
+  ref.current?.measure((x, y, width, height, pageX, pageY) => {
+    if (buttonPosition.x !== pageX || buttonPosition.y !== pageY) {
+      setButtonPosition({
+        height: height,
+        width: width,
+        x: pageX,
+        y: pageY,
+      });
+    }
+  });
+
+  const sharedValue = useSharedValue(0);
+  useEffect(() => {
+    if (isVisible) {
+      sharedValue.value = withTiming(1);
+    } else {
+      sharedValue.value = withTiming(0);
+    }
+  }, [isVisible, sharedValue]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {rotate: interpolate(sharedValue.value, [0, 1], [0, 90]) + 'deg'},
+      ],
+      marginLeft: 10,
+    };
+  });
+
   return (
     <Pressable
-      onLayout={({nativeEvent}) => {
-        setButtonPossion(nativeEvent.layout);
-      }}
+      ref={ref}
       onPress={toggleIsVisible}
       style={[styles.container, props.style]}
-      {...props}>
+      {...props}
+      disabled={disable}>
       {label && (
-        <View>
+        <View style={labelContainerStyle}>
           <Text style={[styles.textLabel, labelStyle]}>{label}</Text>
         </View>
       )}
       <View style={[styles.inputContainer, inputContainer]}>
         <Text style={[styles.textValue, valueStyle]}>
-          {selectedLabel ?? placeholder}
+          {selectedLabel ? (
+            selectedLabel
+          ) : (
+            <Text style={{color: placeholderTextColor}}>{placeholder}</Text>
+          )}
         </Text>
-        <Icon type="Ionicons" name="chevron-forward" size={20} />
+        <Animated.View style={animatedStyle}>
+          <Icon type="Ionicons" name="chevron-forward" size={20} />
+        </Animated.View>
       </View>
       <ReactNativeModal
         useNativeDriverForBackdrop
-        statusBarTranslucent
+        statusBarTranslucent={true}
         backdropOpacity={0.2}
         animationIn={'fadeIn'}
         animationOut={'fadeOut'}
@@ -112,9 +158,9 @@ const DropdownMenu = ({
           }}>
           <View
             style={{
-              top: buttonPossion.height + buttonPossion.y + headerHeight,
-              width: buttonPossion.width,
-              left: buttonPossion.x,
+              top: buttonPosition.height + buttonPosition.y,
+              width: buttonPosition.width,
+              left: buttonPosition.x,
             }}>
             <FlatList
               style={styles.listOption}
@@ -150,7 +196,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 5,
     // maxHeight: '60%',
-    minWidth: 0.4 * width,
+    minWidth: 0.4 * sWidth,
   },
   itemOption: {
     paddingHorizontal: 10,

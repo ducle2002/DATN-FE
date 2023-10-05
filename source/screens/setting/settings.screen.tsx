@@ -9,7 +9,7 @@ import React from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {AppStackParamsList} from '@/routes/app.stack';
 import Button from '@/components/button.component';
-import {useLogout} from '@/modules/auth/auth.hook';
+import {useLogout} from '@/screens/authentication/services/auth.hook';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from '@/components/icon.component';
 import {SettingStackParamsList} from '@/routes/settings.stack';

@@ -1,4 +1,4 @@
-import {TBooking} from '@/modules/local-service/local-service.model';
+import {TBooking} from '@/screens/local-service/services/local-service.model';
 import BookingDetailScreen from '@/screens/local-service/booking.detail.screen';
 import BookingScreen from '@/screens/local-service/booking.screen';
 import LocalServiceScreen from '@/screens/local-service/local-service.screen';

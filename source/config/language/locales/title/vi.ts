@@ -1,14 +1,19 @@
-const title = {
-  'Pages.Administrative': 'Hành chính',
-  'Pages.Forum': 'Diễn đàn',
-  'Pages.Management.ChatCitizen': 'Chat',
-  'Pages.Management.Citizens.Reflects': 'Phản ánh',
-  'Pages.Management.Citizens.Vote': 'Khảo sát',
-  'Pages.Management.Digital.Notices': 'Thông báo số',
-  'Pages.Management.Hotline': 'Hotline',
-  'Pages.Management.Newsfeed': 'Bảng tin',
-  'Pages.Management.Question_Answer': 'Hỏi đáp',
-  'Pages.Services.Local_Amenities.Create_Store': 'Tiện ích',
+import {TPermission} from 'types/type';
+
+const title: {[key in TPermission]?: string} = {
+  'Pages.Digitals.Notifications.GetAll': 'Thông báo số',
+  'Pages.Digitals.Reflects.GetAll': 'Phản ánh số',
+  'Pages.Digitals.Surveys.GetAll': 'Khảo sát số',
+  'Pages.Digitals.Forums.GetAll': 'Quản trị bảng tin',
+  'Pages.Digitals.Communications': 'Giao tiếp số',
+  'Pages.Digitals.QnA.GetAll': 'Hỏi đáp',
+  'Pages.Digitals.Hotline.GetAll': 'Hotline',
+  'Pages.AdministrationService.Configurations': 'Hành chính số',
+  'Pages.Assets.AssetCatalog.GetAll': 'Danh mục tài sản',
+  'Pages.Assets.AssetParameters.GetAll': 'Danh phân loại',
+  'Pages.Citizen.Verifications.GetAll': 'Xác minh cư dân',
+  'Pages.LocalAmenities.List': 'Tiện ích',
+  'Pages.Operations.TaskManagement.GetAll': 'Quản lý công việc',
 };
 
 export default title;

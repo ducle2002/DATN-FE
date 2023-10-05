@@ -1,6 +1,6 @@
 import {StyleSheet, View} from 'react-native';
 import React, {useMemo} from 'react';
-import {EQAFormID, QAFormID} from '@/modules/qa/qa.model';
+import {EQAFormID, QAFormID} from '@/screens/question-answer/services/qa.model';
 import DropdownMenuComponent, {
   TOptionItem,
 } from '@/components/dropdown-menu.component';

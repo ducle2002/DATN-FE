@@ -9,6 +9,7 @@ import {StatusBar} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {PaperProvider} from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
+import {linking} from '@/config/linking';
 
 const queryClient = new QueryClient();
 function App(): JSX.Element {
@@ -23,7 +24,7 @@ function App(): JSX.Element {
       <QueryClientProvider client={queryClient}>
         <PaperProvider theme={{dark: false}}>
           <ToastProvider placement="center" duration={1500}>
-            <NavigationContainer>
+            <NavigationContainer linking={linking}>
               <StatusBar translucent={true} backgroundColor={'transparent'} />
               {isLogin ? <AppStack /> : <AuthenticationStack />}
             </NavigationContainer>

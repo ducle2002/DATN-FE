@@ -1,5 +1,6 @@
 const form = {
   requiredMessage: 'Không được để trống',
+  minValue: 'Giá trị tối thiểu là ',
 };
 
 const error = {
@@ -12,11 +13,16 @@ const button = {
   save: 'Lưu',
   cancel: 'Hủy',
   delete: 'Xóa',
-  edit: 'Chỉnh sửa',
+  edit: 'Sửa',
   deselect: 'Bỏ chọn',
   deleteAll: 'Xóa tất cả',
   deny: 'Từ chối',
   accept: 'Xác nhận',
+  back: 'Quay lại',
+  see: 'Xem',
+  requestEdit: 'Yêu cầu chỉnh sửa',
+  pickTime: 'Chọn giờ',
+  pickDate: 'Chọn ngày',
 };
 
 const shared = {

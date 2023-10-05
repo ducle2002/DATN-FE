@@ -2,7 +2,7 @@ import {useAppDispatch} from '../../hooks/redux.hook';
 import {useMutation} from 'react-query';
 import UserApi from './user.service';
 import {setUser} from './user.slice';
-import {useLogout} from '../auth/auth.hook';
+import {useLogout} from '../../screens/authentication/services/auth.hook';
 
 export const useAccount = () => {
   const dispatch = useAppDispatch();

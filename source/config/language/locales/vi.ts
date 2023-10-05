@@ -9,7 +9,10 @@ import qa from './qa/vi';
 import feedback from './feedback/vi';
 import administrative from './administrative/vi';
 import chat from './chat/vi';
-
+import materialAsset from './material-asset/vi';
+import residentLanguage from './resident/vi';
+import water from './water-meter/vi';
+import workManagement from './work-management/vi';
 const vi = {
   ...title,
   auth,
@@ -22,6 +25,14 @@ const vi = {
   administrative,
   chat,
   qa,
+  materialAsset,
+  management: 'Ban quản lý số',
+  adminis: 'Hành chính / Dịch vụ số',
+  service: 'Dịch vụ tiện ích nội khu',
+  inventory: 'Quản lý tài sản vật tư',
+  residentLanguage,
+  water,
+  workManagement,
 };
 
 export default vi;

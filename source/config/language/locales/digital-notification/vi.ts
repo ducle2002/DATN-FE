@@ -1,6 +1,6 @@
 const create = {
   department: 'Phòng ban',
-  selectDeparment: 'Chọn phòng ban',
+  selectDepartment: 'Chọn phòng ban',
   allComment: 'Được phép bình luận',
   title: 'Tiêu đề',
   data: 'Nội dung',

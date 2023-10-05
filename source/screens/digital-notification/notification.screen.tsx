@@ -4,7 +4,7 @@ import MainHeader from '../../components/main-header.component';
 import {StackScreenProps} from '@react-navigation/stack';
 import {NotificationStackParamsList} from '@/routes/notification.stack';
 import {useInfiniteQuery} from 'react-query';
-import DigitalNotiApi from '@/modules/digital-notification/digital-noti.service';
+import DigitalNotiApi from '@/screens/digital-notification/services/digital-noti.service';
 import {LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import NotiItem from './components/noti-item.component';
