@@ -1,23 +1,25 @@
 export type TWork = {
   content: string;
-  creationTime: string;
-  creatorUserId: number;
+  creationTime?: string;
+  creatorUserId?: number;
   dateExpected: string;
-  dateFinish: null | string;
+  dateFinish?: null | string;
   dateStart: string;
-  id: number;
+  id?: number;
   imageUrls: Array<String>;
   note: string;
-  status: EWorkStatus;
-  title: string;
-  tenantId: number;
-  userId: number;
-  workTypeId: number;
+  status?: EWorkStatus;
+  title?: string;
+  tenantId?: number;
+  userId?: number;
+  workTypeId?: number;
   listWorkDetail?: TWorkDetail[];
   workHistories?: TWorkHistories[];
   workLogTimes?: any;
   recipientUsers?: any;
+  recipientIds?: number[];
   supervisorUsers?: any;
+  supervisorIds: number[];
   workCreatorId: number;
 };
 

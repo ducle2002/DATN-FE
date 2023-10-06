@@ -5,11 +5,10 @@ import Icon from '@/components/icon.component';
 import {useNavigation} from '@react-navigation/native';
 import CTextInput from '@/components/text-input.component';
 import {Controller, useForm} from 'react-hook-form';
-import {StackHeaderProps} from '@react-navigation/stack';
 
 type Props = {
   keywordChange?: Function;
-} & StackHeaderProps;
+};
 const MainHeader = ({keywordChange = () => {}}: Props) => {
   const navigation = useNavigation();
   const {control, handleSubmit} = useForm({

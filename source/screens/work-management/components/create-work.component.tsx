@@ -29,13 +29,24 @@ export default memo(CreateWork);
 const styles = StyleSheet.create({
   iconContainer: {
     aspectRatio: 1,
-    flex: 0.1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 20,
+    position: 'absolute',
+    bottom: 50,
+    right: 50,
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 30,
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
+    shadowRadius: 5,
+    elevation: 2,
   },
   viewContainer: {
-    backgroundColor: 'white',
+    backgroundColor: 'red',
     width: '100%',
     height: '100%',
   },

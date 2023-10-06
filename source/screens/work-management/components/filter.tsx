@@ -3,44 +3,64 @@ import React from 'react';
 import DropdownMenuComponent, {
   TOptionItem,
 } from '@/components/dropdown-menu.component';
-import CreateWork from './create-work.component';
-import {useAppSelector} from '@/hooks/redux.hook';
-import {checkPermission} from '@/utils/utils';
 
 type Props = {
   status: Array<TOptionItem>;
-  selectedStatus: number;
-  selectStatus: (id: number) => void;
+  formId: TOptionItem[];
+  selectedStatus?: number;
+  selectStatus: (id?: number) => void;
+  selectedFormId?: number;
+  selectFormId: (id?: number) => void;
 };
 
-const FilterWork = ({status, selectStatus, selectedStatus}: Props) => {
-  const {grantedPermissions} = useAppSelector(state => state.config);
-
+const FilterWork = ({
+  status,
+  selectStatus,
+  selectedStatus,
+  formId,
+  selectedFormId,
+  selectFormId,
+}: Props) => {
   return (
     <View style={styles.container}>
       <DropdownMenuComponent
-        options={status}
-        label="Trạng thái"
-        selectedLabel={status.find(s => s.id === selectedStatus)?.label}
-        onSelected={(id: number) => selectStatus(id)}
+        options={formId}
+        label="Vai trò"
+        selectedLabel={formId.find(s => s.id === selectedFormId)?.label}
+        onSelected={(id: number) => selectFormId(id)}
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          flex: 0.9,
+          alignItems: 'flex-start',
+          flex: 1,
+          paddingRight: 10,
         }}
         inputContainer={{
           backgroundColor: '#F1F1F1',
           paddingVertical: 10,
           borderRadius: 10,
           paddingHorizontal: 15,
-          marginLeft: 30,
-          flex: 1,
+          width: '100%',
+          marginTop: 10,
         }}
-        labelContainerStyle={{flex: 0.5}}
       />
-      {checkPermission(grantedPermissions, [
-        'Pages.Management.TaskManagement.Create',
-      ]) && <CreateWork />}
+      <DropdownMenuComponent
+        options={status}
+        label="Trạng thái"
+        selectedLabel={status.find(s => s.id === selectedStatus)?.label}
+        onSelected={(id: number) => selectStatus(id)}
+        style={{
+          alignItems: 'flex-start',
+          flex: 1,
+          paddingLeft: 10,
+        }}
+        inputContainer={{
+          backgroundColor: '#F1F1F1',
+          paddingVertical: 10,
+          borderRadius: 10,
+          paddingHorizontal: 15,
+          width: '100%',
+          marginTop: 10,
+        }}
+      />
     </View>
   );
 };

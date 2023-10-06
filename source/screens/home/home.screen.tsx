@@ -205,7 +205,7 @@ const HomeScreen = (props: HomeScreenProps) => {
           </View>
           <View style={styles.section}>
             <HomeFunction
-              type="Pages.Management.TaskManagement.GetAll"
+              type="Pages.Operations.TaskManagement.GetAll"
               style={styles.iconContainer}
               iconContainerStyle={{
                 backgroundColor: homeIconBackgroundColor[4],
