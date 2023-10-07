@@ -10,6 +10,7 @@ import {checkPermission} from '@/utils/utils';
 import CreateWorkScreen from '@/screens/work-management/create-work.screen';
 import language, {languageKeys} from '@/config/language/language';
 import {TWorkDetail} from '@/screens/work-management/services/work.model';
+import CreateLogTimeScreen from '@/screens/work-management/create-log-time.screen';
 
 export type WorkManagementDrawerParamsList = {
   MANAGEMENT: undefined;
@@ -21,6 +22,10 @@ export type WorkStackParamsList = {
   DETAIL_WORK: {id?: number};
   CREATE_WORK: undefined;
   LOGTIME: {
+    detailWork: TWorkDetail;
+    workId: number;
+  };
+  CREATE_LOG_TIME: {
     detailWork: TWorkDetail;
     workId: number;
   };
@@ -48,6 +53,13 @@ const WorkStack = () => {
         component={LogTimeWorkScreen}
         options={{
           title: language.t(languageKeys.workManagement.header.logtime),
+        }}
+      />
+      <Stack.Screen
+        name="CREATE_LOG_TIME"
+        component={CreateLogTimeScreen}
+        options={{
+          title: language.t(languageKeys.workManagement.header.create_log_time),
         }}
       />
       <Stack.Screen name="DETAIL_WORK" component={DetailWorkScreen} />

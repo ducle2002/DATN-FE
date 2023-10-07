@@ -3,44 +3,44 @@ import {BaseService} from '@/utils/base.service';
 import {HOST_SERVER} from '@env';
 import {TPagingParams} from 'types/type';
 import {TWork} from './work.model';
+import {TWorkLogTime} from './logtime.model';
 
-class WorkManagementService extends BaseService {
-  endpoint = '/api/services/app/Work/';
+class LogTimeService extends BaseService {
+  endpoint = '/api/services/app/WorkLogTime/';
   getAll = async (
     params: TPagingParams & {
-      status: number;
-      formId: number;
-      workTypeId: number;
+      MaxResultCount?: number;
+      SkipCount?: number;
     },
   ): Promise<{
-    works: Array<TWork>;
+    logTimes: Array<TWorkLogTime>;
     totalRecords: number;
   }> => {
-    const url = HOST_SERVER + this.endpoint + 'GetListWork';
+    const url = HOST_SERVER + this.endpoint + 'GetListWorkLogTime';
     const {
       data: {result},
     } = await axiosClient.get(url, {params: params});
 
     return {
-      works: result.data,
+      logTimes: result.data,
       totalRecords: result.totalRecords,
     };
   };
 
-  getById = async (params: {id?: number}): Promise<TWork> => {
-    const url = HOST_SERVER + this.endpoint + 'GetWorkById';
+  getById = async (params: {id?: number}): Promise<TWorkLogTime> => {
+    const url = HOST_SERVER + this.endpoint + 'GetWorkLogTimeById';
     const {
       data: {result},
     } = await axiosClient.get(url, {params: params});
     return result.data;
   };
 
-  create = async (params: TWork) => {
-    const url = HOST_SERVER + this.endpoint + 'CreateWork';
+  create = async (params: TWorkLogTime) => {
+    const url = HOST_SERVER + this.endpoint + 'CreateWorkLogTime';
     return axiosClient.post(url, {params: params});
   };
 }
 
-const WorkManagementApi = new WorkManagementService();
+const LogTimeApi = new LogTimeService();
 
-export default WorkManagementApi;
+export default LogTimeApi;
