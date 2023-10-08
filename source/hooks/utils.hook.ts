@@ -1,8 +1,8 @@
 import {TImagePicker} from '@/utils/image-picker-handle';
-import UtilsApi from '@/utils/utils.service';
 import {useMemo} from 'react';
 import {useMutation} from 'react-query';
 import HTMLParser from 'node-html-parser';
+import UtilsApi from '@/services/utils.service';
 
 export const useUploadImages = (
   onError: Function = () => {},

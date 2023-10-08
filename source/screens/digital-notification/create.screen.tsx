@@ -28,10 +28,10 @@ import language, {languageKeys} from '@/config/language/language';
 import {TImagePicker} from '@/utils/image-picker-handle';
 import AddImageButton from './components/add-image-button.component';
 import {useMutation, useQueryClient} from 'react-query';
-import UtilsApi from '@/utils/utils.service';
 import {useToast} from 'react-native-toast-notifications';
 import BottomButton from '../../components/bottom-button.component';
 import DigitalNotiApi from './services/digital-noti.service';
+import UtilsApi from '@/services/utils.service';
 
 type Props = StackScreenProps<NotificationStackParamsList, 'CREATE_SCREEN'>;
 
@@ -173,7 +173,9 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
           onSelected={onSelected}
           options={[
             ...listOrganizations
-              .filter(o => o.types.includes(TOrganizationUnitType.Notification))
+              .filter(o =>
+                o.types?.includes(TOrganizationUnitType.Notification),
+              )
               .map(o => ({
                 label: o.displayName,
                 id: o.organizationUnitId,

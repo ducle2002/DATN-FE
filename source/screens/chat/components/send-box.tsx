@@ -17,9 +17,9 @@ import DocumentPicker, {
 import Icon from '@/components/icon.component';
 import {useToast} from 'react-native-toast-notifications';
 import ChooseImageModal from '@/components/choose-image-modal';
-import UtilsApi from '@/utils/utils.service';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
+import UtilsApi from '@/services/utils.service';
 
 const {width, height} = Dimensions.get('screen');
 type Props = {

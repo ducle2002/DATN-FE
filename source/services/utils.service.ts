@@ -1,7 +1,7 @@
+import axiosClient from '@/utils/axios.client';
+import {compressImageHandle} from '@/utils/compress-handle';
+import {TImagePicker} from '@/utils/image-picker-handle';
 import {HOST_SERVER} from '@env';
-import axiosClient from './axios.client';
-import {TImagePicker} from './image-picker-handle';
-import {compressImageHandle} from './compress-handle';
 
 export class UtilsService {
   uploadImagesRequest = async (files: Array<TImagePicker>) => {

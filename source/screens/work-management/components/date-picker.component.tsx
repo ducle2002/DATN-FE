@@ -23,6 +23,7 @@ type Props = {
   inputContainerStyle?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   labelContainerStyle?: StyleProp<ViewStyle>;
+  errorMessage?: string;
 };
 
 const DatePickerComponent = ({
@@ -34,6 +35,7 @@ const DatePickerComponent = ({
   inputContainerStyle,
   containerStyle,
   labelContainerStyle,
+  errorMessage,
 }: Props) => {
   const [modal, setIsVisible] = useState<{
     isVisible: boolean;
@@ -83,6 +85,7 @@ const DatePickerComponent = ({
             color="#429AE0"
           />
         </View>
+        <Text>{errorMessage}</Text>
       </View>
       <DatePicker
         date={moment(value ? value : undefined).toDate()}

@@ -37,7 +37,7 @@ class WorkManagementService extends BaseService {
 
   create = async (params: TWork) => {
     const url = HOST_SERVER + this.endpoint + 'CreateWork';
-    return axiosClient.post(url, {params: params});
+    return axiosClient.post(url, params);
   };
 }
 
