@@ -139,7 +139,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             alignItems: 'center',
             justifyContent: 'space-around',
           }}>
-          <Icon
+          {/* <Icon
             name="notifications"
             type="Ionicons"
             size={30}
@@ -150,7 +150,10 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
                 reminder: true,
               });
             }}
-          />
+          /> */}
+          <Button onPress={() => {}} icon={'plus'} mode="outlined">
+            Thêm lượt
+          </Button>
           <Button
             onPress={() => {
               setIsVisible({
@@ -158,6 +161,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
                 reminder: false,
               });
             }}
+            icon={'checkbox-marked-circle-plus-outline'}
             mode="contained">
             Hoàn thành
           </Button>

@@ -7,6 +7,7 @@ import Icon from '@/components/icon.component';
 import {EWorkStatus} from '../services/work.model';
 import language, {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
+import moment from 'moment';
 
 type Props = StackHeaderProps & {status?: EWorkStatus};
 const HeaderWorkDetail = ({status, ...props}: Props) => {
@@ -50,12 +51,24 @@ const HeaderWorkDetail = ({status, ...props}: Props) => {
             paddingHorizontal: 30,
             paddingVertical: 10,
             borderRadius: 10,
+            alignItems: 'center',
           }}>
-          <Text style={styles.textLabel}>
+          {/* <Text style={styles.textLabel}>
             Trạng thái:{' '}
             <Text style={{color: '#2E9BFF'}}>
               {language.t(languageKeys.workManagement.status[status])}
             </Text>
+          </Text> */}
+          <Text style={styles.textLabel}>
+            Lượt: số <Text style={{color: '#2E9BFF'}}>1</Text>
+          </Text>
+          <Text
+            style={{
+              fontSize: 12,
+              paddingTop: 4,
+              color: 'gray',
+            }}>
+            Ngày {moment().format('DD/MM/YYYY HH:mm')}
           </Text>
         </View>
       )}
