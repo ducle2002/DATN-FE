@@ -35,7 +35,12 @@ const CTextInput = React.forwardRef(
       <>
         {label && <Text style={[styles.textLabel, labelStyle]}>{label}</Text>}
         <View style={[styles.container, containerStyle]}>
-          <TextInput ref={ref} style={[styles.textInput, style]} {...props} />
+          <TextInput
+            ref={ref}
+            style={[styles.textInput, style]}
+            {...props}
+            placeholderTextColor={'#ababab'}
+          />
         </View>
         {withError && <Text style={styles.textError}>{errorMessage}</Text>}
       </>

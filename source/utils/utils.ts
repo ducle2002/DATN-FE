@@ -24,6 +24,16 @@ function getIntersection<T>(array1: T[], array2: T[]): T[] {
 
   return intersection;
 }
+
+export function arrayToTree<T>(array: T[], parentId?: number | null): T[] {
+  parentId = parentId ?? null;
+  const children = array.filter(item => item.parentId === parentId);
+  return children.map(child => ({
+    ...child,
+    children: arrayToTree(array, child.id),
+  }));
+}
+
 export const checkPermission = (
   grantedPermissions: TPermission[],
   permissions?: TPermission[],

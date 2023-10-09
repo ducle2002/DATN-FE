@@ -1,23 +1,46 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
-import React from 'react';
+import React, {createContext, useState} from 'react';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import DatePickerComponent from './components/date-picker.component';
 import CTextInput from '@/components/text-input.component';
 import TextInputSuggestion from '@/components/text-input-suggestion';
 import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
-import {useQuery} from 'react-query';
-import WorkTypeApi from './services/work-type.service';
+import {useMutation} from 'react-query';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
 import globalStyles from '@/config/globalStyles';
 import language, {languageKeys} from '@/config/language/language';
 import {StackScreenProps} from '@react-navigation/stack';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
+import WorkManagementApi from './services/work-management.service';
+import {useWorkType} from './services/hook';
+import * as yup from 'yup';
+import {yupResolver} from '@hookform/resolvers/yup';
+import PersonnelPicker from './components/personnel-picker.component';
+import {TPersonnel} from './services/work.model';
 
 type Props = StackScreenProps<WorkStackParamsList, 'CREATE_WORK'>;
+export const PersonnelPickerContext = createContext<{
+  selected: TPersonnel[];
+  onSelect: (accounts: TPersonnel[]) => void;
+}>({
+  selected: [],
+  onSelect: () => {},
+});
 
 const CreateWorkScreen = ({navigation}: Props) => {
-  const {control} = useForm({
+  const [supervisorUsers, setSupervisorUsers] = useState<TPersonnel[]>([]);
+  const [recipientUsers, setRecipientUsers] = useState<TPersonnel[]>([]);
+
+  const schema = yup.object({
+    dateStart: yup.string().required(),
+    dateExpected: yup.string(),
+    title: yup.string().required(),
+    content: yup.string().required(),
+    workTypeId: yup.string().required(),
+  });
+
+  const {control, handleSubmit} = useForm({
     defaultValues: {
       dateStart: '',
       dateExpected: '',
@@ -25,6 +48,7 @@ const CreateWorkScreen = ({navigation}: Props) => {
       content: '',
       workTypeId: '',
     },
+    resolver: yupResolver(schema),
   });
 
   const dateStart = useWatch({
@@ -32,32 +56,66 @@ const CreateWorkScreen = ({navigation}: Props) => {
     name: 'dateStart',
   });
 
-  const {data} = useQuery({
-    queryKey: ['work-type'],
-    queryFn: () => WorkTypeApi.getAllNotPaging(),
+  const {workType} = useWorkType();
+
+  const {mutate} = useMutation({
+    mutationFn: (params: any) => WorkManagementApi.create(params),
+    onSuccess: result => {
+      console.log(result);
+    },
+    onError: error => {
+      console.log(error);
+    },
   });
+
+  const onSubmit = (data: any) => {
+    mutate({
+      ...data,
+      imageUrls: [],
+      workTypeId: parseInt(data.workTypeId, 10),
+      supervisorIds: supervisorUsers.map(s => s.id),
+      recipientIds: recipientUsers.map(s => s.id),
+    });
+  };
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.contentContainer}>
-          <DropdownMenuComponent
-            label="Dự án"
-            inputContainer={styles.inputContainerStyle}
-            labelStyle={styles.labelStyle}
-            style={{marginBottom: 20}}
-          />
-          <DropdownMenuComponent
-            label="Phòng ban"
-            inputContainer={styles.inputContainerStyle}
-            labelStyle={styles.labelStyle}
-            style={{marginBottom: 20}}
-          />
+          <PersonnelPickerContext.Provider
+            value={{
+              selected: supervisorUsers,
+              onSelect: setSupervisorUsers,
+            }}>
+            <PersonnelPicker
+              label={language.t(
+                languageKeys.workManagement.work.supervisorUsers,
+              )}
+              containerStyle={{
+                marginBottom: 20,
+              }}
+            />
+          </PersonnelPickerContext.Provider>
+
+          <PersonnelPickerContext.Provider
+            value={{
+              selected: recipientUsers,
+              onSelect: setRecipientUsers,
+            }}>
+            <PersonnelPicker
+              label={language.t(
+                languageKeys.workManagement.work.recipientUsers,
+              )}
+              containerStyle={{
+                marginBottom: 20,
+              }}
+            />
+          </PersonnelPickerContext.Provider>
 
           <Controller
             control={control}
             name="dateStart"
-            render={({field: {value, onChange}}) => (
+            render={({field: {value, onChange}, fieldState: {error}}) => (
               <DatePickerComponent
                 value={value}
                 onChange={onChange}
@@ -68,13 +126,14 @@ const CreateWorkScreen = ({navigation}: Props) => {
                   {paddingVertical: 0},
                 ]}
                 containerStyle={{marginBottom: 20}}
+                errorMessage={error?.message}
               />
             )}
           />
           <Controller
             control={control}
             name="dateExpected"
-            render={({field: {value, onChange}}) => (
+            render={({field: {value, onChange}, fieldState: {error}}) => (
               <DatePickerComponent
                 value={value}
                 onChange={onChange}
@@ -88,6 +147,7 @@ const CreateWorkScreen = ({navigation}: Props) => {
                   {paddingVertical: 0},
                 ]}
                 containerStyle={{marginBottom: 20}}
+                errorMessage={error?.message}
               />
             )}
           />
@@ -99,14 +159,14 @@ const CreateWorkScreen = ({navigation}: Props) => {
             render={({field: {value, onChange}}) => (
               <DropdownMenuComponent
                 options={
-                  data?.workType.map(type => ({
+                  workType?.map(type => ({
                     id: type.id,
                     label: type.name,
                   })) ?? []
                 }
                 onSelected={(id: number) => onChange(id.toString())}
                 selectedLabel={
-                  data?.workType.find(t => t.id.toString() === value)?.name
+                  workType?.find(t => t.id.toString() === value)?.name
                 }
                 label={language.t(languageKeys.workManagement.work.workTypeId)}
                 inputContainer={styles.inputContainerStyle}
@@ -161,7 +221,9 @@ const CreateWorkScreen = ({navigation}: Props) => {
         </View>
       </ScrollView>
       <BottomContainer>
-        <Button mode="contained">Save</Button>
+        <Button mode="contained" onPress={handleSubmit(onSubmit)}>
+          Save
+        </Button>
       </BottomContainer>
     </View>
   );

@@ -28,9 +28,9 @@ import {useMutation, useQuery, useQueryClient} from 'react-query';
 import FeedbackApi from '@/modules/feedback/feedback.service';
 import {TOrganizationUnitUser} from '@/modules/feedback/feedback.model';
 import moment from 'moment';
-import UtilsApi from '@/utils/utils.service';
 import {useToast} from 'react-native-toast-notifications';
 import LoadingComponent from '@/components/loading';
+import UtilsApi from '@/services/utils.service';
 
 const {width, height} = Dimensions.get('screen');
 type screenNavigationProp = StackNavigationProp<

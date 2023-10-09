@@ -54,6 +54,11 @@ export type TWorkType = {
   name: string;
 };
 
+export type TPersonnel = {
+  id: number;
+  fullName: string;
+};
+
 export enum EWorkStatus {
   TO_DO = 1,
   DOING = 2,

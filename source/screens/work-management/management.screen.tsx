@@ -25,9 +25,11 @@ const ManagementScreen = ({navigation}: Props) => {
   const status = useMemo(
     () => [
       {id: undefined, label: 'All'},
+      {id: EWorkStatus.TO_DO, label: 'Cần làm'},
       {id: EWorkStatus.DOING, label: 'Đang làm'},
       {id: EWorkStatus.COMPLETE, label: 'Đã hoàn thành'},
       {id: EWorkStatus.OVERDUE, label: 'Quá hạn'},
+      {id: EWorkStatus.CANCELED, label: 'Đã hủy'},
     ],
     [],
   );
