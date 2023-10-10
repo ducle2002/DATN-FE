@@ -3,7 +3,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import moment from 'moment';
 import BottomContainer from '@/components/bottom-container.component';
 import globalStyles from '@/config/globalStyles';
-import Icon from '@/components/icon.component';
 import SubTaskItem from './components/sub-task.component';
 import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
@@ -16,6 +15,7 @@ import WorkManagementApi from './services/work-management.service';
 import RenderHTML from 'react-native-render-html';
 import HeaderWorkDetail from './components/header.component';
 const {width, height} = Dimensions.get('screen');
+import language, {languageKeys} from '@/config/language/language';
 
 type Props = StackScreenProps<WorkStackParamsList, 'DETAIL_WORK'>;
 
@@ -56,6 +56,20 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
       <ScrollView style={{}}>
         <View style={styles.contentContainer}>
           <View style={[styles.row, {alignItems: 'center', flexWrap: 'wrap'}]}>
+            <Text style={styles.textLabel}>Trạng thái:</Text>
+            <View
+              style={[
+                styles.textDateContainer,
+                {marginRight: 'auto', marginLeft: 4},
+              ]}>
+              <Text style={styles.textDate}>
+                {work?.status
+                  ? language.t(languageKeys.workManagement.status[work?.status])
+                  : ''}
+              </Text>
+            </View>
+          </View>
+          <View style={[styles.row, {alignItems: 'center', flexWrap: 'wrap'}]}>
             <Text style={styles.textLabel}>Người giám sát:</Text>
             <View
               style={{
@@ -72,7 +86,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
           <View style={{...styles.row, justifyContent: 'space-between'}}>
             <View style={[styles.row, styles.dateContainer]}>
               <Text style={{...styles.textLabel, marginRight: 'auto'}}>
-                Bắt đầu
+                Bắt đầu:
               </Text>
               <View style={[styles.textDateContainer, {marginRight: 'auto'}]}>
                 <Text style={styles.textDate}>
@@ -82,7 +96,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             </View>
             <View style={[styles.row, styles.dateContainer]}>
               <Text style={{...styles.textLabel, marginLeft: 'auto'}}>
-                Kết thúc
+                Kết thúc:
               </Text>
               <View style={[styles.textDateContainer, {marginLeft: 'auto'}]}>
                 <Text style={styles.textDate}>
@@ -92,7 +106,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             </View>
           </View>
           <View>
-            <Text style={styles.textLabel}>Mô tả công việc</Text>
+            <Text style={styles.textLabel}>Mô tả công việc:</Text>
             <RenderHTML
               source={{html: work?.content ?? ''}}
               contentWidth={width}

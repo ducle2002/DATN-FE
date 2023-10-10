@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import ItemCard from '@/components/item-card.component';
 import {Checkbox} from 'react-native-paper';
 import {TWorkDetail} from '../services/work.model';
@@ -15,6 +15,7 @@ type Props = {
 
 const SubTaskItem = ({item, workId}: Props) => {
   const navigation = useNavigation<NavigationProp<WorkStackParamsList>>();
+  const [check, setCheck] = useState(false);
 
   return (
     <ItemCard
@@ -32,6 +33,19 @@ const SubTaskItem = ({item, workId}: Props) => {
           workId: workId,
         });
       }}>
+      <TouchableOpacity
+        onPress={() => {
+          setCheck(!check);
+        }}
+        style={[
+          styles.btnRow,
+          {
+            borderTopLeftRadius: 8,
+            borderBottomLeftRadius: 8,
+          },
+        ]}>
+        <Checkbox.Android status={check ? 'checked' : 'unchecked'} />
+      </TouchableOpacity>
       <View
         style={{
           flexDirection: 'row',
@@ -40,24 +54,23 @@ const SubTaskItem = ({item, workId}: Props) => {
           justifyContent: 'space-between',
           paddingVertical: 12,
           paddingLeft: 10,
+          borderLeftWidth: 2,
+          borderRightWidth: 2,
+          borderColor: '#F1F1F1',
         }}>
-        <Checkbox.Android status="checked" />
         <View style={{flex: 1, marginLeft: 10}}>
           <Text style={styles.textTitle}>{item.name}</Text>
           <Text style={styles.textValue}>{item.description}</Text>
         </View>
       </View>
       <TouchableOpacity
-        style={{
-          height: '100%',
-          padding: 10,
-          borderTopRightRadius: 8,
-          borderBottomRightRadius: 8,
-          borderLeftWidth: 2,
-          borderColor: '#F1F1F1',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+        style={[
+          styles.btnRow,
+          {
+            borderTopRightRadius: 8,
+            borderBottomRightRadius: 8,
+          },
+        ]}>
         <Icon
           type="Ionicons"
           name="document-attach"
@@ -77,5 +90,11 @@ const styles = StyleSheet.create({
   },
   textValue: {
     ...globalStyles.text15Medium,
+  },
+  btnRow: {
+    height: '100%',
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
