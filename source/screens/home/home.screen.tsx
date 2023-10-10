@@ -1,13 +1,10 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {useAppSelector} from '@/hooks/redux.hook';
 import HomeFunction from './components/home-function.component';
 import HomeHeader from './components/home-header.component';
 import {StackScreenProps} from '@react-navigation/stack';
 import {AppStackParamsList} from '@/routes/app.stack';
-import {useAccount} from '@/modules/user/user.hook';
-import {useOrganizationUnit} from '@/modules/organization/organization.hook';
-import {useConfigPermissions} from '@/modules/config/config.hook';
 import globalStyles, {homeIconBackgroundColor} from '@/config/globalStyles';
 import {
   administrativeFunction,
@@ -25,30 +22,9 @@ export type HomeScreenProps = StackScreenProps<
 >;
 
 const HomeScreen = (props: HomeScreenProps) => {
-  const {getOrganizationUnitByUser} = useOrganizationUnit();
-  const {getConfigPermission} = useConfigPermissions();
-
-  const {getUserInfor} = useAccount();
   const language = useTranslation();
 
-  const {isLogin} = useAppSelector(state => state.auth);
-  const {grantedPermissions, isRefreshingPermissions} = useAppSelector(
-    state => state.config,
-  );
-
-  useEffect(() => {
-    if (isLogin) {
-      getConfigPermission();
-      getOrganizationUnitByUser();
-      getUserInfor();
-    }
-  }, [getConfigPermission, getOrganizationUnitByUser, getUserInfor, isLogin]);
-
-  useEffect(() => {
-    if (isRefreshingPermissions) {
-      getConfigPermission();
-    }
-  }, [getConfigPermission, isRefreshingPermissions]);
+  const {grantedPermissions} = useAppSelector(state => state.config);
 
   const {management, administrative, service, operator, resident} =
     useMemo(() => {

@@ -32,6 +32,7 @@ import OperatingStack, {
 import WorkManagementDrawer, {
   WorkStackParamsList,
 } from './work-management.stack';
+import {ERole} from '@/screens/role/service/role.model';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -91,6 +92,9 @@ const AppStack = () => {
       dispatch(setConnection(hubConnection));
     }
   }, [dispatch, encryptedAccessToken]);
+
+  const {role} = useAppSelector(state => state.role);
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -98,34 +102,44 @@ const AppStack = () => {
         headerShown: false,
         freezeOnBlur: true,
       }}>
-      <Stack.Screen name={'HOME_SCREEN'} component={HomeScreen} />
-      <Stack.Screen name={'SETTING_SCREEN'} component={SettingStack} />
-      <Stack.Screen name="NOTIFICATION_STACK" component={NotificationStack} />
-      <Stack.Screen name="CHAT_STACK" component={ChatStack} />
-      <Stack.Screen name="FEEDBACK_STACK" component={FeedbackStack} />
-      <Stack.Screen
-        name="ADMINISTRATIVE_STACK"
-        component={AdministrativeStack}
-      />
-      <Stack.Screen name="VOTE_STACK" component={VoteStack} />
-      <Stack.Screen name="LOCAL_SERVICE_STACK" component={LocalServiceStack} />
-      <Stack.Screen name="QUESTION_ANSWER_STACK" component={QAStack} />
-      <Stack.Screen
-        name="MATERIAL_ASSET_STACK"
-        component={MaterialAssetStack}
-      />
+      {role?.type === ERole.ADMINISTRATOR && (
+        <Stack.Group>
+          <Stack.Screen name={'HOME_SCREEN'} component={HomeScreen} />
+          <Stack.Screen
+            name="NOTIFICATION_STACK"
+            component={NotificationStack}
+          />
+          <Stack.Screen name="CHAT_STACK" component={ChatStack} />
+          <Stack.Screen name="FEEDBACK_STACK" component={FeedbackStack} />
+          <Stack.Screen
+            name="ADMINISTRATIVE_STACK"
+            component={AdministrativeStack}
+          />
+          <Stack.Screen name="VOTE_STACK" component={VoteStack} />
+          <Stack.Screen
+            name="LOCAL_SERVICE_STACK"
+            component={LocalServiceStack}
+          />
+          <Stack.Screen name="QUESTION_ANSWER_STACK" component={QAStack} />
+          <Stack.Screen
+            name="MATERIAL_ASSET_STACK"
+            component={MaterialAssetStack}
+          />
+          <Stack.Screen
+            name="RESIDENT_STACK"
+            component={ResidentVerifyScreen}
+            options={{headerShown: true}}
+          />
+        </Stack.Group>
+      )}
+      <Stack.Screen name="WORK_MANAGEMENT" component={WorkManagementDrawer} />
       <Stack.Screen
         initialParams={{isReturnPhoto: true}}
         name="CAMERA_SCREEN"
         component={CameraScreen}
       />
-      <Stack.Screen
-        name="RESIDENT_STACK"
-        component={ResidentVerifyScreen}
-        options={{headerShown: true}}
-      />
       <Stack.Screen name="OPERATING_STACK" component={OperatingStack} />
-      <Stack.Screen name="WORK_MANAGEMENT" component={WorkManagementDrawer} />
+      <Stack.Screen name={'SETTING_SCREEN'} component={SettingStack} />
     </Stack.Navigator>
   );
 };

@@ -27,7 +27,7 @@ class WorkManagementService extends BaseService {
     };
   };
 
-  getById = async (params: {id: number}): Promise<TWork> => {
+  getById = async (params: {id?: number}): Promise<TWork> => {
     const url = HOST_SERVER + this.endpoint + 'GetWorkById';
     const {
       data: {result},

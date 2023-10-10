@@ -10,10 +10,12 @@ export const useLogout = () => {
     mutationFn: () => AuthenticationApi.logout(),
     onSuccess: () => {
       AsyncStorage.removeItem('Token');
+      AsyncStorage.removeItem('Role');
       dispatch(logoutSuccess());
     },
     onError: () => {
       AsyncStorage.removeItem('Token');
+      AsyncStorage.removeItem('Role');
       dispatch(logoutSuccess());
     },
   });

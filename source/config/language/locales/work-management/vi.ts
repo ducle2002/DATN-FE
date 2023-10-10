@@ -28,6 +28,7 @@ const work = {
 const header = {
   create: 'Tạo công việc',
   management: 'Quản lý công việc',
+  myWork: 'Công việc của tôi',
 };
 
 const workManagement = {

@@ -3,8 +3,6 @@ import React, {useEffect, useMemo, useState} from 'react';
 import FilterWork from './components/filter';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
 import {StackScreenProps} from '@react-navigation/stack';
-import {useInfiniteQuery} from 'react-query';
-import WorkManagementApi from './services/work-management.service';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {flatten, map} from 'ramda';
 import WorkItem from './components/work-item.component';
@@ -12,6 +10,7 @@ import {EWorkFormID, EWorkStatus, TWork} from './services/work.model';
 import CreateWorkComponent from './components/create-work.component';
 import {checkPermission} from '@/utils/utils';
 import {useAppSelector} from '@/hooks/redux.hook';
+import {useWorkQuery} from './services/hook';
 
 type Props = StackScreenProps<WorkStackParamsList, 'MAIN_DRAWER'>;
 
@@ -48,25 +47,9 @@ const ManagementScreen = ({navigation}: Props) => {
 
   const [selectedFormId, selectFormId] = useState(formId[0].id);
 
-  const {data, fetchNextPage} = useInfiniteQuery({
-    queryKey: ['my-work', selectedStatus, selectedFormId],
-    queryFn: ({pageParam}) =>
-      WorkManagementApi.getAll({
-        ...pageParam,
-        maxResultCount: 10,
-        status: selectedStatus,
-        formId: selectedFormId,
-      }),
-    getNextPageParam: (lastPage, allPages) => {
-      const skipCount = allPages.length * 10;
-      return (allPages.length - 1) * 10 + lastPage.works.length !==
-        lastPage.totalRecords
-        ? {
-            skipCount: skipCount,
-            maxResultCount: 10,
-          }
-        : undefined;
-    },
+  const {data, fetchNextPage} = useWorkQuery({
+    selectedFormId: selectedFormId,
+    selectedStatus: selectedStatus,
   });
 
   const dataProvider = useMemo(
