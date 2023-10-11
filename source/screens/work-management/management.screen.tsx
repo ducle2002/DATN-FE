@@ -79,7 +79,9 @@ const ManagementScreen = ({navigation}: Props) => {
 
   const renderItem: ListRenderItem<TWork> = ({item}) => (
     <WorkItem
-      onPress={() => navigation.navigate('DETAIL_WORK', {id: item.id})}
+      onPress={() => {
+        navigation.navigate('DETAIL_WORK', {id: item.id});
+      }}
       {...{item}}
     />
   );

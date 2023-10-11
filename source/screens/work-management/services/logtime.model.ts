@@ -9,3 +9,13 @@ export type TWorkLogTime = {
   imageUrls?: string[] | any[];
   id?: number;
 };
+
+export type TWorkAttachLogTime = {
+  note?: string | null;
+  imageUrls?: string[] | any[];
+};
+export type TCreateTurnWork = {
+  workId: number;
+  turnNumber: number;
+  description?: string;
+};

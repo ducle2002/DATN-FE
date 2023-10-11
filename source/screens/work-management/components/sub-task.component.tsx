@@ -11,9 +11,10 @@ import Icon from '@/components/icon.component';
 type Props = {
   item: TWorkDetail;
   workId: number;
+  setModalAttachProps: Function;
 };
 
-const SubTaskItem = ({item, workId}: Props) => {
+const SubTaskItem = ({item, workId, setModalAttachProps}: Props) => {
   const navigation = useNavigation<NavigationProp<WorkStackParamsList>>();
   const [check, setCheck] = useState(false);
 
@@ -64,6 +65,13 @@ const SubTaskItem = ({item, workId}: Props) => {
         </View>
       </View>
       <TouchableOpacity
+        disabled={!check}
+        onPress={() => {
+          setModalAttachProps({
+            visible: true,
+            workDetail: item,
+          });
+        }}
         style={[
           styles.btnRow,
           {
@@ -75,7 +83,7 @@ const SubTaskItem = ({item, workId}: Props) => {
           type="Ionicons"
           name="document-attach"
           size={24}
-          color={'#ced4da'}
+          color={check ? '#0096c7' : '#ced4da'}
         />
       </TouchableOpacity>
     </ItemCard>

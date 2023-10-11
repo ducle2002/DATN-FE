@@ -9,3 +9,7 @@ export const schemaLogTime = yup.object().shape({
   note: yup.string().nullable(),
   imageUrls: yup.array().of(yup.mixed()).required('Cần tải lên minh chứng ảnh'),
 });
+export const schemaAttachLogTime = yup.object().shape({
+  note: yup.string().nullable(),
+  imageUrls: yup.array().required('Cần tải lên minh chứng ảnh'),
+});
