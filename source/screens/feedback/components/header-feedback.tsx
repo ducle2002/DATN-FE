@@ -20,8 +20,13 @@ const {width, height} = Dimensions.get('screen');
 type Props = {
   searchQuery: string;
   setSearchQuery: Function;
+  openModalFilter: Function;
 };
-const HeaderFeedback = ({searchQuery = '', setSearchQuery}: Props) => {
+const HeaderFeedback = ({
+  searchQuery = '',
+  setSearchQuery,
+  openModalFilter,
+}: Props) => {
   const [value, setValue] = useState(searchQuery);
   const {t} = useTranslation();
   const navigation = useNavigation<NavigationProp<FeedbackStackParamsList>>();
@@ -52,8 +57,8 @@ const HeaderFeedback = ({searchQuery = '', setSearchQuery}: Props) => {
         onChangeText={text => {
           setValue(text);
         }}
-        onEndEditing={text => {
-          setSearchQuery(text);
+        onEndEditing={e => {
+          setSearchQuery(e.nativeEvent.text);
         }}
         onClearIconPress={() => {
           setSearchQuery('');
@@ -97,7 +102,9 @@ const HeaderFeedback = ({searchQuery = '', setSearchQuery}: Props) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            // navigation.goBack();
+            if (openModalFilter) {
+              openModalFilter();
+            }
           }}
           style={{
             paddingLeft: 5,

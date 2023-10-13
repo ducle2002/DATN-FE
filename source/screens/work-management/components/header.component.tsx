@@ -1,5 +1,11 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
 import LinearGradientHeader from '@/components/linear-gradient-header.component';
 import {StackHeaderProps} from '@react-navigation/stack';
 import {HeaderTitle} from '@react-navigation/elements';
@@ -7,9 +13,28 @@ import Icon from '@/components/icon.component';
 import {EWorkStatus} from '../services/work.model';
 import language, {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
+import moment from 'moment';
+import {Divider, Menu} from 'react-native-paper';
+import SelectTimesComponent, {TOptionItem} from './select-times.component';
+import {TTurnWork} from '../services/logtime.model';
 
-type Props = StackHeaderProps & {status?: EWorkStatus};
-const HeaderWorkDetail = ({status, ...props}: Props) => {
+type Props = StackHeaderProps & {
+  status?: EWorkStatus;
+  turnWork?: TTurnWork[];
+  onChangeTurn: Function;
+  selectedTurn?: TTurnWork;
+};
+const HeaderWorkDetail = ({
+  status,
+  turnWork,
+  onChangeTurn,
+  selectedTurn,
+  ...props
+}: Props) => {
+  const [visibleMenu, setVisibleMenu] = useState(false);
+  const closeMenu = () => {
+    setVisibleMenu(false);
+  };
   return (
     <LinearGradientHeader headerProps={props}>
       <View
@@ -43,21 +68,33 @@ const HeaderWorkDetail = ({status, ...props}: Props) => {
         />
       </View>
       {!!status && (
-        <View
+        <SelectTimesComponent
           style={{
             alignSelf: 'center',
             backgroundColor: '#F7F7F7',
-            paddingHorizontal: 30,
+            paddingHorizontal: 12,
             paddingVertical: 10,
             borderRadius: 10,
-          }}>
-          <Text style={styles.textLabel}>
-            Trạng thái:{' '}
-            <Text style={{color: '#2E9BFF'}}>
-              {language.t(languageKeys.workManagement.status[status])}
-            </Text>
-          </Text>
-        </View>
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+          valueStyle={styles.textLabel}
+          options={
+            turnWork?.map(el => ({
+              id: el.id ?? el.turnNumber,
+              label: String(el.turnNumber),
+              hint: moment(el.creationTime).format('DD/MM/YYYY HH:mm'),
+            })) ?? []
+          }
+          selectedLabel={
+            selectedTurn ? String(selectedTurn.turnNumber) : 'đang cập nhật'
+          }
+          onSelected={(val: string) => {
+            onChangeTurn(turnWork?.find(el => el.id === Number(val)));
+          }}
+          preLabel="Lượt thực hiện: "
+        />
       )}
     </LinearGradientHeader>
   );

@@ -1,9 +1,4 @@
-import {
-  AnyAction,
-  CombinedState,
-  combineReducers,
-  configureStore,
-} from '@reduxjs/toolkit';
+import {AnyAction, combineReducers, configureStore} from '@reduxjs/toolkit';
 import authenticationSlice, {
   authInitAction,
   logoutSuccess,

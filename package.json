@@ -39,6 +39,7 @@
     "react-i18next": "^13.0.1",
     "react-native": "0.71.13",
     "react-native-date-picker": "4.2.14",
+    "react-native-calendars": "^1.1300.0",
     "react-native-document-picker": "^9.0.1",
     "react-native-dotenv": "^3.4.9",
     "react-native-fast-image": "^8.6.3",

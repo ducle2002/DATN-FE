@@ -1,35 +1,142 @@
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import {
+  Alert,
+  Dimensions,
+  KeyboardAvoidingView,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import moment from 'moment';
 import BottomContainer from '@/components/bottom-container.component';
 import globalStyles from '@/config/globalStyles';
-import Icon from '@/components/icon.component';
 import SubTaskItem from './components/sub-task.component';
 import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
 import Button from '@/components/button.component';
 import CheckoutWork from './components/checkout-work.component';
-import {Chip, useTheme} from 'react-native-paper';
-import AddNotifications from './components/add-notification.component';
-import {useQuery} from 'react-query';
+import {useMutation, useQuery} from 'react-query';
 import WorkManagementApi from './services/work-management.service';
 import RenderHTML from 'react-native-render-html';
 import HeaderWorkDetail from './components/header.component';
-const {width, height} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
+import language, {languageKeys} from '@/config/language/language';
+import ReactNativeModal from 'react-native-modal';
+import {TWorkDetail} from './services/work.model';
+import AttachLogTimeComponent from './components/attach-logtime.component';
+import LogTimeApi from './services/logtime.service';
+import {
+  TCreateTurnWork,
+  TTurnWork,
+  TWorkLogTime,
+} from './services/logtime.model';
+import {useToast} from 'react-native-toast-notifications';
+import LoadingComponent from '@/components/loading';
 
 type Props = StackScreenProps<WorkStackParamsList, 'DETAIL_WORK'>;
+type TModalAttachProps = {
+  visible: boolean;
+  workDetail?: TWorkDetail;
+};
 
 const DetailWorkScreen = ({route, navigation}: Props) => {
+  const toast = useToast();
+  const [modalAttachProps, setModalAttachProps] = useState<TModalAttachProps>({
+    visible: false,
+  });
+  const [selectedTurnWork, setSelectedTurnWork] = useState<
+    TTurnWork | undefined
+  >();
+  const [statusLogTimes, setStatusLogTime] = useState<TWorkLogTime[]>([]);
+  const toggleIsVisible = () => {
+    setModalAttachProps({
+      ...modalAttachProps,
+      visible: !modalAttachProps.visible,
+    });
+  };
   const {data: work} = useQuery({
     queryKey: ['work', route.params.id],
     queryFn: () => WorkManagementApi.getById({id: route.params.id}),
   });
+  const {data: logTimeWork, refetch: refetchLogTime} = useQuery({
+    queryKey: ['logTime', route.params.id, selectedTurnWork?.id],
+    queryFn: () =>
+      selectedTurnWork?.id
+        ? LogTimeApi.getAllByTurn({
+            WorkId: work?.id,
+            WorkTurnId: selectedTurnWork?.id,
+            maxResultCount: 1000,
+          })
+        : [],
+  });
+  const {data: turnWork, refetch: refetchTurn} = useQuery({
+    queryKey: ['turnWork', route.params.id],
+    queryFn: () =>
+      LogTimeApi.getAllTurnWorkNotPaging({
+        WorkId: route.params.id,
+      }),
+    onSuccess(data) {
+      if (data.length === 0 && route.params.id) {
+        addTurnWork({
+          workId: route.params.id,
+          description: new Date().toISOString(),
+        });
+      } else {
+        if (data.length > 0) {
+          setSelectedTurnWork(data[0]);
+        }
+      }
+    },
+  });
+  const {mutate: addTurnWork} = useMutation({
+    mutationKey: ['createTurn'],
+    mutationFn: (data: TCreateTurnWork) => LogTimeApi.createTurn(data),
+    onSuccess: () => {
+      refetchTurn();
+    },
+  });
+  const {mutate: updateTurnLogTime, isLoading: LoadingUpdateLogTime} =
+    useMutation({
+      mutationKey: ['updateTurnLogTime'],
+      mutationFn: (data: {
+        workTurnId: number;
+        listLogTimeIdsDelete: number[];
+        listLogTimeCreate: TWorkLogTime[];
+      }) => LogTimeApi.updateManyLogTime(data),
+      onSuccess: () => {
+        toast.show('Lưu thông tin thành công', {
+          type: 'success',
+          placement: 'top',
+          duration: 1000,
+          animationType: 'slide-in',
+        });
+        refetchLogTime();
+      },
+      onError: () => {
+        toast.show('Lưu thông tin thất bại', {
+          type: 'danger',
+          placement: 'top',
+          duration: 1000,
+          animationType: 'slide-in',
+        });
+      },
+    });
 
   const renderHeader = useCallback(
     (props: StackHeaderProps) => {
-      return <HeaderWorkDetail {...props} status={work?.status} />;
+      return (
+        <HeaderWorkDetail
+          {...props}
+          status={work?.status}
+          turnWork={turnWork}
+          onChangeTurn={setSelectedTurnWork}
+          selectedTurn={selectedTurnWork}
+        />
+      );
     },
-    [work?.status],
+    [work?.status, turnWork, selectedTurnWork],
   );
 
   useEffect(() => {
@@ -37,14 +144,36 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
       title: work?.title,
       header: props => renderHeader(props),
     });
-  }, [navigation, renderHeader, work]);
+  }, [navigation, renderHeader, work, turnWork]);
+
+  useEffect(() => {
+    let newListLogTime = logTimeWork ? [...logTimeWork] : [];
+    statusLogTimes.forEach(value => {
+      if (
+        !value.id &&
+        !logTimeWork?.find(el => el.workDetailId === value.workDetailId)
+      ) {
+        newListLogTime.push(value);
+      }
+    });
+    setStatusLogTime(newListLogTime);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logTimeWork]);
+  const disableCompleteBtn = useMemo(() => {
+    if (
+      statusLogTimes.find(el => el.id === undefined) !== undefined ||
+      (logTimeWork && logTimeWork?.length > statusLogTimes.length)
+    ) {
+      return false;
+    }
+    return true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logTimeWork, statusLogTimes, LoadingUpdateLogTime]);
 
   const [isVisible, setIsVisible] = useState({
     checkout: false,
     reminder: false,
   });
-
-  const theme = useTheme();
 
   return (
     <View
@@ -56,23 +185,57 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
       <ScrollView style={{}}>
         <View style={styles.contentContainer}>
           <View style={[styles.row, {alignItems: 'center', flexWrap: 'wrap'}]}>
-            <Text style={styles.textLabel}>Người giám sát:</Text>
+            <Text style={styles.textLabel}>Trạng thái:</Text>
+            <View
+              style={[
+                styles.textDateContainer,
+                {marginRight: 'auto', marginLeft: 4},
+              ]}>
+              <Text style={styles.textDate}>
+                {work?.status
+                  ? language.t(languageKeys.workManagement.status[work?.status])
+                  : ''}
+              </Text>
+            </View>
+          </View>
+          <View style={[styles.row, {alignItems: 'center', flexWrap: 'wrap'}]}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.workManagement.work.supervisorUsers)}:
+            </Text>
             <View
               style={{
                 flexDirection: 'row',
                 flexWrap: 'wrap',
               }}>
-              {['Kien Nguyen', 'Doraemon', 'nobita'].map(su => (
-                <Chip style={{marginHorizontal: 10, marginVertical: 5}}>
-                  <Text>{su}</Text>
-                </Chip>
+              {work?.supervisorUsers?.map(su => (
+                <Text
+                  key={su.fullName}
+                  style={[styles.textDate, {marginLeft: 5}]}>
+                  {su.fullName}
+                </Text>
+              ))}
+            </View>
+          </View>
+          <View style={[styles.row, {alignItems: 'center', flexWrap: 'wrap'}]}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.workManagement.work.recipientUsers)}:
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}>
+              {work?.recipientUsers?.map(re => (
+                <Text key={re.id} style={[styles.textDate, {marginLeft: 5}]}>
+                  {re.fullName}
+                </Text>
               ))}
             </View>
           </View>
           <View style={{...styles.row, justifyContent: 'space-between'}}>
             <View style={[styles.row, styles.dateContainer]}>
               <Text style={{...styles.textLabel, marginRight: 'auto'}}>
-                Bắt đầu
+                Bắt đầu:
               </Text>
               <View style={[styles.textDateContainer, {marginRight: 'auto'}]}>
                 <Text style={styles.textDate}>
@@ -82,7 +245,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             </View>
             <View style={[styles.row, styles.dateContainer]}>
               <Text style={{...styles.textLabel, marginLeft: 'auto'}}>
-                Kết thúc
+                Kết thúc:
               </Text>
               <View style={[styles.textDateContainer, {marginLeft: 'auto'}]}>
                 <Text style={styles.textDate}>
@@ -92,7 +255,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             </View>
           </View>
           <View>
-            <Text style={styles.textLabel}>Mô tả công việc</Text>
+            <Text style={styles.textLabel}>Mô tả công việc:</Text>
             <RenderHTML
               source={{html: work?.content ?? ''}}
               contentWidth={width}
@@ -103,8 +266,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
           </View>
         </View>
 
-        <View
-          style={[styles.contentContainer, {marginTop: 5, minHeight: height}]}>
+        <View style={[styles.contentContainer, {marginTop: 5}]}>
           <View
             style={[
               styles.row,
@@ -112,9 +274,50 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             ]}>
             <Text style={styles.textLabel}>Danh sách công việc</Text>
           </View>
-          {work?.listWorkDetail?.map(w => (
-            <SubTaskItem item={w} key={w.id} />
-          ))}
+          {work?.listWorkDetail?.map(
+            w =>
+              work.id && (
+                <SubTaskItem
+                  item={w}
+                  key={w.id}
+                  workId={work.id}
+                  setModalAttachProps={setModalAttachProps}
+                  logTimeInfo={statusLogTimes?.find(
+                    el => el.workDetailId === w.id,
+                  )}
+                  turnWorkId={selectedTurnWork?.id}
+                  onChangeSelect={() => {
+                    const check = !!statusLogTimes.find(
+                      el => el.workDetailId === w.id,
+                    );
+
+                    if (check) {
+                      const newStatusLogTime = statusLogTimes.filter(
+                        el => el.workDetailId !== w.id,
+                      );
+                      setStatusLogTime(newStatusLogTime);
+                    } else if (work?.id && selectedTurnWork?.id) {
+                      const logTimeExist = logTimeWork?.find(
+                        lgTime => lgTime.workDetailId === w.id,
+                      );
+                      if (logTimeExist !== undefined) {
+                        setStatusLogTime([...statusLogTimes, logTimeExist]);
+                      } else {
+                        setStatusLogTime([
+                          ...statusLogTimes,
+                          {
+                            workId: work.id,
+                            workDetailId: w.id,
+                            dateStart: new Date().toISOString(),
+                            workTurnId: selectedTurnWork?.id,
+                          },
+                        ]);
+                      }
+                    }
+                  }}
+                />
+              ),
+          )}
         </View>
       </ScrollView>
 
@@ -122,7 +325,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
         isVisible={isVisible.checkout}
         onBackdropPress={() => setIsVisible({...isVisible, checkout: false})}
       />
-      <AddNotifications
+      {/* <AddNotifications
         isVisible={isVisible.reminder}
         onBackdropPress={() =>
           setIsVisible({
@@ -130,7 +333,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             reminder: false,
           })
         }
-      />
+      /> */}
       <BottomContainer>
         <View
           style={{
@@ -138,30 +341,113 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             alignItems: 'center',
             justifyContent: 'space-around',
           }}>
-          <Icon
-            name="notifications"
-            type="Ionicons"
-            size={30}
-            color={theme.colors.secondary}
-            onPress={() => {
-              setIsVisible({
-                checkout: false,
-                reminder: true,
-              });
-            }}
-          />
           <Button
             onPress={() => {
-              setIsVisible({
-                checkout: true,
-                reminder: false,
-              });
+              if (route.params.id && turnWork) {
+                addTurnWork({
+                  workId: route.params.id,
+                  description: new Date().toISOString(),
+                });
+              } else {
+                Alert.alert(
+                  'Không thể tạo lượt công việc mới',
+                  'Kiểm tra lại kết nối của bạn',
+                );
+              }
             }}
+            icon={'plus'}
+            mode="outlined">
+            Thêm lượt
+          </Button>
+          <Button
+            disabled={disableCompleteBtn}
+            onPress={() => {
+              Alert.alert(
+                'Lưu thông tin thay đổi',
+                'Bạn có chức lưu thông tin thay đổi?',
+                [
+                  {
+                    text: 'Đồng ý',
+                    onPress: () => {
+                      if (selectedTurnWork?.id) {
+                        const listDelete = logTimeWork
+                          ? logTimeWork
+                              ?.map(item => {
+                                if (
+                                  statusLogTimes.find(
+                                    el => el.workDetailId === item.workDetailId,
+                                  ) === undefined &&
+                                  item.id
+                                ) {
+                                  return item.id;
+                                } else {
+                                  return -1;
+                                }
+                              })
+                              .filter(el => el !== -1)
+                          : [];
+
+                        updateTurnLogTime({
+                          workTurnId: selectedTurnWork?.id,
+                          listLogTimeIdsDelete: listDelete,
+                          listLogTimeCreate: statusLogTimes.filter(
+                            el => !el.id,
+                          ),
+                        });
+                      }
+                    },
+                  },
+                  {
+                    text: 'Hủy bỏ',
+                  },
+                ],
+              );
+            }}
+            icon={'checkbox-marked-circle-plus-outline'}
             mode="contained">
-            Hoàn thành
+            Lưu
           </Button>
         </View>
       </BottomContainer>
+      <ReactNativeModal
+        useNativeDriverForBackdrop
+        statusBarTranslucent={true}
+        backdropOpacity={0.2}
+        animationIn={'slideInUp'}
+        animationOut={'slideOutDown'}
+        swipeDirection={['down']}
+        onBackdropPress={toggleIsVisible}
+        onSwipeComplete={toggleIsVisible}
+        isVisible={modalAttachProps.visible}
+        style={{margin: 0}}>
+        <KeyboardAvoidingView behavior="padding">
+          <Pressable
+            onPress={toggleIsVisible}
+            style={{
+              height: '100%',
+              justifyContent: 'flex-end',
+            }}>
+            <View
+              style={{
+                backgroundColor: 'white',
+                paddingTop: '5%',
+                borderTopRightRadius: 8,
+                borderTopLeftRadius: 8,
+              }}>
+              <AttachLogTimeComponent
+                workId={work?.id}
+                workDetail={modalAttachProps.workDetail}
+                logTimeInfo={logTimeWork?.find(
+                  el => el.workDetailId === modalAttachProps.workDetail?.id,
+                )}
+                turnWorkId={selectedTurnWork?.id}
+                onClose={toggleIsVisible}
+              />
+            </View>
+          </Pressable>
+        </KeyboardAvoidingView>
+      </ReactNativeModal>
+      {LoadingUpdateLogTime && <LoadingComponent />}
     </View>
   );
 };

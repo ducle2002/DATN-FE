@@ -25,6 +25,8 @@ export type TAdministrativeOrder = {
   state: number;
   tenantId: number;
   userBillId?: number;
+  creatorUserAvatar: string;
+  creatorUserName: string;
 };
 export type TItemProperties = {
   id: number;

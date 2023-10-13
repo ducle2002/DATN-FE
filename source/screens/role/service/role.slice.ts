@@ -38,5 +38,5 @@ const roleSlice = createSlice({
       });
   },
 });
-
+export const {resetRole} = roleSlice.actions;
 export default roleSlice.reducer;

@@ -62,7 +62,11 @@ const ManagementScreen = ({navigation}: Props) => {
 
   const renderItem: ListRenderItem<TWork> = ({item}) => (
     <WorkItem
-      onPress={() => navigation.navigate('DETAIL_WORK', {id: item.id})}
+      onPress={() => {
+        navigation.navigate('DETAIL_WORK', {
+          id: item.id,
+        });
+      }}
       {...{item}}
     />
   );
@@ -89,7 +93,9 @@ const ManagementScreen = ({navigation}: Props) => {
       />
       {checkPermission(grantedPermissions, [
         'Pages.Operations.TaskManagement.Create',
-      ]) && <CreateWorkComponent />}
+      ]) && (
+        <CreateWorkComponent status={selectedStatus} formId={selectedFormId} />
+      )}
     </View>
   );
 };

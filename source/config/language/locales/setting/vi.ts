@@ -7,6 +7,7 @@ const main = {
   security: 'Bảo mật',
   aboutUs: 'Về chúng tôi',
   logOut: 'Đăng xuất',
+  role: 'Vai trò',
 };
 
 const setting = {

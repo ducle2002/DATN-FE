@@ -15,6 +15,7 @@ import moment from 'moment';
 import AdministrativeIcon from '@assets/icons/administrative.svg';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
+import FastImage from 'react-native-fast-image';
 const {width} = Dimensions.get('screen');
 type Props = {
   item: TAdministrativeOrder;
@@ -54,9 +55,29 @@ const ItemAdministrative = ({item, onPress}: Props) => {
       enabled={item.state !== 4 && item.state !== 5 && item.state !== 3}>
       <TouchableOpacity style={styles.itemOrder} onPress={onPress}>
         <View style={styles.iconContainer}>
-          <AdministrativeIcon width={24} height={24} />
+          {!item.creatorUserAvatar ? (
+            <AdministrativeIcon width={24} height={24} />
+          ) : (
+            <FastImage
+              source={{uri: item.creatorUserAvatar ?? ''}}
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 48,
+              }}
+            />
+          )}
         </View>
         <View>
+          <Text
+            style={{
+              fontWeight: '500',
+              fontSize: 14,
+              color: '#2D2E31',
+            }}
+            numberOfLines={1}>
+            {item?.creatorUserName}
+          </Text>
           <Text
             style={{
               fontWeight: '500',
@@ -137,7 +158,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     backgroundColor: '#2874CE',
-    borderRadius: 20,
+    borderRadius: 40,
     width: 40,
     aspectRatio: 1,
     justifyContent: 'center',
