@@ -1,13 +1,14 @@
 import {
   Alert,
   Dimensions,
+  KeyboardAvoidingView,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import moment from 'moment';
 import BottomContainer from '@/components/bottom-container.component';
 import globalStyles from '@/config/globalStyles';
@@ -28,7 +29,13 @@ import ReactNativeModal from 'react-native-modal';
 import {TWorkDetail} from './services/work.model';
 import AttachLogTimeComponent from './components/attach-logtime.component';
 import LogTimeApi from './services/logtime.service';
-import {TCreateTurnWork} from './services/logtime.model';
+import {
+  TCreateTurnWork,
+  TTurnWork,
+  TWorkLogTime,
+} from './services/logtime.model';
+import {useToast} from 'react-native-toast-notifications';
+import LoadingComponent from '@/components/loading';
 
 type Props = StackScreenProps<WorkStackParamsList, 'DETAIL_WORK'>;
 type TModalAttachProps = {
@@ -37,9 +44,14 @@ type TModalAttachProps = {
 };
 
 const DetailWorkScreen = ({route, navigation}: Props) => {
+  const toast = useToast();
   const [modalAttachProps, setModalAttachProps] = useState<TModalAttachProps>({
     visible: false,
   });
+  const [selectedTurnWork, setSelectedTurnWork] = useState<
+    TTurnWork | undefined
+  >();
+  const [statusLogTimes, setStatusLogTime] = useState<TWorkLogTime[]>([]);
   const toggleIsVisible = () => {
     setModalAttachProps({
       ...modalAttachProps,
@@ -50,16 +62,18 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
     queryKey: ['work', route.params.id],
     queryFn: () => WorkManagementApi.getById({id: route.params.id}),
   });
-  // const {data: logTimeWork} = useQuery({
-  //   queryKey: ['logTimeWork', route.params.id],
-  //   queryFn: () =>
-  //     LogTimeApi.getAll({
-  //       WorkId: route.params.id,
-  //       WorkTurnId: undefined,
-  //       maxResultCount: 1000,
-  //     }),
-  // });
-  const {data: turnWork} = useQuery({
+  const {data: logTimeWork, refetch: refetchLogTime} = useQuery({
+    queryKey: ['logTime', route.params.id, selectedTurnWork?.id],
+    queryFn: () =>
+      selectedTurnWork?.id
+        ? LogTimeApi.getAllByTurn({
+            WorkId: work?.id,
+            WorkTurnId: selectedTurnWork?.id,
+            maxResultCount: 1000,
+          })
+        : [],
+  });
+  const {data: turnWork, refetch: refetchTurn} = useQuery({
     queryKey: ['turnWork', route.params.id],
     queryFn: () =>
       LogTimeApi.getAllTurnWorkNotPaging({
@@ -68,23 +82,63 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
     onSuccess(data) {
       if (data.length === 0 && route.params.id) {
         addTurnWork({
-          turnNumber: 1,
           workId: route.params.id,
           description: new Date().toISOString(),
         });
+      } else {
+        if (data.length > 0) {
+          setSelectedTurnWork(data[0]);
+        }
       }
     },
   });
   const {mutate: addTurnWork} = useMutation({
     mutationKey: ['createTurn'],
     mutationFn: (data: TCreateTurnWork) => LogTimeApi.createTurn(data),
+    onSuccess: () => {
+      refetchTurn();
+    },
   });
+  const {mutate: updateTurnLogTime, isLoading: LoadingUpdateLogTime} =
+    useMutation({
+      mutationKey: ['updateTurnLogTime'],
+      mutationFn: (data: {
+        workTurnId: number;
+        listLogTimeIdsDelete: number[];
+        listLogTimeCreate: TWorkLogTime[];
+      }) => LogTimeApi.updateManyLogTime(data),
+      onSuccess: () => {
+        toast.show('Lưu thông tin thành công', {
+          type: 'success',
+          placement: 'top',
+          duration: 1000,
+          animationType: 'slide-in',
+        });
+        refetchLogTime();
+      },
+      onError: () => {
+        toast.show('Lưu thông tin thất bại', {
+          type: 'danger',
+          placement: 'top',
+          duration: 1000,
+          animationType: 'slide-in',
+        });
+      },
+    });
 
   const renderHeader = useCallback(
     (props: StackHeaderProps) => {
-      return <HeaderWorkDetail {...props} status={work?.status} />;
+      return (
+        <HeaderWorkDetail
+          {...props}
+          status={work?.status}
+          turnWork={turnWork}
+          onChangeTurn={setSelectedTurnWork}
+          selectedTurn={selectedTurnWork}
+        />
+      );
     },
-    [work?.status],
+    [work?.status, turnWork, selectedTurnWork],
   );
 
   useEffect(() => {
@@ -92,7 +146,31 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
       title: work?.title,
       header: props => renderHeader(props),
     });
-  }, [navigation, renderHeader, work]);
+  }, [navigation, renderHeader, work, turnWork]);
+
+  useEffect(() => {
+    let newListLogTime = logTimeWork ? [...logTimeWork] : [];
+    statusLogTimes.forEach(value => {
+      if (
+        !value.id &&
+        !logTimeWork?.find(el => el.workDetailId === value.workDetailId)
+      ) {
+        newListLogTime.push(value);
+      }
+    });
+    setStatusLogTime(newListLogTime);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logTimeWork]);
+  const disableCompleteBtn = useMemo(() => {
+    if (
+      statusLogTimes.find(el => el.id === undefined) !== undefined ||
+      (logTimeWork && logTimeWork?.length > statusLogTimes.length)
+    ) {
+      return false;
+    }
+    return true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logTimeWork, statusLogTimes, LoadingUpdateLogTime]);
 
   const [isVisible, setIsVisible] = useState({
     checkout: false,
@@ -187,6 +265,39 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
                   key={w.id}
                   workId={work.id}
                   setModalAttachProps={setModalAttachProps}
+                  logTimeInfo={statusLogTimes?.find(
+                    el => el.workDetailId === w.id,
+                  )}
+                  turnWorkId={selectedTurnWork?.id}
+                  onChangeSelect={() => {
+                    const check = !!statusLogTimes.find(
+                      el => el.workDetailId === w.id,
+                    );
+
+                    if (check) {
+                      const newStatusLogTime = statusLogTimes.filter(
+                        el => el.workDetailId !== w.id,
+                      );
+                      setStatusLogTime(newStatusLogTime);
+                    } else if (work?.id && selectedTurnWork?.id) {
+                      const logTimeExist = logTimeWork?.find(
+                        lgTime => lgTime.workDetailId === w.id,
+                      );
+                      if (logTimeExist !== undefined) {
+                        setStatusLogTime([...statusLogTimes, logTimeExist]);
+                      } else {
+                        setStatusLogTime([
+                          ...statusLogTimes,
+                          {
+                            workId: work.id,
+                            workDetailId: w.id,
+                            dateStart: new Date().toISOString(),
+                            workTurnId: selectedTurnWork?.id,
+                          },
+                        ]);
+                      }
+                    }
+                  }}
                 />
               ),
           )}
@@ -218,7 +329,6 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
               if (route.params.id && turnWork) {
                 addTurnWork({
                   workId: route.params.id,
-                  turnNumber: turnWork.length + 1,
                   description: new Date().toISOString(),
                 });
               } else {
@@ -233,15 +343,52 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             Thêm lượt
           </Button>
           <Button
+            disabled={disableCompleteBtn}
             onPress={() => {
-              setIsVisible({
-                checkout: true,
-                reminder: false,
-              });
+              Alert.alert(
+                'Lưu thông tin thay đổi',
+                'Bạn có chức lưu thông tin thay đổi?',
+                [
+                  {
+                    text: 'Đồng ý',
+                    onPress: () => {
+                      if (selectedTurnWork?.id) {
+                        const listDelete = logTimeWork
+                          ? logTimeWork
+                              ?.map(item => {
+                                if (
+                                  statusLogTimes.find(
+                                    el => el.workDetailId === item.workDetailId,
+                                  ) === undefined &&
+                                  item.id
+                                ) {
+                                  return item.id;
+                                } else {
+                                  return -1;
+                                }
+                              })
+                              .filter(el => el !== -1)
+                          : [];
+
+                        updateTurnLogTime({
+                          workTurnId: selectedTurnWork?.id,
+                          listLogTimeIdsDelete: listDelete,
+                          listLogTimeCreate: statusLogTimes.filter(
+                            el => !el.id,
+                          ),
+                        });
+                      }
+                    },
+                  },
+                  {
+                    text: 'Hủy bỏ',
+                  },
+                ],
+              );
             }}
             icon={'checkbox-marked-circle-plus-outline'}
             mode="contained">
-            Hoàn thành
+            Lưu
           </Button>
         </View>
       </BottomContainer>
@@ -249,28 +396,41 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
         useNativeDriverForBackdrop
         statusBarTranslucent={true}
         backdropOpacity={0.2}
-        animationIn={'fadeIn'}
-        animationOut={'fadeOut'}
+        animationIn={'slideInUp'}
+        animationOut={'slideOutDown'}
+        swipeDirection={['down']}
         onBackdropPress={toggleIsVisible}
+        onSwipeComplete={toggleIsVisible}
         isVisible={modalAttachProps.visible}
         style={{margin: 0}}>
-        <Pressable
-          onPress={toggleIsVisible}
-          style={{
-            height: '100%',
-            justifyContent: 'flex-end',
-          }}>
-          <View
+        <KeyboardAvoidingView behavior="padding">
+          <Pressable
+            onPress={toggleIsVisible}
             style={{
-              backgroundColor: 'white',
+              height: '100%',
+              justifyContent: 'flex-end',
             }}>
-            <AttachLogTimeComponent
-              workId={work?.id}
-              workDetail={modalAttachProps.workDetail}
-            />
-          </View>
-        </Pressable>
+            <View
+              style={{
+                backgroundColor: 'white',
+                paddingTop: '5%',
+                borderTopRightRadius: 8,
+                borderTopLeftRadius: 8,
+              }}>
+              <AttachLogTimeComponent
+                workId={work?.id}
+                workDetail={modalAttachProps.workDetail}
+                logTimeInfo={logTimeWork?.find(
+                  el => el.workDetailId === modalAttachProps.workDetail?.id,
+                )}
+                turnWorkId={selectedTurnWork?.id}
+                onClose={toggleIsVisible}
+              />
+            </View>
+          </Pressable>
+        </KeyboardAvoidingView>
       </ReactNativeModal>
+      {LoadingUpdateLogTime && <LoadingComponent />}
     </View>
   );
 };

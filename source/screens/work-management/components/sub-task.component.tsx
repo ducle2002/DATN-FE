@@ -7,16 +7,25 @@ import globalStyles from '@/config/globalStyles';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
 import Icon from '@/components/icon.component';
+import {TWorkLogTime} from '../services/logtime.model';
 
 type Props = {
   item: TWorkDetail;
   workId: number;
   setModalAttachProps: Function;
+  logTimeInfo?: TWorkLogTime;
+  onChangeSelect: Function;
+  turnWorkId?: number;
 };
 
-const SubTaskItem = ({item, workId, setModalAttachProps}: Props) => {
+const SubTaskItem = ({
+  item,
+  workId,
+  setModalAttachProps,
+  logTimeInfo,
+  onChangeSelect,
+}: Props) => {
   const navigation = useNavigation<NavigationProp<WorkStackParamsList>>();
-  const [check, setCheck] = useState(false);
 
   return (
     <ItemCard
@@ -36,7 +45,7 @@ const SubTaskItem = ({item, workId, setModalAttachProps}: Props) => {
       }}>
       <TouchableOpacity
         onPress={() => {
-          setCheck(!check);
+          onChangeSelect();
         }}
         style={[
           styles.btnRow,
@@ -45,7 +54,7 @@ const SubTaskItem = ({item, workId, setModalAttachProps}: Props) => {
             borderBottomLeftRadius: 8,
           },
         ]}>
-        <Checkbox.Android status={check ? 'checked' : 'unchecked'} />
+        <Checkbox.Android status={!!logTimeInfo ? 'checked' : 'unchecked'} />
       </TouchableOpacity>
       <View
         style={{
@@ -65,7 +74,7 @@ const SubTaskItem = ({item, workId, setModalAttachProps}: Props) => {
         </View>
       </View>
       <TouchableOpacity
-        disabled={!check}
+        disabled={!logTimeInfo}
         onPress={() => {
           setModalAttachProps({
             visible: true,
@@ -83,7 +92,7 @@ const SubTaskItem = ({item, workId, setModalAttachProps}: Props) => {
           type="Ionicons"
           name="document-attach"
           size={24}
-          color={check ? '#0096c7' : '#ced4da'}
+          color={!!logTimeInfo ? '#0096c7' : '#ced4da'}
         />
       </TouchableOpacity>
     </ItemCard>

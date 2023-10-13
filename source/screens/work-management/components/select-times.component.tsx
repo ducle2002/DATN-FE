@@ -139,7 +139,7 @@ const SelectTimes = ({
           <Text style={[styles.textValue, valueStyle]}>
             {selectedLabel ? (
               <Text>
-                {'Lượt số: '}
+                {'Lượt thực hiện: '}
                 <Text style={{color: '#2E9BFF'}}>{selectedLabel}</Text>
               </Text>
             ) : (
@@ -179,12 +179,6 @@ const SelectTimes = ({
             }}>
             <FlatList
               style={styles.listOption}
-              contentContainerStyle={{
-                paddingBottom:
-                  buttonPosition.height * options.length >= sHeight * 0.9
-                    ? 200
-                    : 0,
-              }}
               data={options}
               renderItem={renderItemOption}
             />
@@ -216,7 +210,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 5,
     borderRadius: 5,
-    // maxHeight: '60%',
+    maxHeight: 300,
     minWidth: 0.4 * sWidth,
   },
   itemOption: {

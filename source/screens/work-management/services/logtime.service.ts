@@ -3,7 +3,8 @@ import {BaseService} from '@/utils/base.service';
 import {HOST_SERVER} from '@env';
 import {TPagingParams} from 'types/type';
 import {TWork} from './work.model';
-import {TCreateTurnWork, TWorkLogTime} from './logtime.model';
+import {TCreateTurnWork, TTurnWork, TWorkLogTime} from './logtime.model';
+import UtilsApi from '@/services/utils.service';
 
 class LogTimeService extends BaseService {
   endpoint = '/api/services/app/WorkLogTime/';
@@ -29,6 +30,26 @@ class LogTimeService extends BaseService {
     };
   };
 
+  getAllByTurn = async (
+    params: TPagingParams & {
+      WorkId?: number;
+      WorkTurnId?: number;
+      MaxResultCount?: number;
+      SkipCount?: number;
+    },
+  ): Promise<TWorkLogTime[]> => {
+    // if (!!params.WorkTurnId) {
+    //   return [];
+    // } else {
+    const url = HOST_SERVER + this.endpoint + 'GetListWorkLogTime';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: params});
+
+    return result.data;
+    // }
+  };
+
   getById = async (params: {id?: number}): Promise<TWorkLogTime> => {
     const url = HOST_SERVER + this.endpoint + 'GetWorkLogTimeById';
     const {
@@ -37,9 +58,33 @@ class LogTimeService extends BaseService {
     return result.data;
   };
 
-  create = async (params: TWorkLogTime) => {
+  create = async (data: TWorkLogTime) => {
     const url = HOST_SERVER + this.endpoint + 'CreateWorkLogTime';
-    return axiosClient.post(url, {params: params});
+    let submitImgs: any[] = [];
+    if (data.imageUrls?.length && data.imageUrls?.length > 0) {
+      let arrayImgIsFile: any[] = [];
+      data.imageUrls?.forEach(img => {
+        if (typeof img !== 'string') {
+          arrayImgIsFile.push(img);
+        }
+      });
+      if (arrayImgIsFile.length > 0) {
+        const resListImg = await UtilsApi.uploadImagesRequest(arrayImgIsFile);
+        submitImgs = resListImg;
+      }
+    }
+    const {
+      data: {result},
+    } = await axiosClient.post(url, {
+      ...data,
+      imageUrls: submitImgs,
+    });
+
+    return result;
+  };
+  update = async (data: TWorkLogTime) => {
+    const url = HOST_SERVER + this.endpoint + 'UpdateWorkLogTime';
+    return axiosClient.post(url, data);
   };
   getAllTurnWorkNotPaging = async (
     params: TPagingParams & {
@@ -54,9 +99,17 @@ class LogTimeService extends BaseService {
 
     return result.data;
   };
-  createTurn = async (params: TCreateTurnWork) => {
+  createTurn = async (data: TCreateTurnWork) => {
     const url = HOST_SERVER + '/api/services/app/WorkTurn/CreateWorkTurn';
-    return axiosClient.post(url, {params});
+    return axiosClient.post(url, data);
+  };
+  updateManyLogTime = async (data: {
+    workTurnId: number;
+    listLogTimeIdsDelete: number[];
+    listLogTimeCreate: TWorkLogTime[];
+  }) => {
+    const url = HOST_SERVER + this.endpoint + 'UpdateManyWorkLogTime';
+    return axiosClient.put(url, data);
   };
 }
 
