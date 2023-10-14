@@ -70,7 +70,7 @@ const MyWorkScreen = ({navigation}: Props) => {
   const renderItem: ListRenderItem<TWork> = ({item}) => (
     <WorkItemComponent
       onPress={() => navigation.navigate('DETAIL_WORK', {id: item.id})}
-      {...{item}}
+      {...{item, navigation}}
     />
   );
 

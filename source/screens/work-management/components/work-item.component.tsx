@@ -12,19 +12,17 @@ import Animated, {
 import {useTheme} from 'react-native-paper';
 import {TWork} from '../services/work.model';
 import {useTextContentOfHTML} from '@/hooks/utils.hook';
+import {NavigationProp} from '@react-navigation/native';
+import {WorkStackParamsList} from '@/routes/work-management.stack';
 type Props = {
   item: TWork;
   onPress: () => void;
   onMorePress?: () => void;
   isActive?: boolean;
+  navigation: NavigationProp<WorkStackParamsList, 'MAIN_DRAWER'>;
 };
 
-const WorkItem = ({
-  item,
-  onPress,
-  isActive,
-}: // onMorePress
-Props) => {
+const WorkItem = ({item, onPress, isActive, navigation}: Props) => {
   const pressValue = useSharedValue(0);
   useEffect(() => {
     if (isActive) {
@@ -92,16 +90,19 @@ Props) => {
             onPress={onPress}
           />
         </Animated.View>
-        {/* <Animated.View style={triggerAnimatedStyle}>
-          <Icon
-            type="Ionicons"
-            name="chevron-forward-circle"
-            size={30}
-            color={theme.colors.secondary}
-            onPress={onMorePress}
-          />
-        </Animated.View> */}
       </Animated.View>
+      <Icon
+        type="Entypo"
+        name="chat"
+        color="#2B5783"
+        style={{alignSelf: 'center'}}
+        size={30}
+        onPress={() => {
+          if (item.id) {
+            navigation.navigate('COMMENT', {id: item.id});
+          }
+        }}
+      />
     </ItemCard>
   );
 };

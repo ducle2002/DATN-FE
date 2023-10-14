@@ -14,6 +14,7 @@ import {
 } from '@/screens/work-management/services/work.model';
 import CreateLogTimeScreen from '@/screens/work-management/create-log-time.screen';
 import {StatusBar} from 'react-native';
+import CommentScreen from '@/screens/work-management/comment.screen';
 
 export type WorkManagementDrawerParamsList = {
   MANAGEMENT: undefined;
@@ -29,7 +30,6 @@ export type WorkStackParamsList = {
         formId?: EWorkFormID;
       }
     | undefined;
-  // MY_WORK: undefined;
   LOGTIME: {
     detailWork: TWorkDetail;
     workId: number;
@@ -37,6 +37,9 @@ export type WorkStackParamsList = {
   CREATE_LOG_TIME: {
     detailWork: TWorkDetail;
     workId: number;
+  };
+  COMMENT: {
+    id: number;
   };
 };
 const Stack = createStackNavigator<WorkStackParamsList>();
@@ -88,6 +91,7 @@ const WorkStack = () => {
             }}
           />
         )}
+        <Stack.Screen name="COMMENT" component={CommentScreen} />
       </Stack.Navigator>
     </>
   );
