@@ -17,13 +17,11 @@ import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
 import Button from '@/components/button.component';
 import CheckoutWork from './components/checkout-work.component';
-import {Chip, useTheme} from 'react-native-paper';
-import AddNotifications from './components/add-notification.component';
 import {useMutation, useQuery} from 'react-query';
 import WorkManagementApi from './services/work-management.service';
 import RenderHTML from 'react-native-render-html';
 import HeaderWorkDetail from './components/header.component';
-const {width, height} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 import language, {languageKeys} from '@/config/language/language';
 import ReactNativeModal from 'react-native-modal';
 import {TWorkDetail} from './services/work.model';
@@ -201,16 +199,36 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             </View>
           </View>
           <View style={[styles.row, {alignItems: 'center', flexWrap: 'wrap'}]}>
-            <Text style={styles.textLabel}>Người giám sát:</Text>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.workManagement.work.supervisorUsers)}:
+            </Text>
             <View
               style={{
                 flexDirection: 'row',
                 flexWrap: 'wrap',
               }}>
-              {['Kien Nguyen', 'Doraemon', 'nobita'].map((su, k) => (
-                <Chip style={{marginHorizontal: 10, marginVertical: 5}} key={k}>
-                  <Text>{su}</Text>
-                </Chip>
+              {work?.supervisorUsers?.map(su => (
+                <Text
+                  key={su.fullName}
+                  style={[styles.textDate, {marginLeft: 5}]}>
+                  {su.fullName}
+                </Text>
+              ))}
+            </View>
+          </View>
+          <View style={[styles.row, {alignItems: 'center', flexWrap: 'wrap'}]}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.workManagement.work.recipientUsers)}:
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}>
+              {work?.recipientUsers?.map(re => (
+                <Text key={re.id} style={[styles.textDate, {marginLeft: 5}]}>
+                  {re.fullName}
+                </Text>
               ))}
             </View>
           </View>
@@ -248,8 +266,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
           </View>
         </View>
 
-        <View
-          style={[styles.contentContainer, {marginTop: 5, minHeight: height}]}>
+        <View style={[styles.contentContainer, {marginTop: 5}]}>
           <View
             style={[
               styles.row,

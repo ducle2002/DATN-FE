@@ -1,39 +1,16 @@
-import {Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {List} from 'react-native-paper';
-import {useTranslation} from 'react-i18next';
 import {useAppDispatch} from '@/hooks/redux.hook';
-import {SettingStackParamsList} from '@/routes/settings.stack';
-import Icon from '@/components/icon.component';
 import {setLanguage} from '@/modules/config/config.slice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import language, {languageKeys} from '@/config/language/language';
+import language from '@/config/language/language';
 
 const LanguageScreen = () => {
-  const navigation = useNavigation<NavigationProp<SettingStackParamsList>>();
-  const {t} = useTranslation();
   const dispatch = useAppDispatch();
 
   return (
-    <SafeAreaView>
-      <View style={styles.header}>
-        <Pressable
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <Icon
-            type="Ionicons"
-            name="chevron-back"
-            size={24}
-            color={'#2B5783'}
-          />
-        </Pressable>
-        <Text style={styles.txtHeader}>
-          {t(languageKeys.setting.language.title)}
-        </Text>
-        <View />
-      </View>
+    <View>
       <View style={{marginTop: 20, borderRadius: 10}}>
         <List.Accordion
           theme={{colors: {primary: '#339FD9'}}}
@@ -74,7 +51,7 @@ const LanguageScreen = () => {
           />
         </List.Accordion>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

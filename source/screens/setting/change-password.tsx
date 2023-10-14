@@ -1,11 +1,10 @@
 import React from 'react';
-import {Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import {FormProvider, useForm} from 'react-hook-form';
 import {useMutation} from 'react-query';
 import {SettingStackParamsList} from '@/routes/settings.stack';
 import {StackScreenProps} from '@react-navigation/stack';
-import Icon from '@/components/icon.component';
 import {useToast} from 'react-native-toast-notifications';
 import ChangePasswordInput from './components/change-password-input';
 import {useChangePasswordValidator} from '@/validators/settings/change-password.validator';
@@ -49,21 +48,6 @@ const ChangePasswordScreen = ({navigation}: Props) => {
   return (
     <FormProvider {...methods}>
       <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <Pressable
-            onPress={() => {
-              navigation.goBack();
-            }}>
-            <Icon
-              type="Ionicons"
-              name="chevron-back"
-              size={24}
-              color={'#2B5783'}
-            />
-          </Pressable>
-          <Text style={styles.txtHeader}>{'Đổi mật khẩu'}</Text>
-          <View />
-        </View>
         <View style={{paddingHorizontal: 10, paddingTop: 30}}>
           <ChangePasswordInput
             name="currentPassword"

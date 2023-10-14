@@ -10,7 +10,7 @@ type Props = {
   selectedStatus?: number;
   selectStatus: (id?: number) => void;
   selectedFormId?: number;
-  selectFormId: (id?: number) => void;
+  selectFormId: (id: number) => void;
 };
 
 const FilterWork = ({

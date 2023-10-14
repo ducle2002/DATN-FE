@@ -13,6 +13,7 @@ import materialAsset from './material-asset/vi';
 import residentLanguage from './resident/vi';
 import water from './water-meter/vi';
 import workManagement from './work-management/vi';
+import {role} from './role/vi';
 const vi = {
   ...title,
   auth,
@@ -33,6 +34,7 @@ const vi = {
   residentLanguage,
   water,
   workManagement,
+  role,
 };
 
 export default vi;

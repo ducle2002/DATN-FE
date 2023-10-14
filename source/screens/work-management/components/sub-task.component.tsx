@@ -54,7 +54,7 @@ const SubTaskItem = ({
             borderBottomLeftRadius: 8,
           },
         ]}>
-        <Checkbox.Android status={!!logTimeInfo ? 'checked' : 'unchecked'} />
+        <Checkbox.Android status={logTimeInfo ? 'checked' : 'unchecked'} />
       </TouchableOpacity>
       <View
         style={{
@@ -92,7 +92,7 @@ const SubTaskItem = ({
           type="Ionicons"
           name="document-attach"
           size={24}
-          color={!!logTimeInfo ? '#0096c7' : '#ced4da'}
+          color={logTimeInfo ? '#0096c7' : '#ced4da'}
         />
       </TouchableOpacity>
     </ItemCard>

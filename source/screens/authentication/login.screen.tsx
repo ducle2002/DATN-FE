@@ -77,7 +77,7 @@ const LoginScreen = ({navigation}: Props) => {
   return (
     <ImageBackground
       source={require('assets/images/login.background.png')}
-      style={styles.imageBackgroundcontainer}
+      style={styles.imageBackgroundContainer}
       blurRadius={10}>
       <SafeAreaView style={styles.container}>
         <View style={styles.contentContainer}>
@@ -159,7 +159,7 @@ const LoginScreen = ({navigation}: Props) => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  imageBackgroundcontainer: {
+  imageBackgroundContainer: {
     flex: 1,
   },
   container: {

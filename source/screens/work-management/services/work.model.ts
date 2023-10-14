@@ -16,9 +16,9 @@ export type TWork = {
   listWorkDetail?: TWorkDetail[];
   workHistories?: TWorkHistories[];
   workLogTimes?: any;
-  recipientUsers?: any;
+  recipientUsers?: TPersonnel[];
   recipientIds?: number[];
-  supervisorUsers?: any;
+  supervisorUsers?: TPersonnel[];
   supervisorIds: number[];
   workCreatorId: number;
 };

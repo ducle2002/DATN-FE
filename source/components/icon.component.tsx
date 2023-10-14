@@ -42,42 +42,42 @@ interface Props extends IconProps {
   name: string;
 }
 
-const Icon = ({type, ...props}: Props) => {
+const Icon = ({type, size = 25, ...props}: Props) => {
   switch (type) {
     case 'Ionicons':
-      return <Ionicons color={'black'} {...props} />;
+      return <Ionicons color={'black'} size={size} {...props} />;
     case 'AntDesign':
-      return <AntDesign color={'black'} {...props} />;
+      return <AntDesign color={'black'} size={size} {...props} />;
     case 'Entypo':
-      return <Entypo color={'black'} {...props} />;
+      return <Entypo color={'black'} size={size} {...props} />;
     case 'EvilIcons':
-      return <EvilIcons color={'black'} {...props} />;
+      return <EvilIcons color={'black'} size={size} {...props} />;
     case 'Feather':
-      return <Feather color={'black'} {...props} />;
+      return <Feather color={'black'} size={size} {...props} />;
     case 'FontAwesome':
-      return <FontAwesome color={'black'} {...props} />;
+      return <FontAwesome color={'black'} size={size} {...props} />;
     case 'FontAwesome5':
-      return <FontAwesome5 color={'black'} {...props} />;
+      return <FontAwesome5 color={'black'} size={size} {...props} />;
     case 'FontAwesome5Pro':
-      return <FontAwesome5Pro color={'black'} {...props} />;
+      return <FontAwesome5Pro color={'black'} size={size} {...props} />;
     case 'FontAwesome6':
-      return <FontAwesome6 color={'black'} {...props} />;
+      return <FontAwesome6 color={'black'} size={size} {...props} />;
     case 'FontAwesome6Pro':
-      return <FontAwesome6Pro color={'black'} {...props} />;
+      return <FontAwesome6Pro color={'black'} size={size} {...props} />;
     case 'Fontisto':
-      return <Fontisto color={'black'} {...props} />;
+      return <Fontisto color={'black'} size={size} {...props} />;
     case 'Foundation':
-      return <Foundation color={'black'} {...props} />;
+      return <Foundation color={'black'} size={size} {...props} />;
     case 'MaterialCommunityIcons':
-      return <MaterialCommunityIcons color={'black'} {...props} />;
+      return <MaterialCommunityIcons color={'black'} size={size} {...props} />;
     case 'MaterialIcons':
-      return <MaterialIcons color={'black'} {...props} />;
+      return <MaterialIcons color={'black'} size={size} {...props} />;
     case 'Octicons':
-      return <Octicons color={'black'} {...props} />;
+      return <Octicons color={'black'} size={size} {...props} />;
     case 'SimpleLineIcons':
-      return <SimpleLineIcons color={'black'} {...props} />;
+      return <SimpleLineIcons color={'black'} size={size} {...props} />;
     case 'Zocial':
-      return <Zocial color={'black'} {...props} />;
+      return <Zocial color={'black'} size={size} {...props} />;
     default:
       return undefined;
   }

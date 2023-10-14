@@ -4,15 +4,27 @@ import Icon from '@/components/icon.component';
 import {useTheme} from 'react-native-paper';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
+import {EWorkFormID, EWorkStatus} from '../services/work.model';
 
-const CreateWork = () => {
+const CreateWork = ({
+  status,
+  formId,
+}: {
+  status?: EWorkStatus;
+  formId?: EWorkFormID;
+}) => {
   const theme = useTheme();
   const navigation =
     useNavigation<NavigationProp<WorkStackParamsList, 'MAIN_DRAWER'>>();
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('CREATE_WORK')}
+      onPress={() =>
+        navigation.navigate('CREATE_WORK', {
+          status: status,
+          formId: formId,
+        })
+      }
       style={styles.iconContainer}>
       <Icon
         type="MaterialIcons"

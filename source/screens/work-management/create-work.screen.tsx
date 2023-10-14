@@ -3,10 +3,9 @@ import React, {createContext, useState} from 'react';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import DatePickerComponent from './components/date-picker.component';
 import CTextInput from '@/components/text-input.component';
-import TextInputSuggestion from '@/components/text-input-suggestion';
 import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
-import {useMutation} from 'react-query';
+import {useMutation, useQueryClient} from 'react-query';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
 import globalStyles from '@/config/globalStyles';
 import language, {languageKeys} from '@/config/language/language';
@@ -18,6 +17,7 @@ import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import PersonnelPicker from './components/personnel-picker.component';
 import {TPersonnel} from './services/work.model';
+import {useToast} from 'react-native-toast-notifications';
 
 type Props = StackScreenProps<WorkStackParamsList, 'CREATE_WORK'>;
 export const PersonnelPickerContext = createContext<{
@@ -28,7 +28,7 @@ export const PersonnelPickerContext = createContext<{
   onSelect: () => {},
 });
 
-const CreateWorkScreen = ({navigation}: Props) => {
+const CreateWorkScreen = ({navigation, route}: Props) => {
   const [supervisorUsers, setSupervisorUsers] = useState<TPersonnel[]>([]);
   const [recipientUsers, setRecipientUsers] = useState<TPersonnel[]>([]);
 
@@ -57,11 +57,19 @@ const CreateWorkScreen = ({navigation}: Props) => {
   });
 
   const {workType} = useWorkType();
+  const toast = useToast();
+  const queryClient = useQueryClient();
 
   const {mutate} = useMutation({
     mutationFn: (params: any) => WorkManagementApi.create(params),
-    onSuccess: result => {
-      console.log(result);
+    onSuccess: () => {
+      toast.show('Tạo công việc thành công');
+      queryClient.refetchQueries([
+        'my-work',
+        route.params?.status,
+        route.params?.formId,
+      ]);
+      navigation.goBack();
     },
     onError: error => {
       console.log(error);
@@ -135,7 +143,7 @@ const CreateWorkScreen = ({navigation}: Props) => {
             name="dateExpected"
             render={({field: {value, onChange}, fieldState: {error}}) => (
               <DatePickerComponent
-                value={value}
+                value={value ?? ''}
                 onChange={onChange}
                 label={language.t(
                   languageKeys.workManagement.work.dateExpected,
@@ -206,18 +214,6 @@ const CreateWorkScreen = ({navigation}: Props) => {
               />
             )}
           />
-
-          <View>
-            <TextInputSuggestion
-              style={styles.inputContainerStyle}
-              label={language.t(
-                languageKeys.workManagement.work.recipientUsers,
-              )}
-              withError={false}
-              containerStyle={{marginBottom: 20}}
-              labelStyle={styles.labelStyle}
-            />
-          </View>
         </View>
       </ScrollView>
       <BottomContainer>

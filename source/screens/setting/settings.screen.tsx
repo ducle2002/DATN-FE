@@ -1,129 +1,90 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
-import {AppStackParamsList} from '@/routes/app.stack';
-import Button from '@/components/button.component';
 import {useLogout} from '@/screens/authentication/services/auth.hook';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from '@/components/icon.component';
 import {SettingStackParamsList} from '@/routes/settings.stack';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
+import {useAppDispatch} from '@/hooks/redux.hook';
+import {resetRole} from '../role/service/role.slice';
 
 type Props = StackScreenProps<SettingStackParamsList, 'SettingScreen'>;
 
 const SettingScreen = ({navigation}: Props) => {
   const {logout} = useLogout();
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const func_setting = [
+    {
+      name: t(languageKeys.setting.main.role),
+      icon: <Icon type="Entypo" name="cycle" color={'#2B5783'} size={24} />,
+      onPress: () => {
+        dispatch(resetRole());
+      },
+    },
     {
       name: t(languageKeys.setting.main.language),
       icon: (
         <Icon type="Ionicons" name="earth-sharp" color={'#2B5783'} size={24} />
       ),
-      type: 1,
+      onPress: () => navigation.navigate('LanguageScreen'),
     },
     {
       name: t(languageKeys.setting.main.security),
       icon: (
         <Icon type="Ionicons" name="lock-open" color={'#2B5783'} size={24} />
       ),
-      type: 2,
+      onPress: () => navigation.navigate('ChangePasswordScreen'),
     },
-    // {
-    //   name: t(languageKeys.setting.main.aboutUs),
-    //   icon: (
-    //     <Icon
-    //       type="Ionicons"
-    //       name="information-circle"
-    //       color={'#2B5783'}
-    //       size={24}
-    //     />
-    //   ),
-    //   type: 3,
-    // },
     {
       name: t(languageKeys.setting.main.logOut),
       icon: (
         <Icon type="Ionicons" name="power-sharp" color={'#2B5783'} size={24} />
       ),
-      type: 4,
+      onPress: () => logout(),
     },
   ];
   return (
-    <SafeAreaView>
-      <View style={styles.header}>
-        <Pressable
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <Icon
-            type="Ionicons"
-            name="chevron-back"
-            size={24}
-            color={'#2B5783'}
-          />
-        </Pressable>
-        <Text style={styles.txtHeader}>
-          {t(languageKeys.setting.main.title)}
-        </Text>
-        <View />
-      </View>
-      <View
-        style={{
-          paddingHorizontal: '5%',
-        }}>
-        {func_setting.map((item, index) => {
-          return (
-            <TouchableOpacity
-              key={index}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingTop: '5%',
-              }}
-              onPress={() => {
-                switch (item.type) {
-                  case 1:
-                    navigation.navigate('LanguageScreen', {});
-                    return;
-                  case 2:
-                    navigation.navigate('ChangePasswordScreen', {});
-                    return;
-                  case 3:
-                    return;
-                  case 4:
-                    logout();
-                    break;
-                  default:
-                    return;
-                }
-              }}>
-              <View style={styles.btnicon}>{item.icon}</View>
-              <Text style={styles.txtLabel}>{item.name}</Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    </SafeAreaView>
+    <View
+      style={{
+        backgroundColor: 'white',
+        flex: 1,
+      }}>
+      {func_setting.map((item, index) => {
+        return (
+          <Pressable
+            key={index}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+              borderTopWidth: index !== 0 ? 3 : 6,
+              borderBottomWidth: index !== func_setting.length - 1 ? 3 : 6,
+              borderColor: '#f1f2f8',
+            }}
+            onPress={() => {
+              item.onPress();
+            }}>
+            <View style={styles.btnicon}>{item.icon}</View>
+            <Text style={styles.txtLabel}>{item.name}</Text>
+            <Icon
+              type="Ionicons"
+              name="chevron-forward"
+              style={{marginLeft: 'auto'}}
+              color={'#2B5783'}
+            />
+          </Pressable>
+        );
+      })}
+    </View>
   );
 };
 
 export default SettingScreen;
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: '2%',
-    justifyContent: 'space-between',
-  },
   txtHeader: {
     fontSize: 15,
     fontWeight: '700',

@@ -1,10 +1,8 @@
 import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import FilterWork from './components/filter';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
 import {StackScreenProps} from '@react-navigation/stack';
-import {useInfiniteQuery} from 'react-query';
-import WorkManagementApi from './services/work-management.service';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {flatten, map} from 'ramda';
 import WorkItem from './components/work-item.component';
@@ -12,15 +10,35 @@ import {EWorkFormID, EWorkStatus, TWork} from './services/work.model';
 import CreateWorkComponent from './components/create-work.component';
 import {checkPermission} from '@/utils/utils';
 import {useAppSelector} from '@/hooks/redux.hook';
+import {useWorkQuery} from './services/hook';
+import Icon from '@/components/icon.component';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {AppStackParamsList} from '@/routes/app.stack';
 
-type Props = StackScreenProps<WorkStackParamsList, 'MAIN_DRAWER'>;
+type Props = CompositeScreenProps<
+  StackScreenProps<WorkStackParamsList, 'MAIN_DRAWER'>,
+  StackScreenProps<AppStackParamsList, 'WORK_MANAGEMENT'>
+>;
 
 const ManagementScreen = ({navigation}: Props) => {
+  const renderHeaderRight = useCallback(
+    () => (
+      <Icon
+        type="MaterialCommunityIcons"
+        name="account-cog"
+        size={30}
+        color="#2B5783"
+        style={{position: 'absolute', right: 0}}
+        onPress={() => navigation.navigate('SETTING_SCREEN')}
+      />
+    ),
+    [navigation],
+  );
   useEffect(() => {
-    navigation.getParent()?.setOptions({
-      title: 'My Work',
+    navigation.setOptions({
+      headerRight: !navigation.canGoBack() ? renderHeaderRight : undefined,
     });
-  }, [navigation]);
+  }, [navigation, renderHeaderRight]);
 
   const status = useMemo(
     () => [
@@ -36,9 +54,8 @@ const ManagementScreen = ({navigation}: Props) => {
 
   const formId = useMemo(
     () => [
-      {id: undefined, label: 'All'},
-      {id: EWorkFormID.ASSIGNED, label: 'Đã giao'},
       {id: EWorkFormID.RECEIVED, label: 'Được giao'},
+      {id: EWorkFormID.ASSIGNED, label: 'Đã giao'},
       {id: EWorkFormID.FOLLOW, label: 'Đang theo dõi'},
     ],
     [],
@@ -48,25 +65,9 @@ const ManagementScreen = ({navigation}: Props) => {
 
   const [selectedFormId, selectFormId] = useState(formId[0].id);
 
-  const {data, fetchNextPage} = useInfiniteQuery({
-    queryKey: ['my-work', selectedStatus, selectedFormId],
-    queryFn: ({pageParam}) =>
-      WorkManagementApi.getAll({
-        ...pageParam,
-        maxResultCount: 10,
-        status: selectedStatus,
-        formId: selectedFormId,
-      }),
-    getNextPageParam: (lastPage, allPages) => {
-      const skipCount = allPages.length * 10;
-      return (allPages.length - 1) * 10 + lastPage.works.length !==
-        lastPage.totalRecords
-        ? {
-            skipCount: skipCount,
-            maxResultCount: 10,
-          }
-        : undefined;
-    },
+  const {data, fetchNextPage} = useWorkQuery({
+    selectedFormId: selectedFormId,
+    selectedStatus: selectedStatus,
   });
 
   const dataProvider = useMemo(
@@ -80,7 +81,9 @@ const ManagementScreen = ({navigation}: Props) => {
   const renderItem: ListRenderItem<TWork> = ({item}) => (
     <WorkItem
       onPress={() => {
-        navigation.navigate('DETAIL_WORK', {id: item.id});
+        navigation.navigate('DETAIL_WORK', {
+          id: item.id,
+        });
       }}
       {...{item}}
     />
@@ -108,7 +111,9 @@ const ManagementScreen = ({navigation}: Props) => {
       />
       {checkPermission(grantedPermissions, [
         'Pages.Operations.TaskManagement.Create',
-      ]) && <CreateWorkComponent />}
+      ]) && (
+        <CreateWorkComponent status={selectedStatus} formId={selectedFormId} />
+      )}
     </View>
   );
 };
