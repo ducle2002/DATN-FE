@@ -60,6 +60,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
     queryKey: ['work', route.params.id],
     queryFn: () => WorkManagementApi.getById({id: route.params.id}),
   });
+
   const {data: logTimeWork, refetch: refetchLogTime} = useQuery({
     queryKey: ['logTime', route.params.id, selectedTurnWork?.id],
     queryFn: () =>
@@ -167,8 +168,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
       return false;
     }
     return true;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [logTimeWork, statusLogTimes, LoadingUpdateLogTime]);
+  }, [logTimeWork, statusLogTimes]);
 
   const [isVisible, setIsVisible] = useState({
     checkout: false,
@@ -184,7 +184,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
       }}>
       <ScrollView style={{}}>
         <View style={styles.contentContainer}>
-          <View style={[styles.row, {alignItems: 'center', flexWrap: 'wrap'}]}>
+          {/* <View style={[styles.row, {alignItems: 'center', flexWrap: 'wrap'}]}>
             <Text style={styles.textLabel}>Trạng thái:</Text>
             <View
               style={[
@@ -254,7 +254,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
               </View>
             </View>
           </View>
-          <View>
+          {/* <View>
             <Text style={styles.textLabel}>Mô tả công việc:</Text>
             <RenderHTML
               source={{html: work?.content ?? ''}}
@@ -263,7 +263,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
                 style: styles.textValue,
               }}
             />
-          </View>
+          </View> */}
         </View>
 
         <View style={[styles.contentContainer, {marginTop: 5}]}>
