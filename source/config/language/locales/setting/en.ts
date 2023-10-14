@@ -7,6 +7,7 @@ const main = {
   security: 'Security',
   aboutUs: 'About us',
   logOut: 'Log out',
+  role: 'Change role',
 };
 
 const setting = {

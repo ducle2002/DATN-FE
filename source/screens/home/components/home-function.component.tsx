@@ -60,7 +60,6 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
       case 'Pages.Assets.AssetCatalog.GetAll':
         return navigation.navigate('MATERIAL_ASSET_STACK', {
           screen: 'MAIN_SCREEN',
-          params: {type: 'Pages.SmartCommunity.OperationManagement.Material'},
         });
       case 'Pages.Assets.AssetParameters.GetAll': {
         return navigation.navigate('MATERIAL_ASSET_STACK', {
@@ -69,6 +68,8 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
       }
       case 'Pages.Citizen.Verifications.GetAll':
         return navigation.navigate('RESIDENT_STACK');
+      case 'Pages.Operations.TaskManagement.GetAll':
+        return navigation.navigate('WORK_MANAGEMENT', {screen: 'MAIN_DRAWER'});
       default:
         toast.show('Chức năng đang phát triển');
     }

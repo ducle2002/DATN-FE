@@ -16,7 +16,7 @@ import {CompositeScreenProps} from '@react-navigation/native';
 import {AppStackParamsList} from '@/routes/app.stack';
 
 type Props = CompositeScreenProps<
-  StackScreenProps<WorkStackParamsList, 'MY_WORK'>,
+  StackScreenProps<WorkStackParamsList, 'MAIN_DRAWER'>,
   StackScreenProps<AppStackParamsList, 'WORK_MANAGEMENT'>
 >;
 

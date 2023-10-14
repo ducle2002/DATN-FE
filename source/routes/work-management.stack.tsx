@@ -2,7 +2,6 @@ import LogTimeWorkScreen from '@/screens/work-management/log-time-work.screen';
 import ManagementScreen from '@/screens/work-management/management.screen';
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import {NavigatorScreenParams} from '@react-navigation/native';
 import DetailWorkScreen from '@/screens/work-management/detail-work.screen';
 import {useAppSelector} from '@/hooks/redux.hook';
 import {checkPermission} from '@/utils/utils';
@@ -22,7 +21,7 @@ export type WorkManagementDrawerParamsList = {
 };
 
 export type WorkStackParamsList = {
-  MAIN_DRAWER: NavigatorScreenParams<WorkManagementDrawerParamsList>;
+  MAIN_DRAWER: undefined;
   DETAIL_WORK: {id?: number};
   CREATE_WORK:
     | {
@@ -30,7 +29,7 @@ export type WorkStackParamsList = {
         formId?: EWorkFormID;
       }
     | undefined;
-  MY_WORK: undefined;
+  // MY_WORK: undefined;
   LOGTIME: {
     detailWork: TWorkDetail;
     workId: number;

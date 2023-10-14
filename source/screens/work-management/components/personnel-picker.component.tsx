@@ -3,22 +3,17 @@ import {
   Text,
   SafeAreaView,
   View,
-  Dimensions,
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import React, {createContext, useContext, useMemo, useState} from 'react';
+import React, {useContext, useMemo, useState} from 'react';
 import ReactNativeModal from 'react-native-modal';
 import Button from '@/components/button.component';
-import {useQuery} from 'react-query';
 import {useAllDepartment} from '@/modules/department/department.hook';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
 import {useAllOrganizationUnit} from '@/modules/organization/organization.hook';
-import Animated from 'react-native-reanimated';
 import OrganizationUnit from '@/components/organization-unit.component';
-import {TPersonnel} from '../services/work.model';
 import {PersonnelPickerContext} from '../create-work.screen';
-const {height} = Dimensions.get('screen');
 type Props = {
   label: string;
   containerStyle?: StyleProp<ViewStyle>;
@@ -26,6 +21,7 @@ type Props = {
 import globalStyles from '@/config/globalStyles';
 import {Chip} from 'react-native-paper';
 import language, {languageKeys} from '@/config/language/language';
+import BottomContainer from '@/components/bottom-container.component';
 const PersonnelPicker = ({label, containerStyle}: Props) => {
   const {selected} = useContext(PersonnelPickerContext);
 
@@ -75,9 +71,20 @@ const PersonnelPicker = ({label, containerStyle}: Props) => {
           </View>
           <View style={{marginBottom: 'auto'}}>
             <DropdownMenuComponent
+              label="Chọn cơ cấu"
               options={options}
               onSelected={(id: number) => setTypeStructure(id)}
               selectedLabel={options.find(t => t.id === typeStructure)?.label}
+              inputContainer={{
+                backgroundColor: '#f1f2f8',
+                borderRadius: 10,
+                marginLeft: 10,
+              }}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingHorizontal: 10,
+              }}
             />
             {typeStructure === 2 ? (
               <OrganizationUnit data={organizationUnits} />
@@ -85,9 +92,11 @@ const PersonnelPicker = ({label, containerStyle}: Props) => {
               <></>
             )}
           </View>
-          <Button mode="contained" onPress={() => setIsVisible(false)}>
-            Lưu
-          </Button>
+          <BottomContainer>
+            <Button mode="contained" onPress={() => setIsVisible(false)}>
+              Lưu
+            </Button>
+          </BottomContainer>
         </SafeAreaView>
       </ReactNativeModal>
     </>

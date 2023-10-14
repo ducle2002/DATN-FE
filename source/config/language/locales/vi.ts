@@ -31,6 +31,7 @@ const vi = {
   adminis: 'Hành chính / Dịch vụ số',
   service: 'Dịch vụ tiện ích nội khu',
   inventory: 'Quản lý tài sản vật tư',
+  operator: 'Vận hành',
   residentLanguage,
   water,
   workManagement,

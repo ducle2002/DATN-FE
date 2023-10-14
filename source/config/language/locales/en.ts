@@ -11,7 +11,7 @@ import localService from './local-service/en';
 import {digitalNoti} from './digital-notification/en';
 import materialAsset from './material-asset/en';
 import residentLanguage from './resident/en';
-
+import {role} from './role/en';
 const en = {
   ...title,
   setting,
@@ -30,6 +30,7 @@ const en = {
   service: 'Internal Amenities Services',
   inventory: 'Asset and Material Management',
   residentLanguage,
+  role,
 };
 
 export default en;

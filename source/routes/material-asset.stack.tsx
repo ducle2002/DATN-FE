@@ -1,15 +1,17 @@
 import React from 'react';
 import {TPermission} from 'types/type';
 import {createStackNavigator} from '@react-navigation/stack';
-import MainScreen from '@/screens/material-asset/main.screen';
 import ImportExportScreen from '@/screens/material-asset/import-export.screen';
 import language, {languageKeys} from '@/config/language/language';
 import CategoryManagementScreen from '@/screens/material-asset/category-management.screen';
+import ListTab from '@/screens/material-asset/list-assets.tab';
 
 export type MaterialAssetStackParamsList = {
-  MAIN_SCREEN: {
-    type: TPermission;
-  };
+  MAIN_SCREEN:
+    | {
+        type: TPermission;
+      }
+    | undefined;
   IMPORT_EXPORT: {
     type: 'IMPORT' | 'EXPORT';
   };
@@ -27,9 +29,11 @@ const MaterialAssetStack = () => {
       }}>
       <Stack.Screen
         name="MAIN_SCREEN"
-        component={MainScreen}
+        component={ListTab}
         options={{
-          title: language.t(languageKeys['Pages.Assets.AssetCatalog.GetAll']),
+          title: language.t(
+            languageKeys['Pages.Assets.AssetCatalog.GetAll'] ?? '',
+          ),
         }}
       />
       <Stack.Screen
@@ -50,9 +54,7 @@ const MaterialAssetStack = () => {
         component={CategoryManagementScreen}
         options={{
           title: language.t(
-            languageKeys[
-              'Pages.SmartCommunity.OperationManagement.MaterialCategory'
-            ],
+            languageKeys['Pages.Assets.AssetParameters.GetAll'] ?? '',
           ),
         }}
       />
