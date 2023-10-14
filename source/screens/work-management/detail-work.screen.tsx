@@ -24,7 +24,7 @@ import HeaderWorkDetail from './components/header.component';
 const {width} = Dimensions.get('screen');
 import language, {languageKeys} from '@/config/language/language';
 import ReactNativeModal from 'react-native-modal';
-import {TWorkDetail} from './services/work.model';
+import {EWorkFormID, EWorkStatus, TWorkDetail} from './services/work.model';
 import AttachLogTimeComponent from './components/attach-logtime.component';
 import LogTimeApi from './services/logtime.service';
 import {
@@ -34,6 +34,7 @@ import {
 } from './services/logtime.model';
 import {useToast} from 'react-native-toast-notifications';
 import LoadingComponent from '@/components/loading';
+import SubTaskCheckItem from './components/sub-task-check.component';
 
 type Props = StackScreenProps<WorkStackParamsList, 'DETAIL_WORK'>;
 type TModalAttachProps = {
@@ -103,8 +104,9 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
       mutationKey: ['updateTurnLogTime'],
       mutationFn: (data: {
         workTurnId: number;
-        listLogTimeIdsDelete: number[];
-        listLogTimeCreate: TWorkLogTime[];
+        listLogTimeIdsDelete?: number[];
+        listLogTimeCreate?: TWorkLogTime[];
+        listLogTimeUpdate?: TWorkLogTime[];
       }) => LogTimeApi.updateManyLogTime(data),
       onSuccess: () => {
         toast.show('Lưu thông tin thành công', {
@@ -169,6 +171,12 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
     }
     return true;
   }, [logTimeWork, statusLogTimes]);
+  const disableAll = useMemo(() => {
+    if (work?.status === EWorkStatus.DOING) {
+      return false;
+    }
+    return true;
+  }, [work]);
 
   const [isVisible, setIsVisible] = useState({
     checkout: false,
@@ -182,9 +190,9 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
         height: '100%',
         backgroundColor: '#D1D8FB',
       }}>
-      <ScrollView style={{}}>
+      <ScrollView>
         <View style={styles.contentContainer}>
-          {/* <View style={[styles.row, {alignItems: 'center', flexWrap: 'wrap'}]}>
+          <View style={[styles.row, {alignItems: 'center', flexWrap: 'wrap'}]}>
             <Text style={styles.textLabel}>Trạng thái:</Text>
             <View
               style={[
@@ -276,8 +284,23 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
           </View>
           {work?.listWorkDetail?.map(
             w =>
-              work.id && (
+              work.id &&
+              (route.params.formId === EWorkFormID.FOLLOW ? (
+                <SubTaskCheckItem
+                  disable={disableAll}
+                  item={w}
+                  key={w.id}
+                  workId={work.id}
+                  setModalAttachProps={setModalAttachProps}
+                  listLogTimeInfo={logTimeWork?.filter(
+                    el => el.workDetailId === w.id,
+                  )}
+                  turnWorkId={selectedTurnWork?.id}
+                  updateWorkLogTime={updateTurnLogTime}
+                />
+              ) : (
                 <SubTaskItem
+                  disable={disableAll}
                   item={w}
                   key={w.id}
                   workId={work.id}
@@ -316,15 +339,15 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
                     }
                   }}
                 />
-              ),
+              )),
           )}
         </View>
       </ScrollView>
 
-      <CheckoutWork
+      {/* <CheckoutWork
         isVisible={isVisible.checkout}
         onBackdropPress={() => setIsVisible({...isVisible, checkout: false})}
-      />
+      /> */}
       {/* <AddNotifications
         isVisible={isVisible.reminder}
         onBackdropPress={() =>
@@ -334,81 +357,86 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
           })
         }
       /> */}
-      <BottomContainer>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-around',
-          }}>
-          <Button
-            onPress={() => {
-              if (route.params.id && turnWork) {
-                addTurnWork({
-                  workId: route.params.id,
-                  description: new Date().toISOString(),
-                });
-              } else {
+      {route.params.formId !== EWorkFormID.FOLLOW && (
+        <BottomContainer>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+            }}>
+            <Button
+              disabled={disableAll}
+              onPress={() => {
+                if (route.params.id && turnWork) {
+                  addTurnWork({
+                    workId: route.params.id,
+                    description: new Date().toISOString(),
+                  });
+                } else {
+                  Alert.alert(
+                    'Không thể tạo lượt công việc mới',
+                    'Kiểm tra lại kết nối của bạn',
+                  );
+                }
+              }}
+              icon={'plus'}
+              mode="outlined">
+              Thêm lượt
+            </Button>
+            <Button
+              disabled={disableCompleteBtn || disableAll}
+              onPress={() => {
                 Alert.alert(
-                  'Không thể tạo lượt công việc mới',
-                  'Kiểm tra lại kết nối của bạn',
-                );
-              }
-            }}
-            icon={'plus'}
-            mode="outlined">
-            Thêm lượt
-          </Button>
-          <Button
-            disabled={disableCompleteBtn}
-            onPress={() => {
-              Alert.alert(
-                'Lưu thông tin thay đổi',
-                'Bạn có chức lưu thông tin thay đổi?',
-                [
-                  {
-                    text: 'Đồng ý',
-                    onPress: () => {
-                      if (selectedTurnWork?.id) {
-                        const listDelete = logTimeWork
-                          ? logTimeWork
-                              ?.map(item => {
-                                if (
-                                  statusLogTimes.find(
-                                    el => el.workDetailId === item.workDetailId,
-                                  ) === undefined &&
-                                  item.id
-                                ) {
-                                  return item.id;
-                                } else {
-                                  return -1;
-                                }
-                              })
-                              .filter(el => el !== -1)
-                          : [];
+                  'Lưu thông tin thay đổi',
+                  'Bạn có chức lưu thông tin thay đổi?',
+                  [
+                    {
+                      text: 'Đồng ý',
+                      onPress: () => {
+                        if (selectedTurnWork?.id) {
+                          const listDelete = logTimeWork
+                            ? logTimeWork
+                                ?.map(item => {
+                                  if (
+                                    statusLogTimes.find(
+                                      el =>
+                                        el.workDetailId === item.workDetailId,
+                                    ) === undefined &&
+                                    item.id
+                                  ) {
+                                    return item.id;
+                                  } else {
+                                    return -1;
+                                  }
+                                })
+                                .filter(el => el !== -1)
+                            : [];
 
-                        updateTurnLogTime({
-                          workTurnId: selectedTurnWork?.id,
-                          listLogTimeIdsDelete: listDelete,
-                          listLogTimeCreate: statusLogTimes.filter(
-                            el => !el.id,
-                          ),
-                        });
-                      }
+                          updateTurnLogTime({
+                            workTurnId: selectedTurnWork?.id,
+                            listLogTimeIdsDelete: listDelete,
+                            listLogTimeCreate: statusLogTimes.filter(
+                              el => !el.id,
+                            ),
+                          });
+                        }
+                      },
                     },
-                  },
-                  {
-                    text: 'Hủy bỏ',
-                  },
-                ],
-              );
-            }}
-            icon={'checkbox-marked-circle-plus-outline'}
-            mode="contained">
-            Lưu
-          </Button>
-        </View>
-      </BottomContainer>
+                    {
+                      text: 'Hủy bỏ',
+                    },
+                  ],
+                );
+              }}
+              icon={'checkbox-marked-circle-plus-outline'}
+              mode="contained">
+              Lưu
+            </Button>
+          </View>
+        </BottomContainer>
+      )}
+
       <ReactNativeModal
         useNativeDriverForBackdrop
         statusBarTranslucent={true}

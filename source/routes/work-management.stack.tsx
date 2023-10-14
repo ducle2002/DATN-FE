@@ -23,7 +23,7 @@ export type WorkManagementDrawerParamsList = {
 
 export type WorkStackParamsList = {
   MAIN_DRAWER: NavigatorScreenParams<WorkManagementDrawerParamsList>;
-  DETAIL_WORK: {id?: number};
+  DETAIL_WORK: {id?: number; formId: number};
   CREATE_WORK:
     | {
         status?: EWorkStatus;
@@ -32,8 +32,9 @@ export type WorkStackParamsList = {
     | undefined;
   MY_WORK: undefined;
   LOGTIME: {
-    detailWork: TWorkDetail;
+    workTurnId: number;
     workId: number;
+    workDetail: TWorkDetail;
   };
   CREATE_LOG_TIME: {
     detailWork: TWorkDetail;

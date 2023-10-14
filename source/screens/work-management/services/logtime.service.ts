@@ -105,8 +105,9 @@ class LogTimeService extends BaseService {
   };
   updateManyLogTime = async (data: {
     workTurnId: number;
-    listLogTimeIdsDelete: number[];
-    listLogTimeCreate: TWorkLogTime[];
+    listLogTimeIdsDelete?: number[];
+    listLogTimeCreate?: TWorkLogTime[];
+    listLogTimeUpdate?: TWorkLogTime[];
   }) => {
     const url = HOST_SERVER + this.endpoint + 'UpdateManyWorkLogTime';
     return axiosClient.put(url, data);

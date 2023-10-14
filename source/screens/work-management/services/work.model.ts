@@ -67,6 +67,13 @@ export enum EWorkStatus {
   CANCELED = 5,
 }
 
+export enum ELogTimeStatus {
+  DOING = 1,
+  DONE_IMPLEMENTER = 2,
+  DONE_SUPERVISOR = 3,
+  NOT_DONE = 4,
+}
+
 export enum EWorkFormID {
   ASSIGNED = 1,
   RECEIVED = 2,

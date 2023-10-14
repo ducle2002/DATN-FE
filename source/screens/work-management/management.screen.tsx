@@ -81,9 +81,12 @@ const ManagementScreen = ({navigation}: Props) => {
   const renderItem: ListRenderItem<TWork> = ({item}) => (
     <WorkItem
       onPress={() => {
-        navigation.navigate('DETAIL_WORK', {
-          id: item.id,
-        });
+        if (selectedFormId) {
+          navigation.navigate('DETAIL_WORK', {
+            id: item.id,
+            formId: selectedFormId,
+          });
+        }
       }}
       {...{item}}
     />

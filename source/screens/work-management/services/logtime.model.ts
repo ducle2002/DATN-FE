@@ -3,12 +3,16 @@ export type TWorkLogTime = {
   workDetailId: number;
   dateStart: string;
   dateFinish?: string;
-  userId?: number;
   status?: number;
   note?: string | null;
   imageUrls?: string[] | any[];
   id?: number;
   workTurnId: number;
+  tenantId?: 47;
+  workName?: string;
+  fullName?: string;
+  creationTime?: string;
+  creatorUserId?: number;
 };
 
 export type TWorkAttachLogTime = {
