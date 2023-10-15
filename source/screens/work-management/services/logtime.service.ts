@@ -34,6 +34,7 @@ class LogTimeService extends BaseService {
     params: TPagingParams & {
       WorkId?: number;
       WorkTurnId?: number;
+      userId?: number;
       MaxResultCount?: number;
       SkipCount?: number;
     },

@@ -35,6 +35,7 @@ import {
 import {useToast} from 'react-native-toast-notifications';
 import LoadingComponent from '@/components/loading';
 import SubTaskCheckItem from './components/sub-task-check.component';
+import {useAppSelector} from '@/hooks/redux.hook';
 
 type Props = StackScreenProps<WorkStackParamsList, 'DETAIL_WORK'>;
 type TModalAttachProps = {
@@ -44,6 +45,7 @@ type TModalAttachProps = {
 
 const DetailWorkScreen = ({route, navigation}: Props) => {
   const toast = useToast();
+  const userInfo = useAppSelector(state => state.user);
   const [modalAttachProps, setModalAttachProps] = useState<TModalAttachProps>({
     visible: false,
   });
@@ -69,6 +71,10 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
         ? LogTimeApi.getAllByTurn({
             WorkId: work?.id,
             WorkTurnId: selectedTurnWork?.id,
+            userId:
+              route.params.formId !== EWorkFormID.FOLLOW
+                ? userInfo.userId
+                : undefined,
             maxResultCount: 1000,
           })
         : [],

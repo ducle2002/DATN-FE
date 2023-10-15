@@ -178,7 +178,12 @@ const SubTaskCheckItem = ({
           )}
           onPress={() => {
             closeMenu();
-            if (turnWorkId && listLogTimeInfo && !!updateWorkLogTime) {
+            if (
+              turnWorkId &&
+              listLogTimeInfo &&
+              !!updateWorkLogTime &&
+              statusWorkDetail !== ELogTimeStatus.DONE_SUPERVISOR
+            ) {
               const submitData = {
                 workTurnId: turnWorkId,
                 listLogTimeUpdate:
@@ -206,7 +211,12 @@ const SubTaskCheckItem = ({
             />
           )}
           onPress={() => {
-            if (turnWorkId && listLogTimeInfo && !!updateWorkLogTime) {
+            if (
+              turnWorkId &&
+              listLogTimeInfo &&
+              !!updateWorkLogTime &&
+              statusWorkDetail !== ELogTimeStatus.NOT_DONE
+            ) {
               const submitData = {
                 workTurnId: turnWorkId,
                 listLogTimeUpdate:
