@@ -16,6 +16,7 @@ type Props = {
   logTimeInfo?: TWorkLogTime;
   onChangeSelect: Function;
   turnWorkId?: number;
+  disable?: boolean;
 };
 
 const SubTaskItem = ({
@@ -24,6 +25,8 @@ const SubTaskItem = ({
   setModalAttachProps,
   logTimeInfo,
   onChangeSelect,
+  turnWorkId,
+  disable = false,
 }: Props) => {
   const navigation = useNavigation<NavigationProp<WorkStackParamsList>>();
 
@@ -38,12 +41,16 @@ const SubTaskItem = ({
         paddingHorizontal: 0,
       }}
       onPress={() => {
-        navigation.navigate('LOGTIME', {
-          detailWork: item,
-          workId: workId,
-        });
+        if (!disable && !!turnWorkId) {
+          navigation.navigate('LOGTIME', {
+            workTurnId: turnWorkId,
+            workId: workId,
+            workDetail: item,
+          });
+        }
       }}>
       <TouchableOpacity
+        disabled={disable}
         onPress={() => {
           onChangeSelect();
         }}
@@ -74,7 +81,7 @@ const SubTaskItem = ({
         </View>
       </View>
       <TouchableOpacity
-        disabled={!logTimeInfo}
+        disabled={!logTimeInfo || disable}
         onPress={() => {
           setModalAttachProps({
             visible: true,

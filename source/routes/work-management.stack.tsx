@@ -23,7 +23,7 @@ export type WorkManagementDrawerParamsList = {
 
 export type WorkStackParamsList = {
   MAIN_DRAWER: undefined;
-  DETAIL_WORK: {id?: number};
+  DETAIL_WORK: {id?: number; formId: number};
   CREATE_WORK:
     | {
         status?: EWorkStatus;
@@ -31,8 +31,9 @@ export type WorkStackParamsList = {
       }
     | undefined;
   LOGTIME: {
-    detailWork: TWorkDetail;
+    workTurnId: number;
     workId: number;
+    workDetail: TWorkDetail;
   };
   CREATE_LOG_TIME: {
     detailWork: TWorkDetail;

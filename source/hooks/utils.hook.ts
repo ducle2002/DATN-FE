@@ -3,6 +3,7 @@ import UtilsApi from '@/services//utils.service';
 import {useMemo} from 'react';
 import {useMutation} from 'react-query';
 import HTMLParser from 'node-html-parser';
+import {useAppSelector} from './redux.hook';
 
 export const useUploadImages = (
   onError: Function = () => {},
@@ -26,7 +27,3 @@ export const useTextContentOfHTML = (data: string) => {
   const root = useMemo(() => HTMLParser.parse(data), [data]);
   return root?.textContent?.trim();
 };
-
-// export const useGetUserInfo = ()=>{
-//   const
-// }
