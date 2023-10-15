@@ -2,7 +2,6 @@ import axiosClient from '@/utils/axios.client';
 import {HOST_SERVER} from '@env';
 import {TPagingParams} from 'types/type';
 import {TWorkComment} from './work.model';
-import {reverse} from 'ramda';
 
 class WorkComment {
   endpoint = HOST_SERVER + '/api/services/app/WorkComment/';
