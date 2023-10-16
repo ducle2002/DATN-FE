@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
-import React, {createContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import DatePickerComponent from './components/date-picker.component';
 import CTextInput from '@/components/text-input.component';
@@ -12,7 +12,7 @@ import language, {languageKeys} from '@/config/language/language';
 import {StackScreenProps} from '@react-navigation/stack';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
 import WorkManagementApi from './services/work-management.service';
-import {useWorkType} from './services/hook';
+import {PersonnelPickerContext, useWorkType} from './services/hook';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import PersonnelPicker from './components/personnel-picker.component';
@@ -20,14 +20,6 @@ import {TPersonnel} from './services/work.model';
 import {useToast} from 'react-native-toast-notifications';
 
 type Props = StackScreenProps<WorkStackParamsList, 'CREATE_WORK'>;
-export const PersonnelPickerContext = createContext<{
-  selected: TPersonnel[];
-  onSelect: (accounts: TPersonnel[]) => void;
-}>({
-  selected: [],
-  onSelect: () => {},
-});
-
 const CreateWorkScreen = ({navigation, route}: Props) => {
   const [supervisorUsers, setSupervisorUsers] = useState<TPersonnel[]>([]);
   const [recipientUsers, setRecipientUsers] = useState<TPersonnel[]>([]);

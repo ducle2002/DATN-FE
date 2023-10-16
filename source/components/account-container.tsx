@@ -3,7 +3,7 @@ import React, {useContext} from 'react';
 import {Chip} from 'react-native-paper';
 import globalStyles from '@/config/globalStyles';
 import {TPersonnel} from '@/screens/work-management/services/work.model';
-import {PersonnelPickerContext} from '@/screens/work-management/create-work.screen';
+import {PersonnelPickerContext} from '@/screens/work-management/services/hook';
 
 type Props = {
   accounts?: TPersonnel[];

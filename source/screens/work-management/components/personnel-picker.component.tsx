@@ -13,7 +13,6 @@ import {useAllDepartment} from '@/modules/department/department.hook';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
 import {useAllOrganizationUnit} from '@/modules/organization/organization.hook';
 import OrganizationUnit from '@/components/organization-unit.component';
-import {PersonnelPickerContext} from '../create-work.screen';
 type Props = {
   label: string;
   containerStyle?: StyleProp<ViewStyle>;
@@ -22,6 +21,7 @@ import globalStyles from '@/config/globalStyles';
 import {Chip} from 'react-native-paper';
 import language, {languageKeys} from '@/config/language/language';
 import BottomContainer from '@/components/bottom-container.component';
+import {PersonnelPickerContext} from '../services/hook';
 const PersonnelPicker = ({label, containerStyle}: Props) => {
   const {selected} = useContext(PersonnelPickerContext);
 

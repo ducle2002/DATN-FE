@@ -1,8 +1,9 @@
 import {useInfiniteQuery, useQuery} from 'react-query';
 import WorkTypeApi from './work-type.service';
-import {EWorkFormID, EWorkStatus} from './work.model';
+import {EWorkFormID, EWorkStatus, TPersonnel} from './work.model';
 import WorkManagementApi from './work-management.service';
 import WorkCommentApi from './work-comment.service';
+import {createContext} from 'react';
 
 export const useWorkType = () => {
   const {data} = useQuery({
@@ -83,3 +84,11 @@ export const useAllWorkComment = ({workId}: {workId: number}) => {
     refetch,
   };
 };
+
+export const PersonnelPickerContext = createContext<{
+  selected: TPersonnel[];
+  onSelect: (accounts: TPersonnel[]) => void;
+}>({
+  selected: [],
+  onSelect: () => {},
+});
