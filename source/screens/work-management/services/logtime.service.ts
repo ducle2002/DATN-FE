@@ -91,11 +91,13 @@ class LogTimeService extends BaseService {
       data.imageUrls?.forEach(img => {
         if (typeof img !== 'string') {
           arrayImgIsFile.push(img);
+        } else {
+          submitImgs.push(img);
         }
       });
       if (arrayImgIsFile.length > 0) {
         const resListImg = await UtilsApi.uploadImagesRequest(arrayImgIsFile);
-        submitImgs = resListImg;
+        submitImgs = [...submitImgs, ...resListImg];
       }
     }
     return axiosClient.put(url, {
