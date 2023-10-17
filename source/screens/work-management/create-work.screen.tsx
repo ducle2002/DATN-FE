@@ -117,7 +117,7 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
             name="dateStart"
             render={({field: {value, onChange}, fieldState: {error}}) => (
               <DatePickerComponent
-                value={value}
+                value={value ?? ''}
                 onChange={onChange}
                 label={language.t(languageKeys.workManagement.work.dateStart)}
                 labelStyle={styles.labelStyle}
