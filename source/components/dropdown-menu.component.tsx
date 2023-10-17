@@ -42,6 +42,7 @@ type Props = React.ComponentProps<typeof View> & {
   valueStyle?: StyleProp<TextStyle>;
   disable?: boolean;
   labelContainerStyle?: StyleProp<ViewStyle>;
+  error?: string;
 };
 
 const DropdownMenu = ({
@@ -57,6 +58,7 @@ const DropdownMenu = ({
   disable = false,
   placeholderTextColor,
   labelContainerStyle,
+  error,
   ...props
 }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -142,6 +144,7 @@ const DropdownMenu = ({
           <Icon type="Ionicons" name="chevron-forward" size={20} />
         </Animated.View>
       </View>
+      {error && <Text style={styles.textError}>{error}</Text>}
       <ReactNativeModal
         useNativeDriverForBackdrop
         statusBarTranslucent={true}
@@ -204,5 +207,9 @@ const styles = StyleSheet.create({
   },
   itemLabelText: {
     ...globalStyles.text14Medium,
+  },
+  textError: {
+    ...globalStyles.text12Medium,
+    color: 'red',
   },
 });

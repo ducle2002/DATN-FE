@@ -51,6 +51,7 @@ export default AccountContainer;
 const styles = StyleSheet.create({
   accountContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   textLabel: {
     ...globalStyles.text15SemiBold,
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     ...globalStyles.text14Medium,
   },
   chip: {
-    marginBottom: 5,
+    marginBottom: 10,
     marginRight: 10,
   },
 });

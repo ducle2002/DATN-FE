@@ -26,6 +26,8 @@ export const useAllOrganizationUnit = () => {
   const {data} = useQuery({
     queryKey: ['all-organization-unit'],
     queryFn: () => OrganizationApi.getOrganizationUnits({maxResultCount: 1000}),
+    cacheTime: 300000,
+    staleTime: 300000,
   });
 
   return arrayToTree(data?.organizationUnits ?? []);

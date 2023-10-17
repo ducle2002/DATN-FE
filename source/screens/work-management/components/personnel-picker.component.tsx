@@ -5,6 +5,7 @@ import {
   View,
   StyleProp,
   ViewStyle,
+  ScrollView,
 } from 'react-native';
 import React, {useContext, useMemo, useState} from 'react';
 import ReactNativeModal from 'react-native-modal';
@@ -22,14 +23,19 @@ import {Chip} from 'react-native-paper';
 import language, {languageKeys} from '@/config/language/language';
 import BottomContainer from '@/components/bottom-container.component';
 import {PersonnelPickerContext} from '../services/hook';
+import Departments from '@/components/departments.component';
+
 const PersonnelPicker = ({label, containerStyle}: Props) => {
-  const {selected} = useContext(PersonnelPickerContext);
+  const {selected, onSelect} = useContext(PersonnelPickerContext);
+  const removePersonnel = (id: number) => {
+    onSelect(selected.filter(a => a.id !== id));
+  };
 
   const [isVisible, setIsVisible] = useState(false);
   const options = useMemo(
     () => [
-      {id: 1, label: 'Cơ cấu tổ chức'},
       {id: 2, label: 'Cơ cấu dự án'},
+      {id: 1, label: 'Cơ cấu tổ chức'},
     ],
     [],
   );
@@ -45,11 +51,17 @@ const PersonnelPicker = ({label, containerStyle}: Props) => {
         <Text style={styles.textLabel}>{label}</Text>
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
           {selected.map(p => (
-            <Chip key={p.id} style={{marginTop: 5, marginRight: 10}}>
+            <Chip
+              closeIcon={'close-circle'}
+              onClose={() => {
+                removePersonnel(p.id);
+              }}
+              key={p.id}
+              style={{marginTop: 10, marginRight: 10}}>
               {p.fullName}
             </Chip>
           ))}
-          <Button onPress={() => setIsVisible(true)}>
+          <Button style={{marginTop: 10}} onPress={() => setIsVisible(true)}>
             {language.t(languageKeys.shared.button.add)}
           </Button>
         </View>
@@ -61,13 +73,20 @@ const PersonnelPicker = ({label, containerStyle}: Props) => {
         <SafeAreaView style={styles.container}>
           <View style={{paddingLeft: 10, height: '30%'}}>
             <Text style={styles.textLabel}>Nhân sự được chọn</Text>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <ScrollView
+              contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}>
               {selected.map(p => (
-                <Chip key={p.id} style={{marginTop: 5, marginRight: 10}}>
+                <Chip
+                  closeIcon={'close-circle'}
+                  onClose={() => {
+                    removePersonnel(p.id);
+                  }}
+                  key={p.id}
+                  style={{marginTop: 10, marginRight: 10}}>
                   {p.fullName}
                 </Chip>
               ))}
-            </View>
+            </ScrollView>
           </View>
           <View style={{marginBottom: 'auto'}}>
             <DropdownMenuComponent
@@ -89,7 +108,7 @@ const PersonnelPicker = ({label, containerStyle}: Props) => {
             {typeStructure === 2 ? (
               <OrganizationUnit data={organizationUnits} />
             ) : (
-              <></>
+              <Departments departments={departments ?? []} />
             )}
           </View>
           <BottomContainer>

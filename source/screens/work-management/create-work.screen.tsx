@@ -25,10 +25,10 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
   const [recipientUsers, setRecipientUsers] = useState<TPersonnel[]>([]);
 
   const schema = yup.object({
-    dateStart: yup.string().required(),
+    dateStart: yup.string(),
     dateExpected: yup.string(),
     title: yup.string().required(),
-    content: yup.string().required(),
+    content: yup.string(),
     workTypeId: yup.string().required(),
   });
 
@@ -156,7 +156,7 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
           <Controller
             control={control}
             name="workTypeId"
-            render={({field: {value, onChange}}) => (
+            render={({field: {value, onChange}, fieldState: {error}}) => (
               <DropdownMenuComponent
                 options={
                   workType?.map(type => ({
@@ -172,6 +172,7 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
                 inputContainer={styles.inputContainerStyle}
                 labelStyle={styles.labelStyle}
                 style={{marginBottom: 20}}
+                error={error?.message}
               />
             )}
           />
@@ -179,30 +180,28 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
           <Controller
             control={control}
             name="title"
-            render={({field: {value, onChange}}) => (
+            render={({field: {value, onChange}, fieldState: {error}}) => (
               <CTextInput
                 value={value}
                 onChangeText={onChange}
                 style={styles.inputContainerStyle}
                 label={language.t(languageKeys.workManagement.work.title)}
-                labelStyle={styles.labelStyle}
-                withError={false}
-                containerStyle={{marginBottom: 20}}
+                labelStyle={[styles.labelStyle]}
+                errorMessage={error?.message}
               />
             )}
           />
           <Controller
             control={control}
             name="content"
-            render={({field: {value, onChange}}) => (
+            render={({field: {value, onChange}, fieldState: {error}}) => (
               <CTextInput
                 value={value}
                 onChangeText={onChange}
                 style={styles.inputContainerStyle}
-                labelStyle={styles.labelStyle}
+                labelStyle={[styles.labelStyle, {marginTop: 10}]}
                 label={language.t(languageKeys.workManagement.work.content)}
-                containerStyle={{marginBottom: 20}}
-                withError={false}
+                errorMessage={error?.message}
               />
             )}
           />
