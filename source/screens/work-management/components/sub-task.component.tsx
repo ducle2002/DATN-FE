@@ -99,7 +99,13 @@ const SubTaskItem = ({
           type="Ionicons"
           name="document-attach"
           size={24}
-          color={logTimeInfo ? '#0096c7' : '#ced4da'}
+          color={
+            logTimeInfo
+              ? logTimeInfo.imageUrls && logTimeInfo.imageUrls.length > 0
+                ? '#2b9348'
+                : '#0096c7'
+              : '#ced4da'
+          }
         />
       </TouchableOpacity>
     </ItemCard>

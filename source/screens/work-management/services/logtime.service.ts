@@ -85,7 +85,23 @@ class LogTimeService extends BaseService {
   };
   update = async (data: TWorkLogTime) => {
     const url = HOST_SERVER + this.endpoint + 'UpdateWorkLogTime';
-    return axiosClient.post(url, data);
+    let submitImgs: any[] = [];
+    if (data.imageUrls?.length && data.imageUrls?.length > 0) {
+      let arrayImgIsFile: any[] = [];
+      data.imageUrls?.forEach(img => {
+        if (typeof img !== 'string') {
+          arrayImgIsFile.push(img);
+        }
+      });
+      if (arrayImgIsFile.length > 0) {
+        const resListImg = await UtilsApi.uploadImagesRequest(arrayImgIsFile);
+        submitImgs = resListImg;
+      }
+    }
+    return axiosClient.put(url, {
+      ...data,
+      imageUrls: submitImgs,
+    });
   };
   getAllTurnWorkNotPaging = async (
     params: TPagingParams & {

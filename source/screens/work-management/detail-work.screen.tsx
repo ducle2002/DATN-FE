@@ -476,6 +476,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
                 )}
                 turnWorkId={selectedTurnWork?.id}
                 onClose={toggleIsVisible}
+                refetchData={refetchLogTime}
               />
             </View>
           </Pressable>

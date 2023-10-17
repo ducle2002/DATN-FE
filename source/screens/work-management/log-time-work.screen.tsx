@@ -6,11 +6,11 @@ import {WorkStackParamsList} from '@/routes/work-management.stack';
 import {Button} from 'react-native-paper';
 import LogTimeApi from './services/logtime.service';
 import {useQuery} from 'react-query';
-import FastImage from 'react-native-fast-image';
 import {ELogTimeStatus} from './services/work.model';
 import Icon from '@/components/icon.component';
 import globalStyles from '@/config/globalStyles';
 import moment from 'moment';
+import LogTimeItem from './components/log-time-item';
 type Props = StackScreenProps<WorkStackParamsList, 'LOGTIME'>;
 const LogTimeWorkScreen = ({route, navigation}: Props) => {
   const {data: logTimeWork, refetch: refetchLogTime} = useQuery({
@@ -41,48 +41,8 @@ const LogTimeWorkScreen = ({route, navigation}: Props) => {
           ?.filter(item => item.workDetailId === route.params.workDetail.id)
           ?.map((item, index) => {
             return (
-              <View key={index} style={styles.containerLogTime}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    type="AntDesign"
-                    name={
-                      item.status === ELogTimeStatus.DONE_SUPERVISOR
-                        ? 'checksquare'
-                        : item.status === ELogTimeStatus.NOT_DONE
-                        ? 'closesquare'
-                        : 'minussquare'
-                    }
-                    size={24}
-                    color={
-                      item.status === ELogTimeStatus.DONE_SUPERVISOR
-                        ? '#2b9348'
-                        : item.status === ELogTimeStatus.NOT_DONE
-                        ? '#9d0208'
-                        : '#adb5bd'
-                    }
-                  />
-                  <Text style={[styles.txtLabel, {paddingLeft: 4}]}>
-                    {item.status === ELogTimeStatus.DONE_SUPERVISOR
-                      ? 'Đã hoàn thành tốt'
-                      : item.status === ELogTimeStatus.NOT_DONE
-                      ? 'Không đạt'
-                      : 'Chưa đánh giá'}
-                  </Text>
-                </View>
-                <Text style={styles.txtLabel}>
-                  Thời gian:{' '}
-                  <Text style={styles.txtValue}>
-                    {moment(item.dateStart).format('DD/MM/YYYY HH:mma')}
-                  </Text>
-                </Text>
-                <Text style={styles.txtLabel}>
-                  Người xử lý:{' '}
-                  <Text style={styles.txtValue}>{item.fullName}</Text>
-                </Text>
+              <View key={index}>
+                <LogTimeItem data={item} />
               </View>
             );
           })}
@@ -142,6 +102,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
     padding: 8,
     borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   txtLabel: {
     ...globalStyles.text14SemiBold,

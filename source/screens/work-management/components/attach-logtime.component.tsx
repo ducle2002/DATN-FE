@@ -20,6 +20,7 @@ type Props = {
   logTimeInfo?: TWorkLogTime;
   turnWorkId?: number;
   onClose: Function;
+  refetchData?: Function;
 };
 const AttachLogTimeComponent = ({
   workDetail,
@@ -27,6 +28,7 @@ const AttachLogTimeComponent = ({
   logTimeInfo,
   turnWorkId,
   onClose,
+  refetchData,
 }: Props) => {
   const toast = useToast();
   const {control, handleSubmit, watch, setValue, reset} = useForm({
@@ -50,6 +52,7 @@ const AttachLogTimeComponent = ({
         duration: 1000,
         animationType: 'slide-in',
       });
+      refetchData && refetchData?.();
       onClose();
       reset();
     },
@@ -103,7 +106,18 @@ const AttachLogTimeComponent = ({
     //   );
     // }
   };
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (logTimeInfo && logTimeInfo.imageUrls) {
+      setValue('imageUrls', logTimeInfo?.imageUrls);
+    }
+    setValue('note', logTimeInfo?.note);
+
+    reset({
+      imageUrls:
+        logTimeInfo && logTimeInfo.imageUrls ? logTimeInfo?.imageUrls : [],
+      note: logTimeInfo?.note,
+    });
+  }, [logTimeInfo, reset, setValue]);
   return (
     <Pressable>
       <Text style={styles.txtHeader}>Gửi minh chứng</Text>
@@ -113,7 +127,10 @@ const AttachLogTimeComponent = ({
             <>
               <Image
                 source={{
-                  uri: `${watch('imageUrls')[0]?.uri}`,
+                  uri:
+                    logTimeInfo && logTimeInfo.imageUrls
+                      ? watch('imageUrls')[0]
+                      : `${watch('imageUrls')[0]?.uri}`,
                 }}
                 style={{width: '100%', height: '100%', borderRadius: 5}}
                 borderRadius={5}
