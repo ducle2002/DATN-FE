@@ -88,7 +88,7 @@ const ManagementScreen = ({navigation}: Props) => {
           });
         }
       }}
-      {...{item}}
+      {...{item, navigation}}
     />
   );
 

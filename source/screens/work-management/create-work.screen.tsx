@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
-import React, {createContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import DatePickerComponent from './components/date-picker.component';
 import CTextInput from '@/components/text-input.component';
@@ -12,7 +12,7 @@ import language, {languageKeys} from '@/config/language/language';
 import {StackScreenProps} from '@react-navigation/stack';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
 import WorkManagementApi from './services/work-management.service';
-import {useWorkType} from './services/hook';
+import {PersonnelPickerContext, useWorkType} from './services/hook';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import PersonnelPicker from './components/personnel-picker.component';
@@ -20,23 +20,15 @@ import {TPersonnel} from './services/work.model';
 import {useToast} from 'react-native-toast-notifications';
 
 type Props = StackScreenProps<WorkStackParamsList, 'CREATE_WORK'>;
-export const PersonnelPickerContext = createContext<{
-  selected: TPersonnel[];
-  onSelect: (accounts: TPersonnel[]) => void;
-}>({
-  selected: [],
-  onSelect: () => {},
-});
-
 const CreateWorkScreen = ({navigation, route}: Props) => {
   const [supervisorUsers, setSupervisorUsers] = useState<TPersonnel[]>([]);
   const [recipientUsers, setRecipientUsers] = useState<TPersonnel[]>([]);
 
   const schema = yup.object({
-    dateStart: yup.string().required(),
+    dateStart: yup.string(),
     dateExpected: yup.string(),
     title: yup.string().required(),
-    content: yup.string().required(),
+    content: yup.string(),
     workTypeId: yup.string().required(),
   });
 
@@ -125,7 +117,7 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
             name="dateStart"
             render={({field: {value, onChange}, fieldState: {error}}) => (
               <DatePickerComponent
-                value={value}
+                value={value ?? ''}
                 onChange={onChange}
                 label={language.t(languageKeys.workManagement.work.dateStart)}
                 labelStyle={styles.labelStyle}
@@ -164,7 +156,7 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
           <Controller
             control={control}
             name="workTypeId"
-            render={({field: {value, onChange}}) => (
+            render={({field: {value, onChange}, fieldState: {error}}) => (
               <DropdownMenuComponent
                 options={
                   workType?.map(type => ({
@@ -180,6 +172,7 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
                 inputContainer={styles.inputContainerStyle}
                 labelStyle={styles.labelStyle}
                 style={{marginBottom: 20}}
+                error={error?.message}
               />
             )}
           />
@@ -187,30 +180,28 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
           <Controller
             control={control}
             name="title"
-            render={({field: {value, onChange}}) => (
+            render={({field: {value, onChange}, fieldState: {error}}) => (
               <CTextInput
                 value={value}
                 onChangeText={onChange}
                 style={styles.inputContainerStyle}
                 label={language.t(languageKeys.workManagement.work.title)}
-                labelStyle={styles.labelStyle}
-                withError={false}
-                containerStyle={{marginBottom: 20}}
+                labelStyle={[styles.labelStyle]}
+                errorMessage={error?.message}
               />
             )}
           />
           <Controller
             control={control}
             name="content"
-            render={({field: {value, onChange}}) => (
+            render={({field: {value, onChange}, fieldState: {error}}) => (
               <CTextInput
                 value={value}
                 onChangeText={onChange}
                 style={styles.inputContainerStyle}
-                labelStyle={styles.labelStyle}
+                labelStyle={[styles.labelStyle, {marginTop: 10}]}
                 label={language.t(languageKeys.workManagement.work.content)}
-                containerStyle={{marginBottom: 20}}
-                withError={false}
+                errorMessage={error?.message}
               />
             )}
           />

@@ -5,6 +5,7 @@ import Icon from '@/components/icon.component';
 import {useNavigation} from '@react-navigation/native';
 import CTextInput from '@/components/text-input.component';
 import {Controller, useForm} from 'react-hook-form';
+import language, {languageKeys} from '@/config/language/language';
 
 type Props = {
   keywordChange?: Function;
@@ -40,7 +41,7 @@ const MainHeader = ({keywordChange = () => {}}: Props) => {
               value={value}
               onChangeText={onChange}
               onSubmitEditing={handleSubmit(onSubmit)}
-              placeholder="Tìm kiếm"
+              placeholder={language.t(languageKeys.chat.main.search)}
             />
           )}
         />

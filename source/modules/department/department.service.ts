@@ -25,7 +25,9 @@ class DepartmentService extends BaseService {
   ): Promise<{accounts: TPersonnelAccount[]; totalRecords: number}> => {
     const url =
       HOST_SERVER + '/api/services/app/OrganizationStructure/GetAllAccount';
-    const {data: result} = await axiosClient.get(url, {params: params});
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: params});
 
     return {
       accounts: result.data,

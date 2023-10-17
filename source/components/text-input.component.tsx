@@ -1,5 +1,6 @@
 import {
   Platform,
+  StyleProp,
   StyleSheet,
   Text,
   TextInput,
@@ -14,7 +15,7 @@ type Props = React.ComponentProps<typeof TextInput> & {
   errorMessage?: string;
   containerStyle?: ViewStyle;
   label?: string;
-  labelStyle?: TextStyle;
+  labelStyle?: StyleProp<TextStyle>;
   withError?: boolean;
 };
 

@@ -3,22 +3,17 @@ import {
   Text,
   SafeAreaView,
   View,
-  Dimensions,
   StyleProp,
   ViewStyle,
+  ScrollView,
 } from 'react-native';
-import React, {createContext, useContext, useMemo, useState} from 'react';
+import React, {useContext, useMemo, useState} from 'react';
 import ReactNativeModal from 'react-native-modal';
 import Button from '@/components/button.component';
-import {useQuery} from 'react-query';
 import {useAllDepartment} from '@/modules/department/department.hook';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
 import {useAllOrganizationUnit} from '@/modules/organization/organization.hook';
-import Animated from 'react-native-reanimated';
 import OrganizationUnit from '@/components/organization-unit.component';
-import {TPersonnel} from '../services/work.model';
-import {PersonnelPickerContext} from '../create-work.screen';
-const {height} = Dimensions.get('screen');
 type Props = {
   label: string;
   containerStyle?: StyleProp<ViewStyle>;
@@ -26,14 +21,21 @@ type Props = {
 import globalStyles from '@/config/globalStyles';
 import {Chip} from 'react-native-paper';
 import language, {languageKeys} from '@/config/language/language';
+import BottomContainer from '@/components/bottom-container.component';
+import {PersonnelPickerContext} from '../services/hook';
+import Departments from '@/components/departments.component';
+
 const PersonnelPicker = ({label, containerStyle}: Props) => {
-  const {selected} = useContext(PersonnelPickerContext);
+  const {selected, onSelect} = useContext(PersonnelPickerContext);
+  const removePersonnel = (id: number) => {
+    onSelect(selected.filter(a => a.id !== id));
+  };
 
   const [isVisible, setIsVisible] = useState(false);
   const options = useMemo(
     () => [
-      {id: 1, label: 'Cơ cấu tổ chức'},
       {id: 2, label: 'Cơ cấu dự án'},
+      {id: 1, label: 'Cơ cấu tổ chức'},
     ],
     [],
   );
@@ -49,11 +51,17 @@ const PersonnelPicker = ({label, containerStyle}: Props) => {
         <Text style={styles.textLabel}>{label}</Text>
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
           {selected.map(p => (
-            <Chip key={p.id} style={{marginTop: 5, marginRight: 10}}>
+            <Chip
+              closeIcon={'close-circle'}
+              onClose={() => {
+                removePersonnel(p.id);
+              }}
+              key={p.id}
+              style={{marginTop: 10, marginRight: 10}}>
               {p.fullName}
             </Chip>
           ))}
-          <Button onPress={() => setIsVisible(true)}>
+          <Button style={{marginTop: 10}} onPress={() => setIsVisible(true)}>
             {language.t(languageKeys.shared.button.add)}
           </Button>
         </View>
@@ -65,29 +73,49 @@ const PersonnelPicker = ({label, containerStyle}: Props) => {
         <SafeAreaView style={styles.container}>
           <View style={{paddingLeft: 10, height: '30%'}}>
             <Text style={styles.textLabel}>Nhân sự được chọn</Text>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <ScrollView
+              contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}>
               {selected.map(p => (
-                <Chip key={p.id} style={{marginTop: 5, marginRight: 10}}>
+                <Chip
+                  closeIcon={'close-circle'}
+                  onClose={() => {
+                    removePersonnel(p.id);
+                  }}
+                  key={p.id}
+                  style={{marginTop: 10, marginRight: 10}}>
                   {p.fullName}
                 </Chip>
               ))}
-            </View>
+            </ScrollView>
           </View>
           <View style={{marginBottom: 'auto'}}>
             <DropdownMenuComponent
+              label="Chọn cơ cấu"
               options={options}
               onSelected={(id: number) => setTypeStructure(id)}
               selectedLabel={options.find(t => t.id === typeStructure)?.label}
+              inputContainer={{
+                backgroundColor: '#f1f2f8',
+                borderRadius: 10,
+                marginLeft: 10,
+              }}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingHorizontal: 10,
+              }}
             />
             {typeStructure === 2 ? (
               <OrganizationUnit data={organizationUnits} />
             ) : (
-              <></>
+              <Departments departments={departments ?? []} />
             )}
           </View>
-          <Button mode="contained" onPress={() => setIsVisible(false)}>
-            Lưu
-          </Button>
+          <BottomContainer>
+            <Button mode="contained" onPress={() => setIsVisible(false)}>
+              Lưu
+            </Button>
+          </BottomContainer>
         </SafeAreaView>
       </ReactNativeModal>
     </>

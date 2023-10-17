@@ -1,21 +1,17 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {TMaterialAsset} from '@/screens/material-asset/services/material-asset.model';
-import {CompositeNavigationProp} from '@react-navigation/native';
 import {MaterialAssetStackParamsList} from '@/routes/material-asset.stack';
 import ItemCard from '@/components/item-card.component';
 import globalStyles from '@/config/globalStyles';
 import FastImage from 'react-native-fast-image';
-import {MaterialTabParamsList} from '../main.screen';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 
 type Props = {
   item: TMaterialAsset;
-  navigation: CompositeNavigationProp<
-    MaterialTopTabNavigationProp<MaterialTabParamsList, 'LIST'>,
-    StackNavigationProp<MaterialAssetStackParamsList, 'MAIN_SCREEN'>
-  >;
+  navigation: //  CompositeNavigationProp<
+  // MaterialTopTabNavigationProp<MaterialTabParamsList, 'LIST'>,
+  StackNavigationProp<MaterialAssetStackParamsList, 'MAIN_SCREEN'>;
   onPress: () => void;
 };
 

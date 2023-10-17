@@ -16,7 +16,7 @@ import {CompositeScreenProps} from '@react-navigation/native';
 import {AppStackParamsList} from '@/routes/app.stack';
 
 type Props = CompositeScreenProps<
-  StackScreenProps<WorkStackParamsList, 'MY_WORK'>,
+  StackScreenProps<WorkStackParamsList, 'MAIN_DRAWER'>,
   StackScreenProps<AppStackParamsList, 'WORK_MANAGEMENT'>
 >;
 
@@ -70,7 +70,7 @@ const MyWorkScreen = ({navigation}: Props) => {
   const renderItem: ListRenderItem<TWork> = ({item}) => (
     <WorkItemComponent
       onPress={() => navigation.navigate('DETAIL_WORK', {id: item.id})}
-      {...{item}}
+      {...{item, navigation}}
     />
   );
 

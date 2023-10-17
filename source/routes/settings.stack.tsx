@@ -3,7 +3,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import SettingScreen from '@/screens/setting/settings.screen';
 import LanguageScreen from '@/screens/setting/language.screen';
 import ChangePasswordScreen from '@/screens/setting/change-password';
-import language, {languageKeys} from '@/config/language/language';
+import {languageKeys} from '@/config/language/language';
+import {useTranslation} from 'react-i18next';
 export type SettingStackParamsList = {
   SettingScreen: undefined;
   LanguageScreen: undefined;
@@ -12,6 +13,7 @@ export type SettingStackParamsList = {
 const Stack = createStackNavigator<SettingStackParamsList>();
 
 const SettingStack = () => {
+  const language = useTranslation();
   return (
     <Stack.Navigator
       screenOptions={{

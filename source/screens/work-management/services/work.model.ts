@@ -79,3 +79,14 @@ export enum EWorkFormID {
   RECEIVED = 2,
   FOLLOW = 3,
 }
+
+export type TWorkComment = {
+  content: string;
+  creationTime: string;
+  creatorUserId: number;
+  fullName: string;
+  id: number;
+  workId: number;
+  imageUrls: string[];
+  tenantId: number;
+};

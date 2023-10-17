@@ -142,7 +142,7 @@ const HomeScreen = (props: HomeScreenProps) => {
         {operator.length > 0 && (
           <View>
             <Text style={styles.sectionTitle}>
-              {language.t(languageKeys.inventory)}
+              {language.t(languageKeys.operator)}
             </Text>
             <View style={styles.section}>
               {operator.map((p, index) => (
@@ -162,7 +162,7 @@ const HomeScreen = (props: HomeScreenProps) => {
           </View>
         )}
 
-        <Text style={styles.sectionTitle}>Vận hành tòa nhà</Text>
+        {/* <Text style={styles.sectionTitle}>Vận hành tòa nhà</Text>
         <View style={styles.section}>
           <View style={styles.section}>
             <HomeFunction
@@ -194,7 +194,7 @@ const HomeScreen = (props: HomeScreenProps) => {
               }}
             />
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );

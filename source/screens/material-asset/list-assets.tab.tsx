@@ -13,15 +13,13 @@ import Button from '@/components/button.component';
 import language, {languageKeys} from '@/config/language/language';
 import {LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {useListMaterialAssets} from './hooks/hook';
-import {CompositeScreenProps} from '@react-navigation/native';
-import {MaterialTabParamsList} from './main.screen';
-import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
 const {width, height} = Dimensions.get('screen');
 
-type Props = CompositeScreenProps<
-  MaterialTopTabScreenProps<MaterialTabParamsList, 'LIST'>,
-  StackScreenProps<MaterialAssetStackParamsList, 'MAIN_SCREEN'>
->;
+type Props =
+  // CompositeScreenProps<
+  // MaterialTopTabScreenProps<MaterialTabParamsList, 'LIST'>,
+  StackScreenProps<MaterialAssetStackParamsList, 'MAIN_SCREEN'>;
+// >;
 
 const ListTab = ({navigation}: Props) => {
   const [selectedItem, selectItem] = useState<TMaterialAsset | undefined>();

@@ -54,7 +54,11 @@ const Organization = ({
       style={styles.buttonContainer}>
       <Text>
         <Text style={styles.textLabel}>{data.displayName}</Text>
-        <Text> ({data.children.length} đơn vị)</Text>
+        <Text>
+          {' '}
+          ({data.children.length} đơn vị, {data.roleCount} vai trò,{' '}
+          {data.memberCount} thành viên)
+        </Text>
       </Text>
     </Pressable>
   );
@@ -138,14 +142,12 @@ const OrganizationsTree = ({data}: OrganizationsTreeProps) => {
             style={styles.breadcrumb}
             onPress={() => onHistoryPress(index)}>
             <Text style={styles.breadcrumbText}>{o.displayName}</Text>
-            {index !== history.length - 1 ? (
-              <Icon
-                type="Ionicons"
-                name="chevron-forward"
-                color="#5BA9EF"
-                style={{marginLeft: 10}}
-              />
-            ) : undefined}
+            <Icon
+              type="Ionicons"
+              name="chevron-forward"
+              color={index !== history.length - 1 ? '#5BA9EF' : 'transparent'}
+              style={{marginLeft: 10}}
+            />
           </Pressable>
         ))}
       </Text>

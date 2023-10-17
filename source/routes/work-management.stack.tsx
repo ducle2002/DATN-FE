@@ -2,7 +2,6 @@ import LogTimeWorkScreen from '@/screens/work-management/log-time-work.screen';
 import ManagementScreen from '@/screens/work-management/management.screen';
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import {NavigatorScreenParams} from '@react-navigation/native';
 import DetailWorkScreen from '@/screens/work-management/detail-work.screen';
 import {useAppSelector} from '@/hooks/redux.hook';
 import {checkPermission} from '@/utils/utils';
@@ -15,6 +14,7 @@ import {
 } from '@/screens/work-management/services/work.model';
 import CreateLogTimeScreen from '@/screens/work-management/create-log-time.screen';
 import {StatusBar} from 'react-native';
+import CommentScreen from '@/screens/work-management/comment.screen';
 
 export type WorkManagementDrawerParamsList = {
   MANAGEMENT: undefined;
@@ -22,7 +22,7 @@ export type WorkManagementDrawerParamsList = {
 };
 
 export type WorkStackParamsList = {
-  MAIN_DRAWER: NavigatorScreenParams<WorkManagementDrawerParamsList>;
+  MAIN_DRAWER: undefined;
   DETAIL_WORK: {id?: number; formId: number};
   CREATE_WORK:
     | {
@@ -30,7 +30,6 @@ export type WorkStackParamsList = {
         formId?: EWorkFormID;
       }
     | undefined;
-  MY_WORK: undefined;
   LOGTIME: {
     workTurnId: number;
     workId: number;
@@ -39,6 +38,9 @@ export type WorkStackParamsList = {
   CREATE_LOG_TIME: {
     detailWork: TWorkDetail;
     workId: number;
+  };
+  COMMENT: {
+    id: number;
   };
 };
 const Stack = createStackNavigator<WorkStackParamsList>();
@@ -90,6 +92,7 @@ const WorkStack = () => {
             }}
           />
         )}
+        <Stack.Screen name="COMMENT" component={CommentScreen} />
       </Stack.Navigator>
     </>
   );
