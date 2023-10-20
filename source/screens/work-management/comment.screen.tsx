@@ -6,6 +6,7 @@ import {
   ListRenderItem,
   ScrollView,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 import {useMutation} from 'react-query';
@@ -23,6 +24,11 @@ import {TImagePicker, handlePicker} from '@/utils/image-picker-handle';
 import FastImage from 'react-native-fast-image';
 import {remove} from 'ramda';
 import UtilsApi from '@/services/utils.service';
+import {Dialog} from 'react-native-paper';
+import Button from '@/components/button.component';
+import language, {languageKeys} from '@/config/language/language';
+import {useAppSelector} from '@/hooks/redux.hook';
+import globalStyles from '@/config/globalStyles';
 
 type Props = StackScreenProps<WorkStackParamsList, 'COMMENT'>;
 
@@ -37,6 +43,8 @@ const CommentScreen = ({route}: Props) => {
       content: '',
     },
   });
+
+  const {userId} = useAppSelector(state => state.user);
 
   const [images, setImages] = useState<TImagePicker[]>([]);
 
@@ -59,9 +67,23 @@ const CommentScreen = ({route}: Props) => {
     );
   }, [data]);
 
+  const [comment, setComment] = useState<TWorkComment>();
+
   const renderItem: ListRenderItem<TWorkComment> = ({item}) => (
-    <WorkCommentItem {...{item}} />
+    <WorkCommentItem
+      isMine={userId === item.creatorUserId}
+      {...{item}}
+      onDeletePress={() => setComment(item)}
+    />
   );
+
+  const {mutate: deleteComment} = useMutation({
+    mutationFn: (params: {id: number}) => WorkCommentApi.delete(params),
+    onSuccess: () => {
+      refetch();
+      setComment(undefined);
+    },
+  });
 
   const {mutate: createComment} = useMutation({
     mutationFn: (params: {content: string; imageUrls?: string[]}) =>
@@ -189,6 +211,24 @@ const CommentScreen = ({route}: Props) => {
           />
         </View>
       </BottomContainer>
+      <Dialog visible={!!comment}>
+        <Dialog.Actions>
+          <Dialog.Content>
+            <Text style={styles.text}>Bạn có muốn xóa bình luận</Text>
+          </Dialog.Content>
+          <Button onPress={() => setComment(undefined)}>
+            {language.t(languageKeys.shared.button.cancel)}
+          </Button>
+          {comment && (
+            <Button
+              onPress={() => {
+                deleteComment({id: comment.id});
+              }}>
+              {language.t(languageKeys.shared.button.delete)}
+            </Button>
+          )}
+        </Dialog.Actions>
+      </Dialog>
     </View>
   );
 };
@@ -202,5 +242,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     backgroundColor: '#f1f2f8',
+  },
+  text: {
+    ...globalStyles.text16Medium,
   },
 });
