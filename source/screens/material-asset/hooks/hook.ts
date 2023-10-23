@@ -1,6 +1,7 @@
 import {
+  TAssetDetail,
   TInventory,
-  TMaterialAsset,
+  assetDetailDefault,
 } from '@/screens/material-asset/services/material-asset.model';
 import MaterialAssetApi from '@/screens/material-asset/services/material-asset.service';
 import MaterialImportExportApi from '@/screens/material-asset/services/material-import-export.service';
@@ -10,21 +11,25 @@ import {useMemo} from 'react';
 import {
   useInfiniteQuery,
   useMutation,
+  useQueries,
   useQuery,
   useQueryClient,
 } from 'react-query';
+import AssetDetailService from '../services/asset-detail.service';
+import SystemCodeService from '../services/system-code.service';
+import AssetGroupService from '../services/asset-group.service';
 
 export const useListMaterialAssets = () => {
   const {data, fetchNextPage} = useInfiniteQuery({
     queryKey: ['list-material'],
     queryFn: ({pageParam}) =>
-      MaterialAssetApi.getAll({
+      AssetDetailService.getAll({
         ...pageParam,
         maxResultCount: 20,
       }),
     getNextPageParam: (lastPage, allPages) => {
       const skipCount = allPages.length * 20;
-      return (allPages.length - 1) * 20 + lastPage.materials.length !==
+      return (allPages.length - 1) * 20 + lastPage.assets.length !==
         lastPage.totalRecords
         ? {
             skipCount: skipCount,
@@ -32,12 +37,12 @@ export const useListMaterialAssets = () => {
           }
         : undefined;
     },
-    staleTime: 300000,
+    staleTime: 0,
   });
 
   const dataProvider = useMemo(() => {
     return dataProviderMaker(
-      data ? flatten(map(page => page.materials, data.pages)) : [],
+      data ? flatten(map(page => page.assets, data.pages)) : [],
     );
   }, [data]);
 
@@ -71,7 +76,8 @@ export const useCreateInventory = (onSuccessCallback: () => void) => {
   return {createInventory};
 };
 
-export const useCreateMaterial = (onSuccessCallback: () => void) => {
+/**Khong dung nua
+  export const useCreateMaterial = (onSuccessCallback: () => void) => {
   const queryClient = useQueryClient();
   const {mutate: createMaterial} = useMutation({
     mutationFn: (params: TMaterialAsset) => MaterialAssetApi.create(params),
@@ -86,7 +92,11 @@ export const useCreateMaterial = (onSuccessCallback: () => void) => {
   });
   return {createMaterial};
 };
+ */
 
+/** Khong dung nua
+ *
+ *
 export const useUpdateMaterial = (onSuccessCallback: () => void) => {
   const queryClient = useQueryClient();
   const {mutate: updateMaterial} = useMutation({
@@ -102,7 +112,9 @@ export const useUpdateMaterial = (onSuccessCallback: () => void) => {
   });
   return {updateMaterial};
 };
-
+ */
+/**
+ * Khong dung nua
 export const useDeleteMaterial = (onSuccessCallback: () => void) => {
   const queryClient = useQueryClient();
   const {mutate: deleteMaterial} = useMutation({
@@ -119,6 +131,7 @@ export const useDeleteMaterial = (onSuccessCallback: () => void) => {
 
   return {deleteMaterial};
 };
+ */
 
 export const useListImportExport = (type: 'IMPORT' | 'EXPORT') => {
   const {data, fetchNextPage} = useInfiniteQuery({
@@ -168,4 +181,118 @@ export const useInventoryName = (id: number | undefined) => {
     [allInventory, id],
   );
   return inventory;
+};
+
+export const useAllSystemCode = () => {
+  const {data} = useQuery({
+    queryKey: ['system-code'],
+    queryFn: () => SystemCodeService.getAll({maxResultCount: 1000}),
+  });
+  return data ?? {systemCodes: [], totalRecords: 0};
+};
+
+export const useAllAssetGroup = ({systemCode}: {systemCode?: number}) => {
+  const {data} = useQuery({
+    queryKey: ['asset-group', systemCode],
+    queryFn: () =>
+      AssetGroupService.getAll({
+        MaHeThongId: systemCode,
+        maxResultCount: 1000,
+      }),
+  });
+
+  return data ?? {assetGroups: [], totalRecords: 0};
+};
+
+export const useAllAssetEnums = () => {
+  const result = useQueries([
+    {
+      queryKey: ['asset-status'],
+      queryFn: () =>
+        AssetDetailService.getEnums({type: 'TrangThaiTaiSanChiTietEnum'}),
+    },
+    {
+      queryKey: ['asset-form'],
+      queryFn: () =>
+        AssetDetailService.getEnums({type: 'HinhThucTaiSanChiTietEnum'}),
+    },
+  ]);
+  return {
+    assetStatus: result[0].data?.enums ?? [],
+    assetForm: result[1].data?.enums ?? [],
+  };
+};
+
+export const useCreateAsset = ({
+  onSuccessCallback = () => {},
+}: {
+  onSuccessCallback: () => void;
+}) => {
+  const queryClient = useQueryClient();
+  const {mutate: createAsset} = useMutation({
+    mutationFn: (params: TAssetDetail) => AssetDetailService.create(params),
+    onSuccess: () => {
+      queryClient.refetchQueries(['list-material']).then(() => {
+        onSuccessCallback();
+      });
+    },
+    onError: error => {
+      console.log(error);
+    },
+  });
+  return {createAsset};
+};
+
+export const useUpdateAsset = ({
+  onSuccessCallback = () => {},
+}: {
+  onSuccessCallback: () => void;
+}) => {
+  const queryClient = useQueryClient();
+  const {mutate: updateAsset} = useMutation({
+    mutationFn: (params: TAssetDetail) => AssetDetailService.update(params),
+    onSuccess: () => {
+      queryClient.refetchQueries(['list-material']).then(() => {
+        onSuccessCallback();
+      });
+    },
+    onError: error => {
+      console.log(error);
+    },
+  });
+  return {updateAsset};
+};
+
+export const useDeleteAsset = ({
+  onSuccessCallback = () => {},
+}: {
+  onSuccessCallback: () => void;
+}) => {
+  const queryClient = useQueryClient();
+  const {mutate: deleteAsset} = useMutation({
+    mutationFn: (id: number) => AssetDetailService.delete(id),
+    onSuccess: () => {
+      queryClient.refetchQueries(['list-material']).then(() => {
+        onSuccessCallback();
+      });
+    },
+    onError: error => {
+      console.log(error);
+    },
+  });
+
+  return {deleteAsset};
+};
+
+export const useAssetById = (id?: number) => {
+  const {data} = useQuery({
+    enabled: !!id && id > 0,
+    queryKey: ['asset-detail', id],
+    queryFn: () => {
+      if (id) {
+        return AssetDetailService.getById(id);
+      }
+    },
+  });
+  return id !== -1 ? data : assetDetailDefault;
 };

@@ -23,8 +23,6 @@ export const managementFunction: Array<TPermission> = [
   'Pages.Digitals.Hotline.GetAll',
 ];
 export const operatorFunction: Array<TPermission> = [
-  // 'Pages.Assets.AssetCatalog.GetAll',
-  // 'Pages.Assets.AssetParameters.GetAll',
   'Pages.Operations.TaskManagement.GetAll',
   'Pages.Assets.AssetParameters.GetAll',
   'Pages.Assets.AssetCatalog.GetAll',

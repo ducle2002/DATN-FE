@@ -5,7 +5,7 @@ import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
 import {CategoryTabParamsList} from '../category-management.screen';
 import {StackScreenProps} from '@react-navigation/stack';
 import {MaterialAssetStackParamsList} from '@/routes/material-asset.stack';
-import {useListCategory} from '@/screens/material-asset/services/material-category.hook';
+import {useListCategory} from '@/screens/material-asset/hooks/material-category.hook';
 import BottomContainer from '@/components/bottom-container.component';
 import {TAssetFilter} from '@/screens/material-asset/services/material-asset.model';
 import globalStyles from '@/config/globalStyles';

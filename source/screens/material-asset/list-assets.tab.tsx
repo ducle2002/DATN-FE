@@ -1,11 +1,8 @@
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {MaterialAssetStackParamsList} from '@/routes/material-asset.stack';
-import {
-  TMaterialAsset,
-  materialDefault,
-} from '@/screens/material-asset/services/material-asset.model';
+import {TAssetDetail} from '@/screens/material-asset/services/material-asset.model';
 import MaterialCard from './components/material-asset-card';
 import MaterialDetail from './components/material-detail';
 import BottomContainer from '@/components/bottom-container.component';
@@ -13,24 +10,31 @@ import Button from '@/components/button.component';
 import language, {languageKeys} from '@/config/language/language';
 import {LayoutProvider, RecyclerListView} from 'recyclerlistview';
 import {useListMaterialAssets} from './hooks/hook';
+import {checkPermission} from '@/utils/utils';
+import {useAppSelector} from '@/hooks/redux.hook';
+import {dataProviderMaker} from '@/utils/recycler-list-view';
+import {flatten, map} from 'ramda';
 const {width, height} = Dimensions.get('screen');
 
-type Props =
-  // CompositeScreenProps<
-  // MaterialTopTabScreenProps<MaterialTabParamsList, 'LIST'>,
-  StackScreenProps<MaterialAssetStackParamsList, 'MAIN_SCREEN'>;
-// >;
+type Props = StackScreenProps<MaterialAssetStackParamsList, 'MAIN_SCREEN'>;
 
 const ListTab = ({navigation}: Props) => {
-  const [selectedItem, selectItem] = useState<TMaterialAsset | undefined>();
+  const {grantedPermissions} = useAppSelector(state => state.config);
+  const [selectedItem, selectItem] = useState<number | undefined>();
 
-  const {fetchNextPage, dataProvider} = useListMaterialAssets();
+  const {fetchNextPage, data} = useListMaterialAssets();
 
-  const onPressItem = (item: TMaterialAsset) => {
-    selectItem(item);
+  const dataProvider = useMemo(() => {
+    return dataProviderMaker(
+      data ? flatten(map(page => page.assets, data.pages)) : [],
+    );
+  }, [data]);
+
+  const onPressItem = (item: TAssetDetail) => {
+    selectItem(item.id);
   };
 
-  const renderItem = (_: any, item: TMaterialAsset) => (
+  const renderItem = (_: any, item: TAssetDetail) => (
     <MaterialCard {...{item, navigation}} onPress={() => onPressItem(item)} />
   );
 
@@ -64,15 +68,17 @@ const ListTab = ({navigation}: Props) => {
       />
       <MaterialDetail
         onBackdropPress={() => selectItem(undefined)}
-        material={selectedItem}
+        materialId={selectedItem}
       />
-      <BottomContainer>
-        <Button
-          mode="contained"
-          onPress={() => selectItem(materialDefault as TMaterialAsset)}>
-          {language.t(languageKeys.shared.button.add)}
-        </Button>
-      </BottomContainer>
+      {checkPermission(grantedPermissions, [
+        'Pages.Assets.AssetCatalog.Create',
+      ]) && (
+        <BottomContainer>
+          <Button mode="contained" onPress={() => selectItem(-1)}>
+            {language.t(languageKeys.shared.button.add)}
+          </Button>
+        </BottomContainer>
+      )}
     </View>
   );
 };

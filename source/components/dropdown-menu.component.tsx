@@ -78,7 +78,14 @@ const DropdownMenu = ({
       <Pressable
         style={({pressed}) => [
           styles.itemOption,
-          {backgroundColor: !pressed ? 'white' : '#f8f8f8'},
+          {
+            backgroundColor:
+              selectedLabel === item.label
+                ? '#f1f2f8'
+                : !pressed
+                ? 'white'
+                : '#f8f8f8',
+          },
         ]}
         onPress={() => {
           onSelected(item.id);
@@ -169,6 +176,7 @@ const DropdownMenu = ({
               style={styles.listOption}
               data={options}
               renderItem={renderItemOption}
+              showsVerticalScrollIndicator={true}
             />
           </View>
         </Pressable>
@@ -200,6 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     // maxHeight: '60%',
     minWidth: 0.4 * sWidth,
+    maxHeight: 200,
   },
   itemOption: {
     paddingHorizontal: 10,

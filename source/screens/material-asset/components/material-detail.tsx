@@ -1,98 +1,132 @@
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {memo, useEffect, useMemo, useState} from 'react';
 import ReactNativeModal from 'react-native-modal';
-import {TMaterialAsset} from '@/screens/material-asset/services/material-asset.model';
+import {
+  TAssetDetail,
+  assetDetailDefault,
+} from '@/screens/material-asset/services/material-asset.model';
 import language, {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
 import Button from '@/components/button.component';
 import CTextInput from '@/components/text-input.component';
-import {Controller, useForm} from 'react-hook-form';
+import {Controller, useForm, useWatch} from 'react-hook-form';
 import BottomContainer from '@/components/bottom-container.component';
-import {useMaterialCategory} from '@/screens/material-asset/services/material-category.hook';
+import {useMaterialCategory} from '@/screens/material-asset/hooks/material-category.hook';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {
-  useCreateMaterial,
-  useDeleteMaterial,
-  useUpdateMaterial,
+  useAllAssetEnums,
+  useAllAssetGroup,
+  useAllSystemCode,
+  useAssetById,
+  useCreateAsset,
+  useDeleteAsset,
+  useUpdateAsset,
 } from '../hooks/hook';
+import DatePickerComponent from '@/screens/work-management/components/date-picker.component';
 type Props = {
-  material?: TMaterialAsset;
+  materialId?: number;
   onBackdropPress: () => void;
 };
 
-const MaterialDetail = ({material, onBackdropPress}: Props) => {
-  const schema = useMemo(
-    () =>
-      yup.object({
-        materialName: yup
-          .string()
-          .required(language.t(languageKeys.shared.form.requiredMessage)),
-        materialCode: yup
-          .string()
-          .required(language.t(languageKeys.shared.form.requiredMessage)),
-        groupId: yup
-          .number()
-          .required(language.t(languageKeys.shared.form.requiredMessage)),
-        typeId: yup
-          .number()
-          .required(language.t(languageKeys.shared.form.requiredMessage)),
-        unitId: yup
-          .number()
-          .required(language.t(languageKeys.shared.form.requiredMessage)),
-        producerId: yup
-          .number()
-          .required(language.t(languageKeys.shared.form.requiredMessage)),
-        price: yup
-          .number()
-          .required(language.t(languageKeys.shared.form.requiredMessage)),
-      }),
-    [],
-  );
+const MaterialDetail = ({materialId, onBackdropPress}: Props) => {
+  // const schema = useMemo(
+  //   () =>
+  //     yup.object({
+  //       name: yup
+  //         .string()
+  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
+  //       code: yup
+  //         .string()
+  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
+  //       groupId: yup
+  //         .number()
+  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
+  //       typeId: yup
+  //         .number()
+  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
+  //       unitId: yup
+  //         .number()
+  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
+  //       producerId: yup
+  //         .number()
+  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
+  //       price: yup
+  //         .number()
+  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
+  //     }),
+  //   [],
+  // );
+  const material = useAssetById(materialId);
 
-  const [editable, setEditable] = useState(!material?.id);
-  const {categoryGroup, categoryProducer, categoryType, categoryUnit} =
-    useMaterialCategory();
+  const [editable, setEditable] = useState(!materialId);
+  useMaterialCategory();
 
   const {
     control,
     reset,
     handleSubmit,
     formState: {errors},
-  } = useForm<TMaterialAsset>({
-    defaultValues: material,
-    resolver: yupResolver(schema) as any,
+  } = useForm<TAssetDetail>({
+    defaultValues: assetDetailDefault,
+    // resolver: yupResolver(schema) as any,
   });
 
-  const {updateMaterial} = useUpdateMaterial(() => {
-    setEditable(false);
-    onBackdropPress();
+  const systemCode = useWatch({
+    control: control,
+    name: 'maHeThongId',
   });
 
-  const {createMaterial} = useCreateMaterial(() => {
-    setEditable(false);
-    onBackdropPress();
+  const {systemCodes} = useAllSystemCode();
+
+  const {assetGroups} = useAllAssetGroup({systemCode: systemCode});
+
+  const {assetForm, assetStatus} = useAllAssetEnums();
+
+  const {updateAsset} = useUpdateAsset({
+    onSuccessCallback: () => {
+      setEditable(false);
+      onBackdropPress();
+    },
   });
 
-  const {deleteMaterial} = useDeleteMaterial(() => {
-    setEditable(false);
-    onBackdropPress();
+  const {createAsset} = useCreateAsset({
+    onSuccessCallback: () => {
+      setEditable(false);
+      onBackdropPress();
+    },
+  });
+
+  const {deleteAsset} = useDeleteAsset({
+    onSuccessCallback: () => {
+      setEditable(false);
+      onBackdropPress();
+    },
   });
 
   useEffect(() => {
-    setEditable(!material?.id);
+    setEditable(materialId === -1);
     reset(material);
-  }, [material, reset]);
+  }, [material, materialId, reset]);
 
-  const onSubmit = (data: TMaterialAsset) => {
-    if (material?.id) {
-      updateMaterial({
+  const onSubmit = (data: TAssetDetail) => {
+    console.log(materialId);
+
+    if (materialId && materialId > 0) {
+      updateAsset({
         ...material,
         ...data,
       });
     } else {
-      createMaterial({
+      createAsset({
         ...material,
         ...data,
       });
@@ -116,7 +150,7 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
           onBackdropPress();
         }
       }}
-      isVisible={!!material}>
+      isVisible={!!materialId}>
       <SafeAreaView style={styles.container}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
@@ -134,15 +168,15 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
             <View style={styles.cellRight}>
               <Controller
                 control={control}
-                name="materialName"
+                name="title"
                 rules={{required: true}}
                 render={({field: {value, onChange}}) => (
                   <CTextInput
                     value={value}
                     style={[styles.textValue]}
-                    placeholder={errors.materialName?.message}
+                    placeholder={errors.title?.message}
                     placeholderTextColor={
-                      errors.materialName?.message ? '#FF6565' : '#ababab'
+                      errors.title?.message ? '#FF6565' : '#ababab'
                     }
                     editable={editable}
                     onChangeText={onChange}
@@ -165,16 +199,16 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
             <View style={styles.cellRight}>
               <Controller
                 control={control}
-                name="materialCode"
+                name="code"
                 render={({field: {value, onChange}}) => (
                   <CTextInput
                     value={value}
                     style={[styles.textValue, {backgroundColor: '#f1f2f8'}]}
                     editable={editable}
                     withError={false}
-                    placeholder={errors.materialName?.message}
+                    placeholder={errors.code?.message}
                     placeholderTextColor={
-                      errors.materialCode?.message ? '#FF6565' : '#ababab'
+                      errors.code?.message ? '#FF6565' : '#ababab'
                     }
                     onChangeText={onChange}
                   />
@@ -183,33 +217,7 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
             </View>
           </View>
 
-          {/* số serial tài sản */}
-          <View style={styles.row}>
-            <View style={styles.cellLeft}>
-              <Text style={styles.textLabel}>
-                {language.t(
-                  languageKeys.materialAsset.materialDetail.serialNumber,
-                )}
-              </Text>
-            </View>
-            <View style={styles.cellRight}>
-              <Controller
-                control={control}
-                name="serialNumber"
-                render={({field: {value, onChange}}) => (
-                  <CTextInput
-                    value={value as string}
-                    style={[styles.textValue]}
-                    editable={editable}
-                    withError={false}
-                    onChangeText={onChange}
-                  />
-                )}
-              />
-            </View>
-          </View>
-
-          {/* loại tài sản */}
+          {/* loại tài sản - mã hệ thống */}
           <View style={[styles.row, {backgroundColor: '#f1f2f8'}]}>
             <View style={styles.cellLeft}>
               <Text style={styles.textLabel}>
@@ -221,23 +229,23 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
             <View style={styles.cellRight}>
               <Controller
                 control={control}
-                name="typeId"
+                name="maHeThongId"
                 render={({field: {value, onChange}}) => (
                   <DropdownMenuComponent
                     selectedLabel={
-                      categoryType.data?.dataFilter.find(c => c.id === value)
-                        ?.name ?? material?.typeName
+                      systemCodes?.find(c => c.id === value)?.title ??
+                      material?.nhomTaiSanText
                     }
-                    placeholder={errors.typeId?.message}
+                    placeholder={errors.maHeThongId?.message}
                     placeholderTextColor={
-                      errors.materialCode?.message ? '#FF6565' : '#ababab'
+                      errors.maHeThongId?.message ? '#FF6565' : '#ababab'
                     }
                     onSelected={onChange}
                     disable={!editable}
                     options={
-                      categoryType.data?.dataFilter.map(c => ({
+                      systemCodes.map(c => ({
                         id: c.id,
-                        label: c.name,
+                        label: c.title,
                       })) ?? []
                     }
                   />
@@ -258,23 +266,23 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
             <View style={styles.cellRight}>
               <Controller
                 control={control}
-                name="groupId"
+                name="nhomTaiSanId"
                 render={({field: {value, onChange}}) => (
                   <DropdownMenuComponent
                     selectedLabel={
-                      categoryGroup.data?.dataFilter.find(c => c.id === value)
-                        ?.name ?? material?.groupName
+                      assetGroups?.find(c => c.id === value)?.title ??
+                      material?.nhomTaiSanText
                     }
-                    placeholder={errors.groupId?.message}
+                    placeholder={errors.nhomTaiSanId?.message}
                     placeholderTextColor={
-                      errors.groupId?.message ? '#FF6565' : '#ababab'
+                      errors.nhomTaiSanId?.message ? '#FF6565' : '#ababab'
                     }
                     onSelected={onChange}
                     disable={!editable}
                     options={
-                      categoryGroup.data?.dataFilter.map(c => ({
+                      assetGroups?.map(c => ({
                         id: c.id,
-                        label: c.name,
+                        label: c.title,
                       })) ?? []
                     }
                   />
@@ -284,37 +292,32 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
           </View>
 
           {/**
-           * Nhà sản xuất
+           * Hinhthuc
            */}
           <View style={[styles.row, {backgroundColor: '#f1f2f8'}]}>
             <View style={styles.cellLeft}>
               <Text style={styles.textLabel}>
-                {language.t(languageKeys.materialAsset.materialDetail.producer)}
+                {/* {language.t(languageKeys.materialAsset.materialDetail.producer)} */}
+                hinhThuc
               </Text>
             </View>
             <View style={styles.cellRight}>
               <Controller
                 control={control}
-                name="producerId"
+                name="hinhThuc"
                 render={({field: {value, onChange}}) => (
                   <DropdownMenuComponent
                     selectedLabel={
-                      categoryProducer.data?.dataFilter.find(
-                        c => c.id === value,
-                      )?.name ?? material?.producerName
+                      assetForm.find(c => c.id === value)?.label ??
+                      material?.hinhThucText
                     }
                     disable={!editable}
                     onSelected={onChange}
-                    placeholder={errors.producerId?.message}
+                    placeholder={errors.hinhThuc?.message}
                     placeholderTextColor={
-                      errors.producerId?.message ? '#FF6565' : '#ababab'
+                      errors.hinhThuc?.message ? '#FF6565' : '#ababab'
                     }
-                    options={
-                      categoryProducer.data?.dataFilter.map(c => ({
-                        id: c.id,
-                        label: c.name,
-                      })) ?? []
-                    }
+                    options={assetForm}
                   />
                 )}
               />
@@ -322,38 +325,49 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
           </View>
 
           {/**
-           * Đơn vị
+           * Trangthai
            */}
           <View style={styles.row}>
             <View style={styles.cellLeft}>
               <Text style={styles.textLabel}>
-                {language.t(languageKeys.materialAsset.materialDetail.unit)}
+                {language.t(languageKeys.materialAsset.materialDetail.status)}
               </Text>
             </View>
             <View style={styles.cellRight}>
               <Controller
                 control={control}
-                name="unitId"
+                name="trangThai"
                 render={({field: {value, onChange}}) => (
                   <DropdownMenuComponent
                     disable={!editable}
                     selectedLabel={
-                      categoryUnit.data?.dataFilter.find(c => c.id === value)
-                        ?.name ?? material?.unitName
+                      assetStatus.find(c => c.id === value)?.label ??
+                      material?.trangThaiText
                     }
-                    placeholder={errors.unitId?.message}
+                    placeholder={errors.trangThai?.message}
                     placeholderTextColor={
-                      errors.unitId?.message ? '#FF6565' : '#ababab'
+                      errors.trangThai?.message ? '#FF6565' : '#ababab'
                     }
                     onSelected={onChange}
-                    options={
-                      categoryUnit.data?.dataFilter.map(c => ({
-                        id: c.id,
-                        label: c.name,
-                      })) ?? []
-                    }
+                    options={assetStatus}
                   />
                 )}
+              />
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellLeft}>
+              <Text style={styles.textLabel}>
+                {/* {language.t(languageKeys.materialAsset.materialDetail.status)} */}
+                start date
+              </Text>
+            </View>
+            <View style={styles.cellRight}>
+              <Controller
+                control={control}
+                name="ngayBatDau"
+                render={({field: {value, onChange}}) => <DatePickerComponent />}
               />
             </View>
           </View>
@@ -370,7 +384,7 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
             <View style={styles.cellRight}>
               <Controller
                 control={control}
-                name="price"
+                name="giaTriTaiSan"
                 render={({field: {value, onChange}}) => (
                   <CTextInput
                     value={
@@ -381,39 +395,15 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
                           }).format(value)
                         : value?.toString()
                     }
-                    placeholder={errors.price?.message}
+                    placeholder={errors.giaTriTaiSan?.message}
                     placeholderTextColor={
-                      errors.price?.message ? '#FF6565' : '#ababab'
+                      errors.giaTriTaiSan?.message ? '#FF6565' : '#ababab'
                     }
                     style={[styles.textValue, {backgroundColor: '#f1f2f8'}]}
                     editable={editable}
                     withError={false}
                     onChangeText={onChange as any}
                     keyboardType="numbers-and-punctuation"
-                  />
-                )}
-              />
-            </View>
-          </View>
-
-          {/* trạng thái tài sản */}
-          <View style={styles.row}>
-            <View style={styles.cellLeft}>
-              <Text style={styles.textLabel}>
-                {language.t(languageKeys.materialAsset.materialDetail.status)}{' '}
-              </Text>
-            </View>
-            <View style={styles.cellRight}>
-              <Controller
-                control={control}
-                name="status"
-                render={({field: {value, onChange}}) => (
-                  <CTextInput
-                    value={value}
-                    style={[styles.textValue]}
-                    editable={editable}
-                    withError={false}
-                    onChangeText={onChange}
                   />
                 )}
               />
@@ -432,10 +422,10 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
             <View style={styles.cellRight}>
               <Controller
                 control={control}
-                name="description"
+                name="ghiChu"
                 render={({field: {value, onChange}}) => (
                   <CTextInput
-                    value={value}
+                    value={value ? value : ''}
                     style={[styles.textValue, {backgroundColor: '#f1f2f8'}]}
                     editable={editable}
                     withError={false}
@@ -470,8 +460,8 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
                   mode="outlined"
                   style={{flex: 0.4}}
                   onPress={() => {
-                    if (material?.id) {
-                      deleteMaterial(material.id);
+                    if (materialId && materialId > 0) {
+                      deleteAsset(materialId);
                     }
                   }}>
                   {language.t(languageKeys.shared.button.delete)}
@@ -493,7 +483,7 @@ const MaterialDetail = ({material, onBackdropPress}: Props) => {
                   onPress={() => {
                     setTimeout(() => {
                       reset();
-                      if (!material?.id) {
+                      if (!materialId || materialId === -1) {
                         onBackdropPress();
                       }
                     }, 100);
