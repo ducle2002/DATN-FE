@@ -44,10 +44,6 @@ type Props = {
 const CreateFeedBackScreen = (props: Props) => {
   const toast = useToast();
   const queryClient = useQueryClient();
-  //   const actionSheetRef = createRef();
-  //   const dispatch = useDispatch();
-  //   const {typeConfig} = useSelector(states => states.userToken);
-  //   const listUnitOrg = useSelector(state => state.unitOrgFeedBack.listUnitOrg);
   const [visibleChooseImg, setVisibleChooseImg] = useState(false);
   const language = useTranslation();
   const {data: listUnitOrg, isLoading: isLoadingDepartment} = useQuery({
@@ -109,24 +105,6 @@ const CreateFeedBackScreen = (props: Props) => {
       createFeedback(JSON.stringify(res));
     });
   };
-  //   useEffect(() => {
-  //     if (createSuccess) {
-  //       props.navigation.navigate('FeedbScreen');
-  //       if (typeConfig !== 1) {
-  //         if (listUnitOrg?.length <= 1) {
-  //           setDepartment(listUnitOrg[0]);
-  //         } else {
-  //           setDepartment({
-  //             type: null,
-  //             name: language.t('chooseDepartment'),
-  //             detail: '',
-  //           });
-  //         }
-  //       }
-  //     //   dispatch(actions.createFeedBackFinish());
-  //     }
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, [createSuccess]);
   const {mutate: createFeedback, isLoading} = useMutation({
     mutationKey: ['createFeedback'],
     mutationFn: (fileURL?: string) =>
@@ -185,7 +163,7 @@ const CreateFeedBackScreen = (props: Props) => {
         </View>
 
         <View style={styles.containerFeedbackGroup}>
-          <Text style={styles.labelFeedbackGroup}>{'Phòng ban'}</Text>
+          <Text style={styles.labelFeedbackGroup}>{'Khu đô thị (*)'}</Text>
           <TouchableOpacity
             disabled={!listUnitOrg || listUnitOrg?.length <= 1}
             onPress={() => {
@@ -193,7 +171,7 @@ const CreateFeedBackScreen = (props: Props) => {
             }}
             style={styles.comboBoxFeedbackGroup}>
             <Text style={styles.txtLabelModalSolid}>
-              {department?.name ?? 'Chọn phòng ban'}
+              {department?.name ?? 'Chọn Khu đô thị'}
             </Text>
             <Icon
               type="Ionicons"
@@ -209,7 +187,7 @@ const CreateFeedBackScreen = (props: Props) => {
           ) : null}
         </View>
         <View style={styles.containerFeedbackGroup}>
-          <Text style={styles.labelFeedbackGroup}>{'Người xử lý'}</Text>
+          <Text style={styles.labelFeedbackGroup}>{'Tòa nhà'}</Text>
           <TouchableOpacity
             disabled={!listUnitOrg || listUnitOrg?.length <= 1}
             onPress={() => {
@@ -217,7 +195,7 @@ const CreateFeedBackScreen = (props: Props) => {
             }}
             style={styles.comboBoxFeedbackGroup}>
             <Text style={styles.txtLabelModalSolid}>
-              {staff?.fullName ?? 'Chọn nhân viên'}
+              {staff?.fullName ?? 'Chọn tòa nhà'}
             </Text>
             <Icon
               type="Ionicons"
@@ -247,18 +225,7 @@ const CreateFeedBackScreen = (props: Props) => {
             placeholderTextColor={'#c7c7c7'}
             underlineColorAndroid={'transparent'}
           />
-          <Text
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              right: 0,
-              padding: '2%',
-              fontSize: 12,
-              fontWeight: '500',
-              color: 'rgba(0,0,0,0.5)',
-            }}>
-            {data.content.length}/1000
-          </Text>
+          <Text style={styles.txtArea}>{data.content.length}/1000</Text>
         </View>
         <View
           style={{
@@ -279,12 +246,7 @@ const CreateFeedBackScreen = (props: Props) => {
                       onPress={() => {
                         cleanupSingleImage(img);
                       }}
-                      style={{
-                        position: 'absolute',
-                        right: -width * 0.02,
-                        zIndex: 10,
-                        top: -width * 0.03,
-                      }}>
+                      style={styles.btnDelImg}>
                       <Icon
                         type="Ionicons"
                         name="remove-circle"
@@ -293,17 +255,7 @@ const CreateFeedBackScreen = (props: Props) => {
                       />
                     </Pressable>
 
-                    <Image
-                      source={{uri: img?.uri}}
-                      style={{
-                        aspectRatio: 1,
-                        width: width / 4,
-                        borderRadius: 16,
-                        borderColor: '#2B5783',
-                        borderWidth: 1,
-                        marginHorizontal: 1,
-                      }}
-                    />
+                    <Image source={{uri: img?.uri}} style={styles.imgPreview} />
                   </TouchableOpacity>
                 ))
               : null}
@@ -377,7 +329,7 @@ const CreateFeedBackScreen = (props: Props) => {
                     onPress={() => {
                       setVisible(0);
                     }}>
-                    <Text style={styles.txtbtnTitle}>
+                    <Text style={styles.txtBtnTitle}>
                       {language.t('close')}
                     </Text>
                   </Pressable>
@@ -454,7 +406,7 @@ const CreateFeedBackScreen = (props: Props) => {
                     onPress={() => {
                       setVisible(0);
                     }}>
-                    <Text style={styles.txtbtnTitle}>
+                    <Text style={styles.txtBtnTitle}>
                       {language.t('close')}
                     </Text>
                   </Pressable>
@@ -517,7 +469,7 @@ const CreateFeedBackScreen = (props: Props) => {
 
 export default CreateFeedBackScreen;
 const styles = StyleSheet.create({
-  txtbtnTitle: {
+  txtBtnTitle: {
     fontSize: 15,
     fontWeight: '500',
     lineHeight: 18,
@@ -648,5 +600,28 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginVertical: 12,
     paddingHorizontal: 16,
+  },
+  btnDelImg: {
+    position: 'absolute',
+    right: -width * 0.02,
+    zIndex: 10,
+    top: -width * 0.03,
+  },
+  txtArea: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    padding: '2%',
+    fontSize: 12,
+    fontWeight: '500',
+    color: 'rgba(0,0,0,0.5)',
+  },
+  imgPreview: {
+    aspectRatio: 1,
+    width: width / 4,
+    borderRadius: 16,
+    borderColor: '#2B5783',
+    borderWidth: 1,
+    marginHorizontal: 1,
   },
 });
