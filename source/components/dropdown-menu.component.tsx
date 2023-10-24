@@ -140,6 +140,17 @@ const DropdownMenu = ({
         </View>
       )}
       <View style={[styles.inputContainer, inputContainer]}>
+        {selectedLabel && (
+          <Icon
+            type="Ionicons"
+            name="close"
+            size={20}
+            color={'#ababab'}
+            onPress={() => {
+              onSelected(undefined);
+            }}
+          />
+        )}
         <Text style={[styles.textValue, valueStyle]}>
           {selectedLabel ? (
             selectedLabel
@@ -194,6 +205,7 @@ const styles = StyleSheet.create({
   },
   textValue: {
     ...globalStyles.text15Medium,
+    marginRight: 'auto',
   },
   inputContainer: {
     paddingHorizontal: 5,

@@ -24,7 +24,7 @@ export const managementFunction: Array<TPermission> = [
 ];
 export const operatorFunction: Array<TPermission> = [
   'Pages.Operations.TaskManagement.GetAll',
-  'Pages.Assets.AssetParameters.GetAll',
+  // 'Pages.Assets.AssetParameters.GetAll',
   'Pages.Assets.AssetCatalog.GetAll',
 ];
 

@@ -1,6 +1,12 @@
-import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
-import React, {useMemo, useRef, useState} from 'react';
-import {StackScreenProps} from '@react-navigation/stack';
+import {
+  Dimensions,
+  RefreshControl,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {MaterialAssetStackParamsList} from '@/routes/material-asset.stack';
 import {TAssetDetail} from '@/screens/material-asset/services/material-asset.model';
 import MaterialCard from './components/material-asset-card';
@@ -9,11 +15,17 @@ import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
 import language, {languageKeys} from '@/config/language/language';
 import {LayoutProvider, RecyclerListView} from 'recyclerlistview';
-import {useListMaterialAssets} from './hooks/hook';
+import {
+  AssetFilterContext,
+  TAssetFilter,
+  useListMaterialAssets,
+} from './hooks/hook';
 import {checkPermission} from '@/utils/utils';
 import {useAppSelector} from '@/hooks/redux.hook';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {flatten, map} from 'ramda';
+import HeaderAsset from './components/header.component';
+import AssetFilter from './components/asset-filter';
 const {width, height} = Dimensions.get('screen');
 
 type Props = StackScreenProps<MaterialAssetStackParamsList, 'MAIN_SCREEN'>;
@@ -21,8 +33,17 @@ type Props = StackScreenProps<MaterialAssetStackParamsList, 'MAIN_SCREEN'>;
 const ListTab = ({navigation}: Props) => {
   const {grantedPermissions} = useAppSelector(state => state.config);
   const [selectedItem, selectItem] = useState<number | undefined>();
+  const [filters, setFilters] = useState<TAssetFilter>();
+  const [isVisible, setIsVisible] = useState(false);
 
-  const {fetchNextPage, data} = useListMaterialAssets();
+  const {fetchNextPage, data, refetch, remove, isLoading} =
+    useListMaterialAssets({
+      keyword: filters?.keyword,
+      systemCode: filters?.systemCode,
+      status: filters?.status,
+      form: filters?.form,
+      group: filters?.group,
+    });
 
   const dataProvider = useMemo(() => {
     return dataProviderMaker(
@@ -59,6 +80,28 @@ const ListTab = ({navigation}: Props) => {
     ),
   ).current;
 
+  const renderHeader = useCallback((props: StackHeaderProps) => {
+    return (
+      <HeaderAsset
+        {...props}
+        onKeywordChange={kw => {
+          setFilters(old => ({...old, keyword: kw}));
+        }}
+      />
+    );
+  }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      header: props => renderHeader(props),
+    });
+  }, [navigation, renderHeader]);
+
+  const onRefresh = () => {
+    remove();
+    refetch();
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle={'dark-content'} />
@@ -70,6 +113,9 @@ const ListTab = ({navigation}: Props) => {
         style={{
           paddingTop: 10,
         }}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+        }
       />
       <MaterialDetail
         onBackdropPress={() => selectItem(undefined)}
@@ -79,11 +125,27 @@ const ListTab = ({navigation}: Props) => {
         'Pages.Assets.AssetCatalog.Create',
       ]) && (
         <BottomContainer>
-          <Button mode="contained" onPress={() => selectItem(-1)}>
-            {language.t(languageKeys.shared.button.add)}
-          </Button>
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+            <Button mode="contained" onPress={() => selectItem(-1)}>
+              {language.t(languageKeys.shared.button.add)}
+            </Button>
+            <Button
+              onPress={() => {
+                setIsVisible(true);
+              }}
+              mode="contained-tonal">
+              {language.t(languageKeys.shared.button.filter)}
+            </Button>
+          </View>
         </BottomContainer>
       )}
+      <AssetFilterContext.Provider
+        value={{filters: filters, setFilters: flt => setFilters(flt)}}>
+        <AssetFilter
+          isVisible={isVisible}
+          onBackdropPress={() => setIsVisible(false)}
+        />
+      </AssetFilterContext.Provider>
     </View>
   );
 };

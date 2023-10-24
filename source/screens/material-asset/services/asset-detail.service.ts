@@ -23,7 +23,13 @@ class AssetDetail {
   };
 
   getAll = async (
-    params: TPagingParams,
+    params: TPagingParams & {
+      keyword?: string;
+      maHeThongId?: number;
+      trangThai?: number;
+      nhomTaiSanId?: number;
+      hinhThuc?: number;
+    },
   ): Promise<{
     assets: TAssetDetail[];
     totalRecords: number;

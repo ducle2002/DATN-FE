@@ -4,9 +4,8 @@ import {
 } from '@/screens/material-asset/services/material-asset.model';
 import MaterialAssetApi from '@/screens/material-asset/services/material-asset.service';
 import MaterialImportExportApi from '@/screens/material-asset/services/material-import-export.service';
-import {dataProviderMaker} from '@/utils/recycler-list-view';
-import {find, flatten, map, propEq} from 'ramda';
-import {useMemo} from 'react';
+import {find, propEq} from 'ramda';
+import {createContext, useMemo} from 'react';
 import {
   useInfiniteQuery,
   useMutation,
@@ -18,12 +17,45 @@ import AssetDetailService from '../services/asset-detail.service';
 import SystemCodeService from '../services/system-code.service';
 import AssetGroupService from '../services/asset-group.service';
 
-export const useListMaterialAssets = () => {
-  const {data, fetchNextPage} = useInfiniteQuery({
-    queryKey: ['list-material'],
+export type TAssetFilter = {
+  keyword?: string;
+  systemCode?: number;
+  status?: number;
+  form?: number;
+  group?: number;
+};
+
+export const AssetFilterContext = createContext<{
+  filters?: TAssetFilter;
+  setFilters: (flt?: TAssetFilter) => void;
+}>({
+  filters: {
+    keyword: '',
+    systemCode: undefined,
+    status: undefined,
+    form: undefined,
+    group: undefined,
+  },
+  setFilters: () => {},
+});
+
+export const useListMaterialAssets = ({
+  keyword,
+  systemCode,
+  status,
+  form,
+  group,
+}: TAssetFilter) => {
+  const query = useInfiniteQuery({
+    queryKey: ['list-material', keyword, systemCode, status, form, group],
     queryFn: ({pageParam}) =>
       AssetDetailService.getAll({
         ...pageParam,
+        keyword: keyword,
+        maHeThongId: systemCode,
+        trangThai: status,
+        hinhThuc: form,
+        nhomTaiSanId: group,
         maxResultCount: 20,
       }),
     getNextPageParam: (lastPage, allPages) => {
@@ -39,17 +71,7 @@ export const useListMaterialAssets = () => {
     staleTime: 0,
   });
 
-  const dataProvider = useMemo(() => {
-    return dataProviderMaker(
-      data ? flatten(map(page => page.assets, data.pages)) : [],
-    );
-  }, [data]);
-
-  return {
-    data: data,
-    fetchNextPage: fetchNextPage,
-    dataProvider: dataProvider,
-  };
+  return query;
 };
 
 export const useCreateInventory = (onSuccessCallback: () => void) => {

@@ -1,4 +1,10 @@
-import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
+import {
+  FlatList,
+  ListRenderItem,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import FilterWork from './components/filter';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
@@ -65,7 +71,7 @@ const ManagementScreen = ({navigation}: Props) => {
 
   const [selectedFormId, selectFormId] = useState(formId[0].id);
 
-  const {data, fetchNextPage} = useWorkQuery({
+  const {data, fetchNextPage, isLoading, remove, refetch} = useWorkQuery({
     selectedFormId: selectedFormId,
     selectedStatus: selectedStatus,
   });
@@ -94,6 +100,10 @@ const ManagementScreen = ({navigation}: Props) => {
 
   const {grantedPermissions} = useAppSelector(state => state.config);
 
+  const onRefresh = () => {
+    remove();
+    refetch();
+  };
   return (
     <View style={styles.container}>
       <FilterWork
@@ -111,6 +121,9 @@ const ManagementScreen = ({navigation}: Props) => {
         renderItem={renderItem}
         onEndReached={() => fetchNextPage()}
         contentContainerStyle={{paddingTop: 10}}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+        }
       />
       {checkPermission(grantedPermissions, [
         'Pages.Operations.TaskManagement.Create',
