@@ -13,7 +13,7 @@ class AssetDetail {
   };
 
   update = async (params: TAssetDetail) => {
-    const url = HOST_SERVER + this.endpoint + 'Create';
+    const url = HOST_SERVER + this.endpoint + 'Update';
     return axiosClient.put(url, params);
   };
 

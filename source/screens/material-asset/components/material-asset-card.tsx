@@ -10,9 +10,7 @@ import {useTheme} from 'react-native-paper';
 
 type Props = {
   item: TAssetDetail;
-  navigation: //  CompositeNavigationProp<
-  // MaterialTopTabNavigationProp<MaterialTabParamsList, 'LIST'>,
-  StackNavigationProp<MaterialAssetStackParamsList, 'MAIN_SCREEN'>;
+  navigation: StackNavigationProp<MaterialAssetStackParamsList, 'MAIN_SCREEN'>;
   onPress: () => void;
 };
 
@@ -44,7 +42,7 @@ const MaterialCard = ({item, onPress}: Props) => {
             <Text style={styles.textTag}>{item.trangThaiText}</Text>
           </View>
         )}
-        <View style={{marginLeft: 10}}>
+        <View style={{marginLeft: 10, flex: 1}}>
           <Text style={styles.textName}>{item.title}</Text>
           <Text style={styles.textCode}>{item.code}</Text>
           <Text style={styles.textProducer}>{item.nhomTaiSanText}</Text>
@@ -64,6 +62,7 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 2,
     paddingHorizontal: 5,
+    bottom: 0,
   },
   textTag: {
     ...globalStyles.text12Bold,

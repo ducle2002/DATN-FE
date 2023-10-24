@@ -16,7 +16,7 @@ import language, {languageKeys} from '@/config/language/language';
 type Props = {
   value: string;
   onChange: (value: string) => void;
-  label: string;
+  label?: string;
   minimumDate?: string;
   maximumDate?: string;
   labelStyle?: StyleProp<TextStyle>;
@@ -28,7 +28,7 @@ type Props = {
 
 const DatePickerComponent = ({
   value,
-  onChange,
+  onChange = () => {},
   label,
   minimumDate,
   labelStyle,
@@ -45,9 +45,11 @@ const DatePickerComponent = ({
   return (
     <>
       <View style={containerStyle}>
-        <View style={labelContainerStyle}>
-          <Text style={labelStyle}>{label}</Text>
-        </View>
+        {label && (
+          <View style={labelContainerStyle}>
+            <Text style={labelStyle}>{label}</Text>
+          </View>
+        )}
         <View style={[styles.container, inputContainerStyle]}>
           <Button
             onPress={() =>
@@ -85,7 +87,7 @@ const DatePickerComponent = ({
             color="#429AE0"
           />
         </View>
-        <Text>{errorMessage}</Text>
+        {errorMessage && <Text>{errorMessage}</Text>}
       </View>
       <DatePicker
         date={moment(value ? value : undefined).toDate()}

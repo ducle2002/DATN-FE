@@ -30,12 +30,17 @@ const ListTab = ({navigation}: Props) => {
     );
   }, [data]);
 
-  const onPressItem = (item: TAssetDetail) => {
-    selectItem(item.id);
-  };
-
   const renderItem = (_: any, item: TAssetDetail) => (
-    <MaterialCard {...{item, navigation}} onPress={() => onPressItem(item)} />
+    <MaterialCard
+      {...{item, navigation}}
+      onPress={() => {
+        if (item.id) {
+          navigation.navigate('DETAIL_SCREEN', {
+            id: item.id,
+          });
+        }
+      }}
+    />
   );
 
   const onEndReached = () => {

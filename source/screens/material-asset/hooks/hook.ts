@@ -1,7 +1,6 @@
 import {
   TAssetDetail,
   TInventory,
-  assetDetailDefault,
 } from '@/screens/material-asset/services/material-asset.model';
 import MaterialAssetApi from '@/screens/material-asset/services/material-asset.service';
 import MaterialImportExportApi from '@/screens/material-asset/services/material-import-export.service';
@@ -154,13 +153,7 @@ export const useListImportExport = (type: 'IMPORT' | 'EXPORT') => {
     },
   });
 
-  const dataProvider = useMemo(() => {
-    return dataProviderMaker(
-      data ? flatten(map(page => page.importExportDocs, data.pages)) : [],
-    );
-  }, [data]);
-
-  return {data, fetchNextPage, dataProvider};
+  return {data, fetchNextPage};
 };
 
 export const useAllInventory = () => {
@@ -187,6 +180,7 @@ export const useAllSystemCode = () => {
   const {data} = useQuery({
     queryKey: ['system-code'],
     queryFn: () => SystemCodeService.getAll({maxResultCount: 1000}),
+    staleTime: 180000,
   });
   return data ?? {systemCodes: [], totalRecords: 0};
 };
@@ -199,6 +193,7 @@ export const useAllAssetGroup = ({systemCode}: {systemCode?: number}) => {
         MaHeThongId: systemCode,
         maxResultCount: 1000,
       }),
+    staleTime: 180000,
   });
 
   return data ?? {assetGroups: [], totalRecords: 0};
@@ -210,11 +205,13 @@ export const useAllAssetEnums = () => {
       queryKey: ['asset-status'],
       queryFn: () =>
         AssetDetailService.getEnums({type: 'TrangThaiTaiSanChiTietEnum'}),
+      staleTime: 180000,
     },
     {
       queryKey: ['asset-form'],
       queryFn: () =>
         AssetDetailService.getEnums({type: 'HinhThucTaiSanChiTietEnum'}),
+      staleTime: 180000,
     },
   ]);
   return {
@@ -251,9 +248,11 @@ export const useUpdateAsset = ({
   const queryClient = useQueryClient();
   const {mutate: updateAsset} = useMutation({
     mutationFn: (params: TAssetDetail) => AssetDetailService.update(params),
-    onSuccess: () => {
+    onSuccess: (_, params) => {
       queryClient.refetchQueries(['list-material']).then(() => {
-        onSuccessCallback();
+        queryClient.refetchQueries(['asset-detail', params.id]).then(() => {
+          onSuccessCallback();
+        });
       });
     },
     onError: error => {
@@ -293,6 +292,7 @@ export const useAssetById = (id?: number) => {
         return AssetDetailService.getById(id);
       }
     },
+    staleTime: 60000,
   });
-  return id !== -1 ? data : assetDetailDefault;
+  return data;
 };

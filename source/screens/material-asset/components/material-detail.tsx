@@ -1,12 +1,5 @@
-import {
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import React, {memo, useEffect, useMemo, useState} from 'react';
+import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {memo, useEffect, useState} from 'react';
 import ReactNativeModal from 'react-native-modal';
 import {
   TAssetDetail,
@@ -20,18 +13,18 @@ import {Controller, useForm, useWatch} from 'react-hook-form';
 import BottomContainer from '@/components/bottom-container.component';
 import {useMaterialCategory} from '@/screens/material-asset/hooks/material-category.hook';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
-import * as yup from 'yup';
-import {yupResolver} from '@hookform/resolvers/yup';
+// import * as yup from 'yup';
+// import {yupResolver} from '@hookform/resolvers/yup';
 import {
   useAllAssetEnums,
   useAllAssetGroup,
   useAllSystemCode,
   useAssetById,
   useCreateAsset,
-  useDeleteAsset,
   useUpdateAsset,
 } from '../hooks/hook';
 import DatePickerComponent from '@/screens/work-management/components/date-picker.component';
+
 type Props = {
   materialId?: number;
   onBackdropPress: () => void;
@@ -67,7 +60,8 @@ const MaterialDetail = ({materialId, onBackdropPress}: Props) => {
   // );
   const material = useAssetById(materialId);
 
-  const [editable, setEditable] = useState(!materialId);
+  const [editable] = useState(true);
+
   useMaterialCategory();
 
   const {
@@ -93,33 +87,21 @@ const MaterialDetail = ({materialId, onBackdropPress}: Props) => {
 
   const {updateAsset} = useUpdateAsset({
     onSuccessCallback: () => {
-      setEditable(false);
       onBackdropPress();
     },
   });
 
   const {createAsset} = useCreateAsset({
     onSuccessCallback: () => {
-      setEditable(false);
-      onBackdropPress();
-    },
-  });
-
-  const {deleteAsset} = useDeleteAsset({
-    onSuccessCallback: () => {
-      setEditable(false);
       onBackdropPress();
     },
   });
 
   useEffect(() => {
-    setEditable(materialId === -1);
     reset(material);
-  }, [material, materialId, reset]);
+  }, [material, reset]);
 
   const onSubmit = (data: TAssetDetail) => {
-    console.log(materialId);
-
     if (materialId && materialId > 0) {
       updateAsset({
         ...material,
@@ -222,7 +204,7 @@ const MaterialDetail = ({materialId, onBackdropPress}: Props) => {
             <View style={styles.cellLeft}>
               <Text style={styles.textLabel}>
                 {language.t(
-                  languageKeys.materialAsset.materialDetail.assetType,
+                  languageKeys.materialAsset.materialDetail.systemCode,
                 )}
               </Text>
             </View>
@@ -297,8 +279,7 @@ const MaterialDetail = ({materialId, onBackdropPress}: Props) => {
           <View style={[styles.row, {backgroundColor: '#f1f2f8'}]}>
             <View style={styles.cellLeft}>
               <Text style={styles.textLabel}>
-                {/* {language.t(languageKeys.materialAsset.materialDetail.producer)} */}
-                hinhThuc
+                {language.t(languageKeys.materialAsset.materialDetail.form)}
               </Text>
             </View>
             <View style={styles.cellRight}>
@@ -325,7 +306,7 @@ const MaterialDetail = ({materialId, onBackdropPress}: Props) => {
           </View>
 
           {/**
-           * Trangthai
+           * Trang thai
            */}
           <View style={styles.row}>
             <View style={styles.cellLeft}>
@@ -359,15 +340,41 @@ const MaterialDetail = ({materialId, onBackdropPress}: Props) => {
           <View style={styles.row}>
             <View style={styles.cellLeft}>
               <Text style={styles.textLabel}>
-                {/* {language.t(languageKeys.materialAsset.materialDetail.status)} */}
-                start date
+                {language.t(
+                  languageKeys.materialAsset.materialDetail.startDate,
+                )}
               </Text>
             </View>
             <View style={styles.cellRight}>
               <Controller
                 control={control}
                 name="ngayBatDau"
-                render={({field: {value, onChange}}) => <DatePickerComponent />}
+                render={({field: {value, onChange}}) => (
+                  <DatePickerComponent
+                    value={value ?? ''}
+                    onChange={onChange}
+                  />
+                )}
+              />
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.cellLeft}>
+              <Text style={styles.textLabel}>
+                {language.t(languageKeys.materialAsset.materialDetail.endDate)}
+              </Text>
+            </View>
+            <View style={styles.cellRight}>
+              <Controller
+                control={control}
+                name="ngayKetThuc"
+                render={({field: {value, onChange}}) => (
+                  <DatePickerComponent
+                    value={value ?? ''}
+                    onChange={onChange}
+                  />
+                )}
               />
             </View>
           </View>
@@ -395,6 +402,34 @@ const MaterialDetail = ({materialId, onBackdropPress}: Props) => {
                           }).format(value)
                         : value?.toString()
                     }
+                    placeholder={errors.giaTriTaiSan?.message}
+                    placeholderTextColor={
+                      errors.giaTriTaiSan?.message ? '#FF6565' : '#ababab'
+                    }
+                    style={[styles.textValue, {backgroundColor: '#f1f2f8'}]}
+                    editable={editable}
+                    withError={false}
+                    onChangeText={onChange as any}
+                    keyboardType="numbers-and-punctuation"
+                  />
+                )}
+              />
+            </View>
+          </View>
+
+          <View style={[styles.row, {backgroundColor: '#f1f2f8'}]}>
+            <View style={styles.cellLeft}>
+              <Text style={styles.textLabel}>
+                {language.t(languageKeys.materialAsset.materialDetail.amount)}
+              </Text>
+            </View>
+            <View style={styles.cellRight}>
+              <Controller
+                control={control}
+                name="soLuong"
+                render={({field: {value, onChange}}) => (
+                  <CTextInput
+                    value={value}
                     placeholder={errors.giaTriTaiSan?.message}
                     placeholderTextColor={
                       errors.giaTriTaiSan?.message ? '#FF6565' : '#ababab'
@@ -443,62 +478,23 @@ const MaterialDetail = ({materialId, onBackdropPress}: Props) => {
               width: '100%',
               justifyContent: 'space-around',
             }}>
-            {!editable ? (
-              <>
-                <Button
-                  onPress={() => {
-                    setTimeout(() => {
-                      reset();
-                      onBackdropPress();
-                    }, 100);
-                    setEditable(false);
-                  }}
-                  mode="contained-tonal">
-                  {language.t(languageKeys.shared.button.back)}
-                </Button>
-                <Button
-                  mode="outlined"
-                  style={{flex: 0.4}}
-                  onPress={() => {
-                    if (materialId && materialId > 0) {
-                      deleteAsset(materialId);
-                    }
-                  }}>
-                  {language.t(languageKeys.shared.button.delete)}
-                </Button>
-                <Button
-                  style={{flex: 0.4}}
-                  mode="contained"
-                  onPress={() => {
-                    setEditable(true);
-                  }}>
-                  {language.t(languageKeys.shared.button.edit)}
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  style={{flex: 0.4}}
-                  mode="contained-tonal"
-                  onPress={() => {
-                    setTimeout(() => {
-                      reset();
-                      if (!materialId || materialId === -1) {
-                        onBackdropPress();
-                      }
-                    }, 100);
-                    setEditable(false);
-                  }}>
-                  {language.t(languageKeys.shared.button.cancel)}
-                </Button>
-                <Button
-                  style={{flex: 0.4}}
-                  mode="contained"
-                  onPress={handleSubmit(onSubmit)}>
-                  {language.t(languageKeys.shared.button.save)}
-                </Button>
-              </>
-            )}
+            <>
+              <Button
+                style={{flex: 0.4}}
+                mode="contained-tonal"
+                onPress={() => {
+                  reset();
+                  onBackdropPress();
+                }}>
+                {language.t(languageKeys.shared.button.cancel)}
+              </Button>
+              <Button
+                style={{flex: 0.4}}
+                mode="contained"
+                onPress={handleSubmit(onSubmit)}>
+                {language.t(languageKeys.shared.button.save)}
+              </Button>
+            </>
           </View>
         </BottomContainer>
       </SafeAreaView>
