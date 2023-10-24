@@ -15,9 +15,12 @@ import ReactNativeModal from 'react-native-modal';
 import Carousel from 'react-native-reanimated-carousel';
 import Icon from '@/components/icon.component';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTheme} from 'react-native-paper';
 const {width} = Dimensions.get('screen');
 type Props = {
   item: TWorkComment;
+  isMine: boolean;
+  onDeletePress: () => void;
 };
 
 const ImageDetail = ({uri}: {uri: string}) => {
@@ -42,7 +45,8 @@ const ImageDetail = ({uri}: {uri: string}) => {
   );
 };
 
-const WorkCommentItem = ({item}: Props) => {
+const WorkCommentItem = ({item, isMine, onDeletePress}: Props) => {
+  const {colors} = useTheme();
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -55,6 +59,23 @@ const WorkCommentItem = ({item}: Props) => {
           style={{width: 50, height: 50, borderRadius: 50}}
         />
         <View style={styles.contentContainer}>
+          {isMine && (
+            <Pressable
+              onPress={onDeletePress}
+              style={{
+                position: 'absolute',
+                right: 0,
+                padding: 5,
+                zIndex: 100,
+              }}>
+              <Icon
+                type="MaterialCommunityIcons"
+                name="delete"
+                size={30}
+                color={colors.primary}
+              />
+            </Pressable>
+          )}
           <Text style={styles.textName}>{item.fullName}</Text>
           <Text style={styles.textTime}>
             {moment(item.creationTime).format('HH:mm:ss DD/MM/YYYY')}

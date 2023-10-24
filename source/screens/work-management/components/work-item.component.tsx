@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {memo, useEffect} from 'react';
 import ItemCard from '@/components/item-card.component';
 import globalStyles from '@/config/globalStyles';
@@ -91,18 +91,15 @@ const WorkItem = ({item, onPress, isActive, navigation}: Props) => {
           />
         </Animated.View>
       </Animated.View>
-      <Icon
-        type="Entypo"
-        name="chat"
-        color="#2B5783"
-        style={{alignSelf: 'center'}}
-        size={30}
+      <Pressable
+        style={{alignSelf: 'center', padding: 5}}
         onPress={() => {
           if (item.id) {
             navigation.navigate('COMMENT', {id: item.id});
           }
-        }}
-      />
+        }}>
+        <Icon type="Entypo" name="chat" color="#2B5783" size={30} />
+      </Pressable>
     </ItemCard>
   );
 };

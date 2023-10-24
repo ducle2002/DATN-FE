@@ -14,7 +14,7 @@ import {
   useFrameProcessor,
 } from 'react-native-vision-camera';
 import {runOnJS} from 'react-native-reanimated';
-import {BarcodeFormat, scanBarcodes} from 'vision-camera-code-scanner';
+import {Barcode, BarcodeFormat, scanBarcodes} from 'vision-camera-code-scanner';
 import globalStyles from '@/config/globalStyles';
 
 type Props = {
@@ -22,6 +22,7 @@ type Props = {
   hasCaptureButton?: boolean;
   active?: boolean;
   isReturnPhoto?: boolean;
+  useScanner?: boolean;
 };
 
 const ScannerView = ({
@@ -29,6 +30,7 @@ const ScannerView = ({
   hasCaptureButton,
   active = true,
   isReturnPhoto,
+  useScanner = true,
 }: Props) => {
   const [hasPermission, setPermission] = useState(false);
   const camera = useRef<Camera>(null);
@@ -60,15 +62,15 @@ const ScannerView = ({
     });
   };
 
-  const [code, setCode] = useState<string>();
+  const [code, setCode] = useState<Barcode>();
 
   const frameProcessor = useFrameProcessor(frame => {
     'worklet';
-    const detectedBarCodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE], {
+    const detectedBarCodes = scanBarcodes(frame, [BarcodeFormat.ALL_FORMATS], {
       checkInverted: true,
     });
     if (detectedBarCodes.length > 0) {
-      runOnJS(setCode)(detectedBarCodes[0].displayValue);
+      runOnJS(setCode)(detectedBarCodes[0]);
     }
   }, []);
 
@@ -77,13 +79,13 @@ const ScannerView = ({
       if (isReturnPhoto) {
         camera.current?.takePhoto().then(result => {
           if (onScannedCallback) {
-            onScannedCallback(code, {image: result});
+            onScannedCallback(code.displayValue, {image: result});
           }
         });
         return;
       }
       if (onScannedCallback) {
-        onScannedCallback(code);
+        onScannedCallback(code.displayValue);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,7 +121,7 @@ const ScannerView = ({
               style={StyleSheet.absoluteFill}
               device={back}
               isActive={active}
-              frameProcessor={frameProcessor}
+              frameProcessor={useScanner && active ? frameProcessor : undefined}
               frameProcessorFps={1}
               photo={true}
             />

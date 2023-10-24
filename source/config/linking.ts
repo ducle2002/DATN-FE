@@ -21,6 +21,17 @@ const config: {
         },
       },
     },
+    WORK_MANAGEMENT: {
+      screens: {
+        DETAIL_WORK: {
+          path: 'work/detail',
+          parse: {
+            id: (id: string) => Number(id),
+            tenantId: (tenantId: string) => Number(tenantId),
+          },
+        },
+      },
+    },
   },
 };
 

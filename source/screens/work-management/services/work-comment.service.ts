@@ -43,6 +43,11 @@ class WorkComment {
       totalRecords: result.totalRecords,
     };
   };
+
+  delete = async (params: {id: number}) => {
+    const url = this.endpoint + 'DeleteWorkComment';
+    return axiosClient.delete(url, {params: params});
+  };
 }
 
 const WorkCommentApi = new WorkComment();
