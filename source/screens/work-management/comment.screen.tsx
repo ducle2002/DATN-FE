@@ -211,19 +211,24 @@ const CommentScreen = ({route}: Props) => {
           />
         </View>
       </BottomContainer>
-      <Dialog visible={!!comment}>
+      <Dialog visible={!!comment} onDismiss={() => setComment(undefined)}>
+        <Dialog.Title>
+          <Text style={styles.text}>Bạn có muốn xóa bình luận</Text>
+        </Dialog.Title>
         <Dialog.Actions>
-          <Dialog.Content>
-            <Text style={styles.text}>Bạn có muốn xóa bình luận</Text>
-          </Dialog.Content>
-          <Button onPress={() => setComment(undefined)}>
+          <Button
+            style={styles.button}
+            onPress={() => setComment(undefined)}
+            mode="contained-tonal">
             {language.t(languageKeys.shared.button.cancel)}
           </Button>
           {comment && (
             <Button
+              style={styles.button}
               onPress={() => {
                 deleteComment({id: comment.id});
-              }}>
+              }}
+              mode="contained">
               {language.t(languageKeys.shared.button.delete)}
             </Button>
           )}
@@ -245,5 +250,9 @@ const styles = StyleSheet.create({
   },
   text: {
     ...globalStyles.text16Medium,
+  },
+  button: {
+    paddingHorizontal: 10,
+    marginLeft: 20,
   },
 });

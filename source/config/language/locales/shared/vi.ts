@@ -23,6 +23,8 @@ const button = {
   requestEdit: 'Yêu cầu chỉnh sửa',
   pickTime: 'Chọn giờ',
   pickDate: 'Chọn ngày',
+  filter: 'Lọc',
+  resetFilter: 'Bỏ lọc',
 };
 
 const shared = {

@@ -13,6 +13,15 @@ const materialDetail = {
   amount: 'Số lượng',
   totalValue: 'Tống giá trị',
   value: 'Giá nhập',
+  systemCode: 'Mã hệ thống',
+  startDate: 'Ngày bắt đầu',
+  endDate: 'Ngày kết thúc',
+  form: 'Hình thức',
+  block: 'Block',
+  building: 'Toà nhà',
+  floor: 'Tầng',
+  apartment: 'Căn hộ',
+  warrantyCode: 'Mã bảo hành',
 };
 
 const inventory = {

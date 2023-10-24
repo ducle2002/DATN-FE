@@ -5,6 +5,7 @@ import ImportExportScreen from '@/screens/material-asset/import-export.screen';
 import language, {languageKeys} from '@/config/language/language';
 import CategoryManagementScreen from '@/screens/material-asset/category-management.screen';
 import ListTab from '@/screens/material-asset/list-assets.tab';
+import DetailAssetScreen from '@/screens/material-asset/detail-asset.screen';
 
 export type MaterialAssetStackParamsList = {
   MAIN_SCREEN:
@@ -16,6 +17,7 @@ export type MaterialAssetStackParamsList = {
     type: 'IMPORT' | 'EXPORT';
   };
   CATEGORY_MANAGEMENT: undefined;
+  DETAIL_SCREEN: {id: number};
 };
 
 const Stack = createStackNavigator<MaterialAssetStackParamsList>();
@@ -58,6 +60,7 @@ const MaterialAssetStack = () => {
           ),
         }}
       />
+      <Stack.Screen name="DETAIL_SCREEN" component={DetailAssetScreen} />
     </Stack.Navigator>
   );
 };

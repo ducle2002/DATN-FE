@@ -1,30 +1,66 @@
 import {
+  TAssetDetail,
   TInventory,
-  TMaterialAsset,
 } from '@/screens/material-asset/services/material-asset.model';
 import MaterialAssetApi from '@/screens/material-asset/services/material-asset.service';
 import MaterialImportExportApi from '@/screens/material-asset/services/material-import-export.service';
-import {dataProviderMaker} from '@/utils/recycler-list-view';
-import {find, flatten, map, propEq} from 'ramda';
-import {useMemo} from 'react';
+import {find, propEq} from 'ramda';
+import {createContext, useMemo} from 'react';
 import {
   useInfiniteQuery,
   useMutation,
+  useQueries,
   useQuery,
   useQueryClient,
 } from 'react-query';
+import AssetDetailService from '../services/asset-detail.service';
+import SystemCodeService from '../services/system-code.service';
+import AssetGroupService from '../services/asset-group.service';
 
-export const useListMaterialAssets = () => {
-  const {data, fetchNextPage} = useInfiniteQuery({
-    queryKey: ['list-material'],
+export type TAssetFilter = {
+  keyword?: string;
+  systemCode?: number;
+  status?: number;
+  form?: number;
+  group?: number;
+};
+
+export const AssetFilterContext = createContext<{
+  filters?: TAssetFilter;
+  setFilters: (flt?: TAssetFilter) => void;
+}>({
+  filters: {
+    keyword: '',
+    systemCode: undefined,
+    status: undefined,
+    form: undefined,
+    group: undefined,
+  },
+  setFilters: () => {},
+});
+
+export const useListMaterialAssets = ({
+  keyword,
+  systemCode,
+  status,
+  form,
+  group,
+}: TAssetFilter) => {
+  const query = useInfiniteQuery({
+    queryKey: ['list-material', keyword, systemCode, status, form, group],
     queryFn: ({pageParam}) =>
-      MaterialAssetApi.getAll({
+      AssetDetailService.getAll({
         ...pageParam,
+        keyword: keyword,
+        maHeThongId: systemCode,
+        trangThai: status,
+        hinhThuc: form,
+        nhomTaiSanId: group,
         maxResultCount: 20,
       }),
     getNextPageParam: (lastPage, allPages) => {
       const skipCount = allPages.length * 20;
-      return (allPages.length - 1) * 20 + lastPage.materials.length !==
+      return (allPages.length - 1) * 20 + lastPage.assets.length !==
         lastPage.totalRecords
         ? {
             skipCount: skipCount,
@@ -32,20 +68,10 @@ export const useListMaterialAssets = () => {
           }
         : undefined;
     },
-    staleTime: 300000,
+    staleTime: 0,
   });
 
-  const dataProvider = useMemo(() => {
-    return dataProviderMaker(
-      data ? flatten(map(page => page.materials, data.pages)) : [],
-    );
-  }, [data]);
-
-  return {
-    data: data,
-    fetchNextPage: fetchNextPage,
-    dataProvider: dataProvider,
-  };
+  return query;
 };
 
 export const useCreateInventory = (onSuccessCallback: () => void) => {
@@ -71,7 +97,8 @@ export const useCreateInventory = (onSuccessCallback: () => void) => {
   return {createInventory};
 };
 
-export const useCreateMaterial = (onSuccessCallback: () => void) => {
+/**Khong dung nua
+  export const useCreateMaterial = (onSuccessCallback: () => void) => {
   const queryClient = useQueryClient();
   const {mutate: createMaterial} = useMutation({
     mutationFn: (params: TMaterialAsset) => MaterialAssetApi.create(params),
@@ -86,7 +113,11 @@ export const useCreateMaterial = (onSuccessCallback: () => void) => {
   });
   return {createMaterial};
 };
+ */
 
+/** Khong dung nua
+ *
+ *
 export const useUpdateMaterial = (onSuccessCallback: () => void) => {
   const queryClient = useQueryClient();
   const {mutate: updateMaterial} = useMutation({
@@ -102,7 +133,9 @@ export const useUpdateMaterial = (onSuccessCallback: () => void) => {
   });
   return {updateMaterial};
 };
-
+ */
+/**
+ * Khong dung nua
 export const useDeleteMaterial = (onSuccessCallback: () => void) => {
   const queryClient = useQueryClient();
   const {mutate: deleteMaterial} = useMutation({
@@ -119,6 +152,7 @@ export const useDeleteMaterial = (onSuccessCallback: () => void) => {
 
   return {deleteMaterial};
 };
+ */
 
 export const useListImportExport = (type: 'IMPORT' | 'EXPORT') => {
   const {data, fetchNextPage} = useInfiniteQuery({
@@ -141,13 +175,7 @@ export const useListImportExport = (type: 'IMPORT' | 'EXPORT') => {
     },
   });
 
-  const dataProvider = useMemo(() => {
-    return dataProviderMaker(
-      data ? flatten(map(page => page.importExportDocs, data.pages)) : [],
-    );
-  }, [data]);
-
-  return {data, fetchNextPage, dataProvider};
+  return {data, fetchNextPage};
 };
 
 export const useAllInventory = () => {
@@ -168,4 +196,125 @@ export const useInventoryName = (id: number | undefined) => {
     [allInventory, id],
   );
   return inventory;
+};
+
+export const useAllSystemCode = () => {
+  const {data} = useQuery({
+    queryKey: ['system-code'],
+    queryFn: () => SystemCodeService.getAll({maxResultCount: 1000}),
+    staleTime: 180000,
+  });
+  return data ?? {systemCodes: [], totalRecords: 0};
+};
+
+export const useAllAssetGroup = ({systemCode}: {systemCode?: number}) => {
+  const {data} = useQuery({
+    queryKey: ['asset-group', systemCode],
+    queryFn: () =>
+      AssetGroupService.getAll({
+        MaHeThongId: systemCode,
+        maxResultCount: 1000,
+      }),
+    staleTime: 180000,
+  });
+
+  return data ?? {assetGroups: [], totalRecords: 0};
+};
+
+export const useAllAssetEnums = () => {
+  const result = useQueries([
+    {
+      queryKey: ['asset-status'],
+      queryFn: () =>
+        AssetDetailService.getEnums({type: 'TrangThaiTaiSanChiTietEnum'}),
+      staleTime: 180000,
+    },
+    {
+      queryKey: ['asset-form'],
+      queryFn: () =>
+        AssetDetailService.getEnums({type: 'HinhThucTaiSanChiTietEnum'}),
+      staleTime: 180000,
+    },
+  ]);
+  return {
+    assetStatus: result[0].data?.enums ?? [],
+    assetForm: result[1].data?.enums ?? [],
+  };
+};
+
+export const useCreateAsset = ({
+  onSuccessCallback = () => {},
+}: {
+  onSuccessCallback: () => void;
+}) => {
+  const queryClient = useQueryClient();
+  const {mutate: createAsset} = useMutation({
+    mutationFn: (params: TAssetDetail) => AssetDetailService.create(params),
+    onSuccess: () => {
+      queryClient.refetchQueries(['list-material']).then(() => {
+        onSuccessCallback();
+      });
+    },
+    onError: error => {
+      console.log(error);
+    },
+  });
+  return {createAsset};
+};
+
+export const useUpdateAsset = ({
+  onSuccessCallback = () => {},
+}: {
+  onSuccessCallback: () => void;
+}) => {
+  const queryClient = useQueryClient();
+  const {mutate: updateAsset} = useMutation({
+    mutationFn: (params: TAssetDetail) => AssetDetailService.update(params),
+    onSuccess: (_, params) => {
+      queryClient.refetchQueries(['list-material']).then(() => {
+        queryClient.refetchQueries(['asset-detail', params.id]).then(() => {
+          onSuccessCallback();
+        });
+      });
+    },
+    onError: error => {
+      console.log(error);
+    },
+  });
+  return {updateAsset};
+};
+
+export const useDeleteAsset = ({
+  onSuccessCallback = () => {},
+}: {
+  onSuccessCallback: () => void;
+}) => {
+  const queryClient = useQueryClient();
+  const {mutate: deleteAsset} = useMutation({
+    mutationFn: (id: number) => AssetDetailService.delete(id),
+    onSuccess: () => {
+      queryClient.refetchQueries(['list-material']).then(() => {
+        onSuccessCallback();
+      });
+    },
+    onError: error => {
+      console.log(error);
+    },
+  });
+
+  return {deleteAsset};
+};
+
+export const useAssetById = (id?: number) => {
+  const {data} = useQuery({
+    enabled: !!id && id > 0,
+    queryKey: ['asset-detail', id],
+    queryFn: () => {
+      if (id) {
+        return AssetDetailService.getById(id);
+      }
+    },
+    staleTime: 60000,
+  });
+  return data;
 };

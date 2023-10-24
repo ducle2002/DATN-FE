@@ -1,6 +1,6 @@
 import {useInfiniteQuery, useQueries} from 'react-query';
-import MaterialCategoryApi from './material-category.service';
-import {ECategoryType} from './material-asset.model';
+import MaterialCategoryApi from '../services/material-category.service';
+import {ECategoryType} from '../services/material-asset.model';
 
 export const useMaterialCategory = () => {
   const result = useQueries([

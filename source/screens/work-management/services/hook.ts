@@ -21,7 +21,7 @@ export const useWorkQuery = ({
   selectedStatus?: EWorkStatus;
   selectedFormId?: EWorkFormID;
 }) => {
-  const {data, fetchNextPage} = useInfiniteQuery({
+  const query = useInfiniteQuery({
     queryKey: ['my-work', selectedStatus, selectedFormId],
     queryFn: ({pageParam}) =>
       WorkManagementApi.getAll({
@@ -42,7 +42,7 @@ export const useWorkQuery = ({
     },
   });
 
-  return {data, fetchNextPage};
+  return query;
 };
 
 export const useWorkComment = ({workId}: {workId: number}) => {
