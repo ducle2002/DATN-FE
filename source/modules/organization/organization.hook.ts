@@ -23,6 +23,17 @@ export const useOrganizationUnit = () => {
 };
 
 export const useAllOrganizationUnit = () => {
+  const query = useQuery({
+    queryKey: ['all-organization-unit'],
+    queryFn: () => OrganizationApi.getOrganizationUnits({maxResultCount: 1000}),
+    cacheTime: 300000,
+    staleTime: 300000,
+  });
+
+  return query;
+};
+
+export const useOrganizationUnitTree = () => {
   const {data} = useQuery({
     queryKey: ['all-organization-unit'],
     queryFn: () => OrganizationApi.getOrganizationUnits({maxResultCount: 1000}),
