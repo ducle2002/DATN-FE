@@ -58,9 +58,16 @@ const category = {
   description: 'Mô tả',
 };
 
+const header = {
+  detail: 'Thông tin',
+  listEntities: 'Danh sách tài sản',
+  maintenanceHistory: 'Lịch sử bảo trì',
+};
+
 export default {
   materialDetail,
   inventory,
   docs,
   category,
+  header,
 };

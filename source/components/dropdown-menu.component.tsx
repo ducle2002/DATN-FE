@@ -43,6 +43,7 @@ type Props = React.ComponentProps<typeof View> & {
   disable?: boolean;
   labelContainerStyle?: StyleProp<ViewStyle>;
   error?: string;
+  useClear?: boolean;
 };
 
 const DropdownMenu = ({
@@ -59,6 +60,7 @@ const DropdownMenu = ({
   placeholderTextColor,
   labelContainerStyle,
   error,
+  useClear = false,
   ...props
 }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -140,7 +142,7 @@ const DropdownMenu = ({
         </View>
       )}
       <View style={[styles.inputContainer, inputContainer]}>
-        {selectedLabel && (
+        {selectedLabel && useClear && (
           <Icon
             type="Ionicons"
             name="close"

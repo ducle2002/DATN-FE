@@ -157,3 +157,21 @@ export type TAssetDetail = {
   soLuong: string;
   xuatXu: null | string;
 };
+
+export type TMaintenanceHistory = {
+  taiSanText: string;
+  nguoiKiemTraText: string;
+  blockText: string;
+  apartmentText: string;
+  buildingText: string;
+  floorText: string;
+  taiSanId: number;
+  boPhanTheoDoi: string;
+  ngaySuaChua: string;
+  ngayCheckList: string;
+  tenantId: number;
+  nguoiKiemTraId: number;
+  creatorUserId: number;
+  id: number;
+  creationTime: string;
+};

@@ -56,7 +56,9 @@ const ListTab = ({navigation}: Props) => {
       {...{item, navigation}}
       onPress={() => {
         if (item.id) {
-          navigation.navigate('DETAIL_SCREEN', {
+          navigation.navigate('DETAIL_TAB', {
+            screen: 'DETAIL_SCREEN',
+            params: {id: item.id},
             id: item.id,
           });
         }
@@ -135,6 +137,12 @@ const ListTab = ({navigation}: Props) => {
               }}
               mode="contained-tonal">
               {language.t(languageKeys.shared.button.filter)}
+            </Button>
+            <Button
+              icon={'camera'}
+              mode="outlined"
+              onPress={() => navigation.navigate('QR_SCANNER')}>
+              Quét mã QR
             </Button>
           </View>
         </BottomContainer>
