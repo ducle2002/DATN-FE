@@ -21,6 +21,10 @@ class MaintenanceHistory {
     const url = HOST_SERVER + this.endpoint + 'GetById';
     return axiosClient.get(url, {params: {id: id}});
   };
+  create = async (params: TMaintenanceHistory) => {
+    const url = HOST_SERVER + this.endpoint + 'Create';
+    return axiosClient.post(url, params);
+  };
 }
 
 const MaintenanceHistoryService = new MaintenanceHistory();

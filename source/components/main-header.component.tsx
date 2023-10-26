@@ -5,11 +5,17 @@ import CTextInput from '@/components/text-input.component';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import LinearGradientHeader from './linear-gradient-header.component';
 import {StackHeaderProps} from '@react-navigation/stack';
+import language, {languageKeys} from '@/config/language/language';
 
 type Props = StackHeaderProps & {
   onKeywordChange?: (kw: string) => void;
+  placeholder?: string;
 };
-const MainHeader = ({onKeywordChange = () => {}, ...props}: Props) => {
+const MainHeader = ({
+  onKeywordChange = () => {},
+  placeholder,
+  ...props
+}: Props) => {
   const {handleSubmit, control, reset} = useForm({
     defaultValues: {keyword: ''},
   });
@@ -59,6 +65,7 @@ const MainHeader = ({onKeywordChange = () => {}, ...props}: Props) => {
                 containerStyle={{flex: 1}}
                 style={{paddingHorizontal: 30, borderRadius: 20}}
                 onSubmitEditing={handleSubmit(onSubmit)}
+                placeholder={placeholder ?? language.t(languageKeys.search)}
               />
               {value && (
                 <Icon

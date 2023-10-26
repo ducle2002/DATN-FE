@@ -15,6 +15,7 @@ import {TMaintenanceHistory} from './services/material-asset.model';
 import HistoryItem from './components/history-item.component';
 import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
+import AssetHistoryCreate from './components/asset-history-creat.component';
 
 type Props = CompositeScreenProps<
   MaterialTopTabScreenProps<AssetDetailTabParamsList, 'MAINTENANCE_HISTORY'>,
@@ -44,7 +45,7 @@ const MaintenanceHistoryScreen = ({route}: Props) => {
         ListEmptyComponent={<Text>Không có lịch sử</Text>}
       />
       <BottomContainer>
-        <Button>Bảo trì</Button>
+        <AssetHistoryCreate />
       </BottomContainer>
     </View>
   );
