@@ -104,6 +104,7 @@ const ManagementScreen = ({navigation}: Props) => {
     remove();
     refetch();
   };
+
   return (
     <View style={styles.container}>
       <FilterWork

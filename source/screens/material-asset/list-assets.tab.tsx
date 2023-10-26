@@ -24,8 +24,8 @@ import {checkPermission} from '@/utils/utils';
 import {useAppSelector} from '@/hooks/redux.hook';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {flatten, map} from 'ramda';
-import HeaderAsset from './components/header.component';
 import AssetFilter from './components/asset-filter';
+import MainHeader from '@/components/main-header.component';
 const {width, height} = Dimensions.get('screen');
 
 type Props = StackScreenProps<MaterialAssetStackParamsList, 'MAIN_SCREEN'>;
@@ -84,7 +84,7 @@ const ListTab = ({navigation}: Props) => {
 
   const renderHeader = useCallback((props: StackHeaderProps) => {
     return (
-      <HeaderAsset
+      <MainHeader
         {...props}
         onKeywordChange={kw => {
           setFilters(old => ({...old, keyword: kw}));
