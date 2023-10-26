@@ -22,6 +22,7 @@ const materialDetail = {
   floor: 'Tầng',
   apartment: 'Căn hộ',
   warrantyCode: 'Mã bảo hành',
+  note: 'Ghi chú',
 };
 
 const inventory = {
@@ -62,6 +63,7 @@ const header = {
   detail: 'Thông tin',
   listEntities: 'Danh sách tài sản',
   maintenanceHistory: 'Lịch sử bảo trì',
+  qrScanner: 'Quét mã QR',
 };
 
 export default {

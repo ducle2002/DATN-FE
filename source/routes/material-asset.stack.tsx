@@ -105,7 +105,13 @@ const MaterialAssetStack = () => {
         }}
       />
       <Stack.Screen name="DETAIL_TAB" component={AssetDetailTab} />
-      <Stack.Screen name="QR_SCANNER" component={AssetQRScreen} />
+      <Stack.Screen
+        name="QR_SCANNER"
+        component={AssetQRScreen}
+        options={{
+          title: language.t(languageKeys.materialAsset.header.qrScanner),
+        }}
+      />
     </Stack.Navigator>
   );
 };
