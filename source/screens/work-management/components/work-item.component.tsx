@@ -14,6 +14,7 @@ import {TWork} from '../services/work.model';
 import {useTextContentOfHTML} from '@/hooks/utils.hook';
 import {NavigationProp} from '@react-navigation/native';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
+import language, {languageKeys} from '@/config/language/language';
 type Props = {
   item: TWork;
   onPress: () => void;
@@ -66,11 +67,24 @@ const WorkItem = ({item, onPress, isActive, navigation}: Props) => {
       onPress={onPress}
       style={{paddingVertical: 15, alignItems: 'center'}}>
       <Animated.View style={contentAnimatedStyle}>
-        <View>
+        <View style={{flex: 1}}>
           <Text style={styles.textLabel}>{item.title}</Text>
           <Text style={styles.textValue} numberOfLines={1}>
             {textContent}
           </Text>
+          <View
+            style={{
+              alignSelf: 'flex-start',
+              paddingHorizontal: 5,
+              paddingVertical: 2,
+              backgroundColor: '#284DCE',
+              borderRadius: 10,
+              marginTop: 5,
+            }}>
+            <Text style={styles.textStatus}>
+              {language.t(languageKeys.workManagement.status[item.status])}
+            </Text>
+          </View>
         </View>
       </Animated.View>
       <Animated.View style={actionContainerAnimatedStyle}>
@@ -115,5 +129,9 @@ const styles = StyleSheet.create({
   },
   textValue: {
     ...globalStyles.text16Medium,
+  },
+  textStatus: {
+    ...globalStyles.text15Medium,
+    color: 'white',
   },
 });
