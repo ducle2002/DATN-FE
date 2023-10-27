@@ -16,7 +16,15 @@ import {Chip} from 'react-native-paper';
 const {width} = Dimensions.get('screen');
 type Props = StackScreenProps<AppStackParamsList, 'CAMERA_SCREEN'>;
 
-const CameraScreen = ({route}: Props) => {
+const CameraScreen = ({route, navigation}: Props) => {
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      headerTransparent: true,
+      headerTitle: '',
+    });
+  }, [navigation]);
+
   const isReturnPhoto = route.params?.isReturnPhoto;
   const [res, setRes] = useState<string>();
 

@@ -12,6 +12,7 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import Icon from '@/components/icon.component';
 import language, {languageKeys} from '@/config/language/language';
+import globalStyles from '@/config/globalStyles';
 
 type Props = {
   value: string;
@@ -47,7 +48,7 @@ const DatePickerComponent = ({
       <View style={containerStyle}>
         {label && (
           <View style={labelContainerStyle}>
-            <Text style={labelStyle}>{label}</Text>
+            <Text style={[labelStyle, styles.textLabel]}>{label}</Text>
           </View>
         )}
         <View style={[styles.container, inputContainerStyle]}>
@@ -118,5 +119,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  textLabel: {
+    ...globalStyles.text15Bold,
   },
 });

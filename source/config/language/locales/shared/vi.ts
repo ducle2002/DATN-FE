@@ -25,6 +25,7 @@ const button = {
   pickDate: 'Chọn ngày',
   filter: 'Lọc',
   resetFilter: 'Bỏ lọc',
+  create: 'Tạo mới',
 };
 
 const shared = {

@@ -13,7 +13,8 @@ import {
 import {useMutation} from 'react-query';
 import MaintenanceHistoryService from '../services/maintenance-history.service';
 import {useAppSelector} from '@/hooks/redux.hook';
-
+import DatePickerComponent from '@/screens/work-management/components/date-picker.component';
+import globalStyles from '@/config/globalStyles';
 type Props = {assetId: number};
 
 const AssetHistoryCreate = ({assetId}: Props) => {
@@ -22,6 +23,8 @@ const AssetHistoryCreate = ({assetId}: Props) => {
     defaultValues: {
       boPhanTheoDoiId: undefined,
       nguoiKiemTraId: undefined,
+      ngayCheckList: '',
+      ngayKiemTra: '',
     },
   });
   const departmentId = useWatch({
@@ -48,14 +51,14 @@ const AssetHistoryCreate = ({assetId}: Props) => {
   const onSubmit: SubmitHandler<{
     boPhanTheoDoiId: undefined;
     nguoiKiemTraId: undefined;
+    ngayCheckList: string;
+    ngayKiemTra: string;
   }> = data => {
     create({
       ...data,
       tenantId: tenantId,
       taiSanId: assetId,
-      nguoiKiemTraText: accounts.find(a => a.id === data.nguoiKiemTraId)
-        ?.displayName,
-      boPhanTheoDoi: accounts.find(d => d.id === data.boPhanTheoDoiId)
+      boPhanTheoDoi: departments?.find(d => d.id === data.boPhanTheoDoiId)
         ?.displayName,
     });
   };
@@ -98,7 +101,7 @@ const AssetHistoryCreate = ({assetId}: Props) => {
                     inputContainer={styles.dropdownInputContainer}
                     labelContainerStyle={styles.dropdownLabelContainer}
                   />
-                  <Text>{error?.message}</Text>
+                  <Text style={styles.textError}>{error?.message}</Text>
                 </View>
               )}
             />
@@ -129,7 +132,61 @@ const AssetHistoryCreate = ({assetId}: Props) => {
                     inputContainer={styles.dropdownInputContainer}
                     labelContainerStyle={styles.dropdownLabelContainer}
                   />
-                  <Text>{error?.message}</Text>
+                  <Text style={styles.textError}>{error?.message}</Text>
+                </View>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="ngayCheckList"
+              rules={{
+                required: {
+                  value: true,
+                  message: language.t(languageKeys.shared.form.requiredMessage),
+                },
+              }}
+              render={({field: {value, onChange}, fieldState: {error}}) => (
+                <View style={{marginBottom: 15}}>
+                  <DatePickerComponent
+                    label="Ngày check list"
+                    onChange={onChange}
+                    value={value ?? ''}
+                    inputContainerStyle={[
+                      styles.dropdownInputContainer,
+                      {paddingVertical: 0},
+                    ]}
+                    containerStyle={styles.dropdownContainer}
+                    labelContainerStyle={styles.dropdownLabelContainer}
+                  />
+                  <Text style={styles.textError}>{error?.message}</Text>
+                </View>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="ngayKiemTra"
+              rules={{
+                required: {
+                  value: true,
+                  message: language.t(languageKeys.shared.form.requiredMessage),
+                },
+              }}
+              render={({field: {value, onChange}, fieldState: {error}}) => (
+                <View>
+                  <DatePickerComponent
+                    label="Ngày kiểm tra"
+                    onChange={onChange}
+                    value={value ?? ''}
+                    inputContainerStyle={[
+                      styles.dropdownInputContainer,
+                      {paddingVertical: 0},
+                    ]}
+                    containerStyle={styles.dropdownContainer}
+                    labelContainerStyle={styles.dropdownLabelContainer}
+                  />
+                  <Text style={styles.textError}>{error?.message}</Text>
                 </View>
               )}
             />
@@ -137,7 +194,12 @@ const AssetHistoryCreate = ({assetId}: Props) => {
           <BottomContainer>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-              <Button onPress={() => setIsVisible(false)} mode="outlined">
+              <Button
+                onPress={() => {
+                  reset();
+                  setIsVisible(false);
+                }}
+                mode="outlined">
                 {language.t(languageKeys.shared.button.back)}
               </Button>
               <Button onPress={handleSubmit(onSubmit)} mode="contained">
@@ -173,5 +235,9 @@ const styles = StyleSheet.create({
   },
   dropdownLabelContainer: {
     flex: 0.6,
+  },
+  textError: {
+    ...globalStyles.text14Medium,
+    color: '#F86F03',
   },
 });
