@@ -182,9 +182,7 @@ const DetailAssetScreen = ({navigation, route}: Props) => {
       />
       <Dialog visible={isVisible} onDismiss={() => setIsVisible(false)}>
         <Dialog.Title>
-          <Text style={[styles.textValue, {flex: 0}]}>
-            Bạn có muốn xóa bình luận
-          </Text>
+          <Text style={[styles.textValue, {flex: 0}]}>Bạn có muốn xóa</Text>
         </Dialog.Title>
         <Dialog.Actions>
           <Button

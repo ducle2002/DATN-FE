@@ -20,14 +20,19 @@ import {flatten, map} from 'ramda';
 import {TMaintenanceHistory} from './services/material-asset.model';
 import HistoryItem from './components/history-item.component';
 import BottomContainer from '@/components/bottom-container.component';
-import AssetHistoryCreate from './components/asset-history-creat.component';
+import AssetHistoryCreate from './components/asset-history-create.component';
+// import Button from '@/components/button.component';
+import {AppStackParamsList} from '@/routes/app.stack';
 
 type Props = CompositeScreenProps<
   MaterialTopTabScreenProps<AssetDetailTabParamsList, 'MAINTENANCE_HISTORY'>,
-  StackScreenProps<MaterialAssetStackParamsList, 'DETAIL_TAB'>
+  CompositeScreenProps<
+    StackScreenProps<MaterialAssetStackParamsList, 'DETAIL_TAB'>,
+    StackScreenProps<AppStackParamsList, 'MATERIAL_ASSET_STACK'>
+  >
 >;
 
-const MaintenanceHistoryScreen = ({route}: Props) => {
+const MaintenanceHistoryScreen = ({route, navigation}: Props) => {
   const id = route.params.id;
   const {data, remove, refetch, status} = useMaintenanceHistory({assetId: id});
   const dataProvider = useMemo(
@@ -61,7 +66,17 @@ const MaintenanceHistoryScreen = ({route}: Props) => {
         }
       />
       <BottomContainer>
-        <AssetHistoryCreate assetId={id} />
+        <View>
+          <AssetHistoryCreate assetId={id} />
+          {/* <Button
+            onPress={() => {
+              navigation.navigate('WORK_MANAGEMENT', {
+                screen: 'CREATE_WORK',
+              });
+            }}>
+            Bảo trì
+          </Button> */}
+        </View>
       </BottomContainer>
     </View>
   );

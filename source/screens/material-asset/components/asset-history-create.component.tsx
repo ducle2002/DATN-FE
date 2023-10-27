@@ -66,7 +66,7 @@ const AssetHistoryCreate = ({assetId}: Props) => {
   return (
     <>
       <Button onPress={() => setIsVisible(true)} mode="contained">
-        Bảo trì
+        Ghi nhật ký
       </Button>
       <ReactNativeModal
         onBackdropPress={() => setIsVisible(false)}
