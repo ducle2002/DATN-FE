@@ -5,7 +5,7 @@ import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {useInfiniteQuery} from 'react-query';
 import VoteApi from '@/modules/vote/vote.service';
 import {useAppSelector} from '@/hooks/redux.hook';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {VoteStackParamsList} from '@/routes/vote.stack';
 import {RefreshControl} from 'react-native-gesture-handler';
 import VoteItem from './components/vote-item.component';
@@ -80,7 +80,9 @@ const VoteScreen = ({navigation}: Props) => {
   );
 
   const renderHeader = useCallback(
-    () => <MainHeader keywordChange={onKeywordChange} />,
+    (props: StackHeaderProps) => (
+      <MainHeader onKeywordChange={onKeywordChange} {...props} />
+    ),
     [onKeywordChange],
   );
 

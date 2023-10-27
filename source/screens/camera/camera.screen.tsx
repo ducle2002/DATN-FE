@@ -1,4 +1,11 @@
-import {Dimensions, Linking, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Linking,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 
 import ScannerView from '@/components/scanner-view';
@@ -18,10 +25,10 @@ const CameraScreen = ({route}: Props) => {
       Linking.canOpenURL(result).then(canOpen => {
         if (canOpen) {
           Linking.openURL(result);
+        } else {
+          setRes(result);
         }
       });
-
-      setRes(result);
     }
   };
   const isFocused = useIsFocused();
@@ -34,6 +41,7 @@ const CameraScreen = ({route}: Props) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={'dark-content'} />
       <ScannerView
         onScannedCallback={onScannedCallback}
         active={isFocused}

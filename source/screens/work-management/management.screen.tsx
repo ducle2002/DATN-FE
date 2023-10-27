@@ -8,7 +8,7 @@ import {
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import FilterWork from './components/filter';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {flatten, map} from 'ramda';
 import WorkItem from './components/work-item.component';
@@ -20,6 +20,7 @@ import {useWorkQuery} from './services/hook';
 import Icon from '@/components/icon.component';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {AppStackParamsList} from '@/routes/app.stack';
+import MainHeader from '@/components/main-header.component';
 
 type Props = CompositeScreenProps<
   StackScreenProps<WorkStackParamsList, 'MAIN_DRAWER'>,
@@ -71,9 +72,12 @@ const ManagementScreen = ({navigation}: Props) => {
 
   const [selectedFormId, selectFormId] = useState(formId[0].id);
 
+  const [keyword, setKeyword] = useState<string>();
+
   const {data, fetchNextPage, isLoading, remove, refetch} = useWorkQuery({
     selectedFormId: selectedFormId,
     selectedStatus: selectedStatus,
+    keyword: keyword,
   });
 
   const dataProvider = useMemo(
@@ -104,6 +108,17 @@ const ManagementScreen = ({navigation}: Props) => {
     remove();
     refetch();
   };
+
+  const renderHeader = useCallback((props: StackHeaderProps) => {
+    return <MainHeader onKeywordChange={kw => setKeyword(kw)} {...props} />;
+  }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      header: renderHeader,
+    });
+  }, [navigation, renderHeader]);
+
   return (
     <View style={styles.container}>
       <FilterWork

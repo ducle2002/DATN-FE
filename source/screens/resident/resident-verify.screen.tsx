@@ -17,7 +17,7 @@ type Props = StackScreenProps<AppStackParamsList, 'RESIDENT_STACK'>;
 
 const ResidentVerifyScreen = ({navigation}: Props) => {
   const [formId, setFormId] = useState(EResidentFormId.ALL);
-  const [keyword, setKeyword] = useState();
+  const [keyword, setKeyword] = useState<string>();
 
   const {fetchNextPage, data} = useResidentData({formId, keyword});
   const [resident, setResident] = useState<TResident>();
@@ -39,13 +39,13 @@ const ResidentVerifyScreen = ({navigation}: Props) => {
       },
       (_, dim) => {
         dim.width = width;
-        dim.height = 150;
+        dim.height = 100;
       },
     ),
   ).current;
 
   const renderHeader = (props: StackHeaderProps) => (
-    <MainHeader {...props} keywordChange={setKeyword} />
+    <MainHeader {...props} onKeywordChange={kw => setKeyword(kw)} />
   );
 
   useLayoutEffect(() => {
@@ -69,6 +69,7 @@ const ResidentVerifyScreen = ({navigation}: Props) => {
           paddingTop: 5,
           paddingBottom: 50,
         }}
+        forceNonDeterministicRendering={true}
       />
 
       <ResidentDetail

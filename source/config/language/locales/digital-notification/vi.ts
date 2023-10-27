@@ -9,6 +9,12 @@ const create = {
   no: 'Không được phép',
   create: 'Tạo thông báo',
   update: 'Cập nhật',
+  sendAll: 'Thông báo đến cho tất cả',
+  destination: 'Gửi thông báo đến',
+  other: 'Khác',
+  selectUrban: 'Khu đô thị',
+  building: 'Tòa nhà',
+  apartment: 'Căn hộ',
 };
 
 const detail = {

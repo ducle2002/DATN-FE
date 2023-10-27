@@ -10,7 +10,6 @@ import React, {useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {NotificationStackParamsList} from '@/routes/notification.stack';
 import {Controller, useForm} from 'react-hook-form';
-import {useAppSelector} from '@/hooks/redux.hook';
 import DropdownMenu from '@/components/dropdown-menu.component';
 import {
   TOrganizationUnit,
@@ -27,11 +26,17 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import language, {languageKeys} from '@/config/language/language';
 import {TImagePicker} from '@/utils/image-picker-handle';
 import AddImageButton from './components/add-image-button.component';
-import {useMutation, useQueryClient} from 'react-query';
+import {useMutation} from 'react-query';
 import {useToast} from 'react-native-toast-notifications';
 import BottomButton from '../../components/bottom-button.component';
-import DigitalNotiApi from './services/digital-noti.service';
 import UtilsApi from '@/services/utils.service';
+import {useAllOrganizationUnit} from '@/modules/organization/organization.hook';
+import {
+  DestinationNoticeContext,
+  useCreateOrUpdateNotification,
+} from './services/hook';
+import SelectDestination from './components/select-notification-destination.component';
+import {TDestination} from './services/digital-noti.model';
 
 type Props = StackScreenProps<NotificationStackParamsList, 'CREATE_SCREEN'>;
 
@@ -42,6 +47,13 @@ const notificationSchema = yup.object({
 
 const CreateNotificationScreen = ({navigation, route}: Props) => {
   const noti = route.params?.noti;
+
+  const organizationUnits =
+    useAllOrganizationUnit().data?.organizationUnits.filter(o =>
+      o.types?.includes(TOrganizationUnitType.Notification),
+    ) ?? [];
+
+  const [destination, setDestination] = useState<TDestination>();
 
   const {
     control,
@@ -57,74 +69,73 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
 
   const toast = useToast();
 
-  const {listOrganizations} = useAppSelector(state => state.organizationUnit);
-  const {tenantId} = useAppSelector(state => state.auth);
-
   const listOption: Array<TRadioItem> = [
     {value: true, label: language.t(languageKeys.digitalNoti.create.yes)},
     {value: false, label: language.t(languageKeys.digitalNoti.create.no)},
+  ];
+
+  const sendAllOptions = [
+    {
+      value: true,
+      label: language.t(languageKeys.digitalNoti.create.sendAll),
+    },
+    {
+      value: false,
+      label: language.t(languageKeys.digitalNoti.create.other),
+    },
   ];
 
   const [selectedOrganization, setSelectedOrganization] = useState<
     TOrganizationUnit | undefined
   >(
     !noti
-      ? listOrganizations[0]
-      : listOrganizations.find(
-          o => o.organizationUnitId === noti.organizationUnitId,
-        ),
+      ? organizationUnits[0]
+      : organizationUnits.find(o => o.id === noti.organizationUnitId),
   );
 
   const [isAllowComment, setAllowComment] = useState<boolean>(
     noti?.isAllowComment ?? false,
   );
+  const [sendAll, setSendAll] = useState(true);
+
   const [file, setFile] = useState<TImagePicker | undefined | string>(
     noti?.fileUrl,
   );
 
   const onSelected = (id: number) => {
     setSelectedOrganization(
-      listOrganizations[
-        listOrganizations.findIndex(o => o.organizationUnitId === id)
-      ],
+      organizationUnits[organizationUnits.findIndex(o => o.id === id)],
     );
   };
 
-  const queryClient = useQueryClient();
-
-  const {mutate: createOrUpdateNotification, status} = useMutation({
-    mutationFn: (params: any) =>
-      DigitalNotiApi.createOrUpdateRequest(params, {
-        'Abp.Tenantid': tenantId,
-      }),
-    onSuccess: () => {
-      queryClient.refetchQueries(['list-noti']);
-      toast.show(
-        language.t(
-          languageKeys.digitalNoti.toastNoti[
-            noti ? 'updateSuccess' : 'createSuccess'
-          ],
-        ),
-      );
-      navigation.navigate('MAIN_SCREEN');
-    },
-    onError: () => {
-      toast.show(
-        language.t(
-          languageKeys.digitalNoti.toastNoti[
-            noti ? 'updateFail' : 'createFail'
-          ],
-        ),
-      );
-    },
-  });
+  const {mutate: createOrUpdateNotification, status} =
+    useCreateOrUpdateNotification({
+      navigation: navigation,
+      noti: noti,
+    });
 
   const {mutate: uploadImage, status: uploadStatus} = useMutation({
     mutationFn: (params: any) => UtilsApi.uploadImagesRequest(params.files),
     onSuccess: (result, params) => {
+      let receiveAll = 0;
+      if (destination) {
+        if (destination.urbanId) {
+          receiveAll = 1;
+          if (destination.buildingId && destination.receiverGroupCode) {
+            receiveAll = 3;
+          } else if (!destination.receiverGroupCode) {
+            receiveAll = 2;
+          }
+        }
+      }
+
       createOrUpdateNotification({
         ...params.data,
         fileUrl: result[0],
+        receiveAll: receiveAll,
+        buildingId: destination?.buildingId,
+        urbanId: destination?.urbanId,
+        receiverGroupCode: destination?.receiverGroupCode?.toString(),
       });
     },
   });
@@ -138,23 +149,34 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
             ...data,
             isAllowComment,
             type: 2,
-            organizationUnitId: selectedOrganization?.organizationUnitId,
+            organizationUnitId: selectedOrganization?.id,
             state: 1,
-            receiveAll: 0,
-            receiverGroupCode: null,
           },
           files: [file],
         });
       } else {
+        let receiveAll = 0;
+        if (destination) {
+          if (destination.urbanId) {
+            receiveAll = 1;
+            if (destination.buildingId && destination.receiverGroupCode) {
+              receiveAll = 3;
+            } else if (!destination.receiverGroupCode) {
+              receiveAll = 2;
+            }
+          }
+        }
         createOrUpdateNotification({
           ...noti,
           ...data,
           isAllowComment,
           type: 2,
-          organizationUnitId: selectedOrganization?.organizationUnitId,
+          organizationUnitId: selectedOrganization?.id,
           state: 1,
-          receiveAll: 0,
-          receiverGroupCode: null,
+          receiveAll: receiveAll,
+          buildingId: destination?.buildingId,
+          urbanId: destination?.urbanId,
+          receiverGroupCode: destination?.receiverGroupCode?.toString(),
         });
       }
     } else {
@@ -172,20 +194,16 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
         <DropdownMenu
           onSelected={onSelected}
           options={[
-            ...listOrganizations
-              .filter(o =>
-                o.types?.includes(TOrganizationUnitType.Notification),
-              )
-              .map(o => ({
-                label: o.displayName,
-                id: o.organizationUnitId,
-              })),
+            ...organizationUnits.map(o => ({
+              label: o.displayName,
+              id: o.id,
+            })),
           ]}
           label={language.t(languageKeys.digitalNoti.create.department)}
+          selectedLabel={selectedOrganization?.displayName}
           placeholder={language.t(
             languageKeys.digitalNoti.create.selectDepartment,
           )}
-          selectedLabel={selectedOrganization?.displayName}
           labelStyle={styles.textLabel}
           itemLabelStyle={styles.textValue}
           inputContainer={styles.dataInput}
@@ -206,6 +224,35 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
           }}
         />
 
+        <RadioButtonGroup
+          onSelection={(value: boolean) => {
+            setSendAll(value);
+          }}
+          listOptions={sendAllOptions}
+          selectedOption={sendAllOptions[sendAll ? 0 : 1]}
+          label={language.t(languageKeys.digitalNoti.create.destination)}
+          labelStyle={styles.textLabel}
+          style={[styles.sectionContainer]}
+          contentContainer={{
+            justifyContent: 'space-around',
+          }}
+        />
+
+        {!sendAll && (
+          <View>
+            <DestinationNoticeContext.Provider
+              value={{
+                destination: destination,
+                setDestination: setDestination,
+              }}>
+              <SelectDestination
+                labelStyle={styles.textLabel}
+                itemLabelStyle={styles.textValue}
+                inputContainer={styles.dataInput}
+              />
+            </DestinationNoticeContext.Provider>
+          </View>
+        )}
         <View style={styles.sectionContainer}>
           <Controller
             control={control}
