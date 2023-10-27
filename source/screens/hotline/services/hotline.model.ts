@@ -11,5 +11,5 @@ export type THotline = {
 export type THotlineProperty = {
   name: string;
   phone: string;
-  note: string;
+  note?: string;
 };

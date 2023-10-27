@@ -33,6 +33,7 @@ import WorkManagementDrawer, {
   WorkStackParamsList,
 } from './work-management.stack';
 import {ERole} from '@/screens/role/service/role.model';
+import HotlineStack, {HotlineStackParamsList} from './hotline.stack';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -53,6 +54,7 @@ export type AppStackParamsList = {
   RESIDENT_STACK: undefined;
   OPERATING_STACK: NavigatorScreenParams<OperatingStackParamsList>;
   WORK_MANAGEMENT: NavigatorScreenParams<WorkStackParamsList>;
+  HOTLINE_STACK: NavigatorScreenParams<HotlineStackParamsList>;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -140,6 +142,7 @@ const AppStack = () => {
       />
       <Stack.Screen name="OPERATING_STACK" component={OperatingStack} />
       <Stack.Screen name={'SETTING_SCREEN'} component={SettingStack} />
+      <Stack.Screen name="HOTLINE_STACK" component={HotlineStack} />
     </Stack.Navigator>
   );
 };

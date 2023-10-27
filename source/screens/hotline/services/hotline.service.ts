@@ -7,7 +7,9 @@ class Hotline {
   endpoint = '/api/services/app/Hotline/';
 
   getAll = async (
-    params: TPagingParams,
+    params: TPagingParams & {
+      keyword?: string;
+    },
   ): Promise<{
     hotlines: THotline[];
     totalRecords: number;
@@ -22,3 +24,6 @@ class Hotline {
     };
   };
 }
+
+const HotlineService = new Hotline();
+export default HotlineService;
