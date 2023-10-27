@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import {TDepartment} from '@/modules/department/department.model';
 import {useAllAccountOnDepartment} from '@/modules/department/department.hook';
@@ -14,21 +14,23 @@ const Departments = ({departments}: Props) => {
 
   return (
     <View style={styles.container}>
-      {departments.map(d => (
-        <Pressable
-          style={[
-            styles.itemContainer,
-            {
-              backgroundColor:
-                selectedDepartment?.id === d.id ? '#f1f2f8' : 'white',
-            },
-          ]}
-          key={d.id}
-          onPress={() => setSelectedDepartment(d)}>
-          <Text style={styles.textLabel}>{d.displayName}</Text>
-          <Text style={styles.textCount}>{d.userCount} thành viên</Text>
-        </Pressable>
-      ))}
+      <ScrollView style={{height: 200}}>
+        {departments.map(d => (
+          <Pressable
+            style={[
+              styles.itemContainer,
+              {
+                backgroundColor:
+                  selectedDepartment?.id === d.id ? '#f1f2f8' : 'white',
+              },
+            ]}
+            key={d.id}
+            onPress={() => setSelectedDepartment(d)}>
+            <Text style={styles.textLabel}>{d.displayName}</Text>
+            <Text style={styles.textCount}>{d.userCount} thành viên</Text>
+          </Pressable>
+        ))}
+      </ScrollView>
 
       <AccountContainer
         accounts={accounts?.map(a => ({id: a.id, fullName: a.displayName}))}

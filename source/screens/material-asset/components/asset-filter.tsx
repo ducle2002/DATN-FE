@@ -41,6 +41,7 @@ const AssetFilter = ({isVisible, onBackdropPress = () => {}}: Props) => {
               style={styles.dropdownContainer}
               inputContainer={styles.dropdownInputContainer}
               labelContainerStyle={{flex: 0.5}}
+              useClear={true}
             />
             <DropdownMenuComponent
               label={language.t(
@@ -56,6 +57,7 @@ const AssetFilter = ({isVisible, onBackdropPress = () => {}}: Props) => {
               style={styles.dropdownContainer}
               inputContainer={styles.dropdownInputContainer}
               labelContainerStyle={{flex: 0.5}}
+              useClear={true}
             />
             <DropdownMenuComponent
               label={language.t(languageKeys.materialAsset.materialDetail.form)}
@@ -67,6 +69,7 @@ const AssetFilter = ({isVisible, onBackdropPress = () => {}}: Props) => {
               style={styles.dropdownContainer}
               inputContainer={styles.dropdownInputContainer}
               labelContainerStyle={{flex: 0.5}}
+              useClear={true}
             />
             <DropdownMenuComponent
               label={language.t(
@@ -82,6 +85,7 @@ const AssetFilter = ({isVisible, onBackdropPress = () => {}}: Props) => {
               style={styles.dropdownContainer}
               inputContainer={styles.dropdownInputContainer}
               labelContainerStyle={{flex: 0.5}}
+              useClear={true}
             />
           </View>
           <BottomContainer>

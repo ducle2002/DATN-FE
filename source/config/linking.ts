@@ -32,6 +32,13 @@ const config: {
         },
       },
     },
+    MATERIAL_ASSET_STACK: {
+      screens: {
+        DETAIL_TAB: {
+          path: 'asset/detail',
+        },
+      },
+    },
   },
 };
 

@@ -1,5 +1,11 @@
 import {TPagingParams} from 'types/type';
 
+export type TDestination = {
+  buildingId?: number;
+  urbanId?: number;
+  receiverGroupCode?: string;
+  receiveAll?: number;
+};
 export type TDigitalNoti = {
   name: string;
   data: string;

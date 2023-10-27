@@ -8,16 +8,18 @@ import {
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import FilterWork from './components/filter';
 import {WorkStackParamsList} from '@/routes/work-management.stack';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {flatten, map} from 'ramda';
 import WorkItem from './components/work-item.component';
 import {EWorkFormID, EWorkStatus, TWork} from './services/work.model';
-import CreateWorkComponent from './components/create-work.component';
+import {useWorkQuery} from './services/hook';
+import WorkHeader from './components/work-header.component';
+import BottomContainer from '@/components/bottom-container.component';
+import language, {languageKeys} from '@/config/language/language';
+import Button from '@/components/button.component';
 import {checkPermission} from '@/utils/utils';
 import {useAppSelector} from '@/hooks/redux.hook';
-import {useWorkQuery} from './services/hook';
-import Icon from '@/components/icon.component';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {AppStackParamsList} from '@/routes/app.stack';
 
@@ -27,25 +29,7 @@ type Props = CompositeScreenProps<
 >;
 
 const ManagementScreen = ({navigation}: Props) => {
-  const renderHeaderRight = useCallback(
-    () => (
-      <Icon
-        type="MaterialCommunityIcons"
-        name="account-cog"
-        size={30}
-        color="#2B5783"
-        style={{position: 'absolute', right: 0}}
-        onPress={() => navigation.navigate('SETTING_SCREEN')}
-      />
-    ),
-    [navigation],
-  );
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: !navigation.canGoBack() ? renderHeaderRight : undefined,
-    });
-  }, [navigation, renderHeaderRight]);
-
+  const {grantedPermissions} = useAppSelector(state => state.config);
   const status = useMemo(
     () => [
       {id: undefined, label: 'All'},
@@ -71,9 +55,12 @@ const ManagementScreen = ({navigation}: Props) => {
 
   const [selectedFormId, selectFormId] = useState(formId[0].id);
 
+  const [keyword, setKeyword] = useState<string>();
+
   const {data, fetchNextPage, isLoading, remove, refetch} = useWorkQuery({
     selectedFormId: selectedFormId,
     selectedStatus: selectedStatus,
+    keyword: keyword,
   });
 
   const dataProvider = useMemo(
@@ -98,12 +85,21 @@ const ManagementScreen = ({navigation}: Props) => {
     />
   );
 
-  const {grantedPermissions} = useAppSelector(state => state.config);
-
   const onRefresh = () => {
     remove();
     refetch();
   };
+
+  const renderHeader = useCallback((props: StackHeaderProps) => {
+    return <WorkHeader onKeywordChange={kw => setKeyword(kw)} {...props} />;
+  }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      header: renderHeader,
+    });
+  }, [navigation, renderHeader]);
+
   return (
     <View style={styles.container}>
       <FilterWork
@@ -125,11 +121,27 @@ const ManagementScreen = ({navigation}: Props) => {
           <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
         }
       />
-      {checkPermission(grantedPermissions, [
-        'Pages.Operations.TaskManagement.Create',
-      ]) && (
-        <CreateWorkComponent status={selectedStatus} formId={selectedFormId} />
-      )}
+      <BottomContainer>
+        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+          {checkPermission(grantedPermissions, [
+            'Pages.Operations.TaskManagement.Create',
+          ]) && (
+            <Button
+              mode="contained"
+              onPress={() => {
+                navigation.navigate('CREATE_WORK');
+              }}>
+              {language.t(languageKeys.shared.button.create)}
+            </Button>
+          )}
+          <Button
+            icon={'camera'}
+            mode="outlined"
+            onPress={() => navigation.navigate('CAMERA_SCREEN')}>
+            Quét mã QR
+          </Button>
+        </View>
+      </BottomContainer>
     </View>
   );
 };

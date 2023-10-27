@@ -1,21 +1,20 @@
 import {TouchableOpacity, View} from 'react-native';
 import React from 'react';
+import LinearGradientHeader from '@/components/linear-gradient-header.component';
+import {StackHeaderProps} from '@react-navigation/stack';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import Icon from '@/components/icon.component';
 import CTextInput from '@/components/text-input.component';
-import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import LinearGradientHeader from './linear-gradient-header.component';
-import {StackHeaderProps} from '@react-navigation/stack';
 import language, {languageKeys} from '@/config/language/language';
+import {useAppSelector} from '@/hooks/redux.hook';
+import {ERole} from '@/screens/role/service/role.model';
 
 type Props = StackHeaderProps & {
-  onKeywordChange?: (kw: string) => void;
+  onKeywordChange: (kw: string) => void;
   placeholder?: string;
 };
-const MainHeader = ({
-  onKeywordChange = () => {},
-  placeholder,
-  ...props
-}: Props) => {
+
+const WorkHeader = ({onKeywordChange, placeholder, ...props}: Props) => {
   const {handleSubmit, control, reset} = useForm({
     defaultValues: {keyword: ''},
   });
@@ -26,7 +25,7 @@ const MainHeader = ({
     reset();
     onKeywordChange('');
   };
-
+  const {role} = useAppSelector(state => state.role);
   return (
     <LinearGradientHeader headerProps={props}>
       <View
@@ -34,23 +33,40 @@ const MainHeader = ({
           flexDirection: 'row',
           width: '100%',
           alignItems: 'center',
+          justifyContent: 'space-between',
         }}>
-        <TouchableOpacity
-          style={{
-            padding: 5,
-          }}
-          onPress={() => props.navigation.goBack()}>
-          <Icon type="Ionicons" name="chevron-back" size={30} color={'white'} />
-        </TouchableOpacity>
+        {props.navigation.canGoBack() ? (
+          <TouchableOpacity
+            style={{
+              padding: 5,
+            }}
+            onPress={() => props.navigation.goBack()}>
+            <Icon
+              type="Ionicons"
+              name="chevron-back"
+              size={30}
+              color={'white'}
+            />
+          </TouchableOpacity>
+        ) : (
+          <View
+            style={{
+              padding: 10,
+              width: 35,
+              height: 35,
+            }}
+          />
+        )}
         <Controller
           control={control}
           name="keyword"
           render={({field: {value, onChange}}) => (
             <View
               style={{
-                flex: 1,
+                width: '70%',
                 flexDirection: 'row',
                 alignItems: 'center',
+                justifyContent: 'space-around',
               }}>
               <Icon
                 name="search"
@@ -78,16 +94,33 @@ const MainHeader = ({
             </View>
           )}
         />
-        <View
-          style={{
-            padding: 10,
-            width: 35,
-            height: 35,
-          }}
-        />
+        {role?.type !== ERole.ADMINISTRATOR ? (
+          <TouchableOpacity
+            style={{
+              padding: 5,
+            }}>
+            <Icon
+              type="Ionicons"
+              name="settings"
+              size={30}
+              color={'white'}
+              onPress={() => {
+                props.navigation.navigate('SETTING_SCREEN');
+              }}
+            />
+          </TouchableOpacity>
+        ) : (
+          <View
+            style={{
+              padding: 10,
+              width: 35,
+              height: 35,
+            }}
+          />
+        )}
       </View>
     </LinearGradientHeader>
   );
 };
 
-export default MainHeader;
+export default WorkHeader;

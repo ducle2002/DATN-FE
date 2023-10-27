@@ -12,7 +12,7 @@ import ReactNativeModal from 'react-native-modal';
 import Button from '@/components/button.component';
 import {useAllDepartment} from '@/modules/department/department.hook';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
-import {useAllOrganizationUnit} from '@/modules/organization/organization.hook';
+import {useOrganizationUnitTree} from '@/modules/organization/organization.hook';
 import OrganizationUnit from '@/components/organization-unit.component';
 type Props = {
   label: string;
@@ -43,7 +43,7 @@ const PersonnelPicker = ({label, containerStyle}: Props) => {
   const [typeStructure, setTypeStructure] = useState(options[0].id);
 
   const departments = useAllDepartment();
-  const organizationUnits = useAllOrganizationUnit();
+  const organizationUnits = useOrganizationUnitTree();
 
   return (
     <>

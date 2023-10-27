@@ -11,6 +11,7 @@ class WorkManagementService extends BaseService {
       status: number;
       formId: number;
       workTypeId: number;
+      keyword: string;
     },
   ): Promise<{
     works: Array<TWork>;

@@ -8,7 +8,7 @@ export type TWork = {
   id?: number;
   imageUrls: Array<String>;
   note: string;
-  status?: EWorkStatus;
+  status: EWorkStatus;
   title?: string;
   tenantId?: number;
   userId?: number;

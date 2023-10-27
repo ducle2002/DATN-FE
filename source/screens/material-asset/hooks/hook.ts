@@ -16,6 +16,7 @@ import {
 import AssetDetailService from '../services/asset-detail.service';
 import SystemCodeService from '../services/system-code.service';
 import AssetGroupService from '../services/asset-group.service';
+import MaintenanceHistoryService from '../services/maintenance-history.service';
 
 export type TAssetFilter = {
   keyword?: string;
@@ -317,4 +318,28 @@ export const useAssetById = (id?: number) => {
     staleTime: 60000,
   });
   return data;
+};
+
+export const useMaintenanceHistory = ({assetId}: {assetId: number}) => {
+  const query = useInfiniteQuery({
+    queryKey: ['asset-history', assetId],
+    queryFn: ({pageParam}) =>
+      MaintenanceHistoryService.getAll({
+        ...pageParam,
+        taiSanId: assetId,
+      }),
+    getNextPageParam: (lastPage, allPages) => {
+      const skipCount = allPages.length * 20;
+      return (allPages.length - 1) * 20 + lastPage.history.length !==
+        lastPage.totalRecords
+        ? {
+            skipCount: skipCount,
+            maxResultCount: 20,
+          }
+        : undefined;
+    },
+    staleTime: 0,
+  });
+
+  return query;
 };

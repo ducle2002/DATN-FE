@@ -1,4 +1,11 @@
-import {Dimensions, Linking, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Linking,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 
 import ScannerView from '@/components/scanner-view';
@@ -9,7 +16,15 @@ import {Chip} from 'react-native-paper';
 const {width} = Dimensions.get('screen');
 type Props = StackScreenProps<AppStackParamsList, 'CAMERA_SCREEN'>;
 
-const CameraScreen = ({route}: Props) => {
+const CameraScreen = ({route, navigation}: Props) => {
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      headerTransparent: true,
+      headerTitle: '',
+    });
+  }, [navigation]);
+
   const isReturnPhoto = route.params?.isReturnPhoto;
   const [res, setRes] = useState<string>();
 
@@ -18,10 +33,10 @@ const CameraScreen = ({route}: Props) => {
       Linking.canOpenURL(result).then(canOpen => {
         if (canOpen) {
           Linking.openURL(result);
+        } else {
+          setRes(result);
         }
       });
-
-      setRes(result);
     }
   };
   const isFocused = useIsFocused();
@@ -34,6 +49,7 @@ const CameraScreen = ({route}: Props) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={'dark-content'} />
       <ScannerView
         onScannedCallback={onScannedCallback}
         active={isFocused}
