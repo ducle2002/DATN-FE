@@ -1,6 +1,12 @@
-import {FlatList, ListRenderItem, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  ListRenderItem,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useMemo} from 'react';
-import {useQuery} from 'react-query';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
 import {
@@ -14,7 +20,6 @@ import {flatten, map} from 'ramda';
 import {TMaintenanceHistory} from './services/material-asset.model';
 import HistoryItem from './components/history-item.component';
 import BottomContainer from '@/components/bottom-container.component';
-import Button from '@/components/button.component';
 import AssetHistoryCreate from './components/asset-history-creat.component';
 
 type Props = CompositeScreenProps<
@@ -24,7 +29,7 @@ type Props = CompositeScreenProps<
 
 const MaintenanceHistoryScreen = ({route}: Props) => {
   const id = route.params.id;
-  const {data} = useMaintenanceHistory({assetId: id});
+  const {data, remove, refetch, status} = useMaintenanceHistory({assetId: id});
   const dataProvider = useMemo(
     () =>
       dataProviderMaker(
@@ -36,6 +41,11 @@ const MaintenanceHistoryScreen = ({route}: Props) => {
   const renderItem: ListRenderItem<TMaintenanceHistory> = ({item}) => {
     return <HistoryItem {...{item}} />;
   };
+  const onRefresh = () => {
+    remove();
+    refetch();
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -43,9 +53,15 @@ const MaintenanceHistoryScreen = ({route}: Props) => {
         data={dataProvider.getAllData()}
         renderItem={renderItem}
         ListEmptyComponent={<Text>Không có lịch sử</Text>}
+        refreshControl={
+          <RefreshControl
+            refreshing={status === 'loading'}
+            onRefresh={onRefresh}
+          />
+        }
       />
       <BottomContainer>
-        <AssetHistoryCreate />
+        <AssetHistoryCreate assetId={id} />
       </BottomContainer>
     </View>
   );

@@ -16,7 +16,7 @@ import {
 import AssetDetailService from '../services/asset-detail.service';
 import SystemCodeService from '../services/system-code.service';
 import AssetGroupService from '../services/asset-group.service';
-import MaintenanceHistoryService from '../services/mantenance-history.service';
+import MaintenanceHistoryService from '../services/maintenance-history.service';
 
 export type TAssetFilter = {
   keyword?: string;

@@ -11,7 +11,7 @@ export const useAllDepartment = () => {
 };
 
 export const useAllAccountOnDepartment = ({id}: {id?: number}) => {
-  const {data} = useQuery({
+  const query = useQuery({
     queryKey: ['account-department', id],
     queryFn: () =>
       DepartmentServiceApi.getAllPersonnelAccount({
@@ -23,5 +23,5 @@ export const useAllAccountOnDepartment = ({id}: {id?: number}) => {
     cacheTime: 300000,
   });
 
-  return {accounts: data?.accounts ?? []};
+  return {...query, accounts: query.data?.accounts ?? []};
 };
