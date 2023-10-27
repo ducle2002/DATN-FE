@@ -37,10 +37,7 @@ const ItemFeedback = forwardRef(function (
           flexDirection: 'row',
           paddingRight: 8,
         }}>
-        {item.state === 1 ||
-        item.state === 6 ||
-        item.state === 7 ||
-        item.state === 8 ? (
+        {item.state === 1 ? (
           <Pressable onPress={onAssign}>
             <View style={styles.btnSwipe}>
               <Icon
@@ -55,10 +52,7 @@ const ItemFeedback = forwardRef(function (
             </View>
           </Pressable>
         ) : null}
-        {item.state === 1 ||
-        item.state === 6 ||
-        item.state === 7 ||
-        item.state === 8 ? (
+        {item.state === 1 ? (
           <Pressable onPress={onConfirm}>
             <View style={styles.btnSwipe}>
               <Icon

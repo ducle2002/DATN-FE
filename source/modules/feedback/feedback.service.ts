@@ -10,7 +10,7 @@ import {
 } from './feedback.model';
 
 class FeedbackService {
-  endpoint = '/api/services/app/AdminGovernmentReflect/';
+  endpoint = '/api/services/app/AdminCitizenReflect/';
   endpointUser = '/api/services/app/UserCitizenReflect/';
 
   getFeedback = async (params: {
@@ -18,7 +18,7 @@ class FeedbackService {
     skipCount: number;
     KeyWord?: string;
   }): Promise<TFeedbackPage> => {
-    const url = HOST_SERVER + this.endpoint + 'GetAllGovernmentReflect';
+    const url = HOST_SERVER + this.endpoint + 'GetAllCitizenReflect';
     const {
       data: {result},
     } = await axiosClient.get(url, {
@@ -72,7 +72,7 @@ class FeedbackService {
   };
 
   deleteFeedback = async (data: {id: number}): Promise<any> => {
-    const url = HOST_SERVER + this.endpoint + 'DeleteGovernmentReflect';
+    const url = HOST_SERVER + this.endpoint + 'DeleteCitizenReflect';
     const {
       data: {result},
     } = await axiosClient.delete(url, {
@@ -106,13 +106,15 @@ class FeedbackService {
     return result;
   };
   createFeedback = async (data: {
-    data: string;
+    data?: string;
     fileUrl?: string;
-    handleOrganizationUnitId?: number;
-    handleUserId?: number;
-    name: string;
+    urbanId: number;
+    buildingId?: number;
+    addressFeeder?: string;
+    fullName?: string;
+    name?: string;
   }) => {
-    const url = HOST_SERVER + this.endpoint + 'CreateOrUpdateGovernmentReflect';
+    const url = HOST_SERVER + this.endpoint + 'CreateReflect';
     const {
       data: {result},
     } = await axiosClient.post(url, data);
@@ -124,7 +126,7 @@ class FeedbackService {
     fileOfNote?: string;
     id: number;
   }) => {
-    const url = HOST_SERVER + this.endpoint + 'UpdateStateGovernmentReflect';
+    const url = HOST_SERVER + this.endpoint + 'UpdateStateCitizenReflect';
     const {
       data: {result},
     } = await axiosClient.put(url, data);

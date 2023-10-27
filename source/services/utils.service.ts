@@ -2,6 +2,7 @@ import axiosClient from '@/utils/axios.client';
 import {compressImageHandle} from '@/utils/compress-handle';
 import {TImagePicker} from '@/utils/image-picker-handle';
 import {HOST_SERVER} from '@env';
+import {IBuilding, IPaginatedItems, IUrban, TGetAllQuery} from './utils.model';
 
 export class UtilsService {
   uploadImagesRequest = async (files: Array<TImagePicker>) => {
@@ -41,6 +42,28 @@ export class UtilsService {
 
     return response.data.result.data;
   };
+
+  public async getAllUrban(
+    query?: TGetAllQuery,
+  ): Promise<IPaginatedItems<IUrban>> {
+    const url = HOST_SERVER + '/api/services/app/Urban/GetAllUrbanByUser';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: query});
+
+    return result;
+  }
+
+  public async getAllBuilding(
+    query?: TGetAllQuery | undefined,
+  ): Promise<IPaginatedItems<IBuilding>> {
+    const url = HOST_SERVER + '/api/services/app/Building/GetAllBuildingByUser';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: query});
+
+    return result;
+  }
 }
 
 const UtilsApi = new UtilsService();

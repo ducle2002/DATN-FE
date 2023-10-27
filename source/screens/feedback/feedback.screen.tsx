@@ -34,7 +34,7 @@ const FeedbackScreen = (props: Props) => {
   const {t} = useTranslation();
   let row: Array<any> = [];
   let prevOpenedRow: any;
-  const [status, setStatus] = useState(2);
+  const [status, setStatus] = useState(10);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [showDetail, setShowDetail] = useState<{
     data?: TFeedback;
@@ -64,33 +64,38 @@ const FeedbackScreen = (props: Props) => {
   };
   const statusBtnArr = [
     {
-      title: t(languageKeys.feedback.main.pending),
-      type: 2,
+      title: t(languageKeys.feedback.main.all),
+      type: 10,
       layout: 3,
     },
     {
-      title: t(languageKeys.feedback.main.assigned),
-      type: 3,
+      title: t(languageKeys.feedback.main.pending),
+      type: 11,
       layout: 3,
     },
+    // {
+    //   title: t(languageKeys.feedback.main.assigned),
+    //   type: 3,
+    //   layout: 3,
+    // },
     {
       title: t(languageKeys.feedback.main.handling),
-      type: 4,
+      type: 12,
       layout: 3,
     },
     {
       title: t(languageKeys.feedback.main.Finished),
-      type: 6,
+      type: 14,
       layout: 3,
     },
     {
       title: t(languageKeys.feedback.main.Rated),
-      type: 7,
+      type: 15,
       layout: 3,
     },
     {
       title: t(languageKeys.feedback.main.declined),
-      type: 5,
+      type: 13,
       layout: 3,
     },
   ];
@@ -117,10 +122,11 @@ const FeedbackScreen = (props: Props) => {
         return null;
       },
     });
+
   useEffect(() => {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, searchQuery]);
+  }, [searchQuery]);
 
   const {mutate: deleteFeedback, isLoading: isLoadingDelete} = useMutation({
     mutationKey: ['assignFeedback'],

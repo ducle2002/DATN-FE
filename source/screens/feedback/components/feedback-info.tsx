@@ -14,6 +14,7 @@ import moment from 'moment';
 import ImagesGridGallery from '@/components/images-grid-gallery';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
+import {checkValidJsonParse} from '@/utils/valid';
 
 const {width, height} = Dimensions.get('screen');
 type Props = {
@@ -120,7 +121,13 @@ const FeedbackInfo = ({
                 alignItems: 'center',
               }}>
               <View style={{width: (width * 3) / 4}}>
-                <ImagesGridGallery images={data.fileUrl?.split(',')} />
+                <ImagesGridGallery
+                  images={
+                    checkValidJsonParse(data.fileUrl)
+                      ? JSON.parse(data.fileUrl)
+                      : data.fileUrl?.split(',')
+                  }
+                />
               </View>
             </View>
           </View>

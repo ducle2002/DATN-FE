@@ -1,5 +1,6 @@
 const main = {
   title: 'Language setting',
+  all: 'Tất cả',
   pending: 'Phản ánh mới',
   handling: 'Đang xử lý',
   assigned: 'Đã phân công',

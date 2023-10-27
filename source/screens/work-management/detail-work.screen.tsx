@@ -72,7 +72,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
             WorkId: work?.id,
             WorkTurnId: selectedTurnWork?.id,
             userId:
-              route.params.formId !== EWorkFormID.FOLLOW
+              route.params.formId === EWorkFormID.RECEIVED
                 ? userInfo.userId
                 : undefined,
             maxResultCount: 1000,
@@ -291,7 +291,8 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
           {work?.listWorkDetail?.map(
             w =>
               work.id &&
-              (route.params.formId === EWorkFormID.FOLLOW ? (
+              (route.params.formId === EWorkFormID.FOLLOW ||
+              route.params.formId === EWorkFormID.ASSIGNED ? (
                 <SubTaskCheckItem
                   disable={disableAll}
                   item={w}
@@ -363,7 +364,7 @@ const DetailWorkScreen = ({route, navigation}: Props) => {
           })
         }
       /> */}
-      {route.params.formId !== EWorkFormID.FOLLOW && (
+      {route.params.formId === EWorkFormID.RECEIVED && (
         <BottomContainer>
           <View
             style={{

@@ -14,6 +14,7 @@ import {
   SafeAreaView,
   Modal,
   TouchableWithoutFeedback,
+  TextInput,
 } from 'react-native';
 // import Textarea from 'react-native-textarea';
 import {useTranslation} from 'react-i18next';
@@ -23,7 +24,6 @@ import {NavigationProp} from '@react-navigation/native';
 import {FeedbackStackParamsList} from '@/routes/feedback.stack';
 import {StackNavigationProp} from '@react-navigation/stack';
 import ModalPickerImage, {TImage} from './components/choose-image';
-import {TextInput} from 'react-native-gesture-handler';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import FeedbackApi from '@/modules/feedback/feedback.service';
 import {TOrganizationUnitUser} from '@/modules/feedback/feedback.model';
@@ -31,6 +31,8 @@ import moment from 'moment';
 import {useToast} from 'react-native-toast-notifications';
 import LoadingComponent from '@/components/loading';
 import UtilsApi from '@/services/utils.service';
+import {Controller, useForm} from 'react-hook-form';
+import SelectWithModal from './components/select-with-modal';
 
 const {width, height} = Dimensions.get('screen');
 type screenNavigationProp = StackNavigationProp<
@@ -43,52 +45,34 @@ type Props = {
 };
 const CreateFeedBackScreen = (props: Props) => {
   const toast = useToast();
+  const language = useTranslation();
   const queryClient = useQueryClient();
   const [visibleChooseImg, setVisibleChooseImg] = useState(false);
-  const language = useTranslation();
-  const {data: listUnitOrg, isLoading: isLoadingDepartment} = useQuery({
-    queryKey: ['listDepartment'],
-    queryFn: () => FeedbackApi.GetAllOrganizationUnitCitizenReflect({}),
+
+  const {control, handleSubmit, watch, setValue, getValues} = useForm({
+    mode: 'onChange',
+    resolver: undefined,
   });
-
-  const [department, setDepartment] = useState(
-    listUnitOrg && listUnitOrg?.length <= 1 ? listUnitOrg[0] : null,
-  );
-  const [staff, setStaff] = useState<TOrganizationUnitUser | null>(null);
-
-  const {
-    data: ListOrganizationUnitUser,
-    refetch,
-    isLoading: isLoadingStaff,
-  } = useQuery({
-    queryKey: ['ListOrganizationUnitUser'],
+  const [selectUrban, setSelectUrban] = useState();
+  const {data: listUrban} = useQuery({
+    queryKey: ['feedback/create/getUrban'],
+    queryFn: () => UtilsApi.getAllUrban(),
+  });
+  const {data: listBuilding} = useQuery({
+    queryKey: ['feedback/create/building', selectUrban],
     queryFn: () =>
-      FeedbackApi.GetOrganizationUnitUsers({
-        id: department?.organizationUnitId ?? null,
+      UtilsApi.getAllBuilding({
+        urbanId: selectUrban,
       }),
-  });
-  useEffect(() => {
-    refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [department]);
-  const [visible, setVisible] = useState(0);
-  //   const {createSuccess, isFetchingUnProcess} = useSelector(
-  //     store => store.getAllFeedBack,
-  //   );
-  const [data, setData] = React.useState<{
-    content: string;
-    file: TImage[] | null;
-  }>({
-    content: '',
-    file: null,
   });
 
   const deleteImage = (image: TImage) => {
-    if (data.file?.length) {
-      setData({
-        ...data,
-        file: data.file.filter(i => i.uri !== image.uri),
-      });
+    const oldData = getValues('fileUrl');
+    if (oldData.length) {
+      setValue(
+        'fileUrl',
+        oldData.filter((i: any) => i.uri !== image.uri),
+      );
     }
   };
   const cleanupSingleImage = (i: any) => {
@@ -100,27 +84,33 @@ const CreateFeedBackScreen = (props: Props) => {
         console.log(e);
       });
   };
-  const createWithImg = (images: any[]) => {
-    UtilsApi.uploadImagesRequest(images).then((res: any) => {
-      createFeedback(JSON.stringify(res));
+  const createWithImg = (data: any) => {
+    UtilsApi.uploadImagesRequest(data.fileUrl).then((res: any) => {
+      createFeedback({
+        fileUrl: JSON.stringify(res),
+        data: data,
+      });
     });
   };
   const {mutate: createFeedback, isLoading} = useMutation({
     mutationKey: ['createFeedback'],
-    mutationFn: (fileURL?: string) =>
+    mutationFn: ({fileUrl, data}: {fileUrl?: string; data?: any}) =>
       FeedbackApi.createFeedback({
-        data: data.content,
-        fileUrl: fileURL,
-        handleOrganizationUnitId: department?.organizationUnitId,
-        handleUserId: staff?.id,
-        name: moment().toISOString(),
+        data: data.data,
+        fileUrl: fileUrl,
+        urbanId: data.urbanId,
+        buildingId: data.buildingId,
+        addressFeeder: data.addressFeeder,
+        fullName: data.data,
+        // name: moment().toISOString(),
       }),
     onSuccess: res => {
       toast.show('Tạo phản ánh thành công', {
         duration: 1000,
         type: 'success',
       });
-      queryClient.refetchQueries({queryKey: ['feedback', 3]});
+      queryClient.refetchQueries({queryKey: ['feedback', 10]});
+      queryClient.refetchQueries({queryKey: ['feedback', 11]});
       props.navigation.goBack();
     },
     onError: err => {
@@ -131,6 +121,16 @@ const CreateFeedBackScreen = (props: Props) => {
       });
     },
   });
+  const onSubmit = (data: any) => {
+    if (data.fileUrl && data.fileUrl.length > 0) {
+      createWithImg(data);
+    } else {
+      createFeedback({
+        fileUrl: undefined,
+        data: data,
+      });
+    }
+  };
   return (
     <SafeAreaView style={{flex: 1}}>
       <Pressable onPress={Keyboard.dismiss} style={styles.modal}>
@@ -161,300 +161,225 @@ const CreateFeedBackScreen = (props: Props) => {
             name="chevron-back-outline"
           />
         </View>
-
-        <View style={styles.containerFeedbackGroup}>
-          <Text style={styles.labelFeedbackGroup}>{'Khu đô thị (*)'}</Text>
-          <TouchableOpacity
-            disabled={!listUnitOrg || listUnitOrg?.length <= 1}
-            onPress={() => {
-              setVisible(1);
-            }}
-            style={styles.comboBoxFeedbackGroup}>
-            <Text style={styles.txtLabelModalSolid}>
-              {department?.name ?? 'Chọn Khu đô thị'}
-            </Text>
-            <Icon
-              type="Ionicons"
-              name="chevron-down-outline"
-              color="#333333"
-              size={24}
-            />
-          </TouchableOpacity>
-          {department?.description ? (
-            <Text style={styles.txtDescriptFeedbackGroup}>
-              {`(*) ${department?.description}`}
-            </Text>
-          ) : null}
-        </View>
-        <View style={styles.containerFeedbackGroup}>
-          <Text style={styles.labelFeedbackGroup}>{'Tòa nhà'}</Text>
-          <TouchableOpacity
-            disabled={!listUnitOrg || listUnitOrg?.length <= 1}
-            onPress={() => {
-              setVisible(2);
-            }}
-            style={styles.comboBoxFeedbackGroup}>
-            <Text style={styles.txtLabelModalSolid}>
-              {staff?.fullName ?? 'Chọn tòa nhà'}
-            </Text>
-            <Icon
-              type="Ionicons"
-              name="chevron-down-outline"
-              color="#333333"
-              size={24}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.labelContentFeedback}>
-          <Text style={styles.txtLabelModalSolid}>{'Nội dung'}</Text>
-        </View>
-        <View style={styles.textareaContainer}>
-          <TextInput
-            style={styles.textarea}
-            onChangeText={(text: string) => {
-              setData({
-                ...data,
-                content: text,
-              });
-            }}
-            defaultValue={data.content}
-            multiline={true}
-            maxLength={1000}
-            placeholder={'Nhập nội dung phản ánh'}
-            placeholderTextColor={'#c7c7c7'}
-            underlineColorAndroid={'transparent'}
-          />
-          <Text style={styles.txtArea}>{data.content.length}/1000</Text>
-        </View>
-        <View
-          style={{
-            alignItems: 'flex-start',
-            width: '100%',
-            paddingHorizontal: 16,
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: height * 0.2,
           }}>
-          <Text style={[styles.txtLabelModalSolid, {paddingVertical: 20}]}>
-            {'Đính kèm ảnh'}
-          </Text>
-          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            {data.file?.length && data.file?.length > 0
-              ? data.file.map((img, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={{marginEnd: 16, marginBottom: 10}}>
-                    <Pressable
-                      onPress={() => {
-                        cleanupSingleImage(img);
-                      }}
-                      style={styles.btnDelImg}>
-                      <Icon
-                        type="Ionicons"
-                        name="remove-circle"
-                        size={width * 0.06}
-                        color="#c1121f"
-                      />
-                    </Pressable>
-
-                    <Image source={{uri: img?.uri}} style={styles.imgPreview} />
-                  </TouchableOpacity>
-                ))
-              : null}
-            {data.file?.length && data.file?.length >= 5 ? null : (
-              <Pressable
-                onPress={() => {
-                  setVisibleChooseImg(true);
+          <Controller
+            control={control}
+            name="urbanId"
+            render={({field: {value, onChange}}) => (
+              <SelectWithModal
+                disable={!listUrban?.data || listUrban?.data?.length <= 1}
+                options={
+                  listUrban?.data
+                    ? listUrban?.data.map(el => ({
+                        label: el.displayName,
+                        value: el.id,
+                      }))
+                    : []
+                }
+                placeHolder="Chọn khu đô thị (*)"
+                title="Khu đô thị (*)"
+                value={value}
+                onChange={(_v: any) => {
+                  onChange(_v);
+                  setSelectUrban(_v);
                 }}
-                style={styles.uploadImgIcon}>
-                <Icon
-                  type="Ionicons"
-                  name="images"
-                  size={width * 0.12}
-                  color="#333"
-                />
-              </Pressable>
+              />
             )}
+          />
+          <Controller
+            control={control}
+            name="buildingId"
+            render={({field: {value, onChange}}) => (
+              <SelectWithModal
+                disable={
+                  !listBuilding?.data ||
+                  listBuilding?.data?.length <= 1 ||
+                  !selectUrban
+                }
+                options={
+                  listBuilding?.data
+                    ? listBuilding?.data?.map(el => ({
+                        label: el.displayName,
+                        value: el.id,
+                      }))
+                    : []
+                }
+                placeHolder="Chọn tòa nhà"
+                title="Tòa nhà"
+                value={value}
+                onChange={onChange}
+              />
+            )}
+          />
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'flex-start',
+              marginTop: 4,
+              paddingHorizontal: 16,
+            }}>
+            <Text
+              style={{
+                fontSize: 13,
+                fontWeight: '400',
+                color: '#BDBDBD',
+              }}>
+              {'Họ và tên'}
+            </Text>
           </View>
-        </View>
+          <Controller
+            control={control}
+            name="fullName"
+            render={({field: {value, onChange}}) => (
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(text: string) => {
+                    onChange(text);
+                  }}
+                  value={value}
+                  placeholder={'Nhập họ và tên'}
+                  placeholderTextColor={'#c7c7c7'}
+                  underlineColorAndroid={'transparent'}
+                />
+              </View>
+            )}
+          />
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'flex-start',
+              marginTop: 12,
+              paddingHorizontal: 16,
+            }}>
+            <Text
+              style={{
+                fontSize: 13,
+                fontWeight: '400',
+                color: '#BDBDBD',
+              }}>
+              {'Địa chỉ'}
+            </Text>
+          </View>
+          <Controller
+            control={control}
+            name="addressFeeder"
+            render={({field: {value, onChange}}) => (
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(text: string) => {
+                    onChange(text);
+                  }}
+                  value={value}
+                  placeholder={'Nhập địa chỉ'}
+                  placeholderTextColor={'#c7c7c7'}
+                  underlineColorAndroid={'transparent'}
+                />
+              </View>
+            )}
+          />
+          <View style={styles.labelContentFeedback}>
+            <Text style={styles.txtLabelModalSolid}>{'Nội dung'}</Text>
+          </View>
+          <Controller
+            control={control}
+            name="data"
+            render={({field: {value, onChange}}) => (
+              <View style={styles.textareaContainer}>
+                <TextInput
+                  style={styles.textarea}
+                  onChangeText={(text: string) => {
+                    onChange(text);
+                  }}
+                  value={value}
+                  multiline={true}
+                  maxLength={1000}
+                  placeholder={'Nhập nội dung phản ánh'}
+                  placeholderTextColor={'#c7c7c7'}
+                  underlineColorAndroid={'transparent'}
+                />
+                <Text style={styles.txtArea}>
+                  {watch('data')?.length ?? 0}/1000
+                </Text>
+              </View>
+            )}
+          />
+
+          <View
+            style={{
+              alignItems: 'flex-start',
+              width: '100%',
+              paddingHorizontal: 16,
+            }}>
+            <Text style={[styles.txtLabelModalSolid, {paddingVertical: 20}]}>
+              {'Đính kèm ảnh'}
+            </Text>
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              {watch('fileUrl')?.length && watch('fileUrl')?.length > 0
+                ? watch('fileUrl').map((img: any, index: number) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={{marginEnd: 16, marginBottom: 10}}>
+                      <Pressable
+                        onPress={() => {
+                          cleanupSingleImage(img);
+                        }}
+                        style={styles.btnDelImg}>
+                        <Icon
+                          type="Ionicons"
+                          name="remove-circle"
+                          size={width * 0.06}
+                          color="#c1121f"
+                        />
+                      </Pressable>
+
+                      <Image
+                        source={{uri: img?.uri}}
+                        style={styles.imgPreview}
+                      />
+                    </TouchableOpacity>
+                  ))
+                : null}
+              {/* {data.file?.length && data.file?.length >= 5 ? null : ( */}
+              {watch('fileUrl')?.length &&
+              watch('fileUrl')?.length >= 5 ? null : (
+                <Pressable
+                  onPress={() => {
+                    setVisibleChooseImg(true);
+                  }}
+                  style={styles.uploadImgIcon}>
+                  <Icon
+                    type="Ionicons"
+                    name="images"
+                    size={width * 0.12}
+                    color="#333"
+                  />
+                </Pressable>
+              )}
+            </View>
+          </View>
+        </ScrollView>
         <View style={[styles.iconAddContainer]}>
           <TouchableOpacity
-            onPress={() => {
-              if (data.content.length === 0) {
-                Alert.alert('Cảnh báo', 'nội dung không được để trống', [
-                  {text: 'Okay'},
-                ]);
-                return;
-              }
-              if (data.file && data.file.length > 0) {
-                createWithImg(data.file);
-              } else {
-                createFeedback(undefined);
-              }
-            }}
+            disabled={isLoading}
+            onPress={handleSubmit(onSubmit)}
             style={styles.btnCreate}>
             <Text style={styles.txtBtnCreate}>{'Gửi'}</Text>
           </TouchableOpacity>
         </View>
-        <Modal
-          visible={visible === 1}
-          transparent
-          animationType="slide"
-          style={styles.containerActionSheet}>
-          <Pressable
-            onPress={() => {
-              setVisible(0);
-            }}
-            style={{
-              backgroundColor: 'rgba(0,0,0,0.4)',
-              flex: 1,
-              justifyContent: 'flex-end',
-            }}>
-            <TouchableWithoutFeedback>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  paddingHorizontal: '3%',
-                  paddingTop: '4%',
-                  borderTopRightRadius: 8,
-                  borderTopLeftRadius: 8,
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingBottom: 16,
-                  }}>
-                  <Text style={styles.txtTitleASheet}>{'Phòng ban'}</Text>
-                  <Pressable
-                    onPress={() => {
-                      setVisible(0);
-                    }}>
-                    <Text style={styles.txtBtnTitle}>
-                      {language.t('close')}
-                    </Text>
-                  </Pressable>
-                </View>
-                <ScrollView>
-                  <View style={{paddingBottom: height * 0.1}}>
-                    {listUnitOrg?.map((item, index) => {
-                      return (
-                        <TouchableOpacity
-                          key={index}
-                          onPress={() => {
-                            setDepartment(item);
-                            setVisible(0);
-                          }}
-                          style={{
-                            borderBottomWidth: 2,
-                            borderColor: 'rgba(224, 224, 224, 0.5)',
-                          }}>
-                          <Text
-                            style={{
-                              paddingVertical: 16,
-                              color:
-                                item.organizationUnitId ===
-                                department?.organizationUnitId
-                                  ? '#339FD9'
-                                  : '#333333',
-                              fontSize: 15,
-                              fontWeight: '500',
-                              lineHeight: 18,
-                            }}>
-                            {item.name}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
-                </ScrollView>
-              </View>
-            </TouchableWithoutFeedback>
-          </Pressable>
-        </Modal>
-        <Modal
-          visible={visible === 2}
-          transparent
-          animationType="slide"
-          style={styles.containerActionSheet}>
-          <Pressable
-            onPress={() => {
-              setVisible(0);
-            }}
-            style={{
-              backgroundColor: 'rgba(0,0,0,0.4)',
-              flex: 1,
-              justifyContent: 'flex-end',
-            }}>
-            <TouchableWithoutFeedback>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  paddingHorizontal: '3%',
-                  paddingTop: '4%',
-                  borderTopRightRadius: 8,
-                  borderTopLeftRadius: 8,
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingBottom: 16,
-                  }}>
-                  <Text style={styles.txtTitleASheet}>{'Nhân viên'}</Text>
-                  <Pressable
-                    onPress={() => {
-                      setVisible(0);
-                    }}>
-                    <Text style={styles.txtBtnTitle}>
-                      {language.t('close')}
-                    </Text>
-                  </Pressable>
-                </View>
-                <ScrollView>
-                  <View style={{paddingBottom: height * 0.1}}>
-                    {ListOrganizationUnitUser?.map((item, index) => {
-                      return (
-                        <TouchableOpacity
-                          key={index}
-                          onPress={() => {
-                            setStaff(item);
-                            setVisible(0);
-                          }}
-                          style={{
-                            borderBottomWidth: 2,
-                            borderColor: 'rgba(224, 224, 224, 0.5)',
-                          }}>
-                          <Text
-                            style={{
-                              paddingVertical: 16,
-                              color:
-                                item.id === staff?.id ? '#339FD9' : '#333333',
-                              fontSize: 15,
-                              fontWeight: '500',
-                              lineHeight: 18,
-                            }}>
-                            {item.fullName}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
-                </ScrollView>
-              </View>
-            </TouchableWithoutFeedback>
-          </Pressable>
-        </Modal>
         <ModalPickerImage
           visible={visibleChooseImg}
           onClose={() => {
             setVisibleChooseImg(false);
           }}
           setImg={(imgs: TImage[]) => {
-            setData({
-              ...data,
-              file: data.file ? [...data.file, ...imgs] : [...imgs],
-            });
+            const oldData = getValues('fileUrl');
+            setValue('fileUrl', oldData ? [...oldData, ...imgs] : [...imgs]);
           }}
           multipleImg={true}
           compressImageMaxHeight={height}
@@ -531,6 +456,10 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: '#4F4F4F',
   },
+  textInput: {
+    fontSize: 15,
+    color: '#333',
+  },
   textarea: {
     textAlignVertical: 'top', // hack android
     height: (height * 120) / 812,
@@ -538,10 +467,20 @@ const styles = StyleSheet.create({
     color: '#333',
     paddingVertical: 20,
   },
+  textInputContainer: {
+    width: (width * 343) / 375,
+    paddingTop: 4,
+    paddingBottom: 12,
+    marginHorizontal: 16,
+    backgroundColor: '#fff',
+    borderBottomWidth: 2,
+    borderColor: 'rgba(224, 224, 224, 0.5)',
+  },
   textareaContainer: {
     minHeight: (height * 120) / 812,
     width: (width * 343) / 375,
     padding: 12,
+    marginHorizontal: 16,
     backgroundColor: '#fff',
     borderRadius: 12,
     borderWidth: 2,
@@ -554,9 +493,9 @@ const styles = StyleSheet.create({
     color: '#4F4F4F',
   },
   modal: {
-    alignItems: 'center',
+    // alignItems: 'center',
     backgroundColor: '#fff',
-    flex: 1,
+    // flex: 1,
   },
   header: {
     flexDirection: 'row',

@@ -1,5 +1,6 @@
 const main = {
   title: 'Language setting',
+  all: 'All',
   pending: 'New feedback',
   handling: 'Processing',
   assigned: 'Assigned',
