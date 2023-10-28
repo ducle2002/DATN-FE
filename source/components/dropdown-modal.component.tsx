@@ -1,7 +1,6 @@
 import {
   Dimensions,
   FlatList,
-  LayoutRectangle,
   ListRenderItem,
   Pressable,
   StyleProp,
@@ -11,7 +10,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {memo, useEffect, useRef, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import ReactNativeModal from 'react-native-modal';
 import globalStyles from '@/config/globalStyles';
 import Icon from './icon.component';
@@ -21,6 +20,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import {Searchbar} from 'react-native-paper';
 
 const {width: sWidth} = Dimensions.get('screen');
 
@@ -48,7 +48,7 @@ type Props = React.ComponentProps<typeof View> & {
   degAnimation?: number;
 };
 
-const DropdownMenu = ({
+const DropdownModal = ({
   label,
   options,
   placeholder,
@@ -71,13 +71,6 @@ const DropdownMenu = ({
   const toggleIsVisible = () => {
     setIsVisible(!isVisible);
   };
-
-  const [buttonPosition, setButtonPosition] = useState<LayoutRectangle>({
-    height: 0,
-    width: 0,
-    y: 0,
-    x: 0,
-  });
 
   const renderItemOption: ListRenderItem<TOptionItem> = ({item}) => {
     return (
@@ -102,19 +95,6 @@ const DropdownMenu = ({
     );
   };
 
-  const ref = useRef<View | null>(null);
-
-  ref.current?.measure((x, y, width, height, pageX, pageY) => {
-    if (buttonPosition.x !== pageX || buttonPosition.y !== pageY) {
-      setButtonPosition({
-        height: height,
-        width: width,
-        x: pageX,
-        y: pageY,
-      });
-    }
-  });
-
   const sharedValue = useSharedValue(0);
   useEffect(() => {
     if (isVisible) {
@@ -135,10 +115,12 @@ const DropdownMenu = ({
       marginLeft: 10,
     };
   });
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const onChangeSearch = (query: string) => setSearchQuery(query);
 
   return (
     <Pressable
-      ref={ref}
       onPress={toggleIsVisible}
       style={[styles.container, props.style]}
       {...props}
@@ -171,7 +153,7 @@ const DropdownMenu = ({
           {iconCustom ? (
             iconCustom
           ) : (
-            <Icon type="Ionicons" name="chevron-forward" size={20} />
+            <Icon type="Ionicons" name="chevron-down-outline" size={20} />
           )}
         </Animated.View>
       </View>
@@ -180,8 +162,9 @@ const DropdownMenu = ({
         useNativeDriverForBackdrop
         statusBarTranslucent={true}
         backdropOpacity={0.2}
-        animationIn={'fadeIn'}
-        animationOut={'fadeOut'}
+        animationIn={'slideInUp'}
+        animationOut={'slideOutDown'}
+        swipeDirection={'down'}
         onBackdropPress={toggleIsVisible}
         isVisible={isVisible}
         style={{margin: 0}}>
@@ -189,16 +172,17 @@ const DropdownMenu = ({
           onPress={toggleIsVisible}
           style={{
             height: '100%',
+            justifyContent: 'flex-end',
           }}>
-          <View
-            style={{
-              top: buttonPosition.height + buttonPosition.y,
-              width: buttonPosition.width,
-              left: buttonPosition.x,
-            }}>
+          <Searchbar
+            placeholder="Search"
+            onChangeText={onChangeSearch}
+            value={searchQuery}
+          />
+          <View style={{backgroundColor: 'white', paddingBottom: '5%'}}>
             <FlatList
               style={styles.listOption}
-              data={options}
+              data={options.filter(el => el.label.includes(searchQuery))}
               renderItem={renderItemOption}
               showsVerticalScrollIndicator={true}
             />
@@ -209,7 +193,7 @@ const DropdownMenu = ({
   );
 };
 
-export default memo(DropdownMenu);
+export default memo(DropdownModal);
 
 const styles = StyleSheet.create({
   container: {},

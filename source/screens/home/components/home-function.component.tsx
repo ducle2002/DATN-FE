@@ -72,6 +72,10 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
         return navigation.navigate('WORK_MANAGEMENT', {screen: 'MAIN_DRAWER'});
       case 'Pages.Digitals.Hotline.GetAll':
         return navigation.navigate('HOTLINE_STACK', {screen: 'LIST_HOTLINE'});
+      case 'Pages.LocalService.List':
+        return navigation.navigate('LOCAL_SERVICE_MANAGEMENT_STACK', {
+          screen: 'MAIN_SCREEN',
+        });
       default:
         toast.show('Chức năng đang phát triển');
     }

@@ -258,6 +258,8 @@ const allPermissions = {
   'Pages.Admin.Tenant_Settings': 'true',
   'Pages.Admin.Organization_Structure': 'true',
   'Pages.Settings.Images': 'true',
+  //add after( need edit)
+  'Pages.LocalService.List': 'true',
 };
 
 export type TPermission = keyof typeof allPermissions;

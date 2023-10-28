@@ -37,7 +37,7 @@ const ItemFeedback = forwardRef(function (
           flexDirection: 'row',
           paddingRight: 8,
         }}>
-        {item.state === 1 ? (
+        {item.state === 2 ? (
           <Pressable onPress={onAssign}>
             <View style={styles.btnSwipe}>
               <Icon
