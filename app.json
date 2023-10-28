@@ -1,4 +1,5 @@
 {
   "name": "YootekOperatingApplication",
-  "displayName": "YootekOperatingApplication"
+  "displayName": "YootekOperatingApplication",
+  "plugins": ["@notifee/react-native"]
 }

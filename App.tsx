@@ -13,6 +13,11 @@ import RoleScreen from '@/screens/role/role.screen';
 import {useOrganizationUnit} from '@/modules/organization/organization.hook';
 import {useConfigPermissions} from '@/modules/config/config.hook';
 import {useAccount} from '@/modules/user/user.hook';
+import {
+  getNotification,
+  useRegisterNotification,
+} from '@/modules/firebase-notification/noti.hook';
+import {useQuery} from 'react-query';
 
 function App(): JSX.Element {
   const {role} = useAppSelector(state => state.role);
@@ -39,6 +44,16 @@ function App(): JSX.Element {
       getConfigPermission();
     }
   }, [getConfigPermission, isRefreshingPermissions]);
+
+  useRegisterNotification();
+
+  useQuery({
+    queryKey: ['notification'],
+    queryFn: async () => {
+      getNotification();
+      return true;
+    },
+  });
 
   return (
     <SafeAreaProvider>
