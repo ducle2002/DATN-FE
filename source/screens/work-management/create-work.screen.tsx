@@ -20,7 +20,9 @@ import {TPersonnel} from './services/work.model';
 import {useToast} from 'react-native-toast-notifications';
 
 type Props = StackScreenProps<WorkStackParamsList, 'CREATE_WORK'>;
-const CreateWorkScreen = ({navigation}: Props) => {
+const CreateWorkScreen = ({navigation, route}: Props) => {
+  const items = route.params?.items;
+
   const [supervisorUsers, setSupervisorUsers] = useState<TPersonnel[]>([]);
   const [recipientUsers, setRecipientUsers] = useState<TPersonnel[]>([]);
 
@@ -71,6 +73,7 @@ const CreateWorkScreen = ({navigation}: Props) => {
       workTypeId: parseInt(data.workTypeId, 10),
       supervisorIds: supervisorUsers.map(s => s.id),
       recipientIds: recipientUsers.map(s => s.id),
+      items: items,
     });
   };
 

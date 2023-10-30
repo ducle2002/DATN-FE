@@ -24,10 +24,16 @@ import LoadingComponent from '@/components/loading';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
 import PickerBeginEndDate from '@/components/picker-begin-end-date';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {AppStackParamsList} from '@/routes/app.stack';
+import {EWorkAssociationType} from '../work-management/services/work.model';
 
 const {width, height} = Dimensions.get('screen');
 
-type Props = StackScreenProps<FeedbackStackParamsList>;
+type Props = CompositeScreenProps<
+  StackScreenProps<FeedbackStackParamsList>,
+  StackScreenProps<AppStackParamsList, 'FEEDBACK_STACK'>
+>;
 
 const FeedbackScreen = (props: Props) => {
   const toast = useToast();
@@ -242,8 +248,16 @@ const FeedbackScreen = (props: Props) => {
                   });
                 }}
                 onAssign={() => {
-                  props.navigation.navigate('AssignFeedbackScreen', {
-                    feedbackId: item.id,
+                  props.navigation.navigate('WORK_MANAGEMENT', {
+                    screen: 'CREATE_WORK',
+                    params: {
+                      items: [
+                        {
+                          relatedId: item.id,
+                          relationshipType: EWorkAssociationType.REFLECT,
+                        },
+                      ],
+                    },
                   });
                   closeRow(index);
                 }}

@@ -90,3 +90,9 @@ export type TWorkComment = {
   imageUrls: string[];
   tenantId: number;
 };
+
+export enum EWorkAssociationType {
+  REFLECT = 1,
+  SERVICE = 2,
+  OPERATION_LOG = 3,
+}

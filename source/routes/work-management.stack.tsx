@@ -8,6 +8,7 @@ import {checkPermission} from '@/utils/utils';
 import CreateWorkScreen from '@/screens/work-management/create-work.screen';
 import language, {languageKeys} from '@/config/language/language';
 import {
+  EWorkAssociationType,
   EWorkFormID,
   EWorkStatus,
   TWorkDetail,
@@ -26,8 +27,10 @@ export type WorkStackParamsList = {
   DETAIL_WORK: {id?: number; formId: number};
   CREATE_WORK:
     | {
-        status?: EWorkStatus;
-        formId?: EWorkFormID;
+        items: {
+          relationshipType: EWorkAssociationType;
+          relatedId: number;
+        }[];
       }
     | undefined;
   LOGTIME: {
