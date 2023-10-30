@@ -9,7 +9,7 @@ import {Provider} from 'react-redux';
 import store from '@/store';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import messaging from '@react-native-firebase/messaging';
-import notifee, {EventType} from '@notifee/react-native';
+import notifee from '@notifee/react-native';
 
 const queryClient = new QueryClient();
 

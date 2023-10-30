@@ -17,5 +17,5 @@ export const useListBuilding = ({
     staleTime: 180000,
     enabled: !!urbanId,
   });
-  return query;
+  return {...query, buildings: query.data?.buildings ?? []};
 };

@@ -4,6 +4,7 @@ export type THotline = {
   properties: string;
   organizationUnitId: number;
   urbanId: number;
+  buildingId: number;
   creationTime: string;
   creatorUserId: null | number;
   id: number;

@@ -22,6 +22,15 @@ export const useOrganizationUnit = () => {
   return {getOrganizationUnitByUser};
 };
 
+export const useAllOrganizationUnitByUser = () => {
+  const query = useQuery({
+    queryKey: ['all-organization-unit-by-user'],
+    queryFn: () => OrganizationApi.getOrganizationUnitIdByUser(),
+    staleTime: 180000,
+  });
+  return {...query, listOrganizations: query.data?.listOrganizations ?? []};
+};
+
 export const useAllOrganizationUnit = () => {
   const query = useQuery({
     queryKey: ['all-organization-unit'],

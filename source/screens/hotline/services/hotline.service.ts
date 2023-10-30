@@ -23,6 +23,16 @@ class Hotline {
       totalRecords: result.totalRecords,
     };
   };
+
+  createOrUpdate = async (params: THotline) => {
+    const url = HOST_SERVER + this.endpoint + 'CreateOrUpdateHotline';
+    return axiosClient.post(url, params);
+  };
+
+  delete = async (params: {id: number}) => {
+    const url = HOST_SERVER + this.endpoint + 'DeleteHotline';
+    return axiosClient.delete(url, {params: params});
+  };
 }
 
 const HotlineService = new Hotline();

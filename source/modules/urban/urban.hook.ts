@@ -15,5 +15,5 @@ export const useAllUrban = ({onSuccessCallback = () => {}}: Props) => {
     staleTime: 180000,
   });
 
-  return query;
+  return {...query, urbans: query.data?.urbans ?? []};
 };

@@ -1,4 +1,11 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  ListRenderItem,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {HotlineStackParamsList} from '@/routes/hotline.stack';
@@ -10,6 +17,10 @@ import globalStyles from '@/config/globalStyles';
 import {useAppSelector} from '@/hooks/redux.hook';
 import {checkPermission} from '@/utils/utils';
 import {useTheme} from 'react-native-paper';
+import Icon from '@/components/icon.component';
+import BottomContainer from '@/components/bottom-container.component';
+import Button from '@/components/button.component';
+import language, {languageKeys} from '@/config/language/language';
 
 type Props = StackScreenProps<HotlineStackParamsList, 'LIST_HOTLINE'>;
 
@@ -29,7 +40,7 @@ const HotlineScreen = ({navigation}: Props) => {
 
   const [keyword, setKeyword] = useState<string>();
 
-  const {data} = useQuery({
+  const {data, status, remove, refetch} = useQuery({
     queryKey: ['hotline', keyword],
     queryFn: () =>
       HotlineService.getAll({maxResultCount: 1000, keyword: keyword}),
@@ -48,23 +59,23 @@ const HotlineScreen = ({navigation}: Props) => {
 
   const {colors} = useTheme();
 
-  const renderHotline = (hotline: THotline) => {
+  const renderHotline: ListRenderItem<THotline> = ({item: hotline}) => {
     const properties: THotlineProperty[] = JSON.parse(hotline.properties);
 
     return (
       <View key={hotline.id} style={styles.hotlineContainer}>
         <View style={styles.hotlineTitleContainer}>
           <Text style={styles.textTitle}>{hotline.name}</Text>
-          {/* {hasUpdatePermission && (
+          {hasUpdatePermission && (
             <Icon
               type="FontAwesome"
               name="edit"
               color={colors.primary}
               onPress={() => {
-                navigation.navigate('DETAIL', {hotline: hotline});
+                navigation.navigate('UPDATE', {hotline: hotline});
               }}
             />
-          )} */}
+          )}
         </View>
         <View style={styles.propertyContainer}>
           {properties.map(p => (
@@ -81,18 +92,32 @@ const HotlineScreen = ({navigation}: Props) => {
     );
   };
 
+  const onRefresh = () => {
+    remove();
+    refetch();
+  };
+
   return (
     <View style={styles.container}>
-      <ScrollView>
-        {data?.hotlines.map(hotline => renderHotline(hotline))}
-      </ScrollView>
-      {/* {hasCreatePermission && (
+      <FlatList
+        data={data?.hotlines}
+        renderItem={renderHotline}
+        refreshControl={
+          <RefreshControl
+            refreshing={status === 'loading'}
+            onRefresh={onRefresh}
+          />
+        }
+      />
+      {hasCreatePermission && (
         <BottomContainer>
-          <Button mode="contained">
+          <Button
+            mode="contained"
+            onPress={() => navigation.navigate('UPDATE')}>
             {language.t(languageKeys.shared.button.add)}
           </Button>
         </BottomContainer>
-      )} */}
+      )}
     </View>
   );
 };
