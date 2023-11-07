@@ -17,18 +17,21 @@ export const useWorkType = () => {
 export const useWorkQuery = ({
   selectedStatus = undefined,
   selectedFormId = undefined,
+  keyword = undefined,
 }: {
   selectedStatus?: EWorkStatus;
   selectedFormId?: EWorkFormID;
+  keyword?: string;
 }) => {
   const query = useInfiniteQuery({
-    queryKey: ['my-work', selectedStatus, selectedFormId],
+    queryKey: ['my-work', selectedStatus, selectedFormId, keyword],
     queryFn: ({pageParam}) =>
       WorkManagementApi.getAll({
         ...pageParam,
         maxResultCount: 20,
         status: selectedStatus,
         formId: selectedFormId,
+        keyword: keyword,
       }),
     getNextPageParam: (lastPage, allPages) => {
       const skipCount = allPages.length * 10;

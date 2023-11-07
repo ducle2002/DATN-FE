@@ -8,7 +8,7 @@ export type TWork = {
   id?: number;
   imageUrls: Array<String>;
   note: string;
-  status?: EWorkStatus;
+  status: EWorkStatus;
   title?: string;
   tenantId?: number;
   userId?: number;
@@ -90,3 +90,9 @@ export type TWorkComment = {
   imageUrls: string[];
   tenantId: number;
 };
+
+export enum EWorkAssociationType {
+  REFLECT = 1,
+  SERVICE = 2,
+  OPERATION_LOG = 3,
+}

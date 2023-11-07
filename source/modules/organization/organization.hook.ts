@@ -22,7 +22,27 @@ export const useOrganizationUnit = () => {
   return {getOrganizationUnitByUser};
 };
 
+export const useAllOrganizationUnitByUser = () => {
+  const query = useQuery({
+    queryKey: ['all-organization-unit-by-user'],
+    queryFn: () => OrganizationApi.getOrganizationUnitIdByUser(),
+    staleTime: 180000,
+  });
+  return {...query, listOrganizations: query.data?.listOrganizations ?? []};
+};
+
 export const useAllOrganizationUnit = () => {
+  const query = useQuery({
+    queryKey: ['all-organization-unit'],
+    queryFn: () => OrganizationApi.getOrganizationUnits({maxResultCount: 1000}),
+    cacheTime: 300000,
+    staleTime: 300000,
+  });
+
+  return query;
+};
+
+export const useOrganizationUnitTree = () => {
   const {data} = useQuery({
     queryKey: ['all-organization-unit'],
     queryFn: () => OrganizationApi.getOrganizationUnits({maxResultCount: 1000}),

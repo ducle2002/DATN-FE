@@ -22,7 +22,7 @@ import {
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import QuestionItem from './components/question-item.component';
 import MainHeader from '@/components/main-header.component';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {QAStackParamsList} from '@/routes/question-answer.stack.screen';
 
 type Props = StackScreenProps<QAStackParamsList, 'MAIN_SCREEN'>;
@@ -72,7 +72,9 @@ const MainScreen = ({navigation}: Props) => {
   }, []);
 
   const renderHeader = useCallback(
-    () => <MainHeader keywordChange={onKeywordChange} />,
+    (props: StackHeaderProps) => (
+      <MainHeader onKeywordChange={onKeywordChange} {...props} />
+    ),
     [onKeywordChange],
   );
 

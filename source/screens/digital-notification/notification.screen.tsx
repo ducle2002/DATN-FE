@@ -1,7 +1,7 @@
 import {Dimensions, RefreshControl, StyleSheet, View} from 'react-native';
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import MainHeader from '../../components/main-header.component';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackHeaderProps, StackScreenProps} from '@react-navigation/stack';
 import {NotificationStackParamsList} from '@/routes/notification.stack';
 import {useInfiniteQuery} from 'react-query';
 import DigitalNotiApi from '@/screens/digital-notification/services/digital-noti.service';
@@ -84,11 +84,6 @@ const NotificationScreen = ({navigation}: Props) => {
     setPaging({...paging});
   };
 
-  const onKeywordChange = (value: string) => {
-    setPaging({...paging, keyword: value});
-    remove();
-  };
-
   const deselectAll = () => {
     setSelectedNotis([]);
   };
@@ -100,10 +95,30 @@ const NotificationScreen = ({navigation}: Props) => {
       setSelectedNotis(selectedNotis.filter(i => i !== id));
     }
   };
+  const renderHeader = useCallback(
+    (props: StackHeaderProps) => {
+      return (
+        <MainHeader
+          onKeywordChange={keyword => {
+            setPaging(old => ({...old, keyword: keyword}));
+            remove();
+          }}
+          {...props}
+        />
+      );
+    },
+    [remove],
+  );
+
+  useEffect(() => {
+    navigation.setOptions({
+      header: props => renderHeader(props),
+      headerShown: true,
+    });
+  }, [navigation, renderHeader]);
 
   return (
     <View style={styles.container}>
-      <MainHeader keywordChange={onKeywordChange} />
       <SelectItemContext.Provider
         value={{
           selected: selectedNotis,

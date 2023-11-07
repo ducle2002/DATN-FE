@@ -1,7 +1,10 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
-import {MaterialAssetStackParamsList} from '@/routes/material-asset.stack';
+import {
+  AssetDetailTabParamsList,
+  MaterialAssetStackParamsList,
+} from '@/routes/material-asset.stack';
 import {useAssetById, useDeleteAsset} from './hooks/hook';
 import MaterialDetail from './components/material-detail';
 import Button from '@/components/button.component';
@@ -12,7 +15,13 @@ import moment from 'moment';
 import {checkPermission} from '@/utils/utils';
 import {useAppSelector} from '@/hooks/redux.hook';
 import {Dialog} from 'react-native-paper';
-type Props = StackScreenProps<MaterialAssetStackParamsList, 'DETAIL_SCREEN'>;
+import {CompositeScreenProps} from '@react-navigation/native';
+import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
+
+type Props = CompositeScreenProps<
+  MaterialTopTabScreenProps<AssetDetailTabParamsList, 'DETAIL_SCREEN'>,
+  StackScreenProps<MaterialAssetStackParamsList, 'DETAIL_TAB'>
+>;
 
 const DetailAssetScreen = ({navigation, route}: Props) => {
   const id = route.params.id;
@@ -20,7 +29,7 @@ const DetailAssetScreen = ({navigation, route}: Props) => {
   const {grantedPermissions} = useAppSelector(state => state.config);
   useEffect(() => {
     if (material) {
-      navigation.setOptions({
+      navigation.getParent()?.setOptions({
         title: material.title,
       });
     }
@@ -173,9 +182,7 @@ const DetailAssetScreen = ({navigation, route}: Props) => {
       />
       <Dialog visible={isVisible} onDismiss={() => setIsVisible(false)}>
         <Dialog.Title>
-          <Text style={[styles.textValue, {flex: 0}]}>
-            Bạn có muốn xóa bình luận
-          </Text>
+          <Text style={[styles.textValue, {flex: 0}]}>Bạn có muốn xóa</Text>
         </Dialog.Title>
         <Dialog.Actions>
           <Button

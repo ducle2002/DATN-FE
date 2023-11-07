@@ -21,6 +21,8 @@ import {useToast} from 'react-native-toast-notifications';
 
 type Props = StackScreenProps<WorkStackParamsList, 'CREATE_WORK'>;
 const CreateWorkScreen = ({navigation, route}: Props) => {
+  const items = route.params?.items;
+
   const [supervisorUsers, setSupervisorUsers] = useState<TPersonnel[]>([]);
   const [recipientUsers, setRecipientUsers] = useState<TPersonnel[]>([]);
 
@@ -56,11 +58,7 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
     mutationFn: (params: any) => WorkManagementApi.create(params),
     onSuccess: () => {
       toast.show('Tạo công việc thành công');
-      queryClient.refetchQueries([
-        'my-work',
-        route.params?.status,
-        route.params?.formId,
-      ]);
+      queryClient.refetchQueries(['my-work']);
       navigation.goBack();
     },
     onError: error => {
@@ -75,6 +73,7 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
       workTypeId: parseInt(data.workTypeId, 10),
       supervisorIds: supervisorUsers.map(s => s.id),
       recipientIds: recipientUsers.map(s => s.id),
+      items: items,
     });
   };
 

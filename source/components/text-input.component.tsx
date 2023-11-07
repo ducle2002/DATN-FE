@@ -17,6 +17,7 @@ type Props = React.ComponentProps<typeof TextInput> & {
   label?: string;
   labelStyle?: StyleProp<TextStyle>;
   withError?: boolean;
+  labelContainerStyle?: StyleProp<ViewStyle>;
 };
 
 const CTextInput = React.forwardRef(
@@ -28,13 +29,18 @@ const CTextInput = React.forwardRef(
       containerStyle,
       labelStyle,
       withError = true,
+      labelContainerStyle,
       ...props
     }: Props,
     ref: React.LegacyRef<TextInput>,
   ) => {
     return (
       <>
-        {label && <Text style={[styles.textLabel, labelStyle]}>{label}</Text>}
+        {label && (
+          <View style={labelContainerStyle}>
+            <Text style={[styles.textLabel, labelStyle]}>{label}</Text>
+          </View>
+        )}
         <View style={[styles.container, containerStyle]}>
           <TextInput
             ref={ref}

@@ -36,6 +36,7 @@ const vi = {
   water,
   workManagement,
   role,
+  search: 'Tìm kiếm',
 };
 
 export default vi;
