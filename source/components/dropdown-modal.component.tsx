@@ -22,7 +22,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Searchbar} from 'react-native-paper';
 
-const {width: sWidth} = Dimensions.get('screen');
+const {width: sWidth, height} = Dimensions.get('screen');
 
 export type TOptionItem = {
   label: string;
@@ -46,6 +46,7 @@ type Props = React.ComponentProps<typeof View> & {
   useClear?: boolean;
   iconCustom?: React.ReactNode;
   degAnimation?: number;
+  onEndScroll?: (info: {distanceFromEnd: number}) => void;
 };
 
 const DropdownModal = ({
@@ -65,6 +66,7 @@ const DropdownModal = ({
   iconCustom,
   degAnimation = 90,
   useClear = false,
+  onEndScroll,
   ...props
 }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -159,7 +161,6 @@ const DropdownModal = ({
       </View>
       {error && <Text style={styles.textError}>{error}</Text>}
       <ReactNativeModal
-        useNativeDriverForBackdrop
         statusBarTranslucent={true}
         backdropOpacity={0.2}
         animationIn={'slideInUp'}
@@ -167,27 +168,45 @@ const DropdownModal = ({
         swipeDirection={'down'}
         onBackdropPress={toggleIsVisible}
         isVisible={isVisible}
-        style={{margin: 0}}>
-        <Pressable
-          onPress={toggleIsVisible}
+        style={{margin: 0, justifyContent: 'flex-end'}}>
+        <View
           style={{
-            height: '100%',
-            justifyContent: 'flex-end',
+            backgroundColor: 'white',
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+            paddingTop: '3%',
+            height: height * 0.5,
           }}>
           <Searchbar
             placeholder="Search"
             onChangeText={onChangeSearch}
             value={searchQuery}
+            style={{
+              height: 45,
+              marginHorizontal: 16,
+            }}
+            inputStyle={{
+              minHeight: 45,
+            }}
           />
           <View style={{backgroundColor: 'white', paddingBottom: '5%'}}>
             <FlatList
               style={styles.listOption}
-              data={options.filter(el => el.label.includes(searchQuery))}
+              data={[
+                {
+                  label: 'Mặc định',
+                  id: undefined,
+                },
+                ...options.filter(el => el.label.includes(searchQuery)),
+              ]}
               renderItem={renderItemOption}
               showsVerticalScrollIndicator={true}
+              onEndReached={onEndScroll}
+              onEndReachedThreshold={10}
+              keyExtractor={(item, index) => index.toString()}
             />
           </View>
-        </Pressable>
+        </View>
       </ReactNativeModal>
     </Pressable>
   );
@@ -216,8 +235,8 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 5,
     // maxHeight: '60%',
-    minWidth: 0.4 * sWidth,
-    maxHeight: 200,
+    // minWidth: 0.4 * sWidth,
+    // maxHeight: 200,
   },
   itemOption: {
     paddingHorizontal: 10,
