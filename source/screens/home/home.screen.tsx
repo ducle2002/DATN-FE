@@ -46,6 +46,7 @@ const HomeScreen = (props: HomeScreenProps) => {
         resident: r,
       };
     }, [grantedPermissions]);
+  console.log(service);
 
   return (
     <View style={styles.container}>
@@ -136,6 +137,16 @@ const HomeScreen = (props: HomeScreenProps) => {
                   }}
                 />
               ))}
+              <HomeFunction
+                type={'Pages.LocalService.List'}
+                style={styles.iconContainer}
+                iconContainerStyle={{
+                  backgroundColor:
+                    homeIconBackgroundColor[
+                      (service.length % homeIconBackgroundColor.length) + 2
+                    ],
+                }}
+              />
             </View>
           </View>
         )}
