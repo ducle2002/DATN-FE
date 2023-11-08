@@ -4,6 +4,7 @@ import shared from './shared/vi';
 import {digitalNoti} from './digital-notification/vi';
 import vote from './vote/vi';
 import localService from './local-service/vi';
+import localServiceManagement from './local-service-management/vi';
 import setting from './setting/vi';
 import qa from './qa/vi';
 import feedback from './feedback/vi';
@@ -21,6 +22,7 @@ const vi = {
   digitalNoti,
   vote,
   localService,
+  localServiceManagement,
   setting,
   feedback,
   administrative,
