@@ -34,6 +34,9 @@ import WorkManagementDrawer, {
 } from './work-management.stack';
 import {ERole} from '@/screens/role/service/role.model';
 import HotlineStack, {HotlineStackParamsList} from './hotline.stack';
+import LocalServiceManagementStack, {
+  LocalServiceManagementStackParamsList,
+} from './local-service-management';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -42,6 +45,7 @@ export type AppStackParamsList = {
   FEEDBACK_STACK: NavigatorScreenParams<FeedbackStackParamsList>;
   VOTE_STACK: NavigatorScreenParams<VoteStackParamsList>;
   LOCAL_SERVICE_STACK: NavigatorScreenParams<LocalServiceStackParamsList>;
+  LOCAL_SERVICE_MANAGEMENT_STACK: NavigatorScreenParams<LocalServiceManagementStackParamsList>;
   CHAT_STACK: NavigatorScreenParams<ChatStackParamsList>;
   ADMINISTRATIVE_STACK: NavigatorScreenParams<AdministrativeStackParamsList>;
   QUESTION_ANSWER_STACK: NavigatorScreenParams<QAStackParamsList>;
@@ -121,6 +125,10 @@ const AppStack = () => {
           <Stack.Screen
             name="LOCAL_SERVICE_STACK"
             component={LocalServiceStack}
+          />
+          <Stack.Screen
+            name="LOCAL_SERVICE_MANAGEMENT_STACK"
+            component={LocalServiceManagementStack}
           />
           <Stack.Screen name="QUESTION_ANSWER_STACK" component={QAStack} />
           <Stack.Screen

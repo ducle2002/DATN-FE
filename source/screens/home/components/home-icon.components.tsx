@@ -70,6 +70,15 @@ const HomeIcon = ({type, ...props}: HomeIconProp) => {
           color={'white'}
         />
       );
+    case 'Pages.LocalService.List':
+      return (
+        <Icon
+          type="MaterialIcons"
+          name="design-services"
+          size={35}
+          color={'white'}
+        />
+      );
   }
 };
 

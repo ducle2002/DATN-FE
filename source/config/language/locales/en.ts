@@ -8,6 +8,8 @@ import vote from './vote/en';
 import shared from './shared/en';
 import qa from './qa/en';
 import localService from './local-service/en';
+import localServiceManagement from './local-service-management/en';
+
 import {digitalNoti} from './digital-notification/en';
 import materialAsset from './material-asset/en';
 import residentLanguage from './resident/en';
@@ -22,6 +24,7 @@ const en = {
   vote,
   qa,
   localService,
+  localServiceManagement,
   shared,
   digitalNoti,
   materialAsset,
