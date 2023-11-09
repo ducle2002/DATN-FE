@@ -61,7 +61,7 @@ export default function BookingListService(props: Props) {
     item: TLocalServiceManagementOrder;
     index: number;
   }) => {
-    return <ItemLocalService />;
+    return <ItemLocalService item={item} index={index} />;
   };
   return (
     <View style={{flex: 1}}>

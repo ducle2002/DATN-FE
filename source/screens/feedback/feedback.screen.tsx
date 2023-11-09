@@ -158,10 +158,10 @@ const FeedbackScreen = (props: Props) => {
   const {mutate: updateStateFeedback, isLoading: isLoadingUpdateState} =
     useMutation({
       mutationKey: ['updateStateFeedback'],
-      mutationFn: (id: number) =>
+      mutationFn: ({id, state}: {id: number; state: number}) =>
         FeedbackApi.updateFeedback({
           id: id,
-          state: 2,
+          state: state,
         }),
       onError: err => {
         console.log(err);
@@ -269,7 +269,17 @@ const FeedbackScreen = (props: Props) => {
                   closeRow(index);
                 }}
                 onConfirm={() => {
-                  updateStateFeedback(item.id);
+                  updateStateFeedback({
+                    id: item.id,
+                    state: 2,
+                  });
+                  closeRow(index);
+                }}
+                onComplete={() => {
+                  updateStateFeedback({
+                    id: item.id,
+                    state: 3,
+                  });
                   closeRow(index);
                 }}
               />

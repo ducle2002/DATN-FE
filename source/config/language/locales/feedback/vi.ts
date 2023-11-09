@@ -17,6 +17,7 @@ const main = {
     name: 'Tên',
     feedback: 'Phản ánh',
     content: 'Nội dung',
+    complete: 'Hoàn thành',
   },
   feedbackInfo: {
     title: 'Chi tiết phản ánh',
