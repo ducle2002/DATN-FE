@@ -17,6 +17,7 @@ const main = {
     name: 'Name',
     feedback: 'Feedback',
     content: 'Content',
+    complete: 'Complete',
   },
   feedbackInfo: {
     title: 'Detail feedback',

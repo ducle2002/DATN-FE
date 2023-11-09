@@ -4,8 +4,15 @@ import globalStyles from '@/config/globalStyles';
 import moment from 'moment';
 import Icon from '@/components/icon.component';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
+import {TLocalServiceManagementOrder} from '../services/local-service-management.model';
 
-const ItemLocalService = () => {
+const ItemLocalService = ({
+  item,
+  index,
+}: {
+  item: TLocalServiceManagementOrder;
+  index: number;
+}) => {
   const [valueStatus, setValueStatus] = useState('Chờ xác nhận');
   const STATUS = [
     {
@@ -25,20 +32,22 @@ const ItemLocalService = () => {
     <View style={[styles.container, styles.row]}>
       <View style={{flex: 2}}>
         <View style={styles.row}>
-          <Text style={styles.txtLabel}>Người đặt: </Text>
-          <Text style={styles.txtContent}>Nguyễn Văn A</Text>
+          <Text style={styles.txtLabel}>Loại dịch vụ: </Text>
+          <Text style={styles.txtContent}>{item?.serviceText}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.txtLabel}>Liên hệ: </Text>
-          <Text style={styles.txtContent}>0973389056</Text>
+          <Text style={styles.txtLabel}>Người đặt: </Text>
+          <Text style={styles.txtContent}>{item?.creatorName}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.txtLabel}>Ngày đặt: </Text>
-          <Text style={styles.txtContent}>{moment().format('DD/MM/YYYY')}</Text>
+          <Text style={styles.txtContent}>
+            {moment(item?.creationTime).format('DD/MM/YYYY')}
+          </Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.txtLabel}>Căn hộ: </Text>
-          <Text style={styles.txtContent}>{'A1001'}</Text>
+          <Text style={styles.txtLabel}>Địa chỉ: </Text>
+          <Text style={styles.txtContent}>{item?.address}</Text>
         </View>
       </View>
       {/* <TouchableOpacity style={[styles.row, styles.chipStatus]}>
@@ -97,6 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 8,
     justifyContent: 'space-between',
+    marginTop: 8,
   },
   row: {
     flexDirection: 'row',

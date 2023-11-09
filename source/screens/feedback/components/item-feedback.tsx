@@ -23,10 +23,11 @@ type Props = {
   onDelete?: (event: GestureResponderEvent) => void;
   onAssign?: (event: GestureResponderEvent) => void;
   onConfirm?: (event: GestureResponderEvent) => void;
+  onComplete?: (event: GestureResponderEvent) => void;
   closeRow?: () => void;
 };
 const ItemFeedback = forwardRef(function (
-  {item, onPress, onDelete, onAssign, closeRow, onConfirm}: Props,
+  {item, onPress, onDelete, onAssign, closeRow, onConfirm, onComplete}: Props,
   ref: React.LegacyRef<Swipeable>,
 ) {
   const {t} = useTranslation();
@@ -48,6 +49,21 @@ const ItemFeedback = forwardRef(function (
               />
               <Text style={styles.txtBtnSwipe}>
                 {t(languageKeys.feedback.main.itemFeedback.assign)}
+              </Text>
+            </View>
+          </Pressable>
+        ) : null}
+        {item.state === 2 ? (
+          <Pressable onPress={onComplete}>
+            <View style={styles.btnSwipe}>
+              <Icon
+                type="Ionicons"
+                name="checkmark-done-circle"
+                size={20}
+                color="#2b9348"
+              />
+              <Text style={styles.txtBtnSwipe}>
+                {t(languageKeys.feedback.main.itemFeedback.complete)}
               </Text>
             </View>
           </Pressable>

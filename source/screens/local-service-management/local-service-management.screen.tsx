@@ -141,7 +141,6 @@ const LocalServiceManagementScreen = (props: Props) => {
             initialParams={{StatusTab: 3}}
           />
         </Tab.Navigator>
-        <ItemLocalService />
       </View>
     </LocalServiceManagementContext.Provider>
   );
