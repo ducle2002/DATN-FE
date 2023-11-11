@@ -44,6 +44,14 @@ export type TLocalServiceManagementOrder = {
   creationTime: string;
   creatorUserId?: number;
   id: number;
+  creatorCitizen?: {
+    address?: string;
+    apartmentCode?: string;
+    email?: string;
+    fullName: string;
+    imageUrl?: string;
+    phoneNumber?: string;
+  };
 };
 export type TLocalServiceDetail = {
   servicesText?: string;

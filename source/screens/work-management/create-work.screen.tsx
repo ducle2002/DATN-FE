@@ -16,7 +16,7 @@ import {PersonnelPickerContext, useWorkType} from './services/hook';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import PersonnelPicker from './components/personnel-picker.component';
-import {TPersonnel} from './services/work.model';
+import {EWorkAssociationType, TPersonnel} from './services/work.model';
 import {useToast} from 'react-native-toast-notifications';
 
 type Props = StackScreenProps<WorkStackParamsList, 'CREATE_WORK'>;
@@ -59,8 +59,15 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
     onSuccess: () => {
       toast.show('Tạo công việc thành công');
       queryClient.refetchQueries(['my-work']);
+      if (
+        items &&
+        items[0].relationshipType === EWorkAssociationType.LOCAL_SERVICE
+      ) {
+        queryClient.refetchQueries(['localService/listAllOrder']);
+      }
       navigation.goBack();
     },
+
     onError: error => {
       console.log(error);
     },
