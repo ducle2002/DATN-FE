@@ -47,6 +47,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = YootekOperatingApplication/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8FE0FBF0C1014CD4F50CFE27 /* libPods-YootekOperatingApplication.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YootekOperatingApplication.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A73F3D312A66886900651CBF /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
+		A76395B12B035CCA00738BA9 /* YootekOperatingApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = YootekOperatingApplication.entitlements; path = YootekOperatingApplication/YootekOperatingApplication.entitlements; sourceTree = "<group>"; };
 		A76909892AEBBDB600F6E799 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A7D39D642A8A041E00FD1A45 /* YooIOC.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = YooIOC.png; path = assets/Images/YooIOC.png; sourceTree = "<group>"; };
 		AEB4CF1F659C2A05222378F3 /* Pods-YootekOperatingApplication.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YootekOperatingApplication.release.xcconfig"; path = "Target Support Files/Pods-YootekOperatingApplication/Pods-YootekOperatingApplication.release.xcconfig"; sourceTree = "<group>"; };
@@ -93,6 +94,7 @@
 		13B07FAE1A68108700A75B9A /* YootekOperatingApplication */ = {
 			isa = PBXGroup;
 			children = (
+				A76395B12B035CCA00738BA9 /* YootekOperatingApplication.entitlements */,
 				A73F3D312A66886900651CBF /* assets */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -513,6 +515,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = YootekOperatingApplication/YootekOperatingApplication.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6S38US475D;
 				ENABLE_BITCODE = NO;
@@ -547,6 +550,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = YootekOperatingApplication/YootekOperatingApplication.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6S38US475D;
 				INFOPLIST_FILE = YootekOperatingApplication/Info.plist;
