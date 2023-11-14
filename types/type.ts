@@ -1,4 +1,5 @@
 const allPermissions = {
+  'Datas.Admin': 'true',
   'Pages.TenantName': 'true',
   'Pages.Citizens': 'true',
   'Pages.Digitals': 'true',
