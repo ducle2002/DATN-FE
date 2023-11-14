@@ -8,10 +8,11 @@ import {
   TLocalServiceManagementOrder,
   TPagingParams,
 } from './local-service-management.model';
+import {BaseService} from '@/utils/base.service';
 const callAxios = async (url: any, params: any) => {
   return axiosClient.get(url, {params: params});
 };
-class LocalServiceManagement {
+class LocalServiceManagement extends BaseService {
   getAllCategory = async (
     params: TPagingParams,
   ): Promise<{data: TLocalServiceManagement[]; totalRecords: number}> => {
@@ -113,6 +114,21 @@ class LocalServiceManagement {
     const url =
       HOST_SERVER + '/api/services/app/DigitalServiceOrder/UpdateRate';
     const res = await axiosClient.put(url, data);
+    return res;
+  };
+  updateFeedback = async (data: {
+    id: number;
+    responseContent: string;
+    totalAmount: number;
+  }) => {
+    const url =
+      HOST_SERVER + '/api/services/app/DigitalServiceOrder/UpdateFeedback';
+    const res = await axiosClient.put(url, data);
+    return res;
+  };
+  deleteOrder = async (params: {id: number}) => {
+    const url = HOST_SERVER + '/api/services/app/DigitalServiceOrder/Delete';
+    const res = await axiosClient.delete(url, {params});
     return res;
   };
 }

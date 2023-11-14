@@ -351,7 +351,9 @@ const FeedbackScreen = (props: Props) => {
           </TouchableWithoutFeedback>
         </Pressable>
       </Modal>
-      {(isLoading || isLoadingDelete) && <LoadingComponent />}
+      {(isLoading || isLoadingDelete || isLoadingUpdateState) && (
+        <LoadingComponent />
+      )}
     </View>
   );
 };

@@ -37,7 +37,7 @@ const LocalServiceManagementScreen = (props: Props) => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['localService/history/listService'],
+    queryKey: ['localService/listService'],
     queryFn: ({pageParam}) =>
       LocalServiceManagementApi.getAllListService({
         skipCount: pageParam,
@@ -86,10 +86,14 @@ const LocalServiceManagementScreen = (props: Props) => {
             {
               paddingRight: 4,
               alignItems: 'center',
-              backgroundColor: 'white',
+              backgroundColor: '#f8f9fa',
             },
           ]}
-          // valueStyle={styles.txtChip}
+          onEndScroll={() => {
+            if (!isFetchingNextPage && hasNextPage) {
+              fetchNextPage();
+            }
+          }}
         />
         <Tab.Navigator
           screenOptions={{

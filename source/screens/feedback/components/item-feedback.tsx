@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import React, {forwardRef} from 'react';
 import {TFeedback} from '@/modules/feedback/feedback.model';
-import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import {Swipeable} from 'react-native-gesture-handler';
 import Icon from '@/components/icon.component';
