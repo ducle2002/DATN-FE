@@ -1,5 +1,11 @@
 import {Dimensions, StyleSheet, View} from 'react-native';
-import React, {useLayoutEffect, useMemo, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {useResidentData} from './services/resident.hook';
 import {EResidentFormId, TResident} from './services/resident.model';
 import ResidentItem from './components/resident-item';
@@ -11,15 +17,18 @@ import ResidentDetail from './components/resident-detail';
 import MainHeader from '@/components/main-header.component';
 import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {flatten, map} from 'ramda';
+import BottomContainer from '@/components/bottom-container.component';
+import {ResidentFilterContext, TFilter} from './hooks/ResidentFilterContext';
 
 const {width} = Dimensions.get('screen');
 type Props = StackScreenProps<AppStackParamsList, 'RESIDENT_STACK'>;
 
 const ResidentVerifyScreen = ({navigation}: Props) => {
-  const [formId, setFormId] = useState(EResidentFormId.ALL);
-  const [keyword, setKeyword] = useState<string>();
+  const [filters, setFilters] = useState<TFilter>({
+    formId: EResidentFormId.ALL,
+  });
 
-  const {fetchNextPage, data} = useResidentData({formId, keyword});
+  const {fetchNextPage, data} = useResidentData(filters);
   const [resident, setResident] = useState<TResident>();
 
   const renderItem = (_: any, item: TResident) => (
@@ -44,19 +53,24 @@ const ResidentVerifyScreen = ({navigation}: Props) => {
     ),
   ).current;
 
-  const renderHeader = (props: StackHeaderProps) => (
-    <MainHeader {...props} onKeywordChange={kw => setKeyword(kw)} />
+  const renderHeader = useCallback(
+    (props: StackHeaderProps) => (
+      <MainHeader
+        {...props}
+        onKeywordChange={kw => setFilters(old => ({...old, keyword: kw}))}
+      />
+    ),
+    [setFilters],
   );
 
   useLayoutEffect(() => {
     navigation.setOptions({
       header: renderHeader,
     });
-  }, [navigation]);
+  }, [navigation, renderHeader]);
 
   return (
     <View style={styles.container}>
-      <ResidentFilter selected={formId} onChange={value => setFormId(value)} />
       <RecyclerListView
         dataProvider={dataProvider}
         layoutProvider={_layoutProvider}
@@ -76,9 +90,18 @@ const ResidentVerifyScreen = ({navigation}: Props) => {
         isVisible={!!resident}
         closeModal={() => setResident(undefined)}
         resident={resident}
-        formId={formId}
-        keyword={keyword}
+        formId={filters.formId}
+        keyword={filters.keyword}
       />
+      <BottomContainer>
+        <ResidentFilterContext.Provider
+          value={{
+            filters: filters,
+            setFilters: setFilters,
+          }}>
+          <ResidentFilter />
+        </ResidentFilterContext.Provider>
+      </BottomContainer>
     </View>
   );
 };

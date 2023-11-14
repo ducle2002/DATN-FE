@@ -5,7 +5,7 @@ import {
 
 const resident = {
   apartmentCode: 'Mã căn hộ',
-  buildingCode: 'Mã khu đô thị',
+  buildingCode: 'Tòa nhà',
   dateOfBirth: 'Ngày sinh',
   gender: 'Giới tính',
   fullName: 'Họ tên',
@@ -15,8 +15,24 @@ const resident = {
   relationship: 'Quan hệ với chủ hộ',
   nationality: 'Quốc tịch',
   residentInformation: 'Thông tin cư dân khai báo',
+  urban: 'Khu đô thị',
+  building: 'Tòa nhà',
+  identityImages: 'Hình ảnh CCCD',
 };
 
+const relationship: {[key: number]: string} = {
+  1: 'Chủ hộ',
+  2: 'Vợ',
+  3: 'Chồng',
+  4: 'Con gái',
+  5: 'Con trai',
+  6: 'Cùng gia đình',
+  7: 'Cha',
+  8: 'Mẹ',
+  9: 'Ông',
+  10: 'Bà',
+  11: 'Khách',
+};
 const formId = {
   [EResidentFormId.ALL]: 'Tất cả',
   [EResidentFormId.NEW]: 'Mới',
@@ -38,6 +54,7 @@ const residentLanguage = {
   resident,
   state,
   formId,
+  relationship,
 };
 
 export default residentLanguage;

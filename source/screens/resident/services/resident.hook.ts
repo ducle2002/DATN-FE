@@ -1,22 +1,24 @@
 import {useInfiniteQuery, useMutation} from 'react-query';
 import {ResidentApi} from './resident.services';
-import {EResidentFormId, TResident} from './resident.model';
+import {TResident} from './resident.model';
+import {TFilter} from '../hooks/ResidentFilterContext';
 
 export const useResidentData = ({
   formId,
   keyword,
-}: {
-  formId: EResidentFormId;
-  keyword?: String;
-}) => {
+  urbanId,
+  buildingId,
+}: TFilter) => {
   const {data, fetchNextPage} = useInfiniteQuery({
-    queryKey: ['resident', formId, keyword],
+    queryKey: ['resident', formId, keyword, urbanId, buildingId],
     queryFn: ({pageParam}) =>
       ResidentApi.getResident({
         ...pageParam,
-        formId: formId,
         maxResultCount: 10,
         keyword,
+        formId,
+        urbanId,
+        buildingId,
       }),
     getNextPageParam: (lastPage, allPages) => {
       const skipCount = allPages.length * 10;

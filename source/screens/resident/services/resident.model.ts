@@ -53,4 +53,5 @@ export type TResident = {
   type: number | null;
   urbanCode: null | string;
   urbanId: number;
+  imageUrlsIdentity?: string[];
 };

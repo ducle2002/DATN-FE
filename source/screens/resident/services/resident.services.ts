@@ -1,13 +1,14 @@
 import axiosClient from '@/utils/axios.client';
 import {BaseService} from '@/utils/base.service';
 import {TPagingParams} from 'types/type';
-import {EResidentFormId, TResident} from './resident.model';
+import {TResident} from './resident.model';
+import {TFilter} from '../hooks/ResidentFilterContext';
 
 class ResidentService extends BaseService {
   endpoint = '/api/services/app/Citizen/';
 
   getResident = async (
-    params: TPagingParams & {formId: EResidentFormId; keyword?: string},
+    params: TPagingParams & TFilter,
   ): Promise<{
     resident: Array<TResident>;
     totalRecords: number;
