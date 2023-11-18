@@ -76,6 +76,11 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
         return navigation.navigate('LOCAL_SERVICE_MANAGEMENT_STACK', {
           screen: 'MAIN_SCREEN',
         });
+      case 'Pages.Meter.List.GetAll':
+        return navigation.navigate('METER_STACK', {
+          screen: 'MAIN_SCREEN',
+          params: {screen: 'LIST_INDEX'},
+        });
       default:
         toast.show('Chức năng đang phát triển');
     }

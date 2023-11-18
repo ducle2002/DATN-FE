@@ -97,7 +97,9 @@ const DropdownMenu = ({
           onSelected(item.id);
           toggleIsVisible();
         }}>
-        <Text style={[styles.itemLabelText, itemLabelStyle]}>{item.label}</Text>
+        <Text numberOfLines={1} style={[styles.itemLabelText, itemLabelStyle]}>
+          {item.label}
+        </Text>
       </Pressable>
     );
   };
@@ -160,7 +162,7 @@ const DropdownMenu = ({
             }}
           />
         )}
-        <Text style={[styles.textValue, valueStyle]}>
+        <Text numberOfLines={1} style={[styles.textValue, valueStyle]}>
           {selectedLabel ? (
             selectedLabel
           ) : (
@@ -219,6 +221,7 @@ const styles = StyleSheet.create({
   textValue: {
     ...globalStyles.text15Medium,
     marginRight: 'auto',
+    flex: 1,
   },
   inputContainer: {
     paddingHorizontal: 5,
@@ -241,6 +244,7 @@ const styles = StyleSheet.create({
   },
   itemLabelText: {
     ...globalStyles.text14Medium,
+    flex: 1,
   },
   textError: {
     ...globalStyles.text12Medium,

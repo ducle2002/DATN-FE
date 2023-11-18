@@ -25,5 +25,5 @@ export const useListApartments = ({
     enabled: !!urbanId,
   });
 
-  return query;
+  return {...query, apartments: query.data?.apartments ?? []};
 };

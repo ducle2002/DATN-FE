@@ -46,7 +46,6 @@ const HomeScreen = (props: HomeScreenProps) => {
         resident: r,
       };
     }, [grantedPermissions]);
-  console.log(service);
 
   return (
     <View style={styles.container}>

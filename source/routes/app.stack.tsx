@@ -26,9 +26,6 @@ import MaterialAssetStack, {
 } from './material-asset.stack';
 import CameraScreen from '@/screens/camera/camera.screen';
 import ResidentVerifyScreen from '@/screens/resident/resident-verify.screen';
-import OperatingStack, {
-  OperatingStackParamsList,
-} from './operating/operating.stack';
 import WorkManagementDrawer, {
   WorkStackParamsList,
 } from './work-management.stack';
@@ -37,6 +34,8 @@ import HotlineStack, {HotlineStackParamsList} from './hotline.stack';
 import LocalServiceManagementStack, {
   LocalServiceManagementStackParamsList,
 } from './local-service-management';
+import MeterStack, {MeterStackParamsList} from './operating/meter.stack';
+import {useListMeterType} from '@/screens/meter-management/hooks/useListMeterTypes';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -56,9 +55,9 @@ export type AppStackParamsList = {
       }
     | undefined;
   RESIDENT_STACK: undefined;
-  OPERATING_STACK: NavigatorScreenParams<OperatingStackParamsList>;
   WORK_MANAGEMENT: NavigatorScreenParams<WorkStackParamsList>;
   HOTLINE_STACK: NavigatorScreenParams<HotlineStackParamsList>;
+  METER_STACK: NavigatorScreenParams<MeterStackParamsList>;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -66,6 +65,8 @@ const Stack = createStackNavigator<AppStackParamsList>();
 const AppStack = () => {
   const encryptedAccessToken = useAppSelector(selectedEncryptedAccessToken);
   const dispatch = useAppDispatch();
+
+  useListMeterType();
 
   useEffect(() => {
     if (encryptedAccessToken && encryptedAccessToken !== '') {
@@ -148,9 +149,9 @@ const AppStack = () => {
         name="CAMERA_SCREEN"
         component={CameraScreen}
       />
-      <Stack.Screen name="OPERATING_STACK" component={OperatingStack} />
       <Stack.Screen name={'SETTING_SCREEN'} component={SettingStack} />
       <Stack.Screen name="HOTLINE_STACK" component={HotlineStack} />
+      <Stack.Screen name="METER_STACK" component={MeterStack} />
     </Stack.Navigator>
   );
 };

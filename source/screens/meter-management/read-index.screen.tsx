@@ -1,0 +1,355 @@
+import {
+  Image,
+  KeyboardAvoidingView,
+  Linking,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {StackScreenProps} from '@react-navigation/stack';
+import {MeterStackParamsList} from '@/routes/operating/meter.stack';
+import Button from '@/components/button.component';
+import ScannerView from '@/components/scanner-view';
+import {PhotoFile} from 'react-native-vision-camera';
+import globalStyles from '@/config/globalStyles';
+import {Controller, useForm} from 'react-hook-form';
+import CTextInput from '@/components/text-input.component';
+import language, {languageKeys} from '@/config/language/language';
+import BottomContainer from '@/components/bottom-container.component';
+import TextInputSuggestion from '@/components/text-input-suggestion';
+import DashedLine from '@/components/dashed-line.component';
+import {useListApartments} from '@/modules/apartment/apartment.hook';
+import {useListBuilding} from '@/modules/building/building.hook';
+import {useAllUrban} from '@/modules/urban/urban.hook';
+import {TFilter} from './hooks/MeterFilterContext';
+import DropdownMenuComponent from '@/components/dropdown-menu.component';
+import {useGetAllMeter} from './hooks/useListMeter';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
+import MeterMonthlyService from './services/meter-monthly.service';
+import moment from 'moment';
+import {useToast} from 'react-native-toast-notifications';
+type Props = StackScreenProps<MeterStackParamsList, 'READ_INDEX'>;
+
+const ReadIndexMeterScreen = ({route, navigation}: Props) => {
+  const toast = useToast();
+  const queryClient = useQueryClient();
+  const [image, setImage] = useState<PhotoFile>();
+
+  const onScannedCallback = (result?: string, params?: any) => {
+    if (result?.includes('yooioc://water-bill/add')) {
+      Linking.openURL(result + `&image=${JSON.stringify(params.image)}`);
+    } else {
+      Linking.openURL(
+        'yooioc://water-bill/add?' + `&image=${JSON.stringify(params.image)}`,
+      );
+    }
+  };
+
+  const [filters, setFilters] = useState<TFilter>();
+  const {urbans} = useAllUrban({});
+  const {buildings} = useListBuilding({urbanId: filters?.urbanId});
+  const {apartments} = useListApartments({...filters});
+  const {meters} = useGetAllMeter({
+    ...filters,
+    meterTypeId: route.params?.meterTypeId,
+  });
+
+  const [meterId, setMeterId] = useState<number>();
+
+  const {data: lastMonthData} = useQuery({
+    queryKey: ['last-month', meterId],
+    queryFn: () =>
+      MeterMonthlyService.getAll({meterId: meterId, maxResultCount: 1}),
+    enabled: !!meterId,
+    onSuccess: result => {
+      if (result.records[0] && !filters?.urbanId && !filters?.urbanId) {
+        setFilters(old => ({
+          ...old,
+          urbanId: result.records[0].urbanId,
+          buildingId: result.records[0].buildingId,
+        }));
+      }
+    },
+  });
+
+  const {control, handleSubmit, resetField} = useForm();
+
+  const {mutate: createRequest, status} = useMutation({
+    mutationFn: params => MeterMonthlyService.create(params),
+    onSuccess: () => {
+      toast.show('Thêm chỉ số thành công');
+      resetField('value');
+      setTimeout(() => {
+        setMeterId(undefined);
+      }, 200);
+      queryClient.refetchQueries(['list-meter-monthly']);
+    },
+  });
+
+  const prevFilterRef = useRef<TFilter>();
+
+  useEffect(() => {
+    if (
+      prevFilterRef.current?.urbanId ||
+      prevFilterRef.current?.apartmentCode ||
+      prevFilterRef.current?.buildingId
+    ) {
+      setMeterId(undefined);
+    }
+    prevFilterRef.current = filters;
+  }, [filters]);
+
+  const onSubmit = (data: any) => {
+    createRequest({
+      ...data,
+      meterId,
+      period: moment().toISOString(),
+    });
+  };
+
+  return (
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={{paddingHorizontal: 16}}>
+          <View style={styles.imageContainer}>
+            <>
+              {image ? (
+                <>
+                  <Image
+                    source={{
+                      uri: image?.path,
+                    }}
+                    style={{width: '100%', height: '100%'}}
+                  />
+                  <Button
+                    onPress={() => {
+                      setImage(undefined);
+                    }}
+                    style={{position: 'absolute'}}>
+                    reset
+                  </Button>
+                </>
+              ) : (
+                <ScannerView
+                  isReturnPhoto={true}
+                  onScannedCallback={onScannedCallback}
+                  active={!image}
+                  hasCaptureButton={true}
+                />
+              )}
+            </>
+          </View>
+          <View style={styles.formContainer}>
+            <View>
+              <View style={styles.row}>
+                <Text style={styles.textLabel}>
+                  {language.t(languageKeys.water.labelForm.urban)}
+                </Text>
+
+                <DropdownMenuComponent
+                  style={{flex: 1}}
+                  inputContainer={styles.textValue}
+                  options={urbans.map(u => ({
+                    id: u.id,
+                    label: u.displayName,
+                  }))}
+                  onSelected={(urbanId: number) =>
+                    setFilters(old => ({
+                      ...old,
+                      urbanId: urbanId,
+                      buildingId: undefined,
+                      apartmentCode: undefined,
+                    }))
+                  }
+                  selectedLabel={
+                    urbans.find(u => u.id === filters?.urbanId)?.displayName
+                  }
+                />
+              </View>
+              <DashedLine style={{marginVertical: 10}} />
+            </View>
+
+            <View>
+              <View style={styles.row}>
+                <Text style={styles.textLabel}>
+                  {language.t(languageKeys.water.labelForm.building)}
+                </Text>
+
+                <DropdownMenuComponent
+                  style={{flex: 1}}
+                  inputContainer={styles.textValue}
+                  options={buildings.map(u => ({
+                    id: u.id,
+                    label: u.displayName,
+                  }))}
+                  onSelected={(buildingId: number) =>
+                    setFilters(old => ({
+                      ...old,
+                      buildingId: buildingId,
+                      apartmentCode: undefined,
+                    }))
+                  }
+                  selectedLabel={
+                    buildings.find(u => u.id === filters?.buildingId)
+                      ?.displayName
+                  }
+                />
+              </View>
+              <DashedLine style={{marginVertical: 10}} />
+            </View>
+
+            <View>
+              <View style={styles.row}>
+                <Text style={styles.textLabel}>
+                  {language.t(languageKeys.water.labelForm.apartment)}
+                </Text>
+
+                <TextInputSuggestion
+                  containerStyle={{flex: 1}}
+                  value={filters?.apartmentCode}
+                  onChangeText={(value: string) =>
+                    setFilters(old => ({...old, apartmentCode: value}))
+                  }
+                  style={[styles.textValue]}
+                  valueSuggest={apartments.map(a => a.apartmentCode)}
+                />
+              </View>
+              <DashedLine style={{marginVertical: 10}} />
+            </View>
+
+            <View>
+              <View style={styles.row}>
+                <Text style={styles.textLabel}>
+                  {language.t(languageKeys.water.labelForm.meter)}
+                </Text>
+
+                <DropdownMenuComponent
+                  style={{flex: 1}}
+                  inputContainer={styles.textValue}
+                  options={meters.map(u => ({
+                    id: u.id,
+                    label: u.name,
+                  }))}
+                  onSelected={(value: number) => setMeterId(value)}
+                  selectedLabel={meters.find(u => u.id === meterId)?.name}
+                />
+              </View>
+              <DashedLine style={{marginVertical: 10}} />
+            </View>
+
+            {!!lastMonthData?.records[0] && (
+              <View>
+                <View style={styles.row}>
+                  <Text style={styles.textLabel}>
+                    {language.t(languageKeys.water.labelForm.previousReading)}
+                  </Text>
+
+                  <CTextInput
+                    containerStyle={{flex: 1}}
+                    style={[styles.textValue]}
+                    value={lastMonthData?.records[0].value.toString()}
+                    editable={false}
+                  />
+                </View>
+                <DashedLine style={{marginVertical: 10}} />
+              </View>
+            )}
+
+            <Controller
+              name="value"
+              control={control}
+              rules={{
+                required: {
+                  value: true,
+                  message: language.t(languageKeys.shared.form.requiredMessage),
+                },
+              }}
+              render={({field: {value, onChange}, fieldState: {error}}) => (
+                <View>
+                  <View style={styles.row}>
+                    <Text style={styles.textLabel}>
+                      {language.t(languageKeys.water.labelForm.currentReading)}
+                    </Text>
+                    <CTextInput
+                      editable={!!meterId}
+                      containerStyle={{flex: 1}}
+                      //@ts-ignore
+                      value={value}
+                      //@ts-ignore
+                      onChangeText={onChange}
+                      style={[styles.textValue]}
+                    />
+                  </View>
+                  {meterId && (
+                    <Text
+                      style={{...globalStyles.text13Medium, color: '#FF6565'}}>
+                      {error?.message}
+                    </Text>
+                  )}
+                  <DashedLine style={{marginVertical: 10}} />
+                </View>
+              )}
+            />
+          </View>
+        </ScrollView>
+        <BottomContainer>
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+            <Button mode="outlined">
+              {language.t(languageKeys.shared.button.back)}
+            </Button>
+            <Button
+              onPress={handleSubmit(onSubmit)}
+              mode="contained"
+              disabled={status === 'loading'}>
+              {language.t(languageKeys.shared.button.save)}
+            </Button>
+          </View>
+        </BottomContainer>
+      </View>
+    </KeyboardAvoidingView>
+  );
+};
+
+export default ReadIndexMeterScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  imageContainer: {
+    width: '60%',
+    aspectRatio: 1,
+    backgroundColor: '#ababab',
+    alignSelf: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    paddingVertical: 2,
+    alignItems: 'center',
+  },
+  textLabel: {
+    ...globalStyles.text16Bold,
+    paddingHorizontal: 5,
+    flex: 1,
+  },
+  textValue: {
+    ...globalStyles.text16Medium,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+    borderRadius: 2,
+    flex: 1,
+  },
+  formContainer: {
+    backgroundColor: '#f1f2f8',
+    marginTop: 20,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
+});

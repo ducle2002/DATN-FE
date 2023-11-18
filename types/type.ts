@@ -1,3 +1,5 @@
+import {ESortBy} from '@/screens/meter-management/models/model';
+
 const allPermissions = {
   'Datas.Admin': 'true',
   'Pages.TenantName': 'true',
@@ -261,6 +263,21 @@ const allPermissions = {
   'Pages.Settings.Images': 'true',
   //add after( need edit)
   'Pages.LocalService.List': 'true',
+  'Pages.Meter.List': 'true',
+  'Pages.Meter.List.GetAll': 'true',
+  'Pages.Meter.List.Create': 'true',
+  'Pages.Meter.List.Edit': 'true',
+  'Pages.Meter.List.Delete': 'true',
+  'Pages.Meter.Type': 'true',
+  'Pages.Meter.Type.Create': 'true',
+  'Pages.Meter.Type.GetAll': 'true',
+  'Pages.Meter.Type.Edit': 'true',
+  'Pages.Meter.Type.Delete': 'true',
+  'Pages.Meter.Monthly': 'true',
+  'Pages.Meter.Monthly.Create': 'true',
+  'Pages.Meter.Monthly.Edit': 'true',
+  'Pages.Meter.Monthly.Delete': 'true',
+  'Pages.Meter.Monthly.GetAll': 'true',
 };
 
 export type TPermission = keyof typeof allPermissions;
@@ -268,4 +285,8 @@ export type TPermission = keyof typeof allPermissions;
 export type TPagingParams = {
   skipCount?: number;
   maxResultCount?: number;
+  urbanId?: number;
+  buildingId?: number;
+  apartmentCode?: string;
+  sortBy?: ESortBy;
 };
