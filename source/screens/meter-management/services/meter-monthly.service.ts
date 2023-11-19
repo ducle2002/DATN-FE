@@ -14,7 +14,9 @@ class MeterMonthly {
     const url = this.endpoint + 'GetAllMeterMonthly';
     const {
       data: {result},
-    } = await axiosClient.get(url, {params: {sortBy: ESortBy.DESC, ...params}});
+    } = await axiosClient.get(url, {
+      params: {sortBy: ESortBy.DESC, ...params},
+    });
     return {
       records: result.data,
       totalRecords: result.totalRecords,

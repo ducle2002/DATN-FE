@@ -25,6 +25,7 @@ type Props = {
   containerStyle?: StyleProp<ViewStyle>;
   labelContainerStyle?: StyleProp<ViewStyle>;
   errorMessage?: string;
+  mode?: 'date' | 'time' | 'datetime';
 };
 
 const DatePickerComponent = ({
@@ -32,11 +33,13 @@ const DatePickerComponent = ({
   onChange = () => {},
   label,
   minimumDate,
+  maximumDate,
   labelStyle,
   inputContainerStyle,
   containerStyle,
   labelContainerStyle,
   errorMessage,
+  mode,
 }: Props) => {
   const [modal, setIsVisible] = useState<{
     isVisible: boolean;
@@ -52,28 +55,32 @@ const DatePickerComponent = ({
           </View>
         )}
         <View style={[styles.container, inputContainerStyle]}>
-          <Button
-            onPress={() =>
-              setIsVisible({
-                isVisible: true,
-                mode: 'time',
-              })
-            }>
-            {value
-              ? moment(value).format('HH:mm')
-              : language.t(languageKeys.shared.button.pickTime)}
-          </Button>
-          <Button
-            onPress={() =>
-              setIsVisible({
-                isVisible: true,
-                mode: 'date',
-              })
-            }>
-            {value
-              ? moment(value).format('DD-MM-YYYY')
-              : language.t(languageKeys.shared.button.pickDate)}
-          </Button>
+          {mode !== 'date' && (
+            <Button
+              onPress={() =>
+                setIsVisible({
+                  isVisible: true,
+                  mode: 'time',
+                })
+              }>
+              {value
+                ? moment(value).format('HH:mm')
+                : language.t(languageKeys.shared.button.pickTime)}
+            </Button>
+          )}
+          {mode !== 'time' && (
+            <Button
+              onPress={() =>
+                setIsVisible({
+                  isVisible: true,
+                  mode: 'date',
+                })
+              }>
+              {value
+                ? moment(value).format('DD-MM-YYYY')
+                : language.t(languageKeys.shared.button.pickDate)}
+            </Button>
+          )}
           <Icon
             size={30}
             type="Ionicons"
@@ -101,13 +108,20 @@ const DatePickerComponent = ({
           setIsVisible({isVisible: false, mode: undefined});
           onChange(moment(date).toISOString());
         }}
-        mode={modal.mode}
+        mode={mode ?? modal.mode}
         theme="light"
-        minimumDate={moment(minimumDate ? minimumDate : undefined).toDate()}
-        maximumDate={moment(minimumDate ? minimumDate : undefined)
-          .add(1, 'M')
-          .toDate()}
+        minimumDate={minimumDate ? moment(minimumDate).toDate() : undefined}
+        maximumDate={
+          maximumDate
+            ? moment(maximumDate).toDate()
+            : minimumDate
+            ? moment(minimumDate).add(1, 'M').toDate()
+            : undefined
+        }
         locale="vi"
+        title={'Chọn thời gian'}
+        cancelText={language.t(languageKeys.shared.button.cancel)}
+        confirmText={language.t(languageKeys.shared.button.save)}
       />
     </>
   );

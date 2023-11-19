@@ -20,6 +20,14 @@ class Meter {
       totalRecords: result.totalRecords,
     };
   };
+
+  getById = async (params: {id: number}): Promise<TMeter> => {
+    const url = this.endpoint + 'GetMeterById';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: params});
+    return result.data;
+  };
 }
 
 const MeterService = new Meter();

@@ -59,8 +59,10 @@ const HomeIcon = ({type, ...props}: HomeIconProp) => {
       );
     case 'Pages.Citizen.Verifications.GetAll':
       return <Icon type="Ionicons" name="person" size={35} color={'white'} />;
-    case 'Pages.Invoices.Monthly.GetAll':
-      return <Icon type="Ionicons" name="water" size={35} color={'white'} />;
+    case 'Pages.Meter.List.GetAll':
+      return (
+        <Icon type="Ionicons" name="speedometer" size={35} color={'white'} />
+      );
     case 'Pages.Operations.TaskManagement.GetAll':
       return (
         <Icon

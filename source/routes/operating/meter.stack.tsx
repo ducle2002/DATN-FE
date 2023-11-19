@@ -12,6 +12,7 @@ import {
 } from '@react-navigation/drawer';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import MonthlyDetailScreen from '@/screens/meter-management/monthly-detail.screen';
+import MeterDetailScreen from '@/screens/meter-management/meter-detail.screen';
 
 export type MeterStackParamsList = {
   READ_INDEX: {
@@ -20,6 +21,7 @@ export type MeterStackParamsList = {
   };
   MAIN_SCREEN: NavigatorScreenParams<MeterDrawerParamsList>;
   MONTHLY_DETAIL: {id: number};
+  METER_DETAIL: {id: number};
 };
 
 export type MeterDrawerParamsList = {
@@ -36,17 +38,17 @@ const MainDrawer = () => {
         drawerPosition: 'right',
       }}>
       <Drawer.Screen
-        name="LIST_INDEX"
-        component={MeterIndexScreen}
-        options={{
-          title: 'Bản ghi chỉ số',
-        }}
-      />
-      <Drawer.Screen
         name="LIST_METER"
         component={ListMeterScreen}
         options={{
           title: 'Danh sách đồng hồ',
+        }}
+      />
+      <Drawer.Screen
+        name="LIST_INDEX"
+        component={MeterIndexScreen}
+        options={{
+          title: 'Bản ghi chỉ số',
         }}
       />
     </Drawer.Navigator>
@@ -62,6 +64,7 @@ const MeterStack = () => {
       screenOptions={{
         headerBackTitleVisible: false,
         headerTitleAlign: 'center',
+        cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
       }}>
       <Stack.Screen
         name="MAIN_SCREEN"
@@ -79,7 +82,14 @@ const MeterStack = () => {
         name="MONTHLY_DETAIL"
         component={MonthlyDetailScreen}
         options={{
-          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+          title: 'Chi tiết bản ghi',
+        }}
+      />
+      <Stack.Screen
+        name="METER_DETAIL"
+        component={MeterDetailScreen}
+        options={{
+          title: 'Chi tiết đồng hồ',
         }}
       />
     </Stack.Navigator>

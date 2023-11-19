@@ -12,7 +12,7 @@ import administrative from './administrative/vi';
 import chat from './chat/vi';
 import materialAsset from './material-asset/vi';
 import residentLanguage from './resident/vi';
-import water from './water-meter/vi';
+import meter from './water-meter/vi';
 import workManagement from './work-management/vi';
 import {role} from './role/vi';
 const vi = {
@@ -35,7 +35,7 @@ const vi = {
   inventory: 'Quản lý tài sản vật tư',
   operator: 'Vận hành',
   residentLanguage,
-  water,
+  meter,
   workManagement,
   role,
   search: 'Tìm kiếm',

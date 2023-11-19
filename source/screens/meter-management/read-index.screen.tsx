@@ -180,7 +180,7 @@ const ReadIndexMeterScreen = ({route}: Props) => {
             <View>
               <View style={styles.row}>
                 <Text style={styles.textLabel}>
-                  {language.t(languageKeys.water.labelForm.urban)}
+                  {language.t(languageKeys.meter.labelForm.urban)}
                 </Text>
 
                 <DropdownMenuComponent
@@ -209,7 +209,7 @@ const ReadIndexMeterScreen = ({route}: Props) => {
             <View>
               <View style={styles.row}>
                 <Text style={styles.textLabel}>
-                  {language.t(languageKeys.water.labelForm.building)}
+                  {language.t(languageKeys.meter.labelForm.building)}
                 </Text>
 
                 <DropdownMenuComponent
@@ -238,7 +238,7 @@ const ReadIndexMeterScreen = ({route}: Props) => {
             <View>
               <View style={styles.row}>
                 <Text style={styles.textLabel}>
-                  {language.t(languageKeys.water.labelForm.meter)}
+                  {language.t(languageKeys.meter.labelForm.meter)}
                 </Text>
 
                 <DropdownMenuComponent
@@ -259,7 +259,7 @@ const ReadIndexMeterScreen = ({route}: Props) => {
               <View>
                 <View style={styles.row}>
                   <Text style={styles.textLabel}>
-                    {language.t(languageKeys.water.labelForm.previousReading)}
+                    {language.t(languageKeys.meter.labelForm.previousReading)}
                   </Text>
 
                   <CTextInput
@@ -286,7 +286,7 @@ const ReadIndexMeterScreen = ({route}: Props) => {
                 <View>
                   <View style={styles.row}>
                     <Text style={styles.textLabel}>
-                      {language.t(languageKeys.water.labelForm.currentReading)}
+                      {language.t(languageKeys.meter.labelForm.currentReading)}
                     </Text>
                     <CTextInput
                       editable={!!meterId}

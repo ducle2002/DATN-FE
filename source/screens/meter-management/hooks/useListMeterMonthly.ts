@@ -3,7 +3,7 @@ import MeterMonthlyService from '../services/meter-monthly.service';
 import {TPagingParams} from 'types/type';
 
 export const useListMeterMonthly = (
-  params?: TPagingParams & {meterTypeId?: number},
+  params?: TPagingParams & {meterTypeId?: number; meterId?: number},
 ) => {
   const query = useInfiniteQuery({
     queryKey: ['list-meter-monthly', params],

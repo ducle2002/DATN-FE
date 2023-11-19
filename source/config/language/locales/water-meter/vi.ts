@@ -1,6 +1,7 @@
 const header = {
   readTheMeter: 'Ghi chỉ số mới',
   list: 'Danh sách đã ghi',
+  meters: 'Danh sách đồng hồ',
 };
 
 const labelForm = {

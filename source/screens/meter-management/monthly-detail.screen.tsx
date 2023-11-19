@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {StackScreenProps} from '@react-navigation/stack';
 import {MeterStackParamsList} from '@/routes/operating/meter.stack';

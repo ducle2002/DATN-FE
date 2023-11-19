@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useMemo, useState} from 'react';
 import DropdownMenuComponent from '@/components/dropdown-menu.component';
 import Button from '@/components/button.component';
@@ -10,9 +10,17 @@ import {MeterFilterContext} from '../hooks/MeterFilterContext';
 import {useListBuilding} from '@/modules/building/building.hook';
 import globalStyles from '@/config/globalStyles';
 import {useListApartments} from '@/modules/apartment/apartment.hook';
-type Props = {};
+import moment from 'moment';
+import DatePickerComponent from '@/screens/work-management/components/date-picker.component';
+type Props = {
+  filterMeter?: boolean;
+  filterOrganization?: boolean;
+};
 
-const FilterMeter = ({}: Props) => {
+const FilterMeter = ({
+  filterMeter = false,
+  filterOrganization = true,
+}: Props) => {
   const [isVisible, setIsVisible] = useState(false);
   const {urbans} = useAllUrban({});
   const {filters, setFilters} = useContext(MeterFilterContext);
@@ -58,78 +66,132 @@ const FilterMeter = ({}: Props) => {
         <SafeAreaView
           style={{height: '60%', backgroundColor: 'white', marginTop: 'auto'}}>
           <View style={styles.container}>
-            <DropdownMenuComponent
-              options={[
-                {
-                  id: undefined,
-                  label: language.t(languageKeys.residentLanguage.formId[1]),
-                },
-                ...urbans.map(u => ({id: u.id, label: u.displayName})),
-              ]}
-              selectedLabel={selectedUrban}
-              onSelected={(id: number) =>
-                setFilters(old => ({
-                  ...old,
-                  urbanId: id,
-                  buildingId: undefined,
-                }))
-              }
-              label={language.t(languageKeys.residentLanguage.resident.urban)}
-              labelStyle={{...globalStyles.text15Medium}}
-              style={styles.filterContainer}
-              valueStyle={{...globalStyles.text15Bold}}
-              labelContainerStyle={styles.labelContainer}
-              inputContainer={styles.inputContainer}
-            />
-            <DropdownMenuComponent
-              options={[
-                {
-                  id: undefined,
-                  label: language.t(languageKeys.residentLanguage.formId[1]),
-                },
-                ...buildings.map(u => ({id: u.id, label: u.displayName})),
-              ]}
-              selectedLabel={selectedBuilding}
-              onSelected={(id: number) =>
-                setFilters(old => ({
-                  ...old,
-                  buildingId: id,
-                  apartmentCode: undefined,
-                }))
-              }
-              label={language.t(
-                languageKeys.residentLanguage.resident.building,
-              )}
-              labelStyle={{...globalStyles.text15Medium}}
-              style={styles.filterContainer}
-              valueStyle={{...globalStyles.text15Bold}}
-              labelContainerStyle={styles.labelContainer}
-              inputContainer={styles.inputContainer}
-            />
-            <DropdownMenuComponent
-              options={[
-                {
-                  id: undefined,
-                  label: language.t(languageKeys.residentLanguage.formId[1]),
-                },
-                ...apartments.map(u => ({
-                  id: u.apartmentCode,
-                  label: u.apartmentCode,
-                })),
-              ]}
-              selectedLabel={selectedApartment}
-              onSelected={(id: string) =>
-                setFilters(old => ({...old, apartmentCode: id}))
-              }
-              label={language.t(
-                languageKeys.residentLanguage.resident.apartmentCode,
-              )}
-              labelStyle={{...globalStyles.text15Medium}}
-              style={styles.filterContainer}
-              valueStyle={{...globalStyles.text15Bold}}
-              labelContainerStyle={styles.labelContainer}
-              inputContainer={styles.inputContainer}
-            />
+            {filterOrganization && (
+              <>
+                <DropdownMenuComponent
+                  options={[
+                    {
+                      id: undefined,
+                      label: language.t(
+                        languageKeys.residentLanguage.formId[1],
+                      ),
+                    },
+                    ...urbans.map(u => ({id: u.id, label: u.displayName})),
+                  ]}
+                  selectedLabel={selectedUrban}
+                  onSelected={(id: number) =>
+                    setFilters(old => ({
+                      ...old,
+                      urbanId: id,
+                      buildingId: undefined,
+                    }))
+                  }
+                  label={language.t(
+                    languageKeys.residentLanguage.resident.urban,
+                  )}
+                  labelStyle={{...globalStyles.text15Medium}}
+                  style={styles.filterContainer}
+                  valueStyle={{...globalStyles.text15Bold}}
+                  labelContainerStyle={styles.labelContainer}
+                  inputContainer={styles.inputContainer}
+                />
+                <DropdownMenuComponent
+                  options={[
+                    {
+                      id: undefined,
+                      label: language.t(
+                        languageKeys.residentLanguage.formId[1],
+                      ),
+                    },
+                    ...buildings.map(u => ({id: u.id, label: u.displayName})),
+                  ]}
+                  selectedLabel={selectedBuilding}
+                  onSelected={(id: number) =>
+                    setFilters(old => ({
+                      ...old,
+                      buildingId: id,
+                      apartmentCode: undefined,
+                    }))
+                  }
+                  label={language.t(
+                    languageKeys.residentLanguage.resident.building,
+                  )}
+                  labelStyle={{...globalStyles.text15Medium}}
+                  style={styles.filterContainer}
+                  valueStyle={{...globalStyles.text15Bold}}
+                  labelContainerStyle={styles.labelContainer}
+                  inputContainer={styles.inputContainer}
+                />
+                <DropdownMenuComponent
+                  options={[
+                    {
+                      id: undefined,
+                      label: language.t(
+                        languageKeys.residentLanguage.formId[1],
+                      ),
+                    },
+                    ...apartments.map(u => ({
+                      id: u.apartmentCode,
+                      label: u.apartmentCode,
+                    })),
+                  ]}
+                  selectedLabel={selectedApartment}
+                  onSelected={(id: string) =>
+                    setFilters(old => ({...old, apartmentCode: id}))
+                  }
+                  label={language.t(
+                    languageKeys.residentLanguage.resident.apartmentCode,
+                  )}
+                  labelStyle={{...globalStyles.text15Medium}}
+                  style={styles.filterContainer}
+                  valueStyle={{...globalStyles.text15Bold}}
+                  labelContainerStyle={styles.labelContainer}
+                  inputContainer={styles.inputContainer}
+                />
+              </>
+            )}
+
+            {!filterMeter && (
+              <>
+                <View style={styles.filterContainer}>
+                  <View style={styles.labelContainer}>
+                    <Text style={{...globalStyles.text15Medium}}>Từ ngày</Text>
+                  </View>
+                  <DatePickerComponent
+                    containerStyle={styles.labelContainer}
+                    value={filters.fromMonth ?? ''}
+                    onChange={date => {
+                      setFilters(old => ({
+                        ...old,
+                        fromMonth: moment(date).toISOString(),
+                      }));
+                    }}
+                    mode="date"
+                    minimumDate={undefined}
+                    maximumDate={moment().toISOString()}
+                  />
+                </View>
+
+                <View style={styles.filterContainer}>
+                  <View style={styles.labelContainer}>
+                    <Text style={{...globalStyles.text15Medium}}>Đến ngày</Text>
+                  </View>
+                  <DatePickerComponent
+                    containerStyle={styles.labelContainer}
+                    value={filters.toMonth ?? ''}
+                    onChange={date => {
+                      setFilters(old => ({
+                        ...old,
+                        toMonth: moment(date).toISOString(),
+                      }));
+                    }}
+                    mode="date"
+                    minimumDate={filters.toMonth}
+                    maximumDate={moment().toISOString()}
+                  />
+                </View>
+              </>
+            )}
           </View>
           <BottomContainer>
             <View
@@ -145,6 +207,8 @@ const FilterMeter = ({}: Props) => {
                     urbanId: undefined,
                     buildingId: undefined,
                     apartmentCode: undefined,
+                    toMonth: undefined,
+                    fromMonth: undefined,
                   }));
                   setTimeout(() => {
                     setIsVisible(false);

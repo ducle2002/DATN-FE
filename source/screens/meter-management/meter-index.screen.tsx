@@ -33,7 +33,7 @@ const MeterIndexScreen = ({navigation}: Props) => {
   useEffect(() => {
     if (isFocused) {
       navigation.getParent()?.setOptions({
-        title: language.t(languageKeys.water.header.list),
+        title: language.t(languageKeys.meter.header.list),
       });
     }
   }, [isFocused, navigation]);
@@ -64,11 +64,12 @@ const MeterIndexScreen = ({navigation}: Props) => {
 
 const NotFound = () => <View />;
 
-const ListScreen = ({navigation, route}: any) => {
+export const ListScreen = ({navigation, route}: any) => {
   const [filters, setFilters] = useState<TFilter>({});
 
   const {data} = useListMeterMonthly({
-    meterTypeId: route.params.meterTypeId,
+    meterTypeId: route.params?.meterTypeId,
+    meterId: route.params?.meterId,
     ...filters,
   });
 
@@ -98,7 +99,7 @@ const ListScreen = ({navigation, route}: any) => {
               filters: filters,
               setFilters: setFilters,
             }}>
-            <FilterMeter />
+            <FilterMeter filterOrganization={!route.params.meterId} />
           </MeterFilterContext.Provider>
           <Button
             mode="contained"
@@ -107,7 +108,7 @@ const ListScreen = ({navigation, route}: any) => {
                 meterTypeId: route.params.meterTypeId,
               })
             }>
-            {language.t(languageKeys.water.action.addNew)}
+            {language.t(languageKeys.meter.action.addNew)}
           </Button>
         </View>
       </BottomContainer>

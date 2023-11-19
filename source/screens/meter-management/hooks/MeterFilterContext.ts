@@ -5,6 +5,8 @@ export type TFilter = {
   urbanId?: number;
   buildingId?: number;
   apartmentCode?: string;
+  fromMonth?: string;
+  toMonth?: string;
 };
 
 export const MeterFilterContext = createContext<{
@@ -16,6 +18,8 @@ export const MeterFilterContext = createContext<{
     urbanId: undefined,
     buildingId: undefined,
     apartmentCode: undefined,
+    fromMonth: undefined,
+    toMonth: undefined,
   },
   setFilters: () => {},
 });
