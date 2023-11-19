@@ -1,5 +1,8 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
 import ListMeterScreen from '@/screens/meter-management/list-meter.screen';
 import MeterIndexScreen from '@/screens/meter-management/meter-index.screen';
 import ReadIndexMeterScreen from '@/screens/meter-management/read-index.screen';
@@ -8,12 +11,15 @@ import {
   createDrawerNavigator,
 } from '@react-navigation/drawer';
 import {NavigatorScreenParams} from '@react-navigation/native';
+import MonthlyDetailScreen from '@/screens/meter-management/monthly-detail.screen';
 
 export type MeterStackParamsList = {
   READ_INDEX: {
     meterTypeId?: number;
+    id?: number;
   };
   MAIN_SCREEN: NavigatorScreenParams<MeterDrawerParamsList>;
+  MONTHLY_DETAIL: {id: number};
 };
 
 export type MeterDrawerParamsList = {
@@ -29,8 +35,20 @@ const MainDrawer = () => {
         headerShown: false,
         drawerPosition: 'right',
       }}>
-      <Drawer.Screen name="LIST_INDEX" component={MeterIndexScreen} />
-      <Drawer.Screen name="LIST_METER" component={ListMeterScreen} />
+      <Drawer.Screen
+        name="LIST_INDEX"
+        component={MeterIndexScreen}
+        options={{
+          title: 'Bản ghi chỉ số',
+        }}
+      />
+      <Drawer.Screen
+        name="LIST_METER"
+        component={ListMeterScreen}
+        options={{
+          title: 'Danh sách đồng hồ',
+        }}
+      />
     </Drawer.Navigator>
   );
 };
@@ -52,7 +70,18 @@ const MeterStack = () => {
           headerRight: renderDrawerToggleButton,
         }}
       />
-      <Stack.Screen name="READ_INDEX" component={ReadIndexMeterScreen} />
+      <Stack.Screen
+        name="READ_INDEX"
+        component={ReadIndexMeterScreen}
+        options={{title: 'Ghi chỉ số'}}
+      />
+      <Stack.Screen
+        name="MONTHLY_DETAIL"
+        component={MonthlyDetailScreen}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+        }}
+      />
     </Stack.Navigator>
   );
 };

@@ -21,9 +21,27 @@ class MeterMonthly {
     };
   };
 
+  getById = async (params: {id: number}): Promise<TMeterMonthly> => {
+    const url = this.endpoint + 'GetMeterMonthlyById';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: params});
+    return result.data;
+  };
+
+  update = async (params: any) => {
+    const url = this.endpoint + 'UpdateMeterMonthly';
+    return axiosClient.put(url, params);
+  };
+
   create = async (params: any) => {
     const url = this.endpoint + 'CreateMeterMonthly';
     return axiosClient.post(url, params);
+  };
+
+  delete = async (params: {id: number}) => {
+    const url = this.endpoint + 'DeleteMeterMonthly';
+    return axiosClient.delete(url, {params: params});
   };
 }
 

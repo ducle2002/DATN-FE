@@ -15,6 +15,7 @@ export type TMeterMonthly = {
   value: number;
   creationTime: string;
   creatorUserId: number;
+  creatorUserName: string;
   imageUrl: string;
 };
 

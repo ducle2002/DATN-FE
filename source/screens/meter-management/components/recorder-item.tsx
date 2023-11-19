@@ -12,6 +12,7 @@ import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import language, {languageKeys} from '@/config/language/language';
 import {useListMeterType} from '../hooks/useListMeterTypes';
+import moment from 'moment';
 type Props = {
   item: TMeterMonthly;
   navigation?: CompositeNavigationProp<
@@ -20,10 +21,14 @@ type Props = {
   >;
 };
 
-const RecorderItem = ({item}: Props) => {
+const RecorderItem = ({item, navigation}: Props) => {
   const {data} = useListMeterType();
   return (
-    <ItemCard style={styles.container}>
+    <ItemCard
+      style={styles.container}
+      onPress={() => {
+        navigation?.navigate('MONTHLY_DETAIL', {id: item.id});
+      }}>
       <View style={styles.contentContainer}>
         <View>
           <Text style={styles.textLabel}>
@@ -36,7 +41,10 @@ const RecorderItem = ({item}: Props) => {
           <Text>{item.urbanName}</Text>
           <Text>{item.buildingName}</Text>
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{alignItems: 'center'}}>
+          <Text style={styles.textPeriod}>
+            {moment(item.period).format('11/YYYY')}
+          </Text>
           <Text style={styles.textValue}>{item.value}</Text>
         </View>
       </View>
@@ -63,6 +71,10 @@ const styles = StyleSheet.create({
     ...globalStyles.text16Bold,
   },
   textValue: {
-    ...globalStyles.text16SemiBold,
+    ...globalStyles.text15SemiBold,
+  },
+  textPeriod: {
+    ...globalStyles.text14Medium,
+    color: '#ababab',
   },
 });

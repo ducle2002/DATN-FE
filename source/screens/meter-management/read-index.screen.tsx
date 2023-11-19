@@ -13,15 +13,12 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {MeterStackParamsList} from '@/routes/operating/meter.stack';
 import Button from '@/components/button.component';
 import ScannerView from '@/components/scanner-view';
-import {PhotoFile} from 'react-native-vision-camera';
 import globalStyles from '@/config/globalStyles';
-import {Controller, useForm} from 'react-hook-form';
+import {Controller, SubmitHandler, useForm, useWatch} from 'react-hook-form';
 import CTextInput from '@/components/text-input.component';
 import language, {languageKeys} from '@/config/language/language';
 import BottomContainer from '@/components/bottom-container.component';
-import TextInputSuggestion from '@/components/text-input-suggestion';
 import DashedLine from '@/components/dashed-line.component';
-import {useListApartments} from '@/modules/apartment/apartment.hook';
 import {useListBuilding} from '@/modules/building/building.hook';
 import {useAllUrban} from '@/modules/urban/urban.hook';
 import {TFilter} from './hooks/MeterFilterContext';
@@ -31,33 +28,33 @@ import {useMutation, useQuery, useQueryClient} from 'react-query';
 import MeterMonthlyService from './services/meter-monthly.service';
 import moment from 'moment';
 import {useToast} from 'react-native-toast-notifications';
+import UtilsApi from '@/services/utils.service';
+import {TImagePicker} from '@/utils/image-picker-handle';
 type Props = StackScreenProps<MeterStackParamsList, 'READ_INDEX'>;
 
-const ReadIndexMeterScreen = ({route, navigation}: Props) => {
+const ReadIndexMeterScreen = ({route}: Props) => {
   const toast = useToast();
   const queryClient = useQueryClient();
-  const [image, setImage] = useState<PhotoFile>();
+  const [meterId, setMeterId] = useState<number | undefined>();
 
-  const onScannedCallback = (result?: string, params?: any) => {
-    if (result?.includes('yooioc://water-bill/add')) {
-      Linking.openURL(result + `&image=${JSON.stringify(params.image)}`);
+  useEffect(() => {
+    setMeterId(route.params.id);
+  }, [route.params.id]);
+
+  const onScannedCallback = (result?: string) => {
+    if (result?.includes('yooioc://app/meter')) {
+      Linking.openURL(result);
     } else {
-      Linking.openURL(
-        'yooioc://water-bill/add?' + `&image=${JSON.stringify(params.image)}`,
-      );
     }
   };
 
   const [filters, setFilters] = useState<TFilter>();
   const {urbans} = useAllUrban({});
   const {buildings} = useListBuilding({urbanId: filters?.urbanId});
-  const {apartments} = useListApartments({...filters});
   const {meters} = useGetAllMeter({
     ...filters,
     meterTypeId: route.params?.meterTypeId,
   });
-
-  const [meterId, setMeterId] = useState<number>();
 
   const {data: lastMonthData} = useQuery({
     queryKey: ['last-month', meterId],
@@ -75,13 +72,18 @@ const ReadIndexMeterScreen = ({route, navigation}: Props) => {
     },
   });
 
-  const {control, handleSubmit, resetField} = useForm();
+  const {control, handleSubmit, resetField, reset} = useForm<{
+    value: number;
+    image: TImagePicker;
+  }>();
+
+  const image = useWatch({control: control, name: 'image'});
 
   const {mutate: createRequest, status} = useMutation({
     mutationFn: params => MeterMonthlyService.create(params),
     onSuccess: () => {
       toast.show('Thêm chỉ số thành công');
-      resetField('value');
+      reset();
       setTimeout(() => {
         setMeterId(undefined);
       }, 200);
@@ -89,21 +91,29 @@ const ReadIndexMeterScreen = ({route, navigation}: Props) => {
     },
   });
 
+  const {mutate: uploadImageRequest, status: uploadStatus} = useMutation({
+    mutationFn: params => {
+      return UtilsApi.uploadImagesRequest(params.image ? [params.image] : []);
+    },
+    onSuccess: (result: any, params: any) => {
+      createRequest({...params, imageUrl: result[0]});
+    },
+  });
+
   const prevFilterRef = useRef<TFilter>();
 
   useEffect(() => {
-    if (
-      prevFilterRef.current?.urbanId ||
-      prevFilterRef.current?.apartmentCode ||
-      prevFilterRef.current?.buildingId
-    ) {
+    if (prevFilterRef.current?.urbanId || prevFilterRef.current?.buildingId) {
       setMeterId(undefined);
     }
     prevFilterRef.current = filters;
   }, [filters]);
 
-  const onSubmit = (data: any) => {
-    createRequest({
+  const onSubmit: SubmitHandler<{
+    value: number;
+    image: TImagePicker;
+  }> = data => {
+    uploadImageRequest({
       ...data,
       meterId,
       period: moment().toISOString(),
@@ -116,34 +126,56 @@ const ReadIndexMeterScreen = ({route, navigation}: Props) => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.container}>
         <ScrollView contentContainerStyle={{paddingHorizontal: 16}}>
-          <View style={styles.imageContainer}>
-            <>
-              {image ? (
-                <>
-                  <Image
-                    source={{
-                      uri: image?.path,
-                    }}
-                    style={{width: '100%', height: '100%'}}
-                  />
-                  <Button
-                    onPress={() => {
-                      setImage(undefined);
-                    }}
-                    style={{position: 'absolute'}}>
-                    reset
-                  </Button>
-                </>
-              ) : (
-                <ScannerView
-                  isReturnPhoto={true}
-                  onScannedCallback={onScannedCallback}
-                  active={!image}
-                  hasCaptureButton={true}
-                />
-              )}
-            </>
-          </View>
+          <>
+            <Controller
+              control={control}
+              name={'image'}
+              rules={{
+                required: {value: true, message: 'Chụp ảnh trước khi lưu'},
+              }}
+              render={({field: {value, onChange}, fieldState: {error}}) => {
+                return (
+                  <>
+                    <View style={styles.imageContainer}>
+                      {value ? (
+                        <>
+                          <Image
+                            source={{
+                              uri: value.uri,
+                            }}
+                            style={{width: '100%', height: '100%'}}
+                          />
+                          <Button
+                            mode="contained-tonal"
+                            onPress={() => {
+                              resetField('image', undefined);
+                            }}
+                            style={{
+                              position: 'absolute',
+                              bottom: 0,
+                              alignSelf: 'center',
+                            }}>
+                            Chụp lại
+                          </Button>
+                        </>
+                      ) : (
+                        <ScannerView
+                          isReturnPhoto={false}
+                          onScannedCallback={onScannedCallback}
+                          active={!image}
+                          onTakeImageCallback={(result: TImagePicker) => {
+                            onChange(result);
+                          }}
+                          useScanner={!meterId && !image}
+                        />
+                      )}
+                    </View>
+                    <Text style={styles.textError}>{error?.message}</Text>
+                  </>
+                );
+              }}
+            />
+          </>
           <View style={styles.formContainer}>
             <View>
               <View style={styles.row}>
@@ -198,25 +230,6 @@ const ReadIndexMeterScreen = ({route, navigation}: Props) => {
                     buildings.find(u => u.id === filters?.buildingId)
                       ?.displayName
                   }
-                />
-              </View>
-              <DashedLine style={{marginVertical: 10}} />
-            </View>
-
-            <View>
-              <View style={styles.row}>
-                <Text style={styles.textLabel}>
-                  {language.t(languageKeys.water.labelForm.apartment)}
-                </Text>
-
-                <TextInputSuggestion
-                  containerStyle={{flex: 1}}
-                  value={filters?.apartmentCode}
-                  onChangeText={(value: string) =>
-                    setFilters(old => ({...old, apartmentCode: value}))
-                  }
-                  style={[styles.textValue]}
-                  valueSuggest={apartments.map(a => a.apartmentCode)}
                 />
               </View>
               <DashedLine style={{marginVertical: 10}} />
@@ -286,10 +299,7 @@ const ReadIndexMeterScreen = ({route, navigation}: Props) => {
                     />
                   </View>
                   {meterId && (
-                    <Text
-                      style={{...globalStyles.text13Medium, color: '#FF6565'}}>
-                      {error?.message}
-                    </Text>
+                    <Text style={styles.textError}>{error?.message}</Text>
                   )}
                   <DashedLine style={{marginVertical: 10}} />
                 </View>
@@ -305,7 +315,7 @@ const ReadIndexMeterScreen = ({route, navigation}: Props) => {
             <Button
               onPress={handleSubmit(onSubmit)}
               mode="contained"
-              disabled={status === 'loading'}>
+              disabled={status === 'loading' || uploadStatus === 'loading'}>
               {language.t(languageKeys.shared.button.save)}
             </Button>
           </View>
@@ -323,7 +333,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   imageContainer: {
-    width: '60%',
+    width: '90%',
     aspectRatio: 1,
     backgroundColor: '#ababab',
     alignSelf: 'center',
@@ -351,5 +361,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 10,
+  },
+  textError: {
+    ...globalStyles.text12Medium,
+    color: 'red',
   },
 });

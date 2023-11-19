@@ -16,6 +16,7 @@ import {
 import {runOnJS} from 'react-native-reanimated';
 import {Barcode, BarcodeFormat, scanBarcodes} from 'vision-camera-code-scanner';
 import globalStyles from '@/config/globalStyles';
+import {TImagePicker} from '@/utils/image-picker-handle';
 
 type Props = {
   onScannedCallback?: (result?: string, params?: any) => void;
@@ -23,6 +24,7 @@ type Props = {
   active?: boolean;
   isReturnPhoto?: boolean;
   useScanner?: boolean;
+  onTakeImageCallback?: (image: TImagePicker) => void;
 };
 
 const ScannerView = ({
@@ -31,6 +33,7 @@ const ScannerView = ({
   active = true,
   isReturnPhoto,
   useScanner = true,
+  onTakeImageCallback,
 }: Props) => {
   const [hasPermission, setPermission] = useState(false);
   const camera = useRef<Camera>(null);
@@ -51,14 +54,24 @@ const ScannerView = ({
 
   const takePhoto = () => {
     camera.current?.takePhoto().then(result => {
-      if (onScannedCallback) {
-        onScannedCallback(undefined, {
-          image: {
-            ...result,
-            path: Platform.OS === 'ios' ? result.path : 'file://' + result.path,
-          },
-        });
-      }
+      fetch((Platform.OS === 'android' ? 'file://' : '') + result.path).then(
+        (img: any) => {
+          if (img && result) {
+            if (onTakeImageCallback) {
+              onTakeImageCallback({
+                name: img?._bodyBlob?._data.name,
+                width: result.width,
+                height: result.height,
+                type: img?._bodyBlob?._data.type,
+                size: img?._bodyBlob?._data.size,
+                uri: (Platform.OS === 'android' ? 'file://' : '') + result.path,
+                source:
+                  (Platform.OS === 'android' ? 'file://' : '') + result.path,
+              });
+            }
+          }
+        },
+      );
     });
   };
 
@@ -143,7 +156,7 @@ const ScannerView = ({
           </View>
           <SafeAreaView
             style={{width: '100%', marginTop: 'auto', alignItems: 'center'}}>
-            {hasCaptureButton && (
+            {(hasCaptureButton || onTakeImageCallback) && (
               <Icon
                 type="Ionicons"
                 name="radio-button-on-outline"
