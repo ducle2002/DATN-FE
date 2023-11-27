@@ -6,7 +6,11 @@ import VoteIcon from 'assets/icons/vote.svg';
 import Administrative from 'assets/icons/administrative.svg';
 import LocalUtilitiesIcon from 'assets/icons/utilities.svg';
 import LocalServiceIcon from '@assets/icons/local-service.svg';
-
+import QnAIcon from '@assets/icons/q&a.svg';
+import CitizenIcon from '@assets/icons/citizen-verification.svg';
+import TaskManagementIcon from '@assets/icons/task-management.svg';
+import AssetIcon from '@assets/icons/asset.svg';
+import NewFeedIcon from '@assets/icons/new-feed.svg';
 import {SvgProps} from 'react-native-svg';
 import {TPermission} from 'types/type';
 import Icon from '@/components/icon.component';
@@ -17,64 +21,41 @@ export type HomeIconProp = SvgProps & {
 const HomeIcon = ({type, ...props}: HomeIconProp) => {
   switch (type) {
     case 'Pages.Digitals.Communications':
-      return <ChatIcon {...props} />;
+      return <ChatIcon width={35} height={35} {...props} />;
     case 'Pages.Digitals.Notifications.GetAll':
       return <NotificationIcon {...props} />;
     case 'Pages.Digitals.Reflects.GetAll':
       return <FeedbackIcon {...props} />;
     case 'Pages.Digitals.Surveys.GetAll':
-      return <VoteIcon {...props} />;
+      return <VoteIcon width={35} height={35} {...props} />;
     case 'Pages.AdministrationService.Configurations':
-      return <Administrative {...props} />;
+      return <Administrative width={35} height={35} {...props} />;
     case 'Pages.Digitals.QnA.GetAll':
-      return (
-        <Icon
-          type="MaterialCommunityIcons"
-          name="chat-question"
-          color={'white'}
-          size={40}
-        />
-      );
+      return <QnAIcon color={'white'} width={35} height={35} {...props} />;
     case 'Pages.Digitals.Hotline.GetAll':
       return (
         <Icon type="Foundation" name="telephone" color={'white'} size={40} />
       );
     case 'Pages.Digitals.Forums.GetAll':
-      return (
-        <Icon
-          type="MaterialCommunityIcons"
-          name="billboard"
-          color={'white'}
-          size={40}
-        />
-      );
+      return <NewFeedIcon width={35} height={35} {...props} />;
     case 'Pages.LocalAmenities.List':
-      return <LocalUtilitiesIcon />;
+      return <LocalUtilitiesIcon width={35} height={35} {...props} />;
     case 'Pages.LocalAmenities.List.GetAll':
-      return <LocalServiceIcon />;
+      return <LocalServiceIcon width={35} height={35} {...props} />;
     case 'Pages.Assets.AssetCatalog.GetAll':
-      return (
-        <Icon type="FontAwesome5" name="toolbox" size={35} color={'white'} />
-      );
+      return <AssetIcon width={35} height={35} {...props} color={'white'} />;
     case 'Pages.Assets.AssetParameters.GetAll':
       return (
         <Icon type="MaterialIcons" name="inventory" size={35} color={'white'} />
       );
     case 'Pages.Citizen.Verifications.GetAll':
-      return <Icon type="Ionicons" name="person" size={35} color={'white'} />;
+      return <CitizenIcon width={35} height={35} {...props} />;
     case 'Pages.Meter.List.GetAll':
       return (
         <Icon type="Ionicons" name="speedometer" size={35} color={'white'} />
       );
     case 'Pages.Operations.TaskManagement.GetAll':
-      return (
-        <Icon
-          type="MaterialIcons"
-          name="assignment"
-          size={35}
-          color={'white'}
-        />
-      );
+      return <TaskManagementIcon width={35} height={35} {...props} />;
     case 'Pages.LocalService.List':
       return (
         <Icon
