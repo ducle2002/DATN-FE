@@ -29,3 +29,20 @@ export const operatorFunction: Array<TPermission> = [
 ];
 
 export const residentFunction: Array<TPermission> = [];
+
+export const appFeatures: TPermission[] = [
+  'Pages.Digitals.Notifications.GetAll',
+  'Pages.Digitals.Reflects.GetAll',
+  'Pages.Digitals.Surveys.GetAll',
+  'Pages.Digitals.Communications',
+  'Pages.Digitals.QnA.GetAll',
+  'Pages.Digitals.Hotline.GetAll',
+  'Pages.LocalAmenities.List',
+  'Pages.LocalAmenities.List.GetAll',
+  'Pages.AdministrationService.Configurations',
+  'Pages.Citizen.Verifications.GetAll',
+  'Pages.Operations.TaskManagement.GetAll',
+  'Pages.Assets.AssetCatalog.GetAll',
+  'Pages.Digitals.Forums.GetAll',
+  'Pages.Meter.List.GetAll',
+];

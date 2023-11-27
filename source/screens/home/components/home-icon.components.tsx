@@ -4,7 +4,8 @@ import NotificationIcon from 'assets/icons/notification.svg';
 import ChatIcon from 'assets/icons/chat.svg';
 import VoteIcon from 'assets/icons/vote.svg';
 import Administrative from 'assets/icons/administrative.svg';
-import LocalServiceIcon from 'assets/icons/utilities.svg';
+import LocalUtilitiesIcon from 'assets/icons/utilities.svg';
+import LocalServiceIcon from '@assets/icons/local-service.svg';
 
 import {SvgProps} from 'react-native-svg';
 import {TPermission} from 'types/type';
@@ -48,6 +49,8 @@ const HomeIcon = ({type, ...props}: HomeIconProp) => {
         />
       );
     case 'Pages.LocalAmenities.List':
+      return <LocalUtilitiesIcon />;
+    case 'Pages.LocalAmenities.List.GetAll':
       return <LocalServiceIcon />;
     case 'Pages.Assets.AssetCatalog.GetAll':
       return (

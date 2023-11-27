@@ -40,14 +40,11 @@
 		<key>NSCameraUsageDescription</key>
 		<string>$(PRODUCT_NAME) needs to access your camera in order to scan QR codes and take photos.</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
-		<string> The app uses your location to find nearby services and maps.This will help users
-			convenient when searching and using the service.</string>
+		<string> The app uses your location to find nearby services and maps.This will help users convenient when searching and using the service.</string>
 		<key>NSPhotoLibraryAddUsageDescription</key>
-		<string> Allows the application to access your library so that it can use Image upload features
-			such as changing avatars, ...</string>
+		<string> Allows the application to access your library so that it can use Image upload features such as changing avatars, ...</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string> Allows the application to access your library so that it can use Image upload features
-			such as changing avatars, ...</string>
+		<string> Allows the application to access your library so that it can use Image upload features such as changing avatars, ...</string>
 		<key>UIAppFonts</key>
 		<array>
 			<string>assets/Icons/AntDesign.ttf</string>
