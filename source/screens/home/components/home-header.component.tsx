@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, useWindowDimensions} from 'react-native';
 import React from 'react';
 import Icon from '@/components/icon.component';
 import {HomeScreenProps} from '../home.screen';
@@ -7,14 +7,21 @@ import {useAppSelector} from '@/hooks/redux.hook';
 import globalStyles from '@/config/globalStyles';
 import BackgroundHeader from '@/components/background-header.component';
 import {useToast} from 'react-native-toast-notifications';
-const {height} = Dimensions.get('screen');
 
 const HomeHeader = ({navigation}: HomeScreenProps) => {
   const {imageUrl, fullName} = useAppSelector(state => state.user);
   const toast = useToast();
+  const {height} = useWindowDimensions();
   return (
     <BackgroundHeader>
-      <View style={styles.contentContainer}>
+      <View style={[styles.contentContainer, {height: height * 0.12}]}>
+        <View style={{flexDirection: 'row', flex: 1}}>
+          <Avatar.Image source={{uri: imageUrl}} size={72} />
+          <View style={styles.textContainer}>
+            <Text style={styles.textWelcome}>Welcome</Text>
+            <Text style={styles.textName}>{fullName}</Text>
+          </View>
+        </View>
         <View style={styles.headerIconContainer}>
           <Icon
             type="Ionicons"
@@ -43,13 +50,6 @@ const HomeHeader = ({navigation}: HomeScreenProps) => {
             }}
           />
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Avatar.Image source={{uri: imageUrl}} size={72} />
-          <View style={styles.textContainer}>
-            <Text style={styles.textWelcome}>Welcome</Text>
-            <Text style={styles.textName}>{fullName}</Text>
-          </View>
-        </View>
       </View>
     </BackgroundHeader>
   );
@@ -60,7 +60,6 @@ export default HomeHeader;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: height * 0.2,
     overflow: 'hidden',
   },
   imageContainer: {
@@ -72,10 +71,10 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     paddingHorizontal: 16,
+    flexDirection: 'row',
   },
   headerIconContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
   },
   icon: {
     padding: 5,

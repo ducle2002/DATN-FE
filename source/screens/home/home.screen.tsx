@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View, useWindowDimensions} from 'react-native';
 import React, {useMemo} from 'react';
 import {useAppSelector} from '@/hooks/redux.hook';
 import HomeFunction from './components/home-function.component';
@@ -7,6 +7,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {AppStackParamsList} from '@/routes/app.stack';
 import globalStyles, {homeIconBackgroundColor} from '@/config/globalStyles';
 import {appFeatures} from '@/modules/config/config.model';
+import HomeStatistics from './components/home-statistic/home-statistics.component';
 
 export type HomeScreenProps = StackScreenProps<
   AppStackParamsList,
@@ -20,24 +21,28 @@ const HomeScreen = (props: HomeScreenProps) => {
     return appFeatures.filter(f => grantedPermissions.includes(f));
   }, [grantedPermissions]);
 
+  const {height} = useWindowDimensions();
   return (
     <View style={styles.container}>
       <ScrollView bounces={false}>
         <HomeHeader {...props} />
-        <View style={styles.section}>
-          {features.map((p, index) => (
-            <HomeFunction
-              key={p}
-              type={p}
-              style={styles.iconContainer}
-              iconContainerStyle={{
-                backgroundColor:
-                  homeIconBackgroundColor[
-                    index % homeIconBackgroundColor.length
-                  ],
-              }}
-            />
-          ))}
+        <View style={{top: -height * 0.05}}>
+          <HomeStatistics />
+          <View style={styles.section}>
+            {features.map((p, index) => (
+              <HomeFunction
+                key={p}
+                type={p}
+                style={styles.iconContainer}
+                iconContainerStyle={{
+                  backgroundColor:
+                    homeIconBackgroundColor[
+                      index % homeIconBackgroundColor.length
+                    ],
+                }}
+              />
+            ))}
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -49,6 +54,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   section: {
     flexDirection: 'row',

@@ -15,6 +15,7 @@ import residentLanguage from './resident/vi';
 import meter from './water-meter/vi';
 import workManagement from './work-management/vi';
 import {role} from './role/vi';
+import chart from './charts/vi';
 const vi = {
   ...title,
   auth,
@@ -39,6 +40,7 @@ const vi = {
   workManagement,
   role,
   search: 'Tìm kiếm',
+  chart,
 };
 
 export default vi;
