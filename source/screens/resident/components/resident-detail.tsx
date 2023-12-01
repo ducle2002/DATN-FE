@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, SafeAreaView} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, ScrollView} from 'react-native';
 import React from 'react';
 import ReactNativeModal from 'react-native-modal';
 import language, {languageKeys} from '@/config/language/language';
@@ -13,6 +13,7 @@ import Button from '@/components/button.component';
 import globalStyles from '@/config/globalStyles';
 import {useQueryClient} from 'react-query';
 import {useUpdateResidentState} from '../services/resident.hook';
+import FastImage from 'react-native-fast-image';
 
 type Props = {
   isVisible: boolean;
@@ -44,86 +45,119 @@ const ResidentDetail = ({
       useNativeDriverForBackdrop={true}>
       {resident ? (
         <SafeAreaView style={styles.container}>
-          <View style={styles.contentContainer}>
-            <Text style={styles.textTitle}>
-              {language.t(
-                languageKeys.residentLanguage.resident.residentInformation,
-              )}
-            </Text>
-            <View style={styles.row}>
-              <Text style={styles.textContent}>
+          <ScrollView>
+            <View style={styles.contentContainer}>
+              <Text style={styles.textTitle}>
                 {language.t(
-                  languageKeys.residentLanguage.resident.buildingCode,
+                  languageKeys.residentLanguage.resident.residentInformation,
                 )}
-                : {resident.buildingCode}
               </Text>
-            </View>
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(
+                    languageKeys.residentLanguage.resident.buildingCode,
+                  )}
+                  : {resident.buildingCode}
+                </Text>
+              </View>
 
-            <View style={styles.row}>
-              <Text style={styles.textContent}>
-                {language.t(
-                  languageKeys.residentLanguage.resident.apartmentCode,
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(
+                    languageKeys.residentLanguage.resident.apartmentCode,
+                  )}
+                  : {resident.apartmentCode}
+                </Text>
+              </View>
+
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(languageKeys.residentLanguage.resident.fullName)}:{' '}
+                  {resident.fullName}
+                </Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(
+                    languageKeys.residentLanguage.resident.dateOfBirth,
+                  )}
+                  : {moment(resident.dateOfBirth).format('DD/MM/YYYY')}
+                </Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(languageKeys.residentLanguage.resident.gender)}:{' '}
+                  {resident.gender}
+                </Text>
+              </View>
+
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(
+                    languageKeys.residentLanguage.resident.phoneNumber,
+                  )}
+                  : {resident.phoneNumber}
+                </Text>
+              </View>
+
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(languageKeys.residentLanguage.resident.email)}:{' '}
+                  {resident.email}
+                </Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(
+                    languageKeys.residentLanguage.resident.identityNumber,
+                  )}
+                  : {resident.identityNumber}
+                </Text>
+              </View>
+
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(
+                    languageKeys.residentLanguage.resident.relationship,
+                  )}
+                  :{' '}
+                  {language.t(
+                    languageKeys.residentLanguage.relationship[
+                      resident.relationShip
+                    ],
+                  )}
+                </Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(
+                    languageKeys.residentLanguage.resident.nationality,
+                  )}
+                  : {resident.nationality}
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.textContent}>
+                  {language.t(
+                    languageKeys.residentLanguage.resident.identityImages,
+                  )}
+                  :
+                </Text>
+                {resident.imageUrlsIdentity &&
+                resident.imageUrlsIdentity.length > 0 ? (
+                  <View style={styles.imagesContainer}>
+                    {resident.imageUrlsIdentity.map(u => (
+                      <View key={u} style={styles.imageContainer}>
+                        <FastImage source={{uri: u}} style={styles.image} />
+                      </View>
+                    ))}
+                  </View>
+                ) : (
+                  <Text>Không cung cấp</Text>
                 )}
-                : {resident.apartmentCode}
-              </Text>
+              </View>
             </View>
-
-            <View style={styles.row}>
-              <Text style={styles.textContent}>
-                {language.t(languageKeys.residentLanguage.resident.fullName)}:{' '}
-                {resident.fullName}
-              </Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.textContent}>
-                {language.t(languageKeys.residentLanguage.resident.dateOfBirth)}
-                : {moment(resident.dateOfBirth).format('DD/MM/YYYY')}
-              </Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.textContent}>
-                {language.t(languageKeys.residentLanguage.resident.gender)}:{' '}
-                {resident.gender}
-              </Text>
-            </View>
-
-            <View style={styles.row}>
-              <Text style={styles.textContent}>
-                {language.t(languageKeys.residentLanguage.resident.phoneNumber)}
-                : {resident.phoneNumber}
-              </Text>
-            </View>
-
-            <View style={styles.row}>
-              <Text style={styles.textContent}>
-                {language.t(languageKeys.residentLanguage.resident.email)}:{' '}
-                {resident.email}
-              </Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.textContent}>
-                {language.t(
-                  languageKeys.residentLanguage.resident.identityNumber,
-                )}
-                : {resident.identityNumber}
-              </Text>
-            </View>
-
-            <View style={styles.row}>
-              <Text style={styles.textContent}>
-                {language.t(
-                  languageKeys.residentLanguage.resident.relationship,
-                )}
-                : {resident.relationShip}
-              </Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.textContent}>
-                {language.t(languageKeys.residentLanguage.resident.nationality)}
-                : {resident.nationality}
-              </Text>
-            </View>
-          </View>
+          </ScrollView>
           <BottomContainer style={{}}>
             <View
               style={{
@@ -198,5 +232,19 @@ const styles = StyleSheet.create({
   },
   button: {
     marginVertical: 5,
+  },
+  imagesContainer: {
+    flexDirection: 'row',
+    width: '100%',
+  },
+  imageContainer: {
+    width: '50%',
+    aspectRatio: 1.7,
+    padding: 5,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 10,
   },
 });

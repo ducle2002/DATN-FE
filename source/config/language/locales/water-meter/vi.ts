@@ -1,6 +1,7 @@
 const header = {
   readTheMeter: 'Ghi chỉ số mới',
   list: 'Danh sách đã ghi',
+  meters: 'Danh sách đồng hồ',
 };
 
 const labelForm = {
@@ -10,6 +11,9 @@ const labelForm = {
   apartment: 'Căn hộ',
   readingDate: 'Ngày ghi chỉ số',
   usageCount: 'Số sử dụng',
+  urban: 'Khu đô thị',
+  building: 'Tòa nhà',
+  meter: 'Đồng hồ',
 };
 
 const action = {

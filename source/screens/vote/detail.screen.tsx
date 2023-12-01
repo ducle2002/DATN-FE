@@ -31,12 +31,14 @@ const DetailScreen = ({navigation, route}: Props) => {
               ...option,
               svg: {fill: voteChartColor[index % 3]},
               key: index,
+              arc: {cornerRadius: 2},
             })),
             {
               option: language.t(languageKeys.vote.detail.notParticipate),
               countVote: data?.totalUsers - data?.totalVotes,
               svg: {fill: '#eaeaea'},
               key: data.voteOptions.length,
+              arc: {cornerRadius: 2},
             },
           ]
         : [],
@@ -99,11 +101,11 @@ const DetailScreen = ({navigation, route}: Props) => {
                   marginTop: 10,
                 }}>
                 <PieChart
-                  innerRadius={0}
-                  padAngle={0}
+                  innerRadius={'50%'}
                   style={{height: 180, width: '50%'}}
                   valueAccessor={({item}) => item.countVote}
                   data={chartData}
+                  padAngle={Math.PI / 180}
                 />
                 <View>
                   {chartData.map(option => (

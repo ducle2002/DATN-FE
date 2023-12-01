@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, View, useWindowDimensions} from 'react-native';
 import React, {useMemo} from 'react';
 import {useAppSelector} from '@/hooks/redux.hook';
 import HomeFunction from './components/home-function.component';
@@ -6,15 +6,8 @@ import HomeHeader from './components/home-header.component';
 import {StackScreenProps} from '@react-navigation/stack';
 import {AppStackParamsList} from '@/routes/app.stack';
 import globalStyles, {homeIconBackgroundColor} from '@/config/globalStyles';
-import {
-  administrativeFunction,
-  managementFunction,
-  operatorFunction,
-  residentFunction,
-  serviceFunction,
-} from '@/modules/config/config.model';
-import {languageKeys} from '@/config/language/language';
-import {useTranslation} from 'react-i18next';
+import {appFeatures} from '@/modules/config/config.model';
+import HomeStatistics from './components/home-statistic/home-statistics.component';
 
 export type HomeScreenProps = StackScreenProps<
   AppStackParamsList,
@@ -22,190 +15,35 @@ export type HomeScreenProps = StackScreenProps<
 >;
 
 const HomeScreen = (props: HomeScreenProps) => {
-  const language = useTranslation();
-
   const {grantedPermissions} = useAppSelector(state => state.config);
 
-  const {management, administrative, service, operator, resident} =
-    useMemo(() => {
-      const m = grantedPermissions?.filter(g => managementFunction.includes(g));
-      const ad = grantedPermissions?.filter(g =>
-        administrativeFunction.includes(g),
-      );
-      const s = grantedPermissions?.filter(g => serviceFunction.includes(g));
+  const features = useMemo(() => {
+    return appFeatures.filter(f => grantedPermissions.includes(f));
+  }, [grantedPermissions]);
 
-      const o = grantedPermissions?.filter(g => operatorFunction.includes(g));
-
-      const r = grantedPermissions?.filter(g => residentFunction.includes(g));
-
-      return {
-        management: m,
-        administrative: ad,
-        service: s,
-        operator: o,
-        resident: r,
-      };
-    }, [grantedPermissions]);
-  console.log(service);
-
+  const {height} = useWindowDimensions();
   return (
     <View style={styles.container}>
       <ScrollView bounces={false}>
         <HomeHeader {...props} />
-        {management.length > 0 && (
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>
-              {language.t(languageKeys.management)}
-            </Text>
-            <View style={styles.section}>
-              {management.map((p, index) => (
-                <HomeFunction
-                  key={p}
-                  type={p}
-                  style={styles.iconContainer}
-                  iconContainerStyle={{
-                    backgroundColor:
-                      homeIconBackgroundColor[
-                        index % homeIconBackgroundColor.length
-                      ],
-                  }}
-                />
-              ))}
-            </View>
-          </View>
-        )}
-        {administrative.length > 0 && (
-          <View>
-            <Text style={styles.sectionTitle}>
-              {language.t(languageKeys.adminis)}
-            </Text>
-            <View style={styles.section}>
-              {administrative.map((p, index) => (
-                <HomeFunction
-                  key={p}
-                  type={p}
-                  style={styles.iconContainer}
-                  iconContainerStyle={{
-                    backgroundColor:
-                      homeIconBackgroundColor[
-                        (index % homeIconBackgroundColor.length) + 1
-                      ],
-                  }}
-                />
-              ))}
-            </View>
-          </View>
-        )}
-        {resident.length > 0 && (
-          <View>
-            <Text style={styles.sectionTitle}>
-              {language.t(languageKeys.adminis)}
-            </Text>
-            <View style={styles.section}>
-              {resident.map((p, index) => (
-                <HomeFunction
-                  key={p}
-                  type={p}
-                  style={styles.iconContainer}
-                  iconContainerStyle={{
-                    backgroundColor:
-                      homeIconBackgroundColor[
-                        (index % homeIconBackgroundColor.length) + 1
-                      ],
-                  }}
-                />
-              ))}
-            </View>
-          </View>
-        )}
-        {service.length > 0 && (
-          <View>
-            <Text style={styles.sectionTitle}>
-              {language.t(languageKeys.service)}
-            </Text>
-            <View style={styles.section}>
-              {service.map((p, index) => (
-                <HomeFunction
-                  key={p}
-                  type={p}
-                  style={styles.iconContainer}
-                  iconContainerStyle={{
-                    backgroundColor:
-                      homeIconBackgroundColor[
-                        (index % homeIconBackgroundColor.length) + 2
-                      ],
-                  }}
-                />
-              ))}
+        <View style={{top: -height * 0.05}}>
+          <HomeStatistics />
+          <View style={styles.section}>
+            {features.map((p, index) => (
               <HomeFunction
-                type={'Pages.LocalService.List'}
+                key={p}
+                type={p}
                 style={styles.iconContainer}
                 iconContainerStyle={{
                   backgroundColor:
                     homeIconBackgroundColor[
-                      (service.length % homeIconBackgroundColor.length) + 2
+                      index % homeIconBackgroundColor.length
                     ],
                 }}
               />
-            </View>
+            ))}
           </View>
-        )}
-        {operator.length > 0 && (
-          <View>
-            <Text style={styles.sectionTitle}>
-              {language.t(languageKeys.operator)}
-            </Text>
-            <View style={styles.section}>
-              {operator.map((p, index) => (
-                <HomeFunction
-                  key={p}
-                  type={p}
-                  style={styles.iconContainer}
-                  iconContainerStyle={{
-                    backgroundColor:
-                      homeIconBackgroundColor[
-                        (index % homeIconBackgroundColor.length) + 3
-                      ],
-                  }}
-                />
-              ))}
-            </View>
-          </View>
-        )}
-
-        {/* <Text style={styles.sectionTitle}>Vận hành tòa nhà</Text>
-        <View style={styles.section}>
-          <View style={styles.section}>
-            <HomeFunction
-              type="Pages.Invoices.Monthly.GetAll"
-              style={styles.iconContainer}
-              iconContainerStyle={{
-                backgroundColor: homeIconBackgroundColor[0],
-              }}
-              onPress={() => {
-                props.navigation.navigate('OPERATING_STACK', {
-                  screen: 'WATER_BILL',
-                  params: {screen: 'MAIN_WATER'},
-                });
-              }}
-            />
-          </View>
-          <View style={styles.section}>
-            <HomeFunction
-              type="Pages.Operations.TaskManagement.GetAll"
-              style={styles.iconContainer}
-              iconContainerStyle={{
-                backgroundColor: homeIconBackgroundColor[4],
-              }}
-              onPress={() => {
-                props.navigation.navigate('WORK_MANAGEMENT', {
-                  screen: 'MAIN_DRAWER',
-                  params: {screen: 'MANAGEMENT'},
-                });
-              }}
-            />
-          </View>
-        </View> */}
+        </View>
       </ScrollView>
     </View>
   );
@@ -216,10 +54,13 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   section: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginTop: 20,
+    paddingHorizontal: 10,
   },
   iconContainer: {
     flexBasis: '25%',

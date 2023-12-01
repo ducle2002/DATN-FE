@@ -14,6 +14,7 @@ import {useMutation} from 'react-query';
 import LogTimeApi from '../services/logtime.service';
 import {useToast} from 'react-native-toast-notifications';
 import LoadingComponent from '@/components/loading';
+import {TImagePicker} from '@/utils/image-picker-handle';
 type Props = {
   workDetail?: TWorkDetail;
   workId?: number;
@@ -22,6 +23,7 @@ type Props = {
   onClose: Function;
   refetchData?: Function;
 };
+
 const AttachLogTimeComponent = ({
   workDetail,
   workId,
@@ -81,31 +83,10 @@ const AttachLogTimeComponent = ({
       });
     }
   };
-  const onScannedCallback = async (result?: string, params?: any) => {
-    const img: any = await fetch(params.image.path);
-    if (img && params?.image) {
-      setValue('imageUrls', [
-        {
-          name: img?._bodyBlob?._data.name,
-          width: params.image.width,
-          height: params.image.height,
-          type: img?._bodyBlob?._data.type,
-          size: img?._bodyBlob?._data.size,
-          uri: params.image.path,
-          source: params.image.path,
-        },
-      ]);
-    }
-
-    // if (result?.includes('yooioc://working-log-time/add')) {
-    //   Linking.openURL(result + `&image=${JSON.stringify(params.image)}`);
-    // } else {
-    //   Linking.openURL(
-    //     'yooioc://working-log-time/add?' +
-    //       `&image=${JSON.stringify(params.image)}`,
-    //   );
-    // }
+  const onScannedCallback = (image: TImagePicker) => {
+    setValue('imageUrls', [image]);
   };
+
   useEffect(() => {
     if (logTimeInfo && logTimeInfo.imageUrls) {
       setValue('imageUrls', logTimeInfo?.imageUrls);
@@ -156,7 +137,7 @@ const AttachLogTimeComponent = ({
           ) : (
             <ScannerView
               isReturnPhoto={true}
-              onScannedCallback={onScannedCallback}
+              onTakeImageCallback={onScannedCallback}
               active={watch('imageUrls').length <= 0}
               hasCaptureButton={true}
             />

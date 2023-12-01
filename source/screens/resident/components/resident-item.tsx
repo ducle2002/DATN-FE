@@ -14,7 +14,7 @@ const ResidentItem = ({resident, viewItem}: Props) => {
         <Text style={styles.textName}>{resident.fullName}</Text>
         <Text style={styles.textValue}>
           {language.t(languageKeys.residentLanguage.resident.buildingCode)}:{' '}
-          {resident.buildingCode}
+          {resident.buildingName}
         </Text>
         <Text style={styles.textValue}>
           {language.t(languageKeys.residentLanguage.resident.apartmentCode)}:{' '}

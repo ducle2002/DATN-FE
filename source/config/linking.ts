@@ -6,22 +6,19 @@ const config: {
   screens: PathConfigMap<AppStackParamsList>;
 } = {
   screens: {
-    OPERATING_STACK: {
+    METER_STACK: {
+      initialRouteName: 'MAIN_SCREEN',
       screens: {
-        WATER_BILL: {
-          screens: {
-            ADD_WATER_BILL: {
-              path: 'water-bill/add',
-              parse: {
-                id: (id: string) => Number(id),
-                image: (image: string) => JSON.parse(image),
-              },
-            },
+        READ_INDEX: {
+          path: 'app/meter',
+          parse: {
+            id: (id: string) => Number(id),
           },
         },
       },
     },
     WORK_MANAGEMENT: {
+      initialRouteName: 'MAIN_DRAWER',
       screens: {
         DETAIL_WORK: {
           path: 'work/detail',

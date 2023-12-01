@@ -17,7 +17,7 @@ type Props = StackScreenProps<
 >;
 
 const ListCommentScreen = ({route}: Props) => {
-  const [seletedComment, setSeletedComment] = useState<Array<number>>([]);
+  const [selectedComment, setSelectedComment] = useState<Array<number>>([]);
 
   const {notiId} = route.params;
 
@@ -32,24 +32,24 @@ const ListCommentScreen = ({route}: Props) => {
   );
 
   const toggleCommentSelect = (id: number) => {
-    const index = seletedComment.findIndex(i => i === id);
+    const index = selectedComment.findIndex(i => i === id);
     if (index === -1) {
-      setSeletedComment([...seletedComment, id]);
+      setSelectedComment([...selectedComment, id]);
     } else {
-      setSeletedComment(seletedComment.filter(i => i !== id));
+      setSelectedComment(selectedComment.filter(i => i !== id));
     }
   };
 
   const deselectAll = () => {
-    setSeletedComment([]);
+    setSelectedComment([]);
   };
 
   const {mutate: deleteAll} = useMutation({
     mutationFn: () =>
-      DigitalNotiApi.deleteMultipleCommentsRequest(seletedComment),
+      DigitalNotiApi.deleteMultipleCommentsRequest(selectedComment),
     onSuccess: () => {
       refetch();
-      setSeletedComment([]);
+      setSelectedComment([]);
     },
   });
 
@@ -57,13 +57,13 @@ const ListCommentScreen = ({route}: Props) => {
     <View style={styles.container}>
       <SelectItemContext.Provider
         value={{
-          selected: seletedComment,
+          selected: selectedComment,
           select: toggleCommentSelect,
           reset: deselectAll,
         }}>
         <FlatList data={data?.comments ?? []} renderItem={renderItem} />
       </SelectItemContext.Provider>
-      {seletedComment.length > 0 && (
+      {selectedComment.length > 0 && (
         <BottomContainer>
           <Button mode="outlined" onPress={() => deleteAll()}>
             {language.t(languageKeys.shared.button.deleteAll)}

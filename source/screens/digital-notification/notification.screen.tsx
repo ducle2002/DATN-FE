@@ -54,18 +54,15 @@ const NotificationScreen = ({navigation}: Props) => {
   ).current;
   const {listOrganizations} = useAppSelector(state => state.organizationUnit);
 
-  const renderItem = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    (_: any, data: any) => {
-      const department = listOrganizations.find(
-        o => o.organizationUnitId === data.organizationUnitId,
-      );
-      return RowRender(data, department?.displayName, () => {
-        navigation.navigate('DETAIL_SCREEN', {noti: data});
-      });
-    },
-    [listOrganizations, navigation],
-  );
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const renderItem = (_: any, data: any) => {
+    const department = listOrganizations.find(
+      o => o.organizationUnitId === data.organizationUnitId,
+    );
+    return RowRender(data, department?.displayName, () => {
+      navigation.navigate('DETAIL_SCREEN', {noti: data});
+    });
+  };
 
   const onEndReached = () => {
     if (
@@ -140,6 +137,7 @@ const NotificationScreen = ({navigation}: Props) => {
               paddingTop: 10,
             },
           }}
+          renderAheadOffset={1000}
         />
         <MainBottom />
       </SelectItemContext.Provider>

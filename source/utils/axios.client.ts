@@ -52,6 +52,8 @@ axiosClient.interceptors.response.use(
     throw response;
   },
   async (error: Error | AxiosError) => {
+    console.log(error.stack);
+
     if (axios.isAxiosError(error)) {
       var originalRequest = error.config;
 
