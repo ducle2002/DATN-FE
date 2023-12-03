@@ -16,6 +16,7 @@ const title: {[key in TPermission]?: string} = {
   'Pages.LocalAmenities.List.GetAll': 'Dịch vụ nội khu',
   'Pages.Operations.TaskManagement.GetAll': 'Quản lý công việc',
   'Pages.Meter.List.GetAll': 'Quản lý đồng hồ',
+  'Pages.Reporting': 'Báo cáo',
 };
 
 export default title;

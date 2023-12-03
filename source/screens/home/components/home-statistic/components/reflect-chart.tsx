@@ -17,6 +17,7 @@ import {useQueries} from 'react-query';
 import React, {memo, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
+import ChartContainer from './chart-container';
 
 const {width} = Dimensions.get('screen');
 echarts.use([
@@ -93,6 +94,7 @@ const ReflectStatistics = () => {
         height: E_HEIGHT,
       });
       chart.setOption({
+        backgroundColor: 'transparent',
         xAxis: {
           type: 'category',
           data: chartData1.map(m => m.key),
@@ -138,7 +140,9 @@ const ReflectStatistics = () => {
   }, [queries, t]);
 
   return (
-    <SvgChart ref={chartRef} style={{borderRadius: 10, overflow: 'hidden'}} />
+    <ChartContainer>
+      <SvgChart ref={chartRef} style={{borderRadius: 10, overflow: 'hidden'}} />
+    </ChartContainer>
   );
 };
 export default memo(ReflectStatistics);

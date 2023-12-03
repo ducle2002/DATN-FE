@@ -16,6 +16,7 @@ import {BarChart, LineChart} from 'echarts/charts';
 import * as echarts from 'echarts/core';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
+import ChartContainer from './chart-container';
 echarts.use([
   TitleComponent,
   TooltipComponent,
@@ -124,13 +125,16 @@ const VoteChart = () => {
         tooltip: {
           trigger: 'axis',
         },
+        backgroundColor: 'transparent',
       });
     }
     return () => chart?.dispose();
   }, [chartData, width]);
 
   return (
-    <SvgChart ref={chartRef} style={{borderRadius: 10, overflow: 'hidden'}} />
+    <ChartContainer>
+      <SvgChart ref={chartRef} style={{borderRadius: 10, overflow: 'hidden'}} />
+    </ChartContainer>
   );
 };
 

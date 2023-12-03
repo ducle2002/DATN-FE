@@ -17,6 +17,7 @@ import {BarChart, LineChart} from 'echarts/charts';
 import * as echarts from 'echarts/core';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
+import ChartContainer from './chart-container';
 
 echarts.use([
   TitleComponent,
@@ -87,6 +88,7 @@ const CommunicateChart = () => {
         height: E_HEIGHT,
       });
       chart.setOption({
+        backgroundColor: 'transparent',
         xAxis: {
           type: 'category',
           data: chartData.xTitle,
@@ -113,7 +115,9 @@ const CommunicateChart = () => {
   }, [chartData, width]);
 
   return (
-    <SvgChart ref={chartRef} style={{borderRadius: 10, overflow: 'hidden'}} />
+    <ChartContainer>
+      <SvgChart ref={chartRef} style={{borderRadius: 10, overflow: 'hidden'}} />
+    </ChartContainer>
   );
 };
 

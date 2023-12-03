@@ -96,6 +96,34 @@ class Statistic {
     } = await axiosClient.get(url, {params: params});
     return result;
   };
+
+  GetApartmentBillStatistics = async (params: {
+    organizationUnitId?: number;
+    numberRange: number;
+    formId?: EFormIdStatistic;
+    queryCase: EQueryCaseStatistic;
+  }) => {
+    const url = this.endpoint + 'StatisticBill/GetApartmentBillStatistics';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: params});
+    return result;
+  };
+
+  getStatisticsWork = async (params: {
+    organizationUnitId?: number;
+    numberRange?: number;
+    formId?: EFormIdStatistic;
+    queryCase?: EQueryCaseStatistic;
+    month?: number;
+    userId?: number;
+  }) => {
+    const url = this.endpoint + 'Work/GetWorkStatisticGeneral';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: params});
+    return result;
+  };
 }
 
 const StatisticService = new Statistic();

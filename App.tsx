@@ -9,7 +9,6 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {PaperProvider} from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
 import {linking} from '@/config/linking';
-import RoleScreen from '@/screens/role/role.screen';
 import {useOrganizationUnit} from '@/modules/organization/organization.hook';
 import {useConfigPermissions} from '@/modules/config/config.hook';
 import {useAccount} from '@/modules/user/user.hook';
@@ -20,8 +19,6 @@ import {
 import {useQuery} from 'react-query';
 
 function App(): JSX.Element {
-  const {role} = useAppSelector(state => state.role);
-
   useEffect(() => {
     SplashScreen.hide();
   }, []);
@@ -61,13 +58,7 @@ function App(): JSX.Element {
         <ToastProvider placement="center" duration={1500}>
           <NavigationContainer linking={linking}>
             <StatusBar translucent={true} backgroundColor={'transparent'} />
-            {!isLogin ? (
-              <AuthenticationStack />
-            ) : role ? (
-              <AppStack />
-            ) : (
-              <RoleScreen />
-            )}
+            {!isLogin ? <AuthenticationStack /> : <AppStack />}
           </NavigationContainer>
         </ToastProvider>
       </PaperProvider>

@@ -36,6 +36,9 @@ import LocalServiceManagementStack, {
 } from './local-service-management';
 import MeterStack, {MeterStackParamsList} from './operating/meter.stack';
 import {useListMeterType} from '@/screens/meter-management/hooks/useListMeterTypes';
+import ReportStatisticStack, {
+  ReportStatisticStackParamsList,
+} from './reporting-statistic.stack';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -58,6 +61,9 @@ export type AppStackParamsList = {
   WORK_MANAGEMENT: NavigatorScreenParams<WorkStackParamsList>;
   HOTLINE_STACK: NavigatorScreenParams<HotlineStackParamsList>;
   METER_STACK: NavigatorScreenParams<MeterStackParamsList>;
+  REPORT_STACK:
+    | NavigatorScreenParams<ReportStatisticStackParamsList>
+    | undefined;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -100,8 +106,6 @@ const AppStack = () => {
     }
   }, [dispatch, encryptedAccessToken]);
 
-  const {role} = useAppSelector(state => state.role);
-
   return (
     <Stack.Navigator
       screenOptions={{
@@ -109,40 +113,35 @@ const AppStack = () => {
         headerShown: false,
         freezeOnBlur: true,
       }}>
-      {role?.type === ERole.ADMINISTRATOR && (
-        <Stack.Group>
-          <Stack.Screen name={'HOME_SCREEN'} component={HomeScreen} />
-          <Stack.Screen
-            name="NOTIFICATION_STACK"
-            component={NotificationStack}
-          />
-          <Stack.Screen name="CHAT_STACK" component={ChatStack} />
-          <Stack.Screen name="FEEDBACK_STACK" component={FeedbackStack} />
-          <Stack.Screen
-            name="ADMINISTRATIVE_STACK"
-            component={AdministrativeStack}
-          />
-          <Stack.Screen name="VOTE_STACK" component={VoteStack} />
-          <Stack.Screen
-            name="LOCAL_SERVICE_STACK"
-            component={LocalServiceStack}
-          />
-          <Stack.Screen
-            name="LOCAL_SERVICE_MANAGEMENT_STACK"
-            component={LocalServiceManagementStack}
-          />
-          <Stack.Screen name="QUESTION_ANSWER_STACK" component={QAStack} />
-          <Stack.Screen
-            name="MATERIAL_ASSET_STACK"
-            component={MaterialAssetStack}
-          />
-          <Stack.Screen
-            name="RESIDENT_STACK"
-            component={ResidentVerifyScreen}
-            options={{headerShown: true}}
-          />
-        </Stack.Group>
-      )}
+      <Stack.Group>
+        <Stack.Screen name={'HOME_SCREEN'} component={HomeScreen} />
+        <Stack.Screen name="NOTIFICATION_STACK" component={NotificationStack} />
+        <Stack.Screen name="CHAT_STACK" component={ChatStack} />
+        <Stack.Screen name="FEEDBACK_STACK" component={FeedbackStack} />
+        <Stack.Screen
+          name="ADMINISTRATIVE_STACK"
+          component={AdministrativeStack}
+        />
+        <Stack.Screen name="VOTE_STACK" component={VoteStack} />
+        <Stack.Screen
+          name="LOCAL_SERVICE_STACK"
+          component={LocalServiceStack}
+        />
+        <Stack.Screen
+          name="LOCAL_SERVICE_MANAGEMENT_STACK"
+          component={LocalServiceManagementStack}
+        />
+        <Stack.Screen name="QUESTION_ANSWER_STACK" component={QAStack} />
+        <Stack.Screen
+          name="MATERIAL_ASSET_STACK"
+          component={MaterialAssetStack}
+        />
+        <Stack.Screen
+          name="RESIDENT_STACK"
+          component={ResidentVerifyScreen}
+          options={{headerShown: true}}
+        />
+      </Stack.Group>
       <Stack.Screen name="WORK_MANAGEMENT" component={WorkManagementDrawer} />
       <Stack.Screen
         initialParams={{isReturnPhoto: true}}
@@ -152,6 +151,7 @@ const AppStack = () => {
       <Stack.Screen name={'SETTING_SCREEN'} component={SettingStack} />
       <Stack.Screen name="HOTLINE_STACK" component={HotlineStack} />
       <Stack.Screen name="METER_STACK" component={MeterStack} />
+      <Stack.Screen name="REPORT_STACK" component={ReportStatisticStack} />
     </Stack.Navigator>
   );
 };
