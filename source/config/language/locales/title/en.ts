@@ -12,6 +12,7 @@ const title = {
   'Pages.Citizen.Verifications.GetAll': 'Citizen verifications',
   'Pages.LocalAmenities.List': 'Amenities',
   'Pages.Operations.TaskManagement.GetAll': 'Task management',
+  'Pages.Statistic': 'Statistic',
 };
 
 export default title;

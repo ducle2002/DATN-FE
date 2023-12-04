@@ -36,6 +36,7 @@ import LocalServiceManagementStack, {
 } from './local-service-management';
 import MeterStack, {MeterStackParamsList} from './operating/meter.stack';
 import {useListMeterType} from '@/screens/meter-management/hooks/useListMeterTypes';
+import StatisticStack, {StatisticStackParamsList} from './ statistic.stack';
 
 export type AppStackParamsList = {
   HOME_SCREEN: undefined;
@@ -58,6 +59,7 @@ export type AppStackParamsList = {
   WORK_MANAGEMENT: NavigatorScreenParams<WorkStackParamsList>;
   HOTLINE_STACK: NavigatorScreenParams<HotlineStackParamsList>;
   METER_STACK: NavigatorScreenParams<MeterStackParamsList>;
+  STATISTIC_STACK: NavigatorScreenParams<StatisticStackParamsList>;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();
@@ -131,6 +133,7 @@ const AppStack = () => {
             name="LOCAL_SERVICE_MANAGEMENT_STACK"
             component={LocalServiceManagementStack}
           />
+          <Stack.Screen name="STATISTIC_STACK" component={StatisticStack} />
           <Stack.Screen name="QUESTION_ANSWER_STACK" component={QAStack} />
           <Stack.Screen
             name="MATERIAL_ASSET_STACK"

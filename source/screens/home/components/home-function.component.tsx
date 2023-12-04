@@ -81,6 +81,10 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
           screen: 'MAIN_SCREEN',
           params: {screen: 'LIST_METER'},
         });
+      case 'Pages.Statistic':
+        return navigation.navigate('STATISTIC_STACK', {
+          screen: 'MAIN_SCREEN',
+        });
       default:
         toast.show('Chức năng đang phát triển');
     }

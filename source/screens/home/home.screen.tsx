@@ -29,7 +29,7 @@ const HomeScreen = (props: HomeScreenProps) => {
         <View style={{top: -height * 0.05}}>
           <HomeStatistics />
           <View style={styles.section}>
-            {features.map((p, index) => (
+            {[...features, 'Pages.Statistic'].map((p, index) => (
               <HomeFunction
                 key={p}
                 type={p}
