@@ -1,8 +1,9 @@
-import React, {memo, useEffect, useMemo, useRef} from 'react';
+import {useWindowDimensions} from 'react-native';
+import React, {useEffect, useMemo, useRef} from 'react';
 import {useQuery} from 'react-query';
 import StatisticService, {
-  EFormGetCitizenId,
-  EQueryCaseCitizenStatistics,
+  EFormIdStatistic,
+  EQueryCaseStatistic,
 } from '@/screens/home/services/statistic.service';
 import SvgChart, {SVGRenderer} from '@wuba/react-native-echarts/svgChart';
 import {
@@ -11,9 +12,8 @@ import {
   TitleComponent,
   TooltipComponent,
 } from 'echarts/components';
-import {LineChart} from 'echarts/charts';
+import {BarChart, LineChart} from 'echarts/charts';
 import * as echarts from 'echarts/core';
-import {useWindowDimensions} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
 import ChartContainer from './chart-container';
@@ -24,18 +24,21 @@ echarts.use([
   SVGRenderer,
   LineChart,
   LegendComponent,
+  BarChart,
 ]);
 
-const CitizenChart = () => {
+const InvoiceChart = () => {
   const {width} = useWindowDimensions();
   const {data} = useQuery({
-    queryKey: ['citizen-statistic', EFormGetCitizenId.GetAccepted],
+    queryKey: ['bill-statistic'],
     queryFn: () =>
-      StatisticService.getStatisticsCitizen({
+      StatisticService.GetApartmentBillStatistics({
         numberRange: 7,
-        queryCase: EQueryCaseCitizenStatistics.ByMonth,
+        formId: EFormIdStatistic.GetAll,
+        queryCase: EQueryCaseStatistic.ByMonth,
       }),
   });
+
   const {t} = useTranslation();
 
   const chartData = useMemo(() => {
@@ -43,52 +46,35 @@ const CitizenChart = () => {
       return {};
     }
     const keys = Object.keys(data.data);
-
     return {
       series: [
         {
-          data: keys.map(key => data?.data[key].countTotal),
-          type: 'line',
-          name: t(languageKeys.chart.legend.countTotal),
+          data: keys.map(key => data?.data[key].sumPaid),
+          type: 'bar',
+          name: t(languageKeys.chart.legend.paid),
           smooth: true,
-          areaStyle: {
-            opacity: 0.5,
-          },
+          stack: 'bill',
         },
         {
-          data: keys.map(key => data?.data[key].countNew),
-          type: 'line',
-          name: t(languageKeys.chart.legend.countNew),
+          data: keys.map(key => data?.data[key].sumUnpaid),
+          type: 'bar',
+          name: t(languageKeys.chart.legend.unpaid),
           smooth: true,
-          areaStyle: {
-            opacity: 0.5,
-          },
+          stack: 'bill',
         },
         {
-          data: keys.map(key => data?.data[key].countAccepted),
-          type: 'line',
-          name: t(languageKeys.chart.legend.countAccepted),
+          data: keys.map(key => data?.data[key].sumDebt),
+          type: 'bar',
+          name: t(languageKeys.chart.legend.debt),
           smooth: true,
-          areaStyle: {
-            opacity: 0.5,
-          },
-        },
-        {
-          data: keys.map(key => data?.data[key].countRejected),
-          type: 'line',
-          name: t(languageKeys.chart.legend.countRejected),
-          smooth: true,
-          areaStyle: {
-            opacity: 0.5,
-          },
+          stack: 'bill',
         },
       ],
       xTitle: keys,
       legend: [
-        t(languageKeys.chart.legend.countRejected),
-        t(languageKeys.chart.legend.countAccepted),
-        t(languageKeys.chart.legend.countNew),
-        t(languageKeys.chart.legend.countTotal),
+        t(languageKeys.chart.legend.paid),
+        t(languageKeys.chart.legend.unpaid),
+        t(languageKeys.chart.legend.debt),
       ],
     };
   }, [data, t]);
@@ -106,24 +92,38 @@ const CitizenChart = () => {
         width: E_WIDTH,
         height: E_HEIGHT,
       });
-
       chart.setOption({
         backgroundColor: 'transparent',
+
         xAxis: {
           type: 'category',
           data: chartData.xTitle,
         },
-        yAxis: {},
+        yAxis: [
+          {
+            type: 'value',
+            axisLabel: {
+              formatter: (value: number) => value / 1000000,
+            },
+            name: 'Triệu đồng',
+          },
+        ],
         series: chartData.series,
         legend: {
           data: chartData.legend,
           bottom: 0,
         },
         title: {
-          text: 'Xác minh cư dân',
+          text: 'Thông kê hóa đơn',
         },
         tooltip: {
           trigger: 'axis',
+          valueFormatter: (value: number) => {
+            return Intl.NumberFormat('vi', {
+              style: 'currency',
+              currency: 'vnd',
+            }).format(value);
+          },
         },
       });
     }
@@ -137,4 +137,4 @@ const CitizenChart = () => {
   );
 };
 
-export default memo(CitizenChart);
+export default InvoiceChart;

@@ -1,28 +1,22 @@
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {useLogout} from '@/screens/authentication/services/auth.hook';
 import Icon from '@/components/icon.component';
 import {SettingStackParamsList} from '@/routes/settings.stack';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
-import {useAppDispatch} from '@/hooks/redux.hook';
-import {resetRole} from '../role/service/role.slice';
+import {Button, Dialog} from 'react-native-paper';
+import globalStyles from '@/config/globalStyles';
 
 type Props = StackScreenProps<SettingStackParamsList, 'SettingScreen'>;
 
 const SettingScreen = ({navigation}: Props) => {
   const {logout} = useLogout();
-  const dispatch = useAppDispatch();
   const {t} = useTranslation();
+  const [isVisible, setIsVisible] = useState(false);
+
   const func_setting = [
-    {
-      name: t(languageKeys.setting.main.role),
-      icon: <Icon type="Entypo" name="cycle" color={'#2B5783'} size={24} />,
-      onPress: () => {
-        dispatch(resetRole());
-      },
-    },
     {
       name: t(languageKeys.setting.main.language),
       icon: (
@@ -42,9 +36,10 @@ const SettingScreen = ({navigation}: Props) => {
       icon: (
         <Icon type="Ionicons" name="power-sharp" color={'#2B5783'} size={24} />
       ),
-      onPress: () => logout(),
+      onPress: () => setIsVisible(true),
     },
   ];
+
   return (
     <View
       style={{
@@ -78,6 +73,29 @@ const SettingScreen = ({navigation}: Props) => {
           </Pressable>
         );
       })}
+      <Dialog visible={isVisible} onDismiss={() => setIsVisible(false)}>
+        <Dialog.Title>
+          <Text style={[styles.textValue, {flex: 0}]}>
+            Bạn có muốn đăng xuất không
+          </Text>
+        </Dialog.Title>
+        <Dialog.Actions>
+          <Button
+            mode="contained-tonal"
+            style={styles.button}
+            onPress={() => setIsVisible(false)}>
+            {t(languageKeys.shared.button.cancel)}
+          </Button>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={() => {
+              logout();
+            }}>
+            {t(languageKeys.shared.button.logout)}
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
     </View>
   );
 };
@@ -103,5 +121,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#2B5783',
     paddingLeft: '4%',
+  },
+  textLabel: {
+    flex: 1,
+    ...globalStyles.text16Medium,
+  },
+  textValue: {
+    flex: 1,
+    ...globalStyles.text16Bold,
+  },
+  button: {
+    paddingHorizontal: 10,
+    marginLeft: 20,
   },
 });

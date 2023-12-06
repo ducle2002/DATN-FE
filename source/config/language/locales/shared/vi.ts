@@ -26,6 +26,7 @@ const button = {
   filter: 'Lọc',
   resetFilter: 'Bỏ lọc',
   create: 'Tạo mới',
+  logout: 'Đăng xuất',
 };
 
 const shared = {

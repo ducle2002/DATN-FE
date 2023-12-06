@@ -11,6 +11,7 @@ import CitizenIcon from '@assets/icons/citizen-verification.svg';
 import TaskManagementIcon from '@assets/icons/task-management.svg';
 import AssetIcon from '@assets/icons/asset.svg';
 import NewFeedIcon from '@assets/icons/new-feed.svg';
+import ChartIcon from '@assets/icons/chart.svg';
 import {SvgProps} from 'react-native-svg';
 import {TPermission} from 'types/type';
 import Icon from '@/components/icon.component';
@@ -65,6 +66,8 @@ const HomeIcon = ({type, ...props}: HomeIconProp) => {
           color={'white'}
         />
       );
+    case 'Pages.Reporting':
+      return <ChartIcon width={35} height={35} />;
   }
 };
 

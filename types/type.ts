@@ -278,6 +278,19 @@ const allPermissions = {
   'Pages.Meter.Monthly.Edit': 'true',
   'Pages.Meter.Monthly.Delete': 'true',
   'Pages.Meter.Monthly.GetAll': 'true',
+
+  'Pages.Reporting.Overview': true,
+  'Pages.Reporting.Overview.CitizenReflect': true,
+  'Pages.Reporting.Overview.CitizenChat': true,
+  'Pages.Reporting.Overview.CitizenVote': true,
+  'Pages.Reporting.Overview.CitizenUseApp': true,
+  'Pages.Reporting.Overview.Account': true,
+
+  'Pages.Reporting.Invoice': true,
+  'Pages.Reporting.Asset': true,
+  'Pages.Reporting.CitizenReflect': true,
+  'Pages.Reporting.Citizen': true,
+  'Pages.Reporting.WorkManagement': true,
 };
 
 export type TPermission = keyof typeof allPermissions;

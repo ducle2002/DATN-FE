@@ -45,4 +45,5 @@ export const appFeatures: TPermission[] = [
   'Pages.LocalAmenities.List.GetAll',
   'Pages.Digitals.Forums.GetAll',
   'Pages.Meter.List.GetAll',
+  'Pages.Reporting',
 ];

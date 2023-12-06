@@ -81,7 +81,7 @@ const HomeFunction = ({type, style, iconContainerStyle, ...props}: Props) => {
           screen: 'MAIN_SCREEN',
           params: {screen: 'LIST_METER'},
         });
-      case 'Pages.Statistic':
+      case 'Pages.Reporting':
         return navigation.navigate('STATISTIC_STACK', {
           screen: 'MAIN_SCREEN',
         });

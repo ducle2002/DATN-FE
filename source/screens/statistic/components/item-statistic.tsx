@@ -13,6 +13,15 @@ const ItemStatistic = ({
     useNavigation<NavigationProp<StatisticStackParamsList, 'MAIN_SCREEN'>>();
   const NavigateToStatisticDetail = () => {
     switch (item.type) {
+      case 1:
+        navigation.navigate('INVOICE_STATISTIC');
+        break;
+      case 3:
+        navigation.navigate('WORK_STATISTIC');
+        break;
+      case 5:
+        navigation.navigate('CITIZEN_STATISTIC');
+        break;
       case 7:
         navigation.navigate('FEEDBACK_STATISTIC');
         break;
