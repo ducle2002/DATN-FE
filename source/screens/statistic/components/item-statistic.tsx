@@ -3,26 +3,27 @@ import React from 'react';
 import {IconStatistic} from '../icons';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {StatisticStackParamsList} from '@/routes/ statistic.stack';
+import {EnumTypeStatistic} from '@/modules/statistic/statistic.model';
 
 const ItemStatistic = ({
   item,
 }: {
-  item: {name: string; hint: string; type: number};
+  item: {name: string; hint: string; type: string};
 }) => {
   const navigation =
     useNavigation<NavigationProp<StatisticStackParamsList, 'MAIN_SCREEN'>>();
   const NavigateToStatisticDetail = () => {
     switch (item.type) {
-      case 1:
+      case EnumTypeStatistic.Invoice:
         navigation.navigate('INVOICE_STATISTIC');
         break;
-      case 3:
+      case EnumTypeStatistic.WorkManagement:
         navigation.navigate('WORK_STATISTIC');
         break;
-      case 5:
+      case EnumTypeStatistic.Citizen:
         navigation.navigate('CITIZEN_STATISTIC');
         break;
-      case 7:
+      case EnumTypeStatistic.CitizenReflect:
         navigation.navigate('FEEDBACK_STATISTIC');
         break;
       default:
