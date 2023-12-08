@@ -1213,7 +1213,7 @@ PODS:
     - React-Core
   - react-native-document-picker (9.0.1):
     - React-Core
-  - react-native-flipper (0.163.0):
+  - react-native-flipper (0.212.0):
     - React-Core
   - react-native-get-random-values (1.9.0):
     - React-Core
@@ -1750,7 +1750,7 @@ SPEC CHECKSUMS:
   react-native-cameraroll: 134805127580aed23403b8c2cb1548920dd77b3a
   react-native-date-picker: 8847cb359cf259ddae5ed165217e15573a654519
   react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
-  react-native-flipper: 2d552a8178d839ef378220101fb7f0cd5b2a8003
+  react-native-flipper: 9c1957af24b76493ba74f46d000a5c1d485e7731
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-image-resizer: 00ceb0e05586c7aadf061eea676957a6c2ec60fa
   react-native-pager-view: d211379f61895b6349bd7e571b44a26d005c2975

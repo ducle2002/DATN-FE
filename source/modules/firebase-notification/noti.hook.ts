@@ -26,11 +26,16 @@ export const useRegisterNotification = () => {
                 messaging()
                   .getToken()
                   .then(token => {
+                    console.log(token);
+
                     AsyncStorage.setItem('FCMToken', token);
                     NotificationService.register({
                       tenantId: tenantId,
                       token: token,
                     });
+                  })
+                  .catch(error => {
+                    console.log(error);
                   });
               }
             });
