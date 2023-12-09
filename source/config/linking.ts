@@ -36,6 +36,12 @@ const config: {
         },
       },
     },
+    RESIDENT_STACK: {
+      path: 'citizen',
+      parse: {
+        id: (id: string) => Number(id),
+      },
+    },
   },
 };
 
