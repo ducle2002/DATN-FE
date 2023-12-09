@@ -18,7 +18,7 @@ const HomeScreen = (props: HomeScreenProps) => {
   const {grantedPermissions} = useAppSelector(state => state.config);
 
   const features = useMemo(() => {
-    return appFeatures.filter(f => grantedPermissions.includes(f));
+    return appFeatures.filter(f => grantedPermissions?.includes(f));
   }, [grantedPermissions]);
 
   const {height} = useWindowDimensions();

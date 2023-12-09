@@ -19,20 +19,22 @@ import {dataProviderMaker} from '@/utils/recycler-list-view';
 import {flatten, map} from 'ramda';
 import BottomContainer from '@/components/bottom-container.component';
 import {ResidentFilterContext, TFilter} from './hooks/ResidentFilterContext';
+import {useQuery} from 'react-query';
+import {ResidentApi} from './services/resident.services';
 
 const {width} = Dimensions.get('screen');
 type Props = StackScreenProps<AppStackParamsList, 'RESIDENT_STACK'>;
 
-const ResidentVerifyScreen = ({navigation}: Props) => {
+const ResidentVerifyScreen = ({navigation, route}: Props) => {
   const [filters, setFilters] = useState<TFilter>({
     formId: EResidentFormId.ALL,
   });
 
   const {fetchNextPage, data} = useResidentData(filters);
-  const [resident, setResident] = useState<TResident>();
+  const [citizenId, setCitizenId] = useState(route.params?.id);
 
   const renderItem = (_: any, item: TResident) => (
-    <ResidentItem resident={item} viewItem={() => setResident(item)} />
+    <ResidentItem resident={item} viewItem={() => setCitizenId(item.id)} />
   );
 
   const dataProvider = useMemo(() => {
@@ -69,6 +71,12 @@ const ResidentVerifyScreen = ({navigation}: Props) => {
     });
   }, [navigation, renderHeader]);
 
+  const {data: resident} = useQuery({
+    queryKey: ['citizen'],
+    queryFn: () => ResidentApi.getById({id: citizenId ?? -1}),
+    enabled: !!citizenId && citizenId > 0,
+  });
+
   return (
     <View style={styles.container}>
       <RecyclerListView
@@ -87,8 +95,8 @@ const ResidentVerifyScreen = ({navigation}: Props) => {
       />
 
       <ResidentDetail
-        isVisible={!!resident}
-        closeModal={() => setResident(undefined)}
+        isVisible={!!citizenId}
+        closeModal={() => setCitizenId(undefined)}
         resident={resident}
         formId={filters.formId}
         keyword={filters.keyword}

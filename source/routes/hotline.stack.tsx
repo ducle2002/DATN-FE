@@ -13,7 +13,11 @@ const Stack = createStackNavigator<HotlineStackParamsList>();
 
 const HotlineStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+      }}>
       <Stack.Screen name="LIST_HOTLINE" component={HotlineScreen} />
       <Stack.Screen name="UPDATE" component={HotlineUpdateScreen} />
     </Stack.Navigator>

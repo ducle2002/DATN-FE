@@ -83,13 +83,13 @@ export const getNotification = async () => {
       },
       // data: {action: message.data.action},
     });
-    notifee.onBackgroundEvent(async ({type, detail}) => {
+    notifee.onBackgroundEvent(async ({type}) => {
       if (type === EventType.PRESS) {
         Linking.openURL('yooioc://');
       }
     });
 
-    notifee.onForegroundEvent(({type, detail}) => {
+    notifee.onForegroundEvent(({type}) => {
       if (type === EventType.PRESS) {
         Linking.openURL('yooioc://');
       }

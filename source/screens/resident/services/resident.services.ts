@@ -28,6 +28,13 @@ class ResidentService extends BaseService {
     const url = this.HOST + this.endpoint + 'UpdateStateCitizen';
     return axiosClient.put(url, params);
   };
+  getById = async (params: {id: number}): Promise<TResident> => {
+    const url = this.endpoint + 'GetCitizenById';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: params});
+    return result.data;
+  };
 }
 
 export const ResidentApi = new ResidentService();

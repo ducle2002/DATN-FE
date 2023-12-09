@@ -1,17 +1,24 @@
-import {StyleSheet, Text, View, useWindowDimensions} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import React from 'react';
 import Icon from '@/components/icon.component';
 import {HomeScreenProps} from '../home.screen';
-import {Avatar} from 'react-native-paper';
+import {Avatar, Badge} from 'react-native-paper';
 import {useAppSelector} from '@/hooks/redux.hook';
 import globalStyles from '@/config/globalStyles';
 import BackgroundHeader from '@/components/background-header.component';
-import {useToast} from 'react-native-toast-notifications';
+import {useGetNumberUnread} from '@/screens/notification/services/hook';
 
 const HomeHeader = ({navigation}: HomeScreenProps) => {
   const {imageUrl, fullName} = useAppSelector(state => state.user);
-  const toast = useToast();
   const {height} = useWindowDimensions();
+  useGetNumberUnread();
+  const {unreadCount} = useAppSelector(state => state.notification);
   return (
     <BackgroundHeader>
       <View style={[styles.contentContainer, {height: height * 0.12}]}>
@@ -23,14 +30,17 @@ const HomeHeader = ({navigation}: HomeScreenProps) => {
           </View>
         </View>
         <View style={styles.headerIconContainer}>
-          <Icon
-            type="Ionicons"
-            name="notifications"
-            size={30}
-            color={'white'}
-            style={styles.icon}
-            onPress={() => toast.show('Chức năng đang phát triển')}
-          />
+          <Pressable>
+            <Icon
+              type="Ionicons"
+              name="notifications"
+              size={30}
+              color={'white'}
+              style={styles.icon}
+              onPress={() => navigation.navigate('NOTIFICATION')}
+            />
+            <Badge style={{position: 'absolute'}}>{unreadCount}</Badge>
+          </Pressable>
           <Icon
             type="Ionicons"
             name="qr-code-outline"
