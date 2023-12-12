@@ -24,10 +24,16 @@ export const useRegisterNotification = () => {
                 result === messaging.AuthorizationStatus.PROVISIONAL
               ) {
                 messaging()
+                  .getAPNSToken()
+                  .then(r => {
+                    console.log('apns token', r);
+                  })
+                  .catch(e => {
+                    console.log('apns error ', e);
+                  });
+                messaging()
                   .getToken()
                   .then(token => {
-                    console.log(token);
-
                     AsyncStorage.setItem('FCMToken', token);
                     NotificationService.register({
                       tenantId: tenantId,
@@ -47,6 +53,15 @@ export const useRegisterNotification = () => {
 export const getNotification = async () => {
   await messaging().registerDeviceForRemoteMessages();
   await messaging().getToken();
+
+  messaging()
+    .getAPNSToken()
+    .then(r => {
+      console.log('apns token', r);
+    })
+    .catch(e => {
+      console.log('apns error ', e);
+    });
   // console.log('[TOKEN]', token);
 
   messaging().onNotificationOpenedApp(async remoteMessage => {
