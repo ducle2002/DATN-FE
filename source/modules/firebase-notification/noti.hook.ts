@@ -24,6 +24,14 @@ export const useRegisterNotification = () => {
                 result === messaging.AuthorizationStatus.PROVISIONAL
               ) {
                 messaging()
+                  .getAPNSToken()
+                  .then(r => {
+                    console.log('apns token', r);
+                  })
+                  .catch(e => {
+                    console.log('apns error ', e);
+                  });
+                messaging()
                   .getToken()
                   .then(token => {
                     AsyncStorage.setItem('FCMToken', token);
@@ -31,6 +39,9 @@ export const useRegisterNotification = () => {
                       tenantId: tenantId,
                       token: token,
                     });
+                  })
+                  .catch(error => {
+                    console.log(error);
                   });
               }
             });
@@ -42,6 +53,15 @@ export const useRegisterNotification = () => {
 export const getNotification = async () => {
   await messaging().registerDeviceForRemoteMessages();
   await messaging().getToken();
+
+  messaging()
+    .getAPNSToken()
+    .then(r => {
+      console.log('apns token', r);
+    })
+    .catch(e => {
+      console.log('apns error ', e);
+    });
   // console.log('[TOKEN]', token);
 
   messaging().onNotificationOpenedApp(async remoteMessage => {
@@ -78,13 +98,13 @@ export const getNotification = async () => {
       },
       // data: {action: message.data.action},
     });
-    notifee.onBackgroundEvent(async ({type, detail}) => {
+    notifee.onBackgroundEvent(async ({type}) => {
       if (type === EventType.PRESS) {
         Linking.openURL('yooioc://');
       }
     });
 
-    notifee.onForegroundEvent(({type, detail}) => {
+    notifee.onForegroundEvent(({type}) => {
       if (type === EventType.PRESS) {
         Linking.openURL('yooioc://');
       }

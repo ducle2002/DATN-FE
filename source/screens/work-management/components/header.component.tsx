@@ -1,21 +1,13 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useState} from 'react';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import React from 'react';
 import LinearGradientHeader from '@/components/linear-gradient-header.component';
 import {StackHeaderProps} from '@react-navigation/stack';
 import {HeaderTitle} from '@react-navigation/elements';
 import Icon from '@/components/icon.component';
 import {EWorkStatus} from '../services/work.model';
-import language, {languageKeys} from '@/config/language/language';
 import globalStyles from '@/config/globalStyles';
 import moment from 'moment';
-import {Divider, Menu} from 'react-native-paper';
-import SelectTimesComponent, {TOptionItem} from './select-times.component';
+import SelectTimesComponent from './select-times.component';
 import {TTurnWork} from '../services/logtime.model';
 
 type Props = StackHeaderProps & {
@@ -31,10 +23,6 @@ const HeaderWorkDetail = ({
   selectedTurn,
   ...props
 }: Props) => {
-  const [visibleMenu, setVisibleMenu] = useState(false);
-  const closeMenu = () => {
-    setVisibleMenu(false);
-  };
   return (
     <LinearGradientHeader headerProps={props}>
       <View

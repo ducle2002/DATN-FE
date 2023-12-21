@@ -9,6 +9,7 @@ import organizationSlice from './modules/organization/organization.slice';
 import localServiceSlice from './screens/local-service/services/local-service.slice';
 import hubconnectionSlice from './modules/hubconnection/hubconnection.slice';
 import roleSlice, {initRoleAction} from './screens/role/service/role.slice';
+import notificationSlice from './screens/notification/services/notification.slice';
 
 const appReducer = combineReducers({
   auth: authenticationSlice,
@@ -18,6 +19,7 @@ const appReducer = combineReducers({
   localService: localServiceSlice,
   hubconnection: hubconnectionSlice,
   role: roleSlice,
+  notification: notificationSlice,
 });
 
 const rootReducer = (state: any, action: AnyAction) => {
