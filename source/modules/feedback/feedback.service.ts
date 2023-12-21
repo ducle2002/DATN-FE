@@ -15,6 +15,8 @@ class FeedbackService {
 
   getFeedback = async (params: {
     FormId: number;
+    FromDay?: string;
+    ToDay?: string;
     skipCount: number;
     KeyWord?: string;
   }): Promise<TFeedbackPage> => {
@@ -86,6 +88,15 @@ class FeedbackService {
     SkipCount?: number;
   }): Promise<TMessageFeedbackPage> => {
     const url = HOST_SERVER + this.endpoint + 'GetAllCommnetByCitizenReflect';
+    const urlAsRead =
+      HOST_SERVER + this.endpoint + 'SetCommentCitizenReflectAsRead';
+    const {
+      data: {resultAsRead},
+    } = await axiosClient.post(urlAsRead, {
+      feedbackId: params.CitizenReflectId,
+    });
+    console.log(resultAsRead);
+
     const {
       data: {result},
     } = await axiosClient.get(url, {

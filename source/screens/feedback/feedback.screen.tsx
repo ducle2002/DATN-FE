@@ -27,6 +27,7 @@ import PickerBeginEndDate from '@/components/picker-begin-end-date';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {AppStackParamsList} from '@/routes/app.stack';
 import {EWorkAssociationType} from '../work-management/services/work.model';
+import {Button} from 'react-native-paper';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -345,8 +346,31 @@ const FeedbackScreen = (props: Props) => {
             style={{
               backgroundColor: 'white',
             }}>
-            <View>
+            <View
+              style={{
+                backgroundColor: '#fff',
+                paddingBottom: 50,
+              }}>
               <PickerBeginEndDate />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  paddingHorizontal: '3%',
+                }}>
+                <Button mode="outlined" style={{flex: 1, marginRight: '2%'}}>
+                  Bỏ lọc
+                </Button>
+                <Button
+                  mode="contained"
+                  contentStyle={{
+                    backgroundColor: '#0077b6',
+                  }}
+                  style={{
+                    flex: 1,
+                  }}>
+                  Lọc
+                </Button>
+              </View>
             </View>
           </TouchableWithoutFeedback>
         </Pressable>
