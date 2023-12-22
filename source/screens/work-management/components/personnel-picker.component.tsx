@@ -71,7 +71,7 @@ const PersonnelPicker = ({label, containerStyle}: Props) => {
         onBackdropPress={() => setIsVisible(false)}
         isVisible={isVisible}>
         <SafeAreaView style={styles.container}>
-          <View style={{paddingLeft: 10, height: '30%'}}>
+          <View style={{paddingLeft: 10, height: '25%'}}>
             <Text style={styles.textLabel}>Nhân sự được chọn</Text>
             <ScrollView
               contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}>
@@ -112,9 +112,13 @@ const PersonnelPicker = ({label, containerStyle}: Props) => {
             )}
           </View>
           <BottomContainer>
-            <Button mode="contained" onPress={() => setIsVisible(false)}>
-              Lưu
-            </Button>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              <Button onPress={() => setIsVisible(false)}>Đóng</Button>
+              <Button mode="contained" onPress={() => setIsVisible(false)}>
+                Lưu
+              </Button>
+            </View>
           </BottomContainer>
         </SafeAreaView>
       </ReactNativeModal>

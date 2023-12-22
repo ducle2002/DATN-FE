@@ -1,6 +1,6 @@
 import {TOrganizationUnit} from '@/modules/organization/organization.model';
 import {useEffect, useState} from 'react';
-import {Pressable, StyleSheet, Text} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, Text} from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -124,7 +124,14 @@ const OrganizationsTree = ({data}: OrganizationsTreeProps) => {
 
   return (
     <Animated.View style={{}}>
-      <Text style={{marginLeft: 5}}>
+      <ScrollView
+        horizontal
+        style={{
+          marginLeft: 5,
+          flexDirection: 'row',
+          flexGrow: 0,
+          marginTop: 5,
+        }}>
         <Pressable style={styles.breadcrumb} onPress={onBackToRoot}>
           <Text style={styles.breadcrumbText}>all</Text>
           {history.length > 0 ? (
@@ -150,18 +157,20 @@ const OrganizationsTree = ({data}: OrganizationsTreeProps) => {
             />
           </Pressable>
         ))}
-      </Text>
+      </ScrollView>
       <Animated.View style={animatedStyle}>
-        {state.data.map(o => (
-          <Organization
-            key={o.id}
-            data={o}
-            setState={setState}
-            state={state}
-            setHistory={setHistory}
-            history={history}
-          />
-        ))}
+        <ScrollView style={{height: '50%'}}>
+          {state.data.map(o => (
+            <Organization
+              key={o.id}
+              data={o}
+              setState={setState}
+              state={state}
+              setHistory={setHistory}
+              history={history}
+            />
+          ))}
+        </ScrollView>
         <AccountContainer
           accounts={accounts?.map(a => ({id: a.id, fullName: a.fullName}))}
           label={'Thành viên ' + state.selectedData?.displayName}
@@ -192,7 +201,9 @@ const styles = StyleSheet.create({
   },
   accountContainer: {
     paddingHorizontal: 10,
-    marginTop: 20,
+    paddingTop: 10,
+    borderTopWidth: 2,
+    borderTopColor: '#f1f2f8',
   },
 });
 export default OrganizationsTree;
