@@ -7,6 +7,11 @@ export type TDestination = {
   receiveAll?: number;
 };
 export type TDigitalNoti = {
+  receiverGroupCode: string | undefined;
+  receiveAll: number | undefined;
+  buildingId: number;
+  urbanId: number;
+  apartmentCode: any;
   name: string;
   data: string;
   fileUrl: string;

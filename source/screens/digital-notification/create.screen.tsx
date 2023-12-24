@@ -37,6 +37,8 @@ import {
 } from './services/hook';
 import SelectDestination from './components/select-notification-destination.component';
 import {TDestination} from './services/digital-noti.model';
+import {useAppSelector} from '@/hooks/redux.hook';
+import {checkPermission} from '@/utils/utils';
 
 type Props = StackScreenProps<NotificationStackParamsList, 'CREATE_SCREEN'>;
 
@@ -53,7 +55,18 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
       o.types?.includes(TOrganizationUnitType.Notification),
     ) ?? [];
 
-  const [destination, setDestination] = useState<TDestination>();
+  const {grantedPermissions} = useAppSelector(state => state.config);
+
+  const [destination, setDestination] = useState<TDestination | undefined>(
+    noti
+      ? {
+          buildingId: noti.buildingId,
+          urbanId: noti.urbanId,
+          receiverGroupCode: noti.receiverGroupCode,
+          receiveAll: noti.receiveAll,
+        }
+      : undefined,
+  );
 
   const {
     control,
@@ -96,7 +109,10 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
   const [isAllowComment, setAllowComment] = useState<boolean>(
     noti?.isAllowComment ?? false,
   );
-  const [sendAll, setSendAll] = useState(true);
+
+  const [sendAll, setSendAll] = useState(
+    checkPermission(grantedPermissions, ['Datas.Admin']),
+  );
 
   const [file, setFile] = useState<TImagePicker | undefined | string>(
     noti?.fileUrl,
@@ -228,7 +244,13 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
           onSelection={(value: boolean) => {
             setSendAll(value);
           }}
-          listOptions={sendAllOptions}
+          listOptions={sendAllOptions.filter(
+            o =>
+              !(
+                !checkPermission(grantedPermissions, ['Datas.Admin']) &&
+                o.value === true
+              ),
+          )}
           selectedOption={sendAllOptions[sendAll ? 0 : 1]}
           label={language.t(languageKeys.digitalNoti.create.destination)}
           labelStyle={styles.textLabel}
