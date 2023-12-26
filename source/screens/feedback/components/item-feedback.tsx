@@ -143,7 +143,13 @@ const ItemFeedback = forwardRef(function (
         <Text style={styles.txtDate}>
           {moment(item.creationTime).format('DD/MM/YY hh:mm')}
         </Text>
-        <View style={styles.badgeContainer}>
+        <View
+          style={[
+            styles.badgeContainer,
+            {
+              backgroundColor: item.countUnreadComment ? '#9d0208' : '#ced4da',
+            },
+          ]}>
           <Text style={styles.txtBadge}>
             {item.countUnreadComment < 99 ? item.countUnreadComment : 99}
           </Text>
