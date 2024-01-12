@@ -22,7 +22,13 @@ const LocalServiceStack = () => {
         headerTitleAlign: 'center',
       }}>
       <Stack.Screen name="MAIN_SCREEN" component={LocalServiceScreen} />
-      <Stack.Screen name="BOOKING_SCREEN" component={BookingScreen} />
+      <Stack.Screen
+        name="BOOKING_SCREEN"
+        component={BookingScreen}
+        options={{
+          title: 'Đơn đặt tiện ích',
+        }}
+      />
       <Stack.Screen
         name="DETAIL_BOOKING_SCREEN"
         component={BookingDetailScreen}

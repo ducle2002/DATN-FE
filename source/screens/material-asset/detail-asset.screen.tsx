@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {
@@ -47,107 +47,110 @@ const DetailAssetScreen = ({navigation, route}: Props) => {
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.assetName)}
-          </Text>
-          <Text style={styles.textValue}>{material?.title}</Text>
-        </View>
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.assetCode)}
-          </Text>
-          <Text style={styles.textValue}>{material?.code}</Text>
-        </View>
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.form)}
-          </Text>
-          <Text style={styles.textValue}>{material?.hinhThucText}</Text>
-        </View>
+        <ScrollView>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.assetName)}
+            </Text>
+            <Text style={styles.textValue}>{material?.title}</Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.assetCode)}
+            </Text>
+            <Text style={styles.textValue}>{material?.code}</Text>
+          </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.form)}
+            </Text>
+            <Text style={styles.textValue}>{material?.hinhThucText}</Text>
+          </View>
 
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.status)}
-          </Text>
-          <Text style={styles.textValue}>{material?.trangThaiText}</Text>
-        </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.status)}
+            </Text>
+            <Text style={styles.textValue}>{material?.trangThaiText}</Text>
+          </View>
 
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.systemCode)}
-          </Text>
-          <Text style={styles.textValue}>{material?.maHeThongText}</Text>
-        </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.systemCode)}
+            </Text>
+            <Text style={styles.textValue}>{material?.maHeThongText}</Text>
+          </View>
 
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.assetGroup)}
-          </Text>
-          <Text style={styles.textValue}>{material?.nhomTaiSanText}</Text>
-        </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.assetGroup)}
+            </Text>
+            <Text style={styles.textValue}>{material?.nhomTaiSanText}</Text>
+          </View>
 
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.block)}
-          </Text>
-          <Text style={styles.textValue}>{material?.blockText}</Text>
-        </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.block)}
+            </Text>
+            <Text style={styles.textValue}>{material?.blockText}</Text>
+          </View>
 
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.floor)}
-          </Text>
-          <Text style={styles.textValue}>{material?.floorText}</Text>
-        </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.floor)}
+            </Text>
+            <Text style={styles.textValue}>{material?.floorText}</Text>
+          </View>
 
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.building)}
-          </Text>
-          <Text style={styles.textValue}>{material?.buildingText}</Text>
-        </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.building)}
+            </Text>
+            <Text style={styles.textValue}>{material?.buildingText}</Text>
+          </View>
 
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.amount)}
-          </Text>
-          <Text style={styles.textValue}>{material?.soLuong}</Text>
-        </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.amount)}
+            </Text>
+            <Text style={styles.textValue}>{material?.soLuong}</Text>
+          </View>
 
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.totalValue)}
-          </Text>
-          <Text style={styles.textValue}>{material?.giaTriTaiSan}</Text>
-        </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.totalValue)}
+            </Text>
+            <Text style={styles.textValue}>{material?.giaTriTaiSan}</Text>
+          </View>
 
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.startDate)}
-          </Text>
-          <Text style={styles.textValue}>
-            {moment(material?.ngayBatDau).format('HH:mm DD/MM/YYYY')}
-          </Text>
-        </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.startDate)}
+            </Text>
+            <Text style={styles.textValue}>
+              {moment(material?.ngayBatDau).format('HH:mm DD/MM/YYYY')}
+            </Text>
+          </View>
 
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.endDate)}
-          </Text>
-          <Text style={styles.textValue}>
-            {material?.ngayKetThuc &&
-              moment(material?.ngayKetThuc).format('HH:mm DD/MM/YYYY')}
-          </Text>
-        </View>
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.materialAsset.materialDetail.endDate)}
+            </Text>
+            <Text style={styles.textValue}>
+              {material?.ngayKetThuc &&
+                moment(material?.ngayKetThuc).format('HH:mm DD/MM/YYYY')}
+            </Text>
+          </View>
 
-        <View style={styles.itemContainer}>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.materialAsset.materialDetail.description)}
-          </Text>
-          <Text style={styles.textValue}>{material?.ghiChu}</Text>
-        </View>
-
+          <View style={styles.itemContainer}>
+            <Text style={styles.textLabel}>
+              {language.t(
+                languageKeys.materialAsset.materialDetail.description,
+              )}
+            </Text>
+            <Text style={styles.textValue}>{material?.ghiChu}</Text>
+          </View>
+        </ScrollView>
         <BottomContainer>
           <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
             {checkPermission(grantedPermissions, [

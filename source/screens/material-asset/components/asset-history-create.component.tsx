@@ -10,7 +10,7 @@ import {
   useAllAccountOnDepartment,
   useAllDepartment,
 } from '@/modules/department/department.hook';
-import {useMutation} from 'react-query';
+import {useMutation, useQueryClient} from 'react-query';
 import MaintenanceHistoryService from '../services/maintenance-history.service';
 import {useAppSelector} from '@/hooks/redux.hook';
 import DatePickerComponent from '@/screens/work-management/components/date-picker.component';
@@ -39,10 +39,12 @@ const AssetHistoryCreate = ({assetId}: Props) => {
   const departments = useAllDepartment();
   const {accounts} = useAllAccountOnDepartment({id: departmentId});
 
+  const queryClient = useQueryClient();
   const {mutate: create} = useMutation({
     mutationFn: (params: any) => MaintenanceHistoryService.create(params),
     onSuccess: () => {
       reset();
+      queryClient.refetchQueries(['asset-history', assetId]);
       setIsVisible(false);
     },
   });

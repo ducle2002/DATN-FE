@@ -6,7 +6,7 @@ import messaging, {
 import NotificationService from './noti.service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import notifee, {AndroidImportance, EventType} from '@notifee/react-native';
-import {Linking} from 'react-native';
+import {Linking, Platform} from 'react-native';
 
 export const useRegisterNotification = () => {
   const {tenantId} = useAppSelector(state => state.auth);
@@ -38,6 +38,8 @@ export const useRegisterNotification = () => {
                     NotificationService.register({
                       tenantId: tenantId,
                       token: token,
+                      appType: 3,
+                      deviceType: Platform.OS === 'android' ? 2 : 1,
                     });
                   })
                   .catch(error => {

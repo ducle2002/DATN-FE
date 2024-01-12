@@ -31,33 +31,6 @@ type Props = {
 };
 
 const MaterialDetail = ({materialId, onBackdropPress}: Props) => {
-  // const schema = useMemo(
-  //   () =>
-  //     yup.object({
-  //       name: yup
-  //         .string()
-  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
-  //       code: yup
-  //         .string()
-  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
-  //       groupId: yup
-  //         .number()
-  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
-  //       typeId: yup
-  //         .number()
-  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
-  //       unitId: yup
-  //         .number()
-  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
-  //       producerId: yup
-  //         .number()
-  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
-  //       price: yup
-  //         .number()
-  //         .required(language.t(languageKeys.shared.form.requiredMessage)),
-  //     }),
-  //   [],
-  // );
   const material = useAssetById(materialId);
 
   const [editable] = useState(true);

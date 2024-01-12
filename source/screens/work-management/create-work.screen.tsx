@@ -1,4 +1,10 @@
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import DatePickerComponent from './components/date-picker.component';
@@ -85,140 +91,146 @@ const CreateWorkScreen = ({navigation, route}: Props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.contentContainer}>
-          <PersonnelPickerContext.Provider
-            value={{
-              selected: supervisorUsers,
-              onSelect: setSupervisorUsers,
-            }}>
-            <PersonnelPicker
-              label={language.t(
-                languageKeys.workManagement.work.supervisorUsers,
-              )}
-              containerStyle={{
-                marginBottom: 20,
-              }}
-            />
-          </PersonnelPickerContext.Provider>
-
-          <PersonnelPickerContext.Provider
-            value={{
-              selected: recipientUsers,
-              onSelect: setRecipientUsers,
-            }}>
-            <PersonnelPicker
-              label={language.t(
-                languageKeys.workManagement.work.recipientUsers,
-              )}
-              containerStyle={{
-                marginBottom: 20,
-              }}
-            />
-          </PersonnelPickerContext.Provider>
-
-          <Controller
-            control={control}
-            name="dateStart"
-            render={({field: {value, onChange}, fieldState: {error}}) => (
-              <DatePickerComponent
-                value={value ?? ''}
-                onChange={onChange}
-                label={language.t(languageKeys.workManagement.work.dateStart)}
-                labelStyle={styles.labelStyle}
-                inputContainerStyle={[
-                  styles.inputContainerStyle,
-                  {paddingVertical: 0},
-                ]}
-                containerStyle={{marginBottom: 20}}
-                errorMessage={error?.message}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="dateExpected"
-            render={({field: {value, onChange}, fieldState: {error}}) => (
-              <DatePickerComponent
-                value={value ?? ''}
-                onChange={onChange}
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.contentContainer}>
+            <PersonnelPickerContext.Provider
+              value={{
+                selected: supervisorUsers,
+                onSelect: setSupervisorUsers,
+              }}>
+              <PersonnelPicker
                 label={language.t(
-                  languageKeys.workManagement.work.dateExpected,
+                  languageKeys.workManagement.work.supervisorUsers,
                 )}
-                minimumDate={dateStart}
-                labelStyle={styles.labelStyle}
-                inputContainerStyle={[
-                  styles.inputContainerStyle,
-                  {paddingVertical: 0},
-                ]}
-                containerStyle={{marginBottom: 20}}
-                errorMessage={error?.message}
+                containerStyle={{
+                  marginBottom: 20,
+                }}
               />
-            )}
-          />
-        </View>
-        <View style={styles.contentContainer}>
-          <Controller
-            control={control}
-            name="workTypeId"
-            render={({field: {value, onChange}, fieldState: {error}}) => (
-              <DropdownMenuComponent
-                options={
-                  workType?.map(type => ({
-                    id: type.id,
-                    label: type.name,
-                  })) ?? []
-                }
-                onSelected={(id: number) => onChange(id.toString())}
-                selectedLabel={
-                  workType?.find(t => t.id.toString() === value)?.name
-                }
-                label={language.t(languageKeys.workManagement.work.workTypeId)}
-                inputContainer={styles.inputContainerStyle}
-                labelStyle={styles.labelStyle}
-                style={{marginBottom: 20}}
-                error={error?.message}
-              />
-            )}
-          />
+            </PersonnelPickerContext.Provider>
 
-          <Controller
-            control={control}
-            name="title"
-            render={({field: {value, onChange}, fieldState: {error}}) => (
-              <CTextInput
-                value={value}
-                onChangeText={onChange}
-                style={styles.inputContainerStyle}
-                label={language.t(languageKeys.workManagement.work.title)}
-                labelStyle={[styles.labelStyle]}
-                errorMessage={error?.message}
+            <PersonnelPickerContext.Provider
+              value={{
+                selected: recipientUsers,
+                onSelect: setRecipientUsers,
+              }}>
+              <PersonnelPicker
+                label={language.t(
+                  languageKeys.workManagement.work.recipientUsers,
+                )}
+                containerStyle={{
+                  marginBottom: 20,
+                }}
               />
-            )}
-          />
-          <Controller
-            control={control}
-            name="content"
-            render={({field: {value, onChange}, fieldState: {error}}) => (
-              <CTextInput
-                value={value}
-                onChangeText={onChange}
-                style={styles.inputContainerStyle}
-                labelStyle={[styles.labelStyle, {marginTop: 10}]}
-                label={language.t(languageKeys.workManagement.work.content)}
-                errorMessage={error?.message}
-              />
-            )}
-          />
-        </View>
-      </ScrollView>
-      <BottomContainer>
-        <Button mode="contained" onPress={handleSubmit(onSubmit)}>
-          Save
-        </Button>
-      </BottomContainer>
-    </View>
+            </PersonnelPickerContext.Provider>
+
+            <Controller
+              control={control}
+              name="dateStart"
+              render={({field: {value, onChange}, fieldState: {error}}) => (
+                <DatePickerComponent
+                  value={value ?? ''}
+                  onChange={onChange}
+                  label={language.t(languageKeys.workManagement.work.dateStart)}
+                  labelStyle={styles.labelStyle}
+                  inputContainerStyle={[
+                    styles.inputContainerStyle,
+                    {paddingVertical: 0},
+                  ]}
+                  containerStyle={{marginBottom: 20}}
+                  errorMessage={error?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="dateExpected"
+              render={({field: {value, onChange}, fieldState: {error}}) => (
+                <DatePickerComponent
+                  value={value ?? ''}
+                  onChange={onChange}
+                  label={language.t(
+                    languageKeys.workManagement.work.dateExpected,
+                  )}
+                  minimumDate={dateStart}
+                  labelStyle={styles.labelStyle}
+                  inputContainerStyle={[
+                    styles.inputContainerStyle,
+                    {paddingVertical: 0},
+                  ]}
+                  containerStyle={{marginBottom: 20}}
+                  errorMessage={error?.message}
+                />
+              )}
+            />
+          </View>
+          <View style={styles.contentContainer}>
+            <Controller
+              control={control}
+              name="workTypeId"
+              render={({field: {value, onChange}, fieldState: {error}}) => (
+                <DropdownMenuComponent
+                  options={
+                    workType?.map(type => ({
+                      id: type.id,
+                      label: type.name,
+                    })) ?? []
+                  }
+                  onSelected={(id: number) => onChange(id.toString())}
+                  selectedLabel={
+                    workType?.find(t => t.id.toString() === value)?.name
+                  }
+                  label={language.t(
+                    languageKeys.workManagement.work.workTypeId,
+                  )}
+                  inputContainer={styles.inputContainerStyle}
+                  labelStyle={styles.labelStyle}
+                  style={{marginBottom: 20}}
+                  error={error?.message}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="title"
+              render={({field: {value, onChange}, fieldState: {error}}) => (
+                <CTextInput
+                  value={value}
+                  onChangeText={onChange}
+                  style={styles.inputContainerStyle}
+                  label={language.t(languageKeys.workManagement.work.title)}
+                  labelStyle={[styles.labelStyle]}
+                  errorMessage={error?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="content"
+              render={({field: {value, onChange}, fieldState: {error}}) => (
+                <CTextInput
+                  value={value}
+                  onChangeText={onChange}
+                  style={styles.inputContainerStyle}
+                  labelStyle={[styles.labelStyle, {marginTop: 10}]}
+                  label={language.t(languageKeys.workManagement.work.content)}
+                  errorMessage={error?.message}
+                />
+              )}
+            />
+          </View>
+        </ScrollView>
+        <BottomContainer>
+          <Button mode="contained" onPress={handleSubmit(onSubmit)}>
+            Save
+          </Button>
+        </BottomContainer>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

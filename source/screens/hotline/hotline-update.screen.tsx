@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {HotlineStackParamsList} from '@/routes/hotline.stack';
 import {THotlineProperty} from './services/hotline.model';
@@ -40,11 +40,6 @@ const HotlineUpdateScreen = ({navigation, route}: Props) => {
     control: methods.control,
     name: 'urbanId',
   });
-
-  useEffect(() => {
-    // @ts-ignore
-    methods.setValue('buildingId', null);
-  }, [methods, urbanId]);
 
   const {buildings} = useListBuilding({urbanId: urbanId});
   const {mutate: createOrUpDate} = useCreateOrUpdateHotLine({
@@ -95,7 +90,11 @@ const HotlineUpdateScreen = ({navigation, route}: Props) => {
               label="Khu đô thị"
               options={urbans.map(u => ({id: u.id, label: u.displayName}))}
               selectedLabel={urbans.find(u => u.id === value)?.displayName}
-              onSelected={(id: any) => onChange(id)}
+              onSelected={(id: any) => {
+                //@ts-ignore
+                methods.setValue('buildingId', null);
+                onChange(id);
+              }}
               style={styles.inputContainer}
               labelContainerStyle={styles.labelContainer}
               inputContainer={styles.input}

@@ -21,7 +21,6 @@ import {TMaintenanceHistory} from './services/material-asset.model';
 import HistoryItem from './components/history-item.component';
 import BottomContainer from '@/components/bottom-container.component';
 import AssetHistoryCreate from './components/asset-history-create.component';
-// import Button from '@/components/button.component';
 import {AppStackParamsList} from '@/routes/app.stack';
 
 type Props = CompositeScreenProps<
@@ -32,7 +31,7 @@ type Props = CompositeScreenProps<
   >
 >;
 
-const MaintenanceHistoryScreen = ({route, navigation}: Props) => {
+const MaintenanceHistoryScreen = ({route}: Props) => {
   const id = route.params.id;
   const {data, remove, refetch, status} = useMaintenanceHistory({assetId: id});
   const dataProvider = useMemo(

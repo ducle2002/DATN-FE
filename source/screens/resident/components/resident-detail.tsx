@@ -57,7 +57,7 @@ const ResidentDetail = ({
                   {language.t(
                     languageKeys.residentLanguage.resident.buildingCode,
                   )}
-                  : {resident.buildingCode}
+                  : {resident.buildingName}
                 </Text>
               </View>
 

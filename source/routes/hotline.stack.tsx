@@ -19,7 +19,13 @@ const HotlineStack = () => {
         headerTitleAlign: 'center',
       }}>
       <Stack.Screen name="LIST_HOTLINE" component={HotlineScreen} />
-      <Stack.Screen name="UPDATE" component={HotlineUpdateScreen} />
+      <Stack.Screen
+        options={({route}) => ({
+          title: !route.params?.hotline ? 'Tạo hotline' : 'Cập nhật',
+        })}
+        name="UPDATE"
+        component={HotlineUpdateScreen}
+      />
     </Stack.Navigator>
   );
 };
