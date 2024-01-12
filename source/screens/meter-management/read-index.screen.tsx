@@ -117,6 +117,8 @@ const ReadIndexMeterScreen = ({route}: Props) => {
       ...data,
       meterId,
       period: moment().toISOString(),
+      firstValue: 0,
+      apartmentCode: '',
     });
   };
 
