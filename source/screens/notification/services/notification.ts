@@ -13,14 +13,27 @@ class Notification {
     totalRecords: number;
   }> => {
     const url = this.endpoint + 'GetUserNotifications';
-    const {data: result} = await axiosClient.get(url, {
-      params: {...params, appType: 3},
-    });
-    return {
-      notifications: result.data,
-      unreadCount: result.unreadCount,
-      totalRecords: result.totalCount,
-    };
+    if (ENV === 'development') {
+      const {data: result} = await axiosClient.get(url, {
+        params: {...params, appType: 3},
+      });
+      return {
+        notifications: result.data,
+        unreadCount: result.unreadCount,
+        totalRecords: result.totalCount,
+      };
+    } else {
+      const {
+        data: {result},
+      } = await axiosClient.get(url, {
+        params: {...params, appType: 3},
+      });
+      return {
+        notifications: result.items,
+        unreadCount: result.unreadCount,
+        totalRecords: result.totalCount,
+      };
+    }
   };
 
   readNotification = async (params: {id: string}) => {
