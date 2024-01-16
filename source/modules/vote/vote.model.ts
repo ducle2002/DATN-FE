@@ -23,6 +23,7 @@ export type TOption = {
   option: string;
   countVote?: number;
   percent?: number;
+  isOptionOther?: boolean;
 };
 
 export enum EVoteState {

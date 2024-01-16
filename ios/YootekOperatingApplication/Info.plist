@@ -31,6 +31,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CodePushDeploymentKey</key>
+	<string>NO5m94KldReuZ5PjGzHHkd7Iu89TP5b9-9QJd</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<true/>
 	<key>LSRequiresIPhoneOS</key>
@@ -41,6 +43,27 @@
 		<false/>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>codepush.appcenter.ms</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+			<key>codepush.blob.core.windows.net</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+			<key>codepushupdates.azureedge.net</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>

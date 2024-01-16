@@ -26,6 +26,9 @@ const TimeLine = ({start, finish, style, ...props}: Props) => {
   const timeProgress = useMemo(() => {
     const startTime = moment(start);
     const finishTime = moment(finish);
+    if (!startTime.isBefore(finishTime)) {
+      return 1;
+    }
     if (now.isAfter(finishTime)) {
       return 1;
     } else {

@@ -10,6 +10,7 @@ import store from '@/store';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
+import CodePush from 'react-native-code-push';
 
 const queryClient = new QueryClient();
 
@@ -23,12 +24,14 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   }
 });
 
-const RenderApp = () => (
+let RenderApp = () => (
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
       <App />
     </Provider>
   </QueryClientProvider>
 );
+
+RenderApp = CodePush(RenderApp);
 
 AppRegistry.registerComponent(appName, () => RenderApp);

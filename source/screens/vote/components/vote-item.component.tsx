@@ -6,6 +6,7 @@ import {TVote} from '@/modules/vote/vote.model';
 import moment from 'moment';
 import {SelectItemContext} from '@/contexts/select-item.context';
 import TimeLineComponent from './time-line.component';
+import HTMLParser from 'node-html-parser';
 
 type Props = {
   item: TVote;
@@ -16,6 +17,10 @@ type Props = {
 const VoteItem = ({item, onPress = () => {}}: Props) => {
   const [now, setNow] = useState(moment());
   const {select, selected} = useContext(SelectItemContext);
+  const root = useMemo(
+    () => HTMLParser.parse(item?.description ?? ''),
+    [item?.description],
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -55,7 +60,7 @@ const VoteItem = ({item, onPress = () => {}}: Props) => {
           </Text>
           {item.description && (
             <Text numberOfLines={2} style={styles.textContent}>
-              {item.description}
+              {root?.textContent?.trim() + '\n'}
             </Text>
           )}
         </View>

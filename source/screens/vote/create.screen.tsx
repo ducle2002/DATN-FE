@@ -24,6 +24,12 @@ import {useToast} from 'react-native-toast-notifications';
 import language, {languageKeys} from '@/config/language/language';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {useAllUrban} from '@/modules/urban/urban.hook';
+import {useListBuilding} from '@/modules/building/building.hook';
+import DropdownMenuComponent from '@/components/dropdown-menu.component';
+import {Switch} from 'react-native-paper';
+import {v4 as uuidv4} from 'uuid';
+import 'react-native-get-random-values';
 
 type Props = StackScreenProps<VoteStackParamsList, 'CREATE_SCREEN'>;
 const voteSchema = yup.object({
@@ -102,8 +108,50 @@ const CreateScreen = ({navigation, route}: Props) => {
   const deleteOptionHandle = (option: TOption) => {
     setOptions(options.filter(o => o.id !== option.id));
   };
+  const [destination, setDestination] = useState<{
+    urbanId?: number;
+    buildingId?: number;
+  }>({
+    buildingId: undefined,
+    urbanId: undefined,
+  });
+
+  const onToggleOther = () => {
+    setOptions(old => {
+      const index = old.findIndex(option => option.isOptionOther);
+      if (index === -1) {
+        return [...old, {option: 'Khác', id: uuidv4(), isOptionOther: true}];
+      }
+      return old.filter(option => !option.isOptionOther);
+    });
+  };
+
+  const urbans =
+    useAllUrban({
+      onSuccessCallback: () => {
+        setDestination({
+          ...destination,
+          buildingId: undefined,
+        });
+      },
+    }).data?.urbans ?? [];
+
+  const buildings =
+    useListBuilding({
+      urbanId: destination?.urbanId,
+      onSuccessCallback: () => {
+        setDestination({
+          ...destination,
+        });
+      },
+    }).data?.buildings ?? [];
 
   const onSubmit = (data: any) => {
+    if (!moment(data.startTime).isBefore(moment(data.finishTime))) {
+      toast.show('Thời gian đã chọn không hợp lệ');
+      return;
+    }
+
     if (options.length > 0) {
       createOrUpdate({
         ...vote,
@@ -111,10 +159,8 @@ const CreateScreen = ({navigation, route}: Props) => {
         voteOptions: options,
         options: JSON.stringify(options),
         organizationUnitId: listOrganizations[0]?.organizationUnitId,
-        finishTime:
-          moment(data.finishTime).format('YYYY-MM-DDTHH:mm:ss.sss') + 'Z',
-        startTime:
-          moment(data.startTime).format('YYYY-MM-DDTHH:mm:ss.sss') + 'Z',
+        finishTime: moment(data.finishTime).toISOString(),
+        startTime: moment(data.startTime).toISOString(),
       });
     } else {
       toast.show(language.t(languageKeys.vote.toastNoti.optionRequired));
@@ -129,6 +175,45 @@ const CreateScreen = ({navigation, route}: Props) => {
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{paddingHorizontal: 16, paddingTop: 5}}>
+        <View style={{marginBottom: 10}}>
+          <DropdownMenuComponent
+            options={urbans.map(urban => ({
+              id: urban.id,
+              label: urban.displayName,
+            }))}
+            label={language.t(languageKeys.digitalNoti.create.selectUrban)}
+            selectedLabel={
+              urbans.find(u => u.id === destination?.urbanId)?.displayName ?? ''
+            }
+            onSelected={(id: number) =>
+              setDestination({...destination, urbanId: id})
+            }
+            labelStyle={styles.textLabel}
+            inputContainer={styles.textInput}
+          />
+        </View>
+        <View style={{marginBottom: 10}}>
+          <DropdownMenuComponent
+            options={buildings.map(building => ({
+              id: building.id,
+              label: building.displayName,
+            }))}
+            label={language.t(languageKeys.digitalNoti.create.building)}
+            selectedLabel={
+              buildings.find(u => u.id === destination?.buildingId)
+                ?.displayName ?? ''
+            }
+            onSelected={(id: number) =>
+              setDestination({
+                ...destination,
+                buildingId: id,
+              })
+            }
+            labelStyle={styles.textLabel}
+            inputContainer={styles.textInput}
+          />
+        </View>
+
         <Controller
           control={control}
           name="name"
@@ -197,16 +282,33 @@ const CreateScreen = ({navigation, route}: Props) => {
                   onConfirm={date => onChange(date.toISOString())}
                   textContainerStyle={styles.textInput}
                   minimumDate={moment(startTime).toDate()}
-                  // label="Ketthuc"
                 />
               )}
             />
           </View>
         </View>
-        <View>
-          <Text style={styles.textLabel}>
-            {language.t(languageKeys.vote.create.options)}
-          </Text>
+        <View style={{marginTop: 10}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: 5,
+            }}>
+            <Text style={styles.textLabel}>
+              {language.t(languageKeys.vote.create.options)}
+            </Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Switch
+                onChange={onToggleOther}
+                value={options.findIndex(o => o.isOptionOther) >= 0}
+                style={{marginRight: 5}}
+              />
+              <Text style={{...globalStyles.text13Medium, color: 'black'}}>
+                Khác
+              </Text>
+            </View>
+          </View>
           {options.map(o => (
             <CreateOptionButton
               deleteOption={deleteOptionHandle}

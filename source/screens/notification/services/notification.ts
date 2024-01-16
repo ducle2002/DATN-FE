@@ -1,7 +1,10 @@
 import axiosClient from '@/utils/axios.client';
+import {ENV} from '@env';
 
 class Notification {
-  endpoint = '/api/services/app/Notification/';
+  endpoint =
+    (ENV === 'development' ? '/notification' : '') +
+    '/api/services/app/Notification/';
   getAll = async (
     params?: any,
   ): Promise<{
@@ -10,11 +13,11 @@ class Notification {
     totalRecords: number;
   }> => {
     const url = this.endpoint + 'GetUserNotifications';
-    const {
-      data: {result},
-    } = await axiosClient.get(url, {params: params});
+    const {data: result} = await axiosClient.get(url, {
+      params: {...params, appType: 3},
+    });
     return {
-      notifications: result.items,
+      notifications: result.data,
       unreadCount: result.unreadCount,
       totalRecords: result.totalCount,
     };
