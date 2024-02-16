@@ -6,7 +6,11 @@ class MeterMonthly {
   endpoint = '/api/services/app/AdminMeterMonthly/';
 
   getAll = async (
-    params: TPagingParams & {meterId?: number; meterTypeId?: number},
+    params: TPagingParams & {
+      meterId?: number;
+      meterTypeId?: number;
+      isClosed?: boolean;
+    },
   ): Promise<{
     records: TMeterMonthly[];
     totalRecords: number;

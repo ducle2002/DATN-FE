@@ -30,6 +30,7 @@ import moment from 'moment';
 import {useToast} from 'react-native-toast-notifications';
 import UtilsApi from '@/services/utils.service';
 import {TImagePicker} from '@/utils/image-picker-handle';
+import MeterService from './services/meter.service';
 type Props = StackScreenProps<MeterStackParamsList, 'READ_INDEX'>;
 
 const ReadIndexMeterScreen = ({route}: Props) => {
@@ -59,7 +60,11 @@ const ReadIndexMeterScreen = ({route}: Props) => {
   const {data: lastMonthData} = useQuery({
     queryKey: ['last-month', meterId],
     queryFn: () =>
-      MeterMonthlyService.getAll({meterId: meterId, maxResultCount: 1}),
+      MeterMonthlyService.getAll({
+        meterId: meterId,
+        maxResultCount: 1,
+        isClosed: true,
+      }),
     enabled: !!meterId,
     onSuccess: result => {
       if (result.records[0] && !filters?.urbanId && !filters?.urbanId) {
@@ -72,6 +77,20 @@ const ReadIndexMeterScreen = ({route}: Props) => {
     },
   });
 
+  useQuery({
+    queryKey: ['meter-info', meterId],
+    queryFn: () => MeterService.getById({id: meterId ?? -1}),
+    enabled: lastMonthData?.totalRecords === 0,
+    onSuccess: result => {
+      if (result) {
+        setFilters(old => ({
+          ...old,
+          urbanId: result.urbanId,
+          buildingId: result.buildingId,
+        }));
+      }
+    },
+  });
   const {control, handleSubmit, resetField, reset} = useForm<{
     value: number;
     image: TImagePicker;
