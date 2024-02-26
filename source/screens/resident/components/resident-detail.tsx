@@ -109,6 +109,14 @@ const ResidentDetail = ({
               <View style={styles.row}>
                 <Text style={styles.textContent}>
                   {language.t(
+                    languageKeys.residentLanguage.resident.homeAddress,
+                  )}
+                  : {resident.homeAddress}
+                </Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(
                     languageKeys.residentLanguage.resident.identityNumber,
                   )}
                   : {resident.identityNumber}

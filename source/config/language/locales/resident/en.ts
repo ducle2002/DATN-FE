@@ -4,17 +4,21 @@ import {
 } from '@/screens/resident/services/resident.model';
 
 const resident = {
-  apartmentCode: 'Apartment code',
-  buildingCode: 'Building code',
-  dateOfBirth: 'Date of birth',
+  apartmentCode: 'Apartment Code',
+  buildingCode: 'Building Code',
+  dateOfBirth: 'Date of Birth',
   gender: 'Gender',
-  fullName: 'Full name',
-  phoneNumber: 'Phone number',
-  email: 'Email address',
-  identityNumber: 'Identity number',
-  relationship: 'Relationship with the head of household',
+  fullName: 'Full Name',
+  phoneNumber: 'Phone Number',
+  email: 'Email Address',
+  identityNumber: 'Identity Number',
+  relationship: 'Relationship with Household Owner',
   nationality: 'Nationality',
-  residentInformation: 'Resident information',
+  residentInformation: 'Resident Declaration Information',
+  urban: 'Urban Area',
+  building: 'Building',
+  identityImages: 'ID Card Images',
+  homeAddress: 'Hometown',
 };
 
 const formId = {

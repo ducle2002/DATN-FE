@@ -18,6 +18,7 @@ const resident = {
   urban: 'Khu đô thị',
   building: 'Tòa nhà',
   identityImages: 'Hình ảnh CCCD',
+  homeAddress: 'Quê quán',
 };
 
 const relationship: {[key: number]: string} = {
