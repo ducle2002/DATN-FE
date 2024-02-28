@@ -33,6 +33,8 @@ export type TFeedback = {
   creationTime: string;
   creatorUserId: number;
   id: number;
+  urbanName?: string;
+  buildingName?: string;
 };
 
 export type TFeedbackPage = {

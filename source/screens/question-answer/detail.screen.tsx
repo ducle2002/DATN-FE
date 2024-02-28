@@ -5,8 +5,11 @@ import {
   Dimensions,
   ScrollView,
   Pressable,
+  InputAccessoryView,
+  Platform,
+  TextInput,
 } from 'react-native';
-import React, {memo, useLayoutEffect} from 'react';
+import React, {memo, useLayoutEffect, useRef} from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
 import {QAStackParamsList} from '@/routes/question-answer.stack.screen';
 import {useQAData} from '@/screens/question-answer/services/qa.hook';
@@ -82,6 +85,7 @@ const DetailScreen = ({navigation, route}: Props) => {
     });
   };
 
+  const inputRef = useRef<TextInput>(null);
   return (
     <View style={styles.container}>
       <ScrollView
@@ -150,36 +154,80 @@ const DetailScreen = ({navigation, route}: Props) => {
         )}
       </ScrollView>
       {(!answer || answer.length === 0) && (
-        <BottomContainer style={styles.bottomContainer}>
-          <View style={{flex: 1}}>
-            <Controller
-              control={control}
-              name="comment"
-              render={({field: {value, onChange}}) => (
-                <CTextInput
-                  style={{backgroundColor: '#f1f2f8', borderRadius: 20}}
-                  placeholder={language.t(languageKeys.qa.answer)}
-                  withError={false}
-                  value={value}
-                  onChangeText={onChange}
-                />
-              )}
-            />
-          </View>
-          <Pressable
-            onPress={handleSubmit(onSubmit)}
-            disabled={answerInput.length === 0 || status === 'loading'}
-            style={{padding: 10, marginLeft: 10}}>
-            <Icon
+        <>
+          {Platform.OS === 'ios' && (
+            <InputAccessoryView nativeID="input">
+              <BottomContainer style={styles.bottomContainer}>
+                <View style={{flex: 1}}>
+                  <Controller
+                    control={control}
+                    name="comment"
+                    render={({field: {value, onChange}}) => (
+                      <CTextInput
+                        ref={inputRef}
+                        inputAccessoryViewID="input"
+                        style={{backgroundColor: '#f1f2f8', borderRadius: 20}}
+                        placeholder={language.t(languageKeys.qa.answer)}
+                        withError={false}
+                        value={value}
+                        onChangeText={onChange}
+                      />
+                    )}
+                  />
+                </View>
+                <Pressable
+                  onPress={handleSubmit(onSubmit)}
+                  disabled={answerInput.length === 0 || status === 'loading'}
+                  style={{padding: 10, marginLeft: 10}}>
+                  <Icon
+                    onPress={handleSubmit(onSubmit)}
+                    type="Ionicons"
+                    name="send"
+                    size={30}
+                    color={answerInput.length === 0 ? '#ababab' : '#505DCF'}
+                    disabled={answerInput.length === 0 || status === 'loading'}
+                  />
+                </Pressable>
+              </BottomContainer>
+            </InputAccessoryView>
+          )}
+          <BottomContainer style={styles.bottomContainer}>
+            <View style={{flex: 1}}>
+              <Controller
+                control={control}
+                name="comment"
+                render={({field: {value, onChange}}) => (
+                  <CTextInput
+                    inputAccessoryViewID="input"
+                    style={{backgroundColor: '#f1f2f8', borderRadius: 20}}
+                    placeholder={language.t(languageKeys.qa.answer)}
+                    withError={false}
+                    value={value}
+                    onChangeText={onChange}
+                    onFocus={() => {
+                      if (Platform.OS === 'ios') {
+                        inputRef.current?.focus();
+                      }
+                    }}
+                  />
+                )}
+              />
+            </View>
+            <Pressable
               onPress={handleSubmit(onSubmit)}
-              type="Ionicons"
-              name="send"
-              size={30}
-              color={answerInput.length === 0 ? '#ababab' : '#505DCF'}
               disabled={answerInput.length === 0 || status === 'loading'}
-            />
-          </Pressable>
-        </BottomContainer>
+              style={{padding: 10, marginLeft: 10}}>
+              <Icon
+                onPress={handleSubmit(onSubmit)}
+                type="Ionicons"
+                name="send"
+                size={30}
+                color={answerInput.length === 0 ? '#ababab' : '#505DCF'}
+                disabled={answerInput.length === 0 || status === 'loading'}
+              />
+            </Pressable>
+          </BottomContainer>
+        </>
       )}
     </View>
   );

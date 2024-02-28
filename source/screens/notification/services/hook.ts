@@ -23,6 +23,7 @@ export const useListNotifications = () => {
     queryFn: ({pageParam}) =>
       NotificationService.getAll({
         ...pageParam,
+        keyword: pageParam.keyword?.toLocaleLowerCase(),
         maxResultCount: 10,
       }),
     getNextPageParam: (lastPage, allPages) => {

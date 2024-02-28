@@ -9,7 +9,9 @@ class Vote {
     const url = HOST_SERVER + this.endpoint + 'GetAllCityVote';
     const {
       data: {result},
-    } = await axiosClient.get(url, {params: params});
+    } = await axiosClient.get(url, {
+      params: {...params, keyword: params.keyword?.toLocaleLowerCase()},
+    });
 
     return {
       totalCount: result.totalRecords,

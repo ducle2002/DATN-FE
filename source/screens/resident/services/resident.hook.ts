@@ -19,6 +19,8 @@ export const useResidentData = ({
         formId,
         urbanId,
         buildingId,
+        orderBy: 5,
+        sortBy: 2,
       }),
     getNextPageParam: (lastPage, allPages) => {
       const skipCount = allPages.length * 10;

@@ -39,7 +39,9 @@ const HomeHeader = ({navigation}: HomeScreenProps) => {
               style={styles.icon}
               onPress={() => navigation.navigate('NOTIFICATION')}
             />
-            <Badge style={{position: 'absolute'}}>{unreadCount}</Badge>
+            {unreadCount > 0 && (
+              <Badge style={{position: 'absolute'}}>{unreadCount}</Badge>
+            )}
           </Pressable>
           <Icon
             type="Ionicons"

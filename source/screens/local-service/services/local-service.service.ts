@@ -37,13 +37,20 @@ class LocalService {
     };
   };
 
-  getAllServiceRequest = async (params: TPagingParams & {type?: number}) => {
+  getAllServiceRequest = async (
+    params: TPagingParams & {type?: number; keyword?: string},
+  ) => {
     const url =
       HOST_SERVER + '/api/services/app/TenantBusinessGridView/GetObjectData';
     const {
       data: {result},
     } = await axiosClient.get(url, {
-      params: {...params, formId: 51, formCase: 1},
+      params: {
+        ...params,
+        keyword: params.keyword?.toLocaleLowerCase(),
+        formId: 51,
+        formCase: 1,
+      },
     });
     return {services: result.data, totalCount: result.totalRecords};
   };

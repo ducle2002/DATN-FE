@@ -2,6 +2,7 @@ import {TPagingParams} from 'types/type';
 
 export type TVoteGetParams = TPagingParams & {
   type?: number;
+  keyword?: string;
 };
 
 export type TVote = {

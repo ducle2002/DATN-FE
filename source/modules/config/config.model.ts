@@ -43,7 +43,7 @@ export const appFeatures: TPermission[] = [
   'Pages.Operations.TaskManagement.GetAll',
   'Pages.Assets.AssetCatalog.GetAll',
   'Pages.LocalAmenities.List.GetAll',
-  'Pages.Digitals.Forums.GetAll',
+  // 'Pages.Digitals.Forums.GetAll',
   'Pages.Meter.List.GetAll',
   'Pages.Reporting',
 ];

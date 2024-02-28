@@ -18,7 +18,9 @@ class QA {
     const url = HOST_SERVER + this.endpoint + 'GetAllQuestionAnswerSocial';
     const {
       data: {result},
-    } = await axiosClient.get(url, {params: params});
+    } = await axiosClient.get(url, {
+      params: {...params, keyword: params.keyword.toLowerCase()},
+    });
 
     return {
       questions: result.data,

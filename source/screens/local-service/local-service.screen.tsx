@@ -26,11 +26,17 @@ import MainHeader from '@/components/main-header.component';
 type Props = StackScreenProps<LocalServiceStackParamsList, 'MAIN_SCREEN'>;
 
 const LocalServiceScreen = ({navigation}: Props) => {
+  const [keyword, setKeyword] = useState<string>();
+
   const [type, setType] = useState<number | undefined>(undefined);
   const {data, fetchNextPage, isLoading, refetch, remove} = useInfiniteQuery({
-    queryKey: ['local-service'],
+    queryKey: ['local-service', type, keyword],
     queryFn: ({pageParam = {maxResultCount: 10}}) =>
-      LocalServiceApi.getAllServiceRequest({...pageParam, type: type}),
+      LocalServiceApi.getAllServiceRequest({
+        ...pageParam,
+        keyword: keyword,
+        type: type,
+      }),
     getNextPageParam: (lastPage, allPages) => {
       const skipCount = allPages.length * 10;
       return (allPages.length - 1) * 10 + lastPage.services.length !==
@@ -74,7 +80,9 @@ const LocalServiceScreen = ({navigation}: Props) => {
     refetch();
   }, [refetch, remove, type]);
 
-  const renderHeader = (props: StackHeaderProps) => <MainHeader {...props} />;
+  const renderHeader = (props: StackHeaderProps) => (
+    <MainHeader onKeywordChange={setKeyword} {...props} />
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({

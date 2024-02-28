@@ -10,6 +10,9 @@ const main = {
   FailReceiveFeedback: 'Tiếp nhận phản ánh thất bại',
   SuccessReceiveFeedback: 'Tiếp nhận phản ánh thành công',
   search: 'Tìm kiếm',
+  building: 'Toà nhà',
+  urban: 'Khu đô thị',
+  apartment: 'Căn hộ',
   itemFeedback: {
     assign: 'Phân công',
     agree: 'Tiếp nhận',

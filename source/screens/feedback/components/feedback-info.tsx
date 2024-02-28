@@ -57,6 +57,40 @@ const FeedbackInfo = ({
           </Text>
           <Text style={styles.txtContentDetail}>{data ? data.name : ''}</Text>
         </View>
+
+        {data.urbanName && (
+          <View style={styles.containerContent}>
+            <Text style={styles.txtLabelDetail}>
+              {t(languageKeys.feedback.main.urban)}:
+            </Text>
+            <Text style={styles.txtContentDetail}>
+              {data ? data.urbanName : ''}
+            </Text>
+          </View>
+        )}
+
+        {data.buildingName && (
+          <View style={styles.containerContent}>
+            <Text style={styles.txtLabelDetail}>
+              {t(languageKeys.feedback.main.building)}:
+            </Text>
+            <Text style={styles.txtContentDetail}>
+              {data ? data.buildingName : ''}
+            </Text>
+          </View>
+        )}
+
+        {data.apartmentCode && (
+          <View style={styles.containerContent}>
+            <Text style={styles.txtLabelDetail}>
+              {t(languageKeys.feedback.main.apartment)}:
+            </Text>
+            <Text style={styles.txtContentDetail}>
+              {data ? data.apartmentCode : ''}
+            </Text>
+          </View>
+        )}
+
         <View style={styles.state}>
           <Text style={styles.txtLabelDetail}>
             {t(languageKeys.feedback.main.feedbackInfo.status)}:

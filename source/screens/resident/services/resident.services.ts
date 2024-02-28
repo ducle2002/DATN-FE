@@ -16,7 +16,9 @@ class ResidentService extends BaseService {
     const url = this.HOST + this.endpoint + 'GetAllCitizen';
     const {
       data: {result},
-    } = await axiosClient.get(url, {params: params});
+    } = await axiosClient.get(url, {
+      params: {...params, keyword: params.keyword?.toLocaleLowerCase()},
+    });
 
     return {
       resident: result.data,

@@ -1,7 +1,6 @@
 import axiosClient from '@/utils/axios.client';
 import {HOST_SERVER} from '@env';
 import {
-  TFeedback,
   TFeedbackPage,
   TMessageFeedback,
   TMessageFeedbackPage,
@@ -24,7 +23,7 @@ class FeedbackService {
     const {
       data: {result},
     } = await axiosClient.get(url, {
-      params: params,
+      params: {...params, KeyWord: params.KeyWord?.toLocaleLowerCase()},
     });
     return {
       listFeedback: result.data,

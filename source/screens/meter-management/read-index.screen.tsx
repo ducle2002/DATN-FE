@@ -33,7 +33,7 @@ import {TImagePicker} from '@/utils/image-picker-handle';
 import MeterService from './services/meter.service';
 type Props = StackScreenProps<MeterStackParamsList, 'READ_INDEX'>;
 
-const ReadIndexMeterScreen = ({route}: Props) => {
+const ReadIndexMeterScreen = ({route, navigation}: Props) => {
   const toast = useToast();
   const queryClient = useQueryClient();
   const [meterId, setMeterId] = useState<number | undefined>();
@@ -68,6 +68,10 @@ const ReadIndexMeterScreen = ({route}: Props) => {
     enabled: !!meterId,
     onSuccess: result => {
       if (result.records[0] && !filters?.urbanId && !filters?.urbanId) {
+        prevFilterRef.current = {
+          urbanId: result.records[0].urbanId,
+          buildingId: result.records[0].buildingId,
+        };
         setFilters(old => ({
           ...old,
           urbanId: result.records[0].urbanId,
@@ -83,6 +87,10 @@ const ReadIndexMeterScreen = ({route}: Props) => {
     enabled: lastMonthData?.totalRecords === 0,
     onSuccess: result => {
       if (result) {
+        prevFilterRef.current = {
+          buildingId: result.buildingId,
+          urbanId: result.urbanId,
+        };
         setFilters(old => ({
           ...old,
           urbanId: result.urbanId,
@@ -106,6 +114,7 @@ const ReadIndexMeterScreen = ({route}: Props) => {
       setTimeout(() => {
         setMeterId(undefined);
       }, 200);
+      setFilters(old => ({...old, buildingId: undefined, urbanId: undefined}));
       queryClient.refetchQueries(['list-meter-monthly']);
     },
   });
@@ -122,7 +131,10 @@ const ReadIndexMeterScreen = ({route}: Props) => {
   const prevFilterRef = useRef<TFilter>();
 
   useEffect(() => {
-    if (prevFilterRef.current?.urbanId || prevFilterRef.current?.buildingId) {
+    if (
+      prevFilterRef.current?.buildingId !== filters?.buildingId ||
+      prevFilterRef.current?.urbanId !== filters?.urbanId
+    ) {
       setMeterId(undefined);
     }
     prevFilterRef.current = filters;
@@ -132,6 +144,13 @@ const ReadIndexMeterScreen = ({route}: Props) => {
     value: number;
     image: TImagePicker;
   }> = data => {
+    if (
+      lastMonthData?.records &&
+      data.value <= lastMonthData?.records?.[0].value
+    ) {
+      toast.show('Chỉ số đã nhập thấp hơn kỳ trước');
+      return;
+    }
     uploadImageRequest({
       ...data,
       meterId,
@@ -266,8 +285,8 @@ const ReadIndexMeterScreen = ({route}: Props) => {
                   style={{flex: 1}}
                   inputContainer={styles.textValue}
                   options={meters.map(u => ({
-                    id: u.id,
-                    label: u.name,
+                    id: u?.id,
+                    label: u?.name,
                   }))}
                   onSelected={(value: number) => setMeterId(value)}
                   selectedLabel={meters.find(u => u.id === meterId)?.name}
@@ -286,7 +305,7 @@ const ReadIndexMeterScreen = ({route}: Props) => {
                   <CTextInput
                     containerStyle={{flex: 1}}
                     style={[styles.textValue]}
-                    value={lastMonthData?.records[0].value.toString()}
+                    value={lastMonthData?.records?.[0].value?.toString()}
                     editable={false}
                   />
                 </View>
@@ -330,7 +349,20 @@ const ReadIndexMeterScreen = ({route}: Props) => {
         </ScrollView>
         <BottomContainer>
           <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-            <Button mode="outlined">
+            <Button
+              mode="outlined"
+              onPress={() => {
+                if (meterId) {
+                  setMeterId(undefined);
+                  setFilters(old => ({
+                    ...old,
+                    buildingId: undefined,
+                    urbanId: undefined,
+                  }));
+                } else {
+                  navigation.goBack();
+                }
+              }}>
               {language.t(languageKeys.shared.button.back)}
             </Button>
             <Button

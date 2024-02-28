@@ -139,6 +139,45 @@ const ItemFeedback = forwardRef(function (
             ]}>
             {t(languageKeys.feedback.main.itemFeedback.content)}: {item.data}
           </Text>
+
+          {item.urbanName && (
+            <Text
+              numberOfLines={1}
+              style={[
+                styles.txtNormal,
+                {
+                  maxWidth: width * 0.7,
+                },
+              ]}>
+              {t(languageKeys.feedback.main.urban)}: {item.urbanName}
+            </Text>
+          )}
+
+          {item.buildingName && (
+            <Text
+              numberOfLines={1}
+              style={[
+                styles.txtNormal,
+                {
+                  maxWidth: width * 0.7,
+                },
+              ]}>
+              {t(languageKeys.feedback.main.building)}: {item.buildingName}
+            </Text>
+          )}
+
+          {item.apartmentCode && (
+            <Text
+              numberOfLines={1}
+              style={[
+                styles.txtNormal,
+                {
+                  maxWidth: width * 0.7,
+                },
+              ]}>
+              {t(languageKeys.feedback.main.apartment)}: {item.apartmentCode}
+            </Text>
+          )}
         </View>
         <Text style={styles.txtDate}>
           {moment(item.creationTime).format('DD/MM/YY hh:mm')}

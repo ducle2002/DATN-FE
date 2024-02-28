@@ -52,6 +52,13 @@ const ResidentDetail = ({
                   languageKeys.residentLanguage.resident.residentInformation,
                 )}
               </Text>
+
+              <View style={styles.row}>
+                <Text style={styles.textContent}>
+                  {language.t(languageKeys.residentLanguage.resident.urban)}:{' '}
+                  {resident.urbanName}
+                </Text>
+              </View>
               <View style={styles.row}>
                 <Text style={styles.textContent}>
                   {language.t(
@@ -96,14 +103,14 @@ const ResidentDetail = ({
                   {language.t(
                     languageKeys.residentLanguage.resident.phoneNumber,
                   )}
-                  : {resident.phoneNumber}
+                  : {resident.phoneNumber ?? 'Không cung cấp'}
                 </Text>
               </View>
 
               <View style={styles.row}>
                 <Text style={styles.textContent}>
                   {language.t(languageKeys.residentLanguage.resident.email)}:{' '}
-                  {resident.email}
+                  {resident.email ?? 'Không cung cấp'}
                 </Text>
               </View>
               <View style={styles.row}>
@@ -111,7 +118,7 @@ const ResidentDetail = ({
                   {language.t(
                     languageKeys.residentLanguage.resident.homeAddress,
                   )}
-                  : {resident.homeAddress}
+                  : {resident.homeAddress ?? 'Không cung cấp'}
                 </Text>
               </View>
               <View style={styles.row}>
@@ -119,7 +126,10 @@ const ResidentDetail = ({
                   {language.t(
                     languageKeys.residentLanguage.resident.identityNumber,
                   )}
-                  : {resident.identityNumber}
+                  :{' '}
+                  {resident.identityNumber
+                    ? resident.identityNumber
+                    : 'Không cung cấp'}
                 </Text>
               </View>
 

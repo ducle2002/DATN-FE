@@ -42,6 +42,10 @@ const ListMeterScreen = ({navigation}: Props) => {
       screenOptions={{
         lazy: true,
         tabBarScrollEnabled: true,
+        tabBarItemStyle: {
+          width: 'auto',
+          paddingHorizontal: 40,
+        },
       }}>
       {meterTypes.map(type => (
         <Tab.Screen
