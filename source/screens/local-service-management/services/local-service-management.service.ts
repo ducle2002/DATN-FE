@@ -4,14 +4,11 @@ import {
   TCreateServiceOrder,
   TLocalServiceDetail,
   TLocalServiceManagement,
-  TLocalServiceManagementCategory,
   TLocalServiceManagementOrder,
   TPagingParams,
 } from './local-service-management.model';
 import {BaseService} from '@/utils/base.service';
-const callAxios = async (url: any, params: any) => {
-  return axiosClient.get(url, {params: params});
-};
+
 class LocalServiceManagement extends BaseService {
   getAllCategory = async (
     params: TPagingParams,
@@ -74,7 +71,8 @@ class LocalServiceManagement extends BaseService {
     data: TLocalServiceManagementOrder[];
     totalRecords: number;
   }> => {
-    const url = HOST_SERVER + '/api/services/app/DigitalServiceOrder/GetAll';
+    const url =
+      HOST_SERVER + '/api/services/app/DigitalServiceOrder/GetAllAdmin';
     const {
       data: {result},
     } = await axiosClient.get(url, {params: params});

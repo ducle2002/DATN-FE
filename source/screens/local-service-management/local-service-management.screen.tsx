@@ -1,12 +1,9 @@
 import {StyleSheet, View} from 'react-native';
 import React, {useState, useMemo, createContext} from 'react';
-import ItemLocalService from './components/item-local-service';
 import DropdownModalComponent from '@/components/dropdown-modal.component';
 import {useInfiniteQuery} from 'react-query';
 import LocalServiceManagementApi from './services/local-service-management.service';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {LocalServiceManagementStackParamsList} from '@/routes/local-service-management';
-import {StackScreenProps} from '@react-navigation/stack';
 import TabTitle from './components/tab-title';
 import BookingListService from './components/booking-list-service';
 import language, {languageKeys} from '@/config/language/language';
@@ -26,8 +23,7 @@ export const LocalServiceManagementContext = createContext<any[]>([]);
 
 const Tab =
   createMaterialTopTabNavigator<BookingLocalServiceManagementTabParamsList>();
-type Props = StackScreenProps<LocalServiceManagementStackParamsList>;
-const LocalServiceManagementScreen = (props: Props) => {
+const LocalServiceManagementScreen = () => {
   const renderTitle = ({focused, name}: {focused: boolean; name: string}) => (
     <TabTitle name={name} focused={focused} />
   );

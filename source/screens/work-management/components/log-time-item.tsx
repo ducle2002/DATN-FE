@@ -6,8 +6,6 @@ import globalStyles from '@/config/globalStyles';
 import {ELogTimeStatus} from '../services/work.model';
 import {TWorkLogTime} from '../services/logtime.model';
 import Animated, {
-  SlideInDown,
-  SlideInUp,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
@@ -92,6 +90,7 @@ const LogTimeItem = ({data}: Props) => {
         </Animated.View>
       </View>
       <CollapsableContainer expanded={visileImg} style={{width: '100%'}}>
+        <Text style={styles.txtValue}>{data.note}</Text>
         <View>
           {data.imageUrls && data.imageUrls.length > 0 ? (
             <View style={styles.containerImg}>
@@ -131,9 +130,11 @@ const styles = StyleSheet.create({
   },
   txtLabel: {
     ...globalStyles.text14SemiBold,
+    color: '#515151',
   },
   txtValue: {
     ...globalStyles.text14Regular,
+    color: '#515151',
   },
   cardContent: {
     flexDirection: 'row',

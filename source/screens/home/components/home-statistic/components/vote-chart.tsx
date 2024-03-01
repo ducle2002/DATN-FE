@@ -120,7 +120,7 @@ const VoteChart = () => {
           bottom: 0,
         },
         title: {
-          text: 'Thông kê khảo sát',
+          text: 'Thống kê khảo sát',
         },
         tooltip: {
           trigger: 'axis',

@@ -82,6 +82,12 @@ class FeedbackService {
     return result;
   };
 
+  setCommentAsRead = async (params: {feedbackId: number}) => {
+    const urlAsRead =
+      HOST_SERVER + this.endpoint + 'SetCommentCitizenReflectAsRead';
+    return axiosClient.post(urlAsRead, params);
+  };
+
   getMessageFeedback = async (params: {
     CitizenReflectId: number;
     SkipCount?: number;
@@ -89,12 +95,9 @@ class FeedbackService {
     const url = HOST_SERVER + this.endpoint + 'GetAllCommnetByCitizenReflect';
     const urlAsRead =
       HOST_SERVER + this.endpoint + 'SetCommentCitizenReflectAsRead';
-    const {
-      data: {resultAsRead},
-    } = await axiosClient.post(urlAsRead, {
+    await axiosClient.post(urlAsRead, {
       feedbackId: params.CitizenReflectId,
     });
-    console.log(resultAsRead);
 
     const {
       data: {result},

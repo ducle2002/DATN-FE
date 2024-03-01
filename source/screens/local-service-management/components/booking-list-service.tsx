@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet, View, RefreshControl} from 'react-native';
+import {View, RefreshControl} from 'react-native';
 import React, {useContext, useMemo, useState} from 'react';
 import {FlatList} from 'react-native';
 import {useInfiniteQuery, useMutation, useQueryClient} from 'react-query';
@@ -7,7 +7,6 @@ import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {StackScreenProps} from '@react-navigation/stack';
 import {LocalServiceManagementStackParamsList} from '@/routes/local-service-management';
 import LocalServiceManagementApi from '../services/local-service-management.service';
-import globalStyles from '@/config/globalStyles';
 import {TLocalServiceManagementOrder} from '../services/local-service-management.model';
 import {
   BookingLocalServiceManagementTabParamsList,
@@ -197,33 +196,3 @@ export default function BookingListService(props: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  //   txtCurrency: {
-  //     ...globalStyles.text14SemiBold,
-  //     color: '#0077b6',
-  //     paddingTop: '1%',
-  //   },
-  //   row: {
-  //     flexDirection: 'row',
-  //     alignItems: 'center',
-  //   },
-  //   txtDate: {
-  //     ...globalStyles.text12Regular,
-  //     color: '#adb5bd',
-  //   },
-  //   txtType: {
-  //     ...globalStyles.text14SemiBold,
-  //   },
-  //   txtNote: {
-  //     ...globalStyles.text13Medium,
-  //     paddingTop: '1%',
-  //   },
-  //   cardItem: {
-  //     backgroundColor: 'white',
-  //     marginHorizontal: '2%',
-  //     marginTop: '2%',
-  //     padding: '3%',
-  //     borderRadius: 8,
-  //   },
-});

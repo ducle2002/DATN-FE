@@ -146,7 +146,7 @@ const ReadIndexMeterScreen = ({route, navigation}: Props) => {
   }> = data => {
     if (
       lastMonthData?.records &&
-      data.value <= lastMonthData?.records?.[0].value
+      data?.value <= lastMonthData?.records?.[0]?.value
     ) {
       toast.show('Chỉ số đã nhập thấp hơn kỳ trước');
       return;

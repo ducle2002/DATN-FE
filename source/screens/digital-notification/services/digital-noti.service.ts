@@ -44,7 +44,7 @@ class Notification {
     const {
       data: {result},
     } = await axiosClient.get(url, {
-      params: {notifiactionId: id},
+      params: {notificationId: id},
     });
 
     return {

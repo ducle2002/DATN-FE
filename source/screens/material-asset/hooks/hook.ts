@@ -327,6 +327,8 @@ export const useMaintenanceHistory = ({assetId}: {assetId: number}) => {
       MaintenanceHistoryService.getAll({
         ...pageParam,
         taiSanId: assetId,
+        orderBy: 1,
+        sortBy: 2,
       }),
     getNextPageParam: (lastPage, allPages) => {
       const skipCount = allPages.length * 20;

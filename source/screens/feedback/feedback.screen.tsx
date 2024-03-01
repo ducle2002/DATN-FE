@@ -16,7 +16,6 @@ import {useInfiniteQuery, useMutation} from 'react-query';
 import FeedbackApi from '@/modules/feedback/feedback.service';
 import ItemFeedback from './components/item-feedback';
 import {TFeedback} from '@/modules/feedback/feedback.model';
-import FeedbackInfo from './components/feedback-info';
 import {StackScreenProps} from '@react-navigation/stack';
 import {FeedbackStackParamsList} from '@/routes/feedback.stack';
 import {useToast} from 'react-native-toast-notifications';
@@ -28,8 +27,9 @@ import {CompositeScreenProps} from '@react-navigation/native';
 import {AppStackParamsList} from '@/routes/app.stack';
 import {EWorkAssociationType} from '../work-management/services/work.model';
 import {Button} from 'react-native-paper';
+import DetailModal from './components/detail-modal';
 
-const {width, height} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 
 type Props = CompositeScreenProps<
   StackScreenProps<FeedbackStackParamsList>,
@@ -62,6 +62,7 @@ const FeedbackScreen = (props: Props) => {
       data: undefined,
       visible: false,
     });
+    refetch();
   };
   const onCloseFilter = () => {
     setFilter({
@@ -305,35 +306,12 @@ const FeedbackScreen = (props: Props) => {
           }
         />
       </View>
-      <Modal visible={showDetail.visible} transparent={true}>
-        <Pressable
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            flex: 1,
-            justifyContent: 'flex-end',
-          }}
-          onPress={onClose}>
-          <TouchableWithoutFeedback
-            style={{
-              backgroundColor: 'white',
-            }}>
-            {!!showDetail.data && (
-              <FeedbackInfo
-                data={showDetail.data}
-                onClose={onClose}
-                onClickChat={() => {
-                  if (showDetail.data) {
-                    props.navigation.navigate('ChatFeedbackScreen', {
-                      inforFeedback: showDetail.data,
-                    });
-                  }
-                  onClose();
-                }}
-              />
-            )}
-          </TouchableWithoutFeedback>
-        </Pressable>
-      </Modal>
+      <DetailModal
+        feedback={showDetail.data}
+        onClose={() => onClose()}
+        navigation={props.navigation}
+        isVisible={showDetail.visible}
+      />
       <Modal visible={filter.visible} transparent={true}>
         <Pressable
           style={{

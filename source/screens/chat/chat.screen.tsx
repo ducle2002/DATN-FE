@@ -1,13 +1,13 @@
 import {
   Dimensions,
   FlatList,
-  Modal,
   Pressable,
   RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  SafeAreaView,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -20,6 +20,7 @@ import UserChatItem from './components/user-chat-item';
 import HeaderChatScreen from './components/header-chat-screen';
 import {useTranslation} from 'react-i18next';
 import {languageKeys} from '@/config/language/language';
+import ReactNativeModal from 'react-native-modal';
 const {height} = Dimensions.get('screen');
 const ChatScreen = () => {
   const {t} = useTranslation();
@@ -85,70 +86,82 @@ const ChatScreen = () => {
           <RefreshControl refreshing={isLoading} onRefresh={refetch} />
         }
       />
-      <Modal visible={visible} transparent>
-        <Pressable
-          onPress={onClose}
+      <ReactNativeModal
+        isVisible={visible}
+        style={{margin: 0}}
+        backdropColor="white">
+        <SafeAreaView
           style={{
             flex: 1,
-            justifyContent: 'flex-end',
-            backgroundColor: 'rgba(0,0,0,0.5)',
           }}>
-          <TouchableWithoutFeedback>
-            <View
-              style={{
-                backgroundColor: 'white',
-                paddingTop: '4%',
-                paddingBottom: '8%',
-                paddingHorizontal: '4%',
-              }}>
+          <Pressable
+            onPress={onClose}
+            style={{
+              flex: 1,
+              justifyContent: 'flex-end',
+              backgroundColor: 'rgba(0,0,0,0.5)',
+            }}>
+            <TouchableWithoutFeedback>
               <View
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
+                  backgroundColor: 'white',
+                  paddingTop: '4%',
+                  paddingBottom: '8%',
+                  paddingHorizontal: '4%',
                 }}>
-                <Text style={{color: '#333', fontWeight: '700', fontSize: 14}}>
-                  {t(languageKeys.chat.main.department.title)}
-                </Text>
-                <TouchableOpacity onPress={onClose}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
                   <Text
-                    style={{color: '#333', fontWeight: '400', fontSize: 14}}>
-                    {t(languageKeys.chat.main.department.close)}
+                    style={{color: '#333', fontWeight: '700', fontSize: 14}}>
+                    {t(languageKeys.chat.main.department.title)}
                   </Text>
-                </TouchableOpacity>
-              </View>
-              {organizationUnit.map((item, index) => {
-                return (
-                  <TouchableOpacity
-                    key={index}
-                    style={{
-                      paddingVertical: '4%',
-                      paddingHorizontal: '5%',
-                      marginTop: '4%',
-                      backgroundColor:
-                        index === selectOrganization
-                          ? 'rgba(173,232,244, 0.5)'
-                          : 'white',
-                      borderRadius: 8,
-                      borderWidth: 1,
-                      borderColor:
-                        index === selectOrganization
-                          ? 'rgba(173,232,244, 0.5)'
-                          : '#333',
-                    }}
-                    onPress={() => {
-                      if (index !== selectOrganization) {
-                        setSelectOrganization(index);
-                      }
-                      onClose();
-                    }}>
-                    <Text>{item.displayName}</Text>
+                  <TouchableOpacity onPress={onClose}>
+                    <Text
+                      style={{color: '#333', fontWeight: '400', fontSize: 14}}>
+                      {t(languageKeys.chat.main.department.close)}
+                    </Text>
                   </TouchableOpacity>
-                );
-              })}
-            </View>
-          </TouchableWithoutFeedback>
-        </Pressable>
-      </Modal>
+                </View>
+                <FlatList
+                  data={organizationUnit}
+                  renderItem={({item, index}) => {
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        style={{
+                          paddingVertical: '4%',
+                          paddingHorizontal: '5%',
+                          marginTop: '4%',
+                          backgroundColor:
+                            index === selectOrganization
+                              ? 'rgba(173,232,244, 0.5)'
+                              : 'white',
+                          borderRadius: 8,
+                          borderWidth: 1,
+                          borderColor:
+                            index === selectOrganization
+                              ? 'rgba(173,232,244, 0.5)'
+                              : '#333',
+                        }}
+                        onPress={() => {
+                          if (index !== selectOrganization) {
+                            setSelectOrganization(index);
+                          }
+                          onClose();
+                        }}>
+                        <Text>{item.displayName}</Text>
+                      </TouchableOpacity>
+                    );
+                  }}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          </Pressable>
+        </SafeAreaView>
+      </ReactNativeModal>
     </View>
   );
 };

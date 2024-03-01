@@ -114,7 +114,7 @@ const InvoiceChart = () => {
           bottom: 0,
         },
         title: {
-          text: 'Thông kê hóa đơn',
+          text: 'Thống kê hóa đơn',
         },
         tooltip: {
           trigger: 'axis',

@@ -1,4 +1,3 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import StatisticScreen from '@/screens/statistic/statistic.screen';
@@ -26,7 +25,7 @@ const StatisticStack = () => {
         name="MAIN_SCREEN"
         component={StatisticScreen}
         options={{
-          title: 'Báo cáo thông kê',
+          title: 'Báo cáo thống kê',
         }}
       />
       <Stack.Screen
@@ -62,5 +61,3 @@ const StatisticStack = () => {
 };
 
 export default StatisticStack;
-
-const styles = StyleSheet.create({});

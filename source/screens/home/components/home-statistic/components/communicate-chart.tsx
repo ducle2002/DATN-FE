@@ -104,7 +104,7 @@ const CommunicateChart = () => {
           bottom: 0,
         },
         title: {
-          text: 'Thông kê giao tiếp',
+          text: 'Thống kê giao tiếp',
         },
         tooltip: {
           trigger: 'axis',
