@@ -12,6 +12,17 @@ export const useRegisterNotification = () => {
   const {tenantId} = useAppSelector(state => state.auth);
   const {isLogin} = useAppSelector(state => state.auth);
   useEffect(() => {
+    const unSubscribe = notifee.onForegroundEvent(({type, detail}) => {
+      if (type === EventType.PRESS) {
+        const url = detail.notification?.data?.data.toString();
+        Linking.openURL(url ?? 'yooioc://app').catch(() => {});
+      }
+    });
+    return () => {
+      unSubscribe();
+    };
+  }, []);
+  useEffect(() => {
     if (tenantId && isLogin) {
       messaging()
         .registerDeviceForRemoteMessages()
@@ -25,9 +36,6 @@ export const useRegisterNotification = () => {
               ) {
                 messaging()
                   .getAPNSToken()
-                  .then(r => {
-                    console.log('apns token', r);
-                  })
                   .catch(e => {
                     console.log('apns error ', e);
                   });
@@ -52,15 +60,36 @@ export const useRegisterNotification = () => {
   }, [isLogin, tenantId]);
 };
 
+export const onMessageReceived = async (
+  message: FirebaseMessagingTypes.RemoteMessage,
+) => {
+  const channelId = await notifee.createChannel({
+    id: 'YooIOC-Notifications',
+    name: 'YooIOC Thông báo',
+    importance: AndroidImportance.HIGH,
+  });
+
+  await notifee.requestPermission();
+
+  await notifee.displayNotification({
+    title: message.notification?.title,
+    body: message.notification?.body,
+    android: {
+      channelId,
+      pressAction: {
+        id: 'YooIOC-Notifications',
+      },
+    },
+    data: {data: message.data?.detailUrlApp ?? 'yooioc://app'},
+  });
+};
+
 export const getNotification = async () => {
   await messaging().registerDeviceForRemoteMessages();
   await messaging().getToken();
 
   messaging()
     .getAPNSToken()
-    .then(r => {
-      console.log('apns token', r);
-    })
     .catch(e => {
       console.log('apns error ', e);
     });
@@ -78,41 +107,6 @@ export const getNotification = async () => {
       if (remoteMessage) {
       }
     });
-  async function onMessageReceived(
-    message: FirebaseMessagingTypes.RemoteMessage,
-  ) {
-    const channelId = await notifee.createChannel({
-      id: 'Test1',
-      name: 'Default Channel1',
-      importance: AndroidImportance.HIGH,
-    });
-
-    await notifee.requestPermission();
-
-    await notifee.displayNotification({
-      title: message.notification?.title,
-      body: message.notification?.body,
-      android: {
-        channelId,
-        pressAction: {
-          id: 'Test1',
-        },
-      },
-      // data: {action: message.data.action},
-    });
-    notifee.onBackgroundEvent(async ({type}) => {
-      if (type === EventType.PRESS) {
-        Linking.openURL('yooioc://');
-      }
-    });
-
-    notifee.onForegroundEvent(({type}) => {
-      if (type === EventType.PRESS) {
-        Linking.openURL('yooioc://');
-      }
-    });
-  }
 
   messaging().onMessage(onMessageReceived);
-  messaging().setBackgroundMessageHandler(onMessageReceived);
 };

@@ -18,6 +18,7 @@ import {
   InfiniteData,
   useInfiniteQuery,
   useMutation,
+  useQuery,
   useQueryClient,
 } from 'react-query';
 import SendBox from '../chat/components/send-box';
@@ -42,7 +43,11 @@ const {width, height} = Dimensions.get('screen');
 
 const ChatFeedbackScreen = ({route}: Props) => {
   const ref_flat_list = useRef<FlatList>(null);
-  const inforFeedback = route.params.inforFeedback;
+  const {data: inforFeedback} = useQuery({
+    queryKey: ['feedback-detail', route.params.id],
+    queryFn: () => FeedbackApi.getByID({id: route.params.id}),
+  });
+
   const currentUser = useAppSelector(selectCurrentUser);
   const queryClient = useQueryClient();
   const hubConnection = useAppSelector(selecthubSignalR);
@@ -92,10 +97,10 @@ const ChatFeedbackScreen = ({route}: Props) => {
 
   const {isLoading, data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
     {
-      queryKey: ['messageFeedback', inforFeedback.id],
+      queryKey: ['messageFeedback', route.params.id],
       queryFn: ({pageParam}) =>
         FeedbackApi.getMessageFeedback({
-          CitizenReflectId: inforFeedback?.id,
+          CitizenReflectId: route.params.id,
           SkipCount: pageParam,
         }),
 
@@ -138,22 +143,22 @@ const ChatFeedbackScreen = ({route}: Props) => {
     const mess = {
       fullName: currentUser.fullName,
       imageUrl: currentUser.imageUrl,
-      creatorFeedbackId: inforFeedback.creatorUserId,
-      feedbackId: inforFeedback.id,
+      creatorFeedbackId: inforFeedback?.creatorUserId,
+      feedbackId: inforFeedback?.id,
       comment: sendMessageData.message,
-      tenantId: inforFeedback.tenantId,
+      tenantId: inforFeedback?.tenantId,
       typeComment: sendMessageData.type,
-      organizationUnitId: inforFeedback.organizationUnitId,
+      organizationUnitId: inforFeedback?.organizationUnitId,
       creatorUserId: currentUser.userId,
     };
     queryClient.setQueryData<InfiniteData<TMessageFeedbackPage> | undefined>(
-      ['messageFeedback', inforFeedback.id],
+      ['messageFeedback', route.params.id],
       (
         oldData: InfiniteData<TMessageFeedbackPage> | undefined,
       ): InfiniteData<TMessageFeedbackPage> | undefined => {
         if (oldData) {
           oldData?.pages.map((page, i) => {
-            if (i === 0) {
+            if (i === 0 && inforFeedback) {
               page.listMessageFeedback.unshift({
                 fullName: currentUser.fullName,
                 imageUrl: currentUser.imageUrl,
@@ -201,11 +206,11 @@ const ChatFeedbackScreen = ({route}: Props) => {
     hubConnection.on(
       'SendCommentFeedbackToUserTenant',
       (message: TMessageFeedback) => {
-        if (message.feedbackId === inforFeedback?.id) {
+        if (message.feedbackId === route.params.id) {
           queryClient.setQueryData<
             InfiniteData<TMessageFeedbackPage> | undefined
           >(
-            ['messageFeedback', inforFeedback.id],
+            ['messageFeedback', route.params.id],
             (
               oldData: InfiniteData<TMessageFeedbackPage> | undefined,
             ): InfiniteData<TMessageFeedbackPage> | undefined => {

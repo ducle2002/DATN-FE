@@ -60,7 +60,7 @@ export type AppStackParamsList = {
   HOTLINE_STACK: NavigatorScreenParams<HotlineStackParamsList>;
   METER_STACK: NavigatorScreenParams<MeterStackParamsList>;
   STATISTIC_STACK: NavigatorScreenParams<StatisticStackParamsList>;
-  NOTIFICATION: undefined;
+  NOTIFICATION: {id?: string} | undefined;
 };
 
 const Stack = createStackNavigator<AppStackParamsList>();

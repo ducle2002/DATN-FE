@@ -75,7 +75,7 @@ const DetailScreen = ({route, navigation}: Props) => {
         <Pressable
           onPress={() => {
             navigation.navigate('LIST_COMMENT_SCREEN', {
-              notiId: noti.id,
+              id: noti.id,
             });
           }}>
           <Text style={styles.textName}>Bình luận</Text>

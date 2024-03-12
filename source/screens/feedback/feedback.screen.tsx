@@ -15,7 +15,6 @@ import HeaderFeedback from './components/header-feedback';
 import {useInfiniteQuery, useMutation} from 'react-query';
 import FeedbackApi from '@/modules/feedback/feedback.service';
 import ItemFeedback from './components/item-feedback';
-import {TFeedback} from '@/modules/feedback/feedback.model';
 import {StackScreenProps} from '@react-navigation/stack';
 import {FeedbackStackParamsList} from '@/routes/feedback.stack';
 import {useToast} from 'react-native-toast-notifications';
@@ -32,11 +31,11 @@ import DetailModal from './components/detail-modal';
 const {width} = Dimensions.get('screen');
 
 type Props = CompositeScreenProps<
-  StackScreenProps<FeedbackStackParamsList>,
+  StackScreenProps<FeedbackStackParamsList, 'FeedBackScreen'>,
   StackScreenProps<AppStackParamsList, 'FEEDBACK_STACK'>
 >;
 
-const FeedbackScreen = (props: Props) => {
+const FeedbackScreen = ({route, ...props}: Props) => {
   const toast = useToast();
   const {t} = useTranslation();
   let row: Array<any> = [];
@@ -44,12 +43,21 @@ const FeedbackScreen = (props: Props) => {
   const [status, setStatus] = useState(10);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [showDetail, setShowDetail] = useState<{
-    data?: TFeedback;
+    id?: number;
     visible: boolean;
   }>({
-    data: undefined,
+    id: -1,
     visible: false,
   });
+  useEffect(() => {
+    if (route.params?.id) {
+      setShowDetail({
+        id: route.params.id,
+        visible: true,
+      });
+    }
+  }, [route.params]);
+
   const [filter, setFilter] = useState<{
     data?: any;
     visible: boolean;
@@ -59,7 +67,7 @@ const FeedbackScreen = (props: Props) => {
   });
   const onClose = () => {
     setShowDetail({
-      data: undefined,
+      id: undefined,
       visible: false,
     });
     refetch();
@@ -81,11 +89,6 @@ const FeedbackScreen = (props: Props) => {
       type: 11,
       layout: 3,
     },
-    // {
-    //   title: t(languageKeys.feedback.main.assigned),
-    //   type: 3,
-    //   layout: 3,
-    // },
     {
       title: t(languageKeys.feedback.main.handling),
       type: 12,
@@ -245,7 +248,7 @@ const FeedbackScreen = (props: Props) => {
                 item={item}
                 onPress={() => {
                   setShowDetail({
-                    data: item,
+                    id: item.id,
                     visible: true,
                   });
                 }}
@@ -307,7 +310,7 @@ const FeedbackScreen = (props: Props) => {
         />
       </View>
       <DetailModal
-        feedback={showDetail.data}
+        id={showDetail.id ?? -1}
         onClose={() => onClose()}
         navigation={props.navigation}
         isVisible={showDetail.visible}

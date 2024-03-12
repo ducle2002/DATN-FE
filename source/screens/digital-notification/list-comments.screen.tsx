@@ -19,7 +19,7 @@ type Props = StackScreenProps<
 const ListCommentScreen = ({route}: Props) => {
   const [selectedComment, setSelectedComment] = useState<Array<number>>([]);
 
-  const {notiId} = route.params;
+  const {id: notiId} = route.params;
 
   const {data, refetch} = useQuery({
     queryKey: ['comment-noti', notiId],

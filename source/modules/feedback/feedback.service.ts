@@ -1,6 +1,7 @@
 import axiosClient from '@/utils/axios.client';
 import {HOST_SERVER} from '@env';
 import {
+  TFeedback,
   TFeedbackPage,
   TMessageFeedback,
   TMessageFeedbackPage,
@@ -29,6 +30,15 @@ class FeedbackService {
       listFeedback: result.data,
       total: result.totalRecords,
     };
+  };
+
+  getByID = async (params: {id: number}): Promise<TFeedback> => {
+    const url = this.endpoint + 'GetCitizenReflectById';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params: params});
+
+    return result.data;
   };
   GetAllOrganizationUnitCitizenReflect = async (params: {
     orgId?: number;

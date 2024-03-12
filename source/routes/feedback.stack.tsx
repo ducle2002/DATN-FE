@@ -2,16 +2,16 @@ import React from 'react';
 
 import FeedbackScreen from '@/screens/feedback/feedback.screen';
 import {createStackNavigator} from '@react-navigation/stack';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import CreateFeedbackScreen from '@/screens/feedback/create-feedback.screen';
 import ChatFeedbackScreen from '@/screens/feedback/chat-feedback.screen';
-import {TFeedback} from '@/modules/feedback/feedback.model';
 import AssignFeeadbackScreen from '@/screens/feedback/assign-feeadback.screen';
 export type FeedbackStackParamsList = {
-  FeedBackScreen: {};
+  FeedBackScreen: {
+    id?: number;
+  };
   CreateFeedbackScreen: {};
   ChatFeedbackScreen: {
-    inforFeedback: TFeedback;
+    id: number;
   };
   AssignFeedbackScreen: {
     feedbackId: number;

@@ -11,7 +11,7 @@ export type NotificationStackParamsList = {
   MAIN_SCREEN: undefined;
   DETAIL_SCREEN: {noti: TDigitalNoti};
   CREATE_SCREEN: {noti?: TDigitalNoti};
-  LIST_COMMENT_SCREEN: {notiId: number};
+  LIST_COMMENT_SCREEN: {id: number};
 };
 
 const Stack = createStackNavigator<NotificationStackParamsList>();

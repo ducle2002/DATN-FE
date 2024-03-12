@@ -2,22 +2,26 @@ import {TouchableWithoutFeedback, View} from 'react-native';
 import React from 'react';
 import ReactNativeModal from 'react-native-modal';
 import FeedbackInfo from './feedback-info';
-import {TFeedback} from '@/modules/feedback/feedback.model';
 import {useQuery} from 'react-query';
 import FeedbackApi from '@/modules/feedback/feedback.service';
 
 type Props = {
   onClose: () => void;
-  feedback?: TFeedback;
+  id: number;
   navigation: any;
   isVisible: boolean;
 };
 
-const DetailModal = ({onClose, feedback, navigation, isVisible}: Props) => {
+const DetailModal = ({onClose, id, navigation, isVisible}: Props) => {
   useQuery({
-    queryFn: () =>
-      FeedbackApi.setCommentAsRead({feedbackId: feedback?.id ?? -1}),
-    enabled: !!feedback,
+    queryFn: () => FeedbackApi.setCommentAsRead({feedbackId: id ?? -1}),
+    enabled: id > 0,
+  });
+
+  const {data: feedback} = useQuery({
+    queryKey: ['feedback-detail', id],
+    queryFn: () => FeedbackApi.getByID({id: id}),
+    enabled: id > 0,
   });
 
   return (
@@ -40,7 +44,7 @@ const DetailModal = ({onClose, feedback, navigation, isVisible}: Props) => {
               onClickChat={() => {
                 if (feedback) {
                   navigation.navigate('ChatFeedbackScreen', {
-                    inforFeedback: feedback,
+                    id: id,
                   });
                 }
                 onClose();

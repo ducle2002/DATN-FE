@@ -1,12 +1,4 @@
-import {
-  Dimensions,
-  Keyboard,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useMemo} from 'react';
 import globalStyles from '@/config/globalStyles';
 import moment from 'moment';
@@ -20,30 +12,23 @@ import {chipWithStatus} from './services/local-service-management.hook';
 import BookingDetailService from './components/booking-detail-service';
 import {Chip} from 'react-native-paper';
 import RateListStar from './components/rate-list-star';
-const {height, width} = Dimensions.get('screen');
+const {height} = Dimensions.get('screen');
 type Props = StackScreenProps<
   LocalServiceManagementStackParamsList,
   'DETAIL_ORDER_SCREEN'
 >;
 const DetailLocalServiceManageOrder = (props: Props) => {
-  const {
-    data,
-    refetch,
-    isLoading: loadingGetInfo,
-  } = useQuery({
-    queryKey: ['DigitalServiceOrder/GetById', props.route.params.orderInfo.id],
+  const {data: orderDetail} = useQuery({
+    queryKey: ['DigitalServiceOrder/GetById', props.route.params.id],
     queryFn: () =>
       LocalServiceManagementApi.getServiceOrderById({
-        id: props.route.params.orderInfo.id,
+        id: props.route.params.id,
       }),
   });
 
-  const orderDetail = useMemo(() => {
-    return data ?? props.route.params.orderInfo;
-  }, [data, props.route.params.orderInfo]);
   const chipInfo = useMemo(() => {
-    return chipWithStatus(orderDetail.status);
-  }, [orderDetail.status]);
+    return chipWithStatus(orderDetail?.status ?? 0);
+  }, [orderDetail?.status]);
 
   return (
     <View
@@ -71,47 +56,46 @@ const DetailLocalServiceManageOrder = (props: Props) => {
           <View style={styles.row}>
             <Text style={[styles.txtLabel, {width: '25%'}]}>Người đặt: </Text>
             <Text style={styles.txtContent}>
-              {orderDetail?.creatorCitizen?.fullName ??
-                props.route.params.orderInfo.creatorName}
+              {orderDetail?.creatorCitizen?.fullName}
             </Text>
           </View>
           <View style={styles.row}>
             <Text style={[styles.txtLabel, {width: '25%'}]}>Ngày đặt: </Text>
             <Text style={styles.txtContent}>
-              {moment(orderDetail.creationTime).format('DD/MM/YYYY')}
+              {moment(orderDetail?.creationTime).format('DD/MM/YYYY')}
             </Text>
           </View>
           <View style={styles.row}>
             <Text style={[styles.txtLabel, {width: '25%'}]}>Địa chỉ: </Text>
             <Text style={styles.txtContent} numberOfLines={1}>
-              {orderDetail.address}
+              {orderDetail?.address}
             </Text>
           </View>
           <View style={styles.row}>
             <Text style={[styles.txtLabel, {width: '25%'}]}>Liên hệ: </Text>
             <Text style={styles.txtContent} numberOfLines={1}>
-              {orderDetail.creatorCitizen?.phoneNumber ?? 'Đang cập nhật'}
+              {orderDetail?.creatorCitizen?.phoneNumber ?? 'Đang cập nhật'}
             </Text>
           </View>
 
           <View style={styles.row}>
             <Text style={[styles.txtLabel, {width: '25%'}]}>Tổng tiền: </Text>
             <Text style={styles.txtCurrency}>
-              {orderDetail.totalAmount.toLocaleString('vi-VN', {
+              {orderDetail?.totalAmount.toLocaleString('vi-VN', {
                 style: 'currency',
                 currency: 'VND',
               })}
             </Text>
           </View>
         </View>
-        {orderDetail.status === STATUS_ORDER_LOCAL_SERVICE.EXCHANGE && (
+        {orderDetail?.status === STATUS_ORDER_LOCAL_SERVICE.EXCHANGE && (
           <View style={styles.section}>
             <Text style={styles.txtLabel}>Nội dung trao đổi: </Text>
             <Text style={styles.txtContent}>{orderDetail.responseContent}</Text>
           </View>
         )}
 
-        {!!orderDetail.arrServiceDetails &&
+        {!!orderDetail?.arrServiceDetails &&
           orderDetail.arrServiceDetails
             ?.filter(item => Number(item.total) !== 0)
             .map((item, index) => {
@@ -121,7 +105,7 @@ const DetailLocalServiceManageOrder = (props: Props) => {
                 </View>
               );
             })}
-        {orderDetail.ratingScore && (
+        {orderDetail?.ratingScore && (
           <View style={styles.section}>
             <Text style={styles.txtLabel}>Đánh giá</Text>
             <View style={[styles.row, {paddingVertical: '1.5%'}]}>

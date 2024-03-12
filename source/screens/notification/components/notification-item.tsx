@@ -17,9 +17,14 @@ import {useMutation, useQueryClient} from 'react-query';
 type Props = {
   notification: TNotification;
   containerStyle?: StyleProp<ViewStyle>;
+  setId: () => void;
 };
 
-const NotificationItem = ({notification, containerStyle}: Props) => {
+const NotificationItem = ({
+  notification,
+  containerStyle,
+  setId = () => {},
+}: Props) => {
   const theme = useTheme();
 
   const queryClient = useQueryClient();
@@ -47,9 +52,9 @@ const NotificationItem = ({notification, containerStyle}: Props) => {
 
   const onPress = () => {
     try {
-      Linking.openURL(notification.notification?.data?.detailUrlApp);
+      Linking.openURL(notification.notification?.data.properties.DetailUrlApp);
     } catch (error) {
-      console.log(error);
+      setId();
     } finally {
       readNotification({id: notification.id});
     }
@@ -78,7 +83,7 @@ const NotificationItem = ({notification, containerStyle}: Props) => {
             {notification.notification?.notificationName}
           </Text>
           <Text style={{...styles.textContent}} numberOfLines={3}>
-            {notification.notification.data?.message}
+            {notification.notification.data?.properties.Message}
           </Text>
           <Text style={{...styles.textContent, fontSize: 10}}>
             {moment().diff(

@@ -16,8 +16,14 @@ class Notification {
     return {
       notifications: result.data,
       unreadCount: result.unreadCount,
-      totalRecords: result.totalCount,
+      totalRecords: result.totalRecords,
     };
+  };
+
+  getById = async (params: {id: string}): Promise<TNotification> => {
+    const url = this.endpoint + 'GetUserNotificationById';
+    const {data} = await axiosClient.get(url, {params: params});
+    return data.data;
   };
 
   readNotification = async (params: {id: string}) => {

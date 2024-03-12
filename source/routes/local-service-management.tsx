@@ -1,13 +1,12 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import LocalServiceManagementScreen from '@/screens/local-service-management/local-service-management.screen';
-import {TLocalServiceManagementOrder} from '@/screens/local-service-management/services/local-service-management.model';
 import DetailLocalServiceManageOrder from '@/screens/local-service-management/detail-local-service-manage-order';
 export type LocalServiceManagementStackParamsList = {
   MAIN_SCREEN: undefined;
   //   BOOKING_SCREEN: {storeId: number};
   DETAIL_ORDER_SCREEN: {
-    orderInfo: TLocalServiceManagementOrder;
+    id: number;
   };
 };
 

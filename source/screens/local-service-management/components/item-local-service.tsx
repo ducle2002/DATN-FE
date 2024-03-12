@@ -5,11 +5,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import globalStyles from '@/config/globalStyles';
 import moment from 'moment';
 import Icon from '@/components/icon.component';
-import DropdownMenuComponent from '@/components/dropdown-menu.component';
 import {
   STATUS_ORDER_LOCAL_SERVICE,
   TLocalServiceManagementOrder,
@@ -21,10 +20,9 @@ import {LocalServiceManagementStackParamsList} from '@/routes/local-service-mana
 import {EWorkAssociationType} from '@/screens/work-management/services/work.model';
 import {AppStackParamsList} from '@/routes/app.stack';
 import {StackNavigationProp} from '@react-navigation/stack';
-const {width, height} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 const ItemLocalService = ({
   item,
-  index,
   disable = true,
   onDelete,
   onUpdateState,
@@ -62,7 +60,7 @@ const ItemLocalService = ({
         navigation.navigate('LOCAL_SERVICE_MANAGEMENT_STACK', {
           screen: 'DETAIL_ORDER_SCREEN',
           params: {
-            orderInfo: item,
+            id: item.id,
           },
         });
       }}>
