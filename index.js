@@ -16,7 +16,9 @@ const queryClient = new QueryClient();
 
 notifee.onBackgroundEvent(async ({detail, type}) => {
   if (type === EventType.PRESS) {
-    const url = detail.notification?.data?.data.toString();
+    const url =
+      detail?.notification?.data?.detailUrlApp?.toString() ||
+      detail?.notification?.data?.data?.toString();
     Linking.openURL(url ?? 'yooioc://app').catch(() => {});
   }
 });

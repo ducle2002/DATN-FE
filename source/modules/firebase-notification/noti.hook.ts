@@ -14,7 +14,9 @@ export const useRegisterNotification = () => {
   useEffect(() => {
     const unSubscribe = notifee.onForegroundEvent(({type, detail}) => {
       if (type === EventType.PRESS) {
-        const url = detail.notification?.data?.data.toString();
+        const url =
+          detail?.notification?.data?.detailUrlApp?.toString() ||
+          detail?.notification?.data?.data?.toString();
         Linking.openURL(url ?? 'yooioc://app').catch(() => {});
       }
     });

@@ -180,12 +180,10 @@ const DetailScreen = ({navigation, route}: Props) => {
                   disabled={answerInput.length === 0 || status === 'loading'}
                   style={{padding: 10, marginLeft: 10}}>
                   <Icon
-                    onPress={handleSubmit(onSubmit)}
                     type="Ionicons"
                     name="send"
                     size={30}
                     color={answerInput.length === 0 ? '#ababab' : '#505DCF'}
-                    disabled={answerInput.length === 0 || status === 'loading'}
                   />
                 </Pressable>
               </BottomContainer>
@@ -218,12 +216,10 @@ const DetailScreen = ({navigation, route}: Props) => {
               disabled={answerInput.length === 0 || status === 'loading'}
               style={{padding: 10, marginLeft: 10}}>
               <Icon
-                onPress={handleSubmit(onSubmit)}
                 type="Ionicons"
                 name="send"
                 size={30}
                 color={answerInput.length === 0 ? '#ababab' : '#505DCF'}
-                disabled={answerInput.length === 0 || status === 'loading'}
               />
             </Pressable>
           </BottomContainer>
