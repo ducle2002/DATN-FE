@@ -2,6 +2,7 @@ import axiosClient from '@/utils/axios.client';
 import {HOST_SERVER} from '@env';
 import {
   TAdminidtrativeConfig,
+  TAdministrativeOrder,
   TAdministrativeOrderPage,
 } from './administrative.model';
 
@@ -46,6 +47,37 @@ class AdministrativeService {
     } = await axiosClient.post(url, data);
 
     return result;
+  };
+  GetAdministrativeTypeById = async (params: {
+    id: number;
+  }): Promise<TAdminidtrativeConfig> => {
+    const url = HOST_SERVER + this.endpoint + 'GetTypeAdministrativeById';
+    const {
+      data: {result},
+    } = await axiosClient.get(url, {params});
+    return result;
+  };
+  GetAdministrativeById = async (params: {
+    id: number;
+  }): Promise<TAdministrativeOrder> => {
+    const url = HOST_SERVER + this.endpoint + 'GetAdministrativeById';
+    const {
+      data: {
+        result: {data},
+      },
+    } = await axiosClient.get(url, {params});
+
+    return data;
+  };
+  getAdministrativeConfig = async (params: {typeId: number}) => {
+    const url =
+      HOST_SERVER + this.endpoint + 'GetAdministrativePropertyGridView';
+    const {
+      data: {
+        result: {data},
+      },
+    } = await axiosClient.get(url, {params});
+    return data;
   };
 }
 

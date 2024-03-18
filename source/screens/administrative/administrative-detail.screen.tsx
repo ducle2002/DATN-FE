@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StackScreenProps} from '@react-navigation/stack';
 import {AdministrativeStackParamsList} from '@/routes/administrative.stack';
@@ -14,7 +14,7 @@ import moment from 'moment';
 import InforTypeHtml from './components/infor-type-html';
 import InforTypeOptions from './components/infor-type-options';
 import InforTypeTable from './components/infor-type-table';
-import {useMutation, useQueryClient} from 'react-query';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
 import AdministrativeApi from '@/modules/administrative/administrative.service';
 import {useToast} from 'react-native-toast-notifications';
 import LoadingComponent from '@/components/loading';
@@ -26,17 +26,36 @@ type Props = StackScreenProps<
   'AdministrativeDetailScreen'
 >;
 const AdministrativeDetailScreen = ({route, navigation}: Props) => {
-  const data = route.params.data;
-  const config = route.params.config;
-  const properties = JSON.parse(data.properties);
+  const {id} = route.params;
+  const [properties, setProperties] = useState<{
+    [key: string]: string | any[];
+  }>();
   const queryClient = useQueryClient();
   const toast = useToast();
   const {t} = useTranslation();
+  const {data} = useQuery({
+    queryKey: ['adminstrative', id],
+    queryFn: () =>
+      AdministrativeApi.GetAdministrativeById({
+        id: id,
+      }),
+    onSuccess: result => {
+      setProperties(JSON.parse(result.properties));
+    },
+  });
+
+  const {data: config} = useQuery({
+    queryKey: ['config', data?.adTypeId],
+    queryFn: () =>
+      AdministrativeApi.getAdministrativeConfig({typeId: data?.adTypeId ?? 0}),
+    enabled: !!data?.adTypeId,
+  });
+
   const {mutate: updateState, isLoading} = useMutation({
     mutationKey: ['confirmAdministrative'],
     mutationFn: (state: number) =>
       AdministrativeApi.UpdateStateAdministrative({
-        id: data.id,
+        id: id,
         state: state,
       }),
     onSuccess: (res: any) => {
@@ -46,7 +65,7 @@ const AdministrativeDetailScreen = ({route, navigation}: Props) => {
           type: 'success',
         });
         queryClient.refetchQueries({
-          queryKey: ['AdministratvieGridView', data.adTypeId],
+          queryKey: ['AdministratvieGridView', data?.adTypeId],
         });
         navigation.goBack();
       }
@@ -59,6 +78,7 @@ const AdministrativeDetailScreen = ({route, navigation}: Props) => {
       });
     },
   });
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <TouchableOpacity
@@ -91,7 +111,7 @@ const AdministrativeDetailScreen = ({route, navigation}: Props) => {
             fontWeight: '600',
             color: '#333',
           }}>
-          {data.name}
+          {data?.name}
         </Text>
         <Text
           style={{
@@ -99,19 +119,19 @@ const AdministrativeDetailScreen = ({route, navigation}: Props) => {
             fontWeight: '400',
             color: '#333',
           }}>
-          Thời gian tạo: {moment(data.creationTime).format('HH:mm DD/MM/YYYY')}
+          Thời gian tạo: {moment(data?.creationTime).format('HH:mm DD/MM/YYYY')}
         </Text>
       </View>
       {properties && config && (
         <View>
-          {config.properties?.map((item, index) => {
+          {config.map((item: any, index: number) => {
             switch (item.type) {
               case 13:
                 return (
                   <InforTypeHtml
                     key={index}
                     label={item.displayName}
-                    value={properties[item.key]}
+                    value={properties[item.key] as string}
                   />
                 );
               case 11:
@@ -127,7 +147,7 @@ const AdministrativeDetailScreen = ({route, navigation}: Props) => {
                   <InforTypeTable
                     key={index}
                     label={item.displayName}
-                    tableValue={properties[item.key]}
+                    tableValue={properties[item.key] as any[]}
                   />
                 );
               default:
@@ -149,7 +169,7 @@ const AdministrativeDetailScreen = ({route, navigation}: Props) => {
           })}
         </View>
       )}
-      {data.state === 1 && (
+      {data?.state === 1 && (
         <View
           style={{
             position: 'absolute',

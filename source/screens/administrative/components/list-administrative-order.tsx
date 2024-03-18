@@ -11,10 +11,8 @@ import React, {useEffect, useState} from 'react';
 import {TAdminidtrativeConfig} from '@/modules/administrative/administrative.model';
 import {useInfiniteQuery} from 'react-query';
 import AdministrativeApi from '@/modules/administrative/administrative.service';
-import AdministrativeIcon from '@assets/icons/administrative.svg';
 
 import {FILTER_FORMID} from '@/modules/administrative/administrative.contants';
-import moment from 'moment';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {AdministrativeStackParamsList} from '@/routes/administrative.stack';
 import ItemAdministrative from './item-administrative';
@@ -105,8 +103,7 @@ const ListAdministrativeOrder = ({typeAdministrative}: Props) => {
               item={item}
               onPress={() => {
                 naviagtion.navigate('AdministrativeDetailScreen', {
-                  data: item,
-                  config: typeAdministrative,
+                  id: item.id,
                 });
               }}
             />

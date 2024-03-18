@@ -1,4 +1,5 @@
 import {
+  Alert,
   Dimensions,
   Pressable,
   ScrollView,
@@ -48,6 +49,15 @@ const DetailScreen = ({route, navigation}: Props) => {
       navigation.goBack();
     },
   });
+
+  const showAlert = () => {
+    Alert.alert('Bạn có chắc chắn muốn xóa không?', undefined, [
+      {
+        text: 'Hủy',
+      },
+      {text: 'Xóa', onPress: () => deleteRequest()},
+    ]);
+  };
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -106,7 +116,7 @@ const DetailScreen = ({route, navigation}: Props) => {
         <Button
           mode="outlined"
           style={{width: '45%'}}
-          onPress={() => deleteRequest()}>
+          onPress={() => showAlert()}>
           {language.t(languageKeys.shared.button.delete)}
         </Button>
         <Button

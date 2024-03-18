@@ -2,15 +2,11 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import AdministrativeScreen from '@/screens/administrative/administrative.screen';
 import AdministrativeDetailScreen from '@/screens/administrative/administrative-detail.screen';
-import {
-  TAdminidtrativeConfig,
-  TAdministrativeOrder,
-} from '@/modules/administrative/administrative.model';
+
 export type AdministrativeStackParamsList = {
   AdministrativeScreen: {};
   AdministrativeDetailScreen: {
-    data: TAdministrativeOrder;
-    config: TAdminidtrativeConfig;
+    id: number;
   };
 };
 const Stack = createStackNavigator<AdministrativeStackParamsList>();

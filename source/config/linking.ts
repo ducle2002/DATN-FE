@@ -37,7 +37,7 @@ const config: {
       },
     },
     RESIDENT_STACK: {
-      path: 'verify-citizen',
+      path: 'verify-citizen/detail',
       parse: {
         id: (id: string) => Number(id),
       },
@@ -72,6 +72,10 @@ const config: {
       screens: {
         DETAIL_ORDER_SCREEN: 'digital-service-order/detail',
       },
+    },
+    ADMINISTRATIVE_STACK: {
+      initialRouteName: 'AdministrativeScreen',
+      screens: {AdministrativeDetailScreen: 'adminstrative/detail'},
     },
   },
 };

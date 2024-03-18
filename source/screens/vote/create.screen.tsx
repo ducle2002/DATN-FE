@@ -221,7 +221,7 @@ const CreateScreen = ({navigation, route}: Props) => {
             <CTextInput
               value={value}
               onChangeText={onChange}
-              label={language.t(languageKeys.vote.create.name)}
+              label={language.t(languageKeys.vote.create.name) + ' *'}
               style={styles.textInput}
               labelStyle={styles.textLabel}
               errorMessage={errors.name?.message}
@@ -236,7 +236,7 @@ const CreateScreen = ({navigation, route}: Props) => {
             <CTextInput
               value={value}
               onChangeText={onChange}
-              label={language.t(languageKeys.vote.create.description)}
+              label={language.t(languageKeys.vote.create.description) + ' *'}
               labelStyle={styles.textLabel}
               multiline
               style={{

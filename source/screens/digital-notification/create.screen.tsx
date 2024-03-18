@@ -281,7 +281,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
             name="name"
             render={({field: {value, onChange}}) => (
               <CTextInput
-                label={language.t(languageKeys.digitalNoti.create.title)}
+                label={language.t(languageKeys.digitalNoti.create.title) + ' *'}
                 value={value}
                 onChangeText={onChange}
                 containerStyle={styles.dataInput}
@@ -295,7 +295,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
 
         <View style={styles.sectionContainer}>
           <Text style={styles.textLabel}>
-            {language.t(languageKeys.digitalNoti.create.data)}
+            {language.t(languageKeys.digitalNoti.create.data)} *
           </Text>
           <Controller
             control={control}
@@ -316,7 +316,7 @@ const CreateNotificationScreen = ({navigation, route}: Props) => {
 
         <View style={styles.sectionContainer}>
           <Text style={styles.textLabel}>
-            {language.t(languageKeys.digitalNoti.create.selectThumbnail)}
+            {language.t(languageKeys.digitalNoti.create.selectThumbnail)} *
           </Text>
           <AddImageButton
             source={{uri: typeof file !== 'string' ? file?.uri : file}}

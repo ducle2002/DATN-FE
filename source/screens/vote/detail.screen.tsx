@@ -139,11 +139,8 @@ const DetailScreen = ({navigation, route}: Props) => {
       <BottomContainer
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-between',
+          justifyContent: 'center',
         }}>
-        <Button mode="outlined" style={{width: '45%'}}>
-          {language.t(languageKeys.shared.button.delete)}
-        </Button>
         <Button
           mode="contained"
           style={{width: '45%'}}

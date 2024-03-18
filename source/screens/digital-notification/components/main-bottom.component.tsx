@@ -1,4 +1,4 @@
-import {StyleSheet, Text} from 'react-native';
+import {Alert, StyleSheet, Text} from 'react-native';
 import React, {useContext} from 'react';
 import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
@@ -28,6 +28,15 @@ const MainBottom = () => {
     },
   });
 
+  const showAlert = () => {
+    Alert.alert('Bạn có chắc chắn muốn xóa không?', undefined, [
+      {
+        text: 'Hủy',
+      },
+      {text: 'Xóa', onPress: () => deleteAll()},
+    ]);
+  };
+
   return (
     <BottomContainer style={styles.container}>
       {selected.length === 0 ? (
@@ -52,7 +61,8 @@ const MainBottom = () => {
           </Button>
           <Button
             onPress={() => {
-              deleteAll();
+              // deleteAll();
+              showAlert();
             }}
             mode="contained"
             icon="delete">
