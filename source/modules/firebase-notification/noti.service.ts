@@ -2,7 +2,7 @@ import axiosClient from '@/utils/axios.client';
 import {HOST_SERVER} from '@env';
 
 class Notification {
-  endpoint = '/api/services/app/PushNotification/';
+  endpoint = '/notification/api/services/app/PushNotification/';
   register = async (params: any) => {
     const url = HOST_SERVER + this.endpoint + 'RegisterToTenant';
     return axiosClient.post(url, params);

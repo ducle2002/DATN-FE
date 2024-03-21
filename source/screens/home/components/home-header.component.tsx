@@ -30,14 +30,13 @@ const HomeHeader = ({navigation}: HomeScreenProps) => {
           </View>
         </View>
         <View style={styles.headerIconContainer}>
-          <Pressable>
+          <Pressable onPress={() => navigation.navigate('NOTIFICATION')}>
             <Icon
               type="Ionicons"
               name="notifications"
               size={30}
               color={'white'}
               style={styles.icon}
-              onPress={() => navigation.navigate('NOTIFICATION')}
             />
             {unreadCount > 0 && (
               <Badge style={{position: 'absolute'}}>{unreadCount}</Badge>
