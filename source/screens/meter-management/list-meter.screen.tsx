@@ -1,4 +1,10 @@
-import {FlatList, ListRenderItem, StatusBar, View} from 'react-native';
+import {
+  FlatList,
+  ListRenderItem,
+  RefreshControl,
+  StatusBar,
+  View,
+} from 'react-native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {useListMeterType} from './hooks/useListMeterTypes';
@@ -70,7 +76,7 @@ const NotFound = () => <View />;
 const ListScreen = ({navigation, route}: any) => {
   const [filters, setFilters] = useState<TFilter>({});
 
-  const {data} = useListMeters({
+  const {data, fetchNextPage, remove, refetch, status} = useListMeters({
     meterTypeId: route.params.meterTypeId,
     ...filters,
   });
@@ -87,6 +93,10 @@ const ListScreen = ({navigation, route}: any) => {
     <MeterItem item={item} navigation={navigation} />
   );
 
+  const onRefresh = () => {
+    remove();
+    refetch();
+  };
   return (
     <View style={{flex: 1}}>
       <StatusBar barStyle={'dark-content'} />
@@ -94,6 +104,13 @@ const ListScreen = ({navigation, route}: any) => {
         data={dataProvider.getAllData()}
         renderItem={renderItem}
         contentContainerStyle={{paddingTop: 10}}
+        onEndReached={() => fetchNextPage()}
+        refreshControl={
+          <RefreshControl
+            refreshing={status === 'loading'}
+            onRefresh={onRefresh}
+          />
+        }
       />
       <BottomContainer>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>

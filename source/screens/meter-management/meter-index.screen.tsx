@@ -1,4 +1,4 @@
-import {FlatList, ListRenderItem, View} from 'react-native';
+import {FlatList, ListRenderItem, RefreshControl, View} from 'react-native';
 import React, {useEffect, useMemo, useState} from 'react';
 import BottomContainer from '@/components/bottom-container.component';
 import Button from '@/components/button.component';
@@ -72,7 +72,7 @@ const NotFound = () => <View />;
 export const ListScreen = ({navigation, route}: any) => {
   const [filters, setFilters] = useState<TFilter>({});
 
-  const {data} = useListMeterMonthly({
+  const {data, fetchNextPage, remove, refetch, status} = useListMeterMonthly({
     meterTypeId: route.params?.meterTypeId,
     meterId: route.params?.meterId,
     ...filters,
@@ -90,12 +90,23 @@ export const ListScreen = ({navigation, route}: any) => {
     <RecorderItem item={item} navigation={navigation} />
   );
 
+  const onRefresh = () => {
+    remove();
+    refetch();
+  };
   return (
     <View style={{flex: 1}}>
       <FlatList
         contentContainerStyle={{paddingTop: 10}}
         data={dataProvider.getAllData()}
         renderItem={renderItem}
+        onEndReached={() => fetchNextPage()}
+        refreshControl={
+          <RefreshControl
+            refreshing={status === 'loading'}
+            onRefresh={onRefresh}
+          />
+        }
       />
       <BottomContainer>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>

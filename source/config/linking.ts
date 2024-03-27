@@ -10,7 +10,7 @@ const config: {
       initialRouteName: 'MAIN_SCREEN',
       screens: {
         READ_INDEX: {
-          path: 'app/meter',
+          path: '/meter',
           parse: {
             id: (id: string) => Number(id),
           },
@@ -81,6 +81,6 @@ const config: {
 };
 
 export const linking: LinkingOptions<AppStackParamsList> = {
-  prefixes: ['yooioc://app/'],
+  prefixes: ['yooioc://app/', 'yooioc://'],
   config: config,
 };
