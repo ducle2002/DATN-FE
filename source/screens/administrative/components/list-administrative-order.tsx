@@ -29,7 +29,7 @@ const ListAdministrativeOrder = ({typeAdministrative}: Props) => {
     refetch,
     isRefetching,
   } = useInfiniteQuery({
-    queryKey: ['AdministratvieGridView', typeAdministrative.id],
+    queryKey: ['AdministratvieGridView', typeAdministrative?.id],
     queryFn: ({pageParam}) =>
       AdministrativeApi.GetAdministratvieGridView({
         FormId: formId,

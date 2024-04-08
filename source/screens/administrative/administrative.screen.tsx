@@ -66,7 +66,7 @@ const AdministrativeScreen = ({navigation}: Props) => {
               setVisible(true);
             }}>
             <Text style={styles.txtBtnTypeAdministrative} numberOfLines={2}>
-              {listTypeAdministrative[selectTypeAdmin].name}
+              {listTypeAdministrative[selectTypeAdmin]?.name}
             </Text>
             <Icon
               type="Ionicons"
