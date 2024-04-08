@@ -99,6 +99,11 @@ const ReadIndexMeterScreen = ({route, navigation}: Props) => {
         }));
       }
     },
+    onError: () => {
+      toast.show('Không tìm thấy thông tin', {
+        placement: 'center',
+      });
+    },
   });
   const {control, handleSubmit, resetField, reset} = useForm<{
     value: number;

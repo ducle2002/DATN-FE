@@ -17,6 +17,7 @@ import AssetDetailService from '../services/asset-detail.service';
 import SystemCodeService from '../services/system-code.service';
 import AssetGroupService from '../services/asset-group.service';
 import MaintenanceHistoryService from '../services/maintenance-history.service';
+import {useToast} from 'react-native-toast-notifications';
 
 export type TAssetFilter = {
   keyword?: string;
@@ -307,6 +308,7 @@ export const useDeleteAsset = ({
 };
 
 export const useAssetById = (id?: number) => {
+  const toast = useToast();
   const {data} = useQuery({
     enabled: !!id && id > 0,
     queryKey: ['asset-detail', id],
@@ -316,6 +318,9 @@ export const useAssetById = (id?: number) => {
       }
     },
     staleTime: 60000,
+    onError: () => {
+      toast.show('Không tìm thấy dữ liệu', {placement: 'center'});
+    },
   });
   return data;
 };
