@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import {
   Image,
   KeyboardAvoidingView,
@@ -81,7 +82,7 @@ const ReadIndexMeterScreen = ({route, navigation}: Props) => {
     },
   });
 
-  useQuery({
+  const {data} = useQuery({
     queryKey: ['meter-info', meterId],
     queryFn: () => MeterService.getById({id: meterId ?? -1}),
     enabled: lastMonthData?.totalRecords === 0,
@@ -289,7 +290,9 @@ const ReadIndexMeterScreen = ({route, navigation}: Props) => {
                     label: u?.name,
                   }))}
                   onSelected={(value: number) => setMeterId(value)}
-                  selectedLabel={meters.find(u => u.id === meterId)?.name}
+                  selectedLabel={
+                    meters.find(u => u.id === meterId)?.name ?? data?.name
+                  }
                 />
               </View>
               <DashedLine style={{marginVertical: 10}} />
