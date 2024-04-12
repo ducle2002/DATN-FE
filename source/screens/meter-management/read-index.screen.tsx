@@ -85,7 +85,7 @@ const ReadIndexMeterScreen = ({route, navigation}: Props) => {
   const {data} = useQuery({
     queryKey: ['meter-info', meterId],
     queryFn: () => MeterService.getById({id: meterId ?? -1}),
-    enabled: lastMonthData?.totalRecords === 0,
+    enabled: !!meterId,
     onSuccess: result => {
       if (result) {
         prevFilterRef.current = {
