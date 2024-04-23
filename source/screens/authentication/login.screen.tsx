@@ -139,10 +139,10 @@ const LoginScreen = ({navigation}: Props) => {
           />
           <Text
             onPress={() => {
-              navigation.navigate('PRIVACY');
+              navigation.navigate('REGISTER');
             }}
             style={styles.textPrivacy}>
-            {language.t(languageKeys.auth.privacy.privacyPolicy)}
+            Đăng ký
           </Text>
           <Button
             style={styles.button}

@@ -28,7 +28,13 @@ const AuthenticationStack = (): JSX.Element => {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="REGISTER" component={RegisterScreen} />
+      <Stack.Screen
+        name="REGISTER"
+        component={RegisterScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="PRIVACY"
         component={PrivatePolicyScreen}

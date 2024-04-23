@@ -7,12 +7,17 @@ import ListMeterScreen from '@/screens/meter-management/list-meter.screen';
 import MeterIndexScreen from '@/screens/meter-management/meter-index.screen';
 import ReadIndexMeterScreen from '@/screens/meter-management/read-index.screen';
 import {
+  DrawerContentComponentProps,
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList,
   DrawerToggleButton,
   createDrawerNavigator,
 } from '@react-navigation/drawer';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import MonthlyDetailScreen from '@/screens/meter-management/monthly-detail.screen';
 import MeterDetailScreen from '@/screens/meter-management/meter-detail.screen';
+import {useLogout} from '@/screens/authentication/services/auth.hook';
 
 export type MeterStackParamsList = {
   READ_INDEX: {
@@ -31,12 +36,23 @@ export type MeterDrawerParamsList = {
 
 const Drawer = createDrawerNavigator<MeterDrawerParamsList>();
 const MainDrawer = () => {
+  const {logout} = useLogout();
+
+  const renderDrawerContent = (props: DrawerContentComponentProps) => {
+    return (
+      <DrawerContentScrollView {...props}>
+        <DrawerItemList {...props} />
+        <DrawerItem label="Đăng xuất" onPress={() => logout()} />
+      </DrawerContentScrollView>
+    );
+  };
   return (
     <Drawer.Navigator
       screenOptions={{
         headerShown: false,
         drawerPosition: 'right',
-      }}>
+      }}
+      drawerContent={renderDrawerContent}>
       <Drawer.Screen
         name="LIST_METER"
         component={ListMeterScreen}

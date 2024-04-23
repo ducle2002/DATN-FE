@@ -1,6 +1,6 @@
 import axiosClient from '@/utils/axios.client';
 import {HOST_SERVER} from '@env';
-import {ILoginPayload, IToken} from './auth.model';
+import {ILoginPayload, IRegisterPayload, IToken} from './auth.model';
 class Authentication {
   endpoint = HOST_SERVER;
 
@@ -24,19 +24,29 @@ class Authentication {
     };
   };
 
-  registerRequest = async (params: {
-    userName: string;
-    password: string;
-    emailAddress?: string;
-    fullName?: string;
-  }) => {
+  registerRequest = async (params: IRegisterPayload & {tenantId: number}) => {
     const url = this.endpoint + '/api/services/app/Account/Register';
-    return axiosClient.post(url, params);
+    const userName = params.phoneNumber;
+    return axiosClient.post(
+      url,
+      {...params, userName: userName},
+      {
+        headers: {
+          Cookie: `Abp.TenantId=${params.tenantId}`,
+        },
+      },
+    );
   };
 
   logout = async () => {
     const url = this.endpoint + '/api/TokenAuth/LogOut';
     return axiosClient.get(url);
+  };
+
+  tenantAvailable = async (params: any) => {
+    const url = this.endpoint + '/api/services/app/Account/IsTenantAvailable';
+    const data = await axiosClient.post(url, params);
+    return data.data.result;
   };
 }
 

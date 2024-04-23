@@ -111,6 +111,8 @@ const AppStack = () => {
         freezeOnBlur: true,
       }}>
       <Stack.Group>
+        <Stack.Screen name="METER_STACK" component={MeterStack} />
+
         <Stack.Screen name={'HOME_SCREEN'} component={HomeScreen} />
         <Stack.Screen name="NOTIFICATION_STACK" component={NotificationStack} />
         <Stack.Screen name="CHAT_STACK" component={ChatStack} />
@@ -148,7 +150,6 @@ const AppStack = () => {
       />
       <Stack.Screen name={'SETTING_SCREEN'} component={SettingStack} />
       <Stack.Screen name="HOTLINE_STACK" component={HotlineStack} />
-      <Stack.Screen name="METER_STACK" component={MeterStack} />
       <Stack.Screen
         name="NOTIFICATION"
         component={NotificationScreen}
