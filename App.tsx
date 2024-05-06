@@ -23,34 +23,14 @@ function App(): JSX.Element {
     SplashScreen.hide();
   }, []);
 
-  const {getOrganizationUnitByUser} = useOrganizationUnit();
-  const {getConfigPermission} = useConfigPermissions();
   const {getUserInfor} = useAccount();
   const {isLogin} = useAppSelector(state => state.auth);
   const {isRefreshingPermissions} = useAppSelector(state => state.config);
   useEffect(() => {
     if (isLogin) {
-      getConfigPermission();
-      getOrganizationUnitByUser();
       getUserInfor();
     }
-  }, [getConfigPermission, getOrganizationUnitByUser, getUserInfor, isLogin]);
-
-  useEffect(() => {
-    if (isRefreshingPermissions) {
-      getConfigPermission();
-    }
-  }, [getConfigPermission, isRefreshingPermissions]);
-
-  useRegisterNotification();
-
-  useQuery({
-    queryKey: ['notification'],
-    queryFn: async () => {
-      getNotification();
-      return true;
-    },
-  });
+  }, [getUserInfor, isLogin]);
 
   return (
     <SafeAreaProvider>
